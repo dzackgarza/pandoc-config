@@ -1,0 +1,21 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Ruff cache
+.ruff_cache/
+
+# Serena agent cache
+.serena/
+
+# Temp/backup files
+*.tmp
+*.orig
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
