@@ -81,6 +81,30 @@
 \newcommand{\quotleft}[2]{ {}_{#2}\mkern-.5mu\backslash\mkern-2mu^{#1} }
 \newcommand{\quotright}[2]{ {}^{#1}\mkern-2mu/\mkern-2mu_{#2} }
 
+% Double coset notation (uses \scalebox from graphicx — LaTeX only)
+% Recovered from archive/legacy-macros-2025-01-09/preamble.tex
+% Overrides MathJax-safe fallbacks in tier2-mathjax-args.tex
+\renewcommand{\dcoset}[3]{
+    \,\scriptscriptstyle
+    {\textstyle #1}
+    \mkern-4mu\scalebox{1.5}{$\diagdown$}\mkern-5mu^{\textstyle #2}
+    \mkern-4mu\scalebox{1.5}{$\diagup$}\mkern-5mu{\textstyle #3} 
+}
+\renewcommand{\dcosetl}[2]{
+    \scriptscriptstyle
+    {\textstyle #1}
+    \mkern-4mu\scalebox{1.5}{$\diagdown$}\mkern-5mu^{\textstyle #2}
+}
+\renewcommand{\dcosetr}[2]{
+    \scriptscriptstyle
+    {\textstyle #1}
+    \mkern-4mu\scalebox{1.5}{$\diagup$}\mkern-5mu{\textstyle #2} 
+}
+\renewcommand{\leftquotient}[2]{
+    {\textstyle #1}
+    \mkern-4mu\scalebox{1.5}{$\diagdown$}\mkern-5mu^{\textstyle #2}
+}
+
 % Multi-choose using \kern
 \def\multichoose#1#2{{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}}
 

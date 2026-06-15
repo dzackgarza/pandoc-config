@@ -85,7 +85,14 @@
 
 % Quotients and moduli
 
-% Radicals
+% Double coset notation (MathJax-safe fallback — no \scalebox)
+% \diagdown/\diagup render at default size; the full-fidelity version
+% with \scalebox{1.5} lives in tier3-tex-complex.tex (LaTeX only).
+\providecommand{\dcoset}[3]{{  _{{ #1} \diagdown} {\scriptstyle #2} {}_{\diagup {#3}}  }}
+\providecommand{\dcosetl}[2]{{  _{{ #1} \diagdown} {\scriptstyle #2}  }}
+\providecommand{\dcosetr}[2]{{  {\scriptstyle #1} {}_{\diagup {#2}}  }}
+\providecommand{\leftquotient}[2]{{ {\textstyle #1} {}_{\diagdown} {\scriptstyle #2} }}
+
 \newcommand{\jacobsonrad}[1]{{J ({#1}) }}
 \newcommand{\nilrad}[1]{{\sqrt{0_{#1}} }}
 
