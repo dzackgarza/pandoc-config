@@ -1,0 +1,7 @@
+# Regenerable artifacts — kept out of the standalone pandoc-config repo
+venv/
+.ruff_cache/
+.serena/cache/
+.serena/project.local.yml
+__pycache__/
+*.log
