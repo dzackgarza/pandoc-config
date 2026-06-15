@@ -85,13 +85,18 @@
 
 % Quotients and moduli
 
-% Double coset notation (MathJax-safe fallback — no \scalebox)
-% \diagdown/\diagup render at default size; the full-fidelity version
-% with \scalebox{1.5} lives in tier3-tex-complex.tex (LaTeX only).
-\providecommand{\dcoset}[3]{{  _{{ #1} \diagdown} {\scriptstyle #2} {}_{\diagup {#3}}  }}
-\providecommand{\dcosetl}[2]{{  _{{ #1} \diagdown} {\scriptstyle #2}  }}
-\providecommand{\dcosetr}[2]{{  {\scriptstyle #1} {}_{\diagup {#2}}  }}
-\providecommand{\leftquotient}[2]{{ {\textstyle #1} {}_{\diagdown} {\scriptstyle #2} }}
+% Double coset notation (MathJax-safe — no \scalebox)
+% Uses natural-size \diagdown/\diagup (visually distinct from \setminus)
+% with superscript-raised middle term. Full-fidelity \scalebox{1.5}
+% version in tier3-tex-complex.tex overrides these in LaTeX.
+\providecommand{\dcoset}[3]{%
+  {#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}\mkern-3mu\diagup\mkern-3mu{#3}}
+\providecommand{\dcosetl}[2]{%
+  {#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}}
+\providecommand{\dcosetr}[2]{%
+  {#1}\mkern-3mu\diagup\mkern-3mu{#2}}
+\providecommand{\leftquotient}[2]{%
+  {#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}}
 
 \newcommand{\jacobsonrad}[1]{{J ({#1}) }}
 \newcommand{\nilrad}[1]{{\sqrt{0_{#1}} }}
