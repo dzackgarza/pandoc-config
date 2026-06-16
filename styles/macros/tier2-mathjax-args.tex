@@ -159,6 +159,31 @@
 \newcommand{\addbase}[1]{{ {}_{pt} }}
 \newcommand{\catspan}[3]{\roof{#1}{#2}{#3}}
 \newcommand{\cptf}[1]{ \overline{ #1 } }
+%
+% ===== Compactification macros (restored from diss/DZG-Macros.sty) =====
+\newcommand{\cpt}[1]{\overline{#1}}
+\newcommand{\normalize}[1]{ {#1}^{\nu} }
+\newcommand{\ksbacpt}[1]{ \cpt{#1} }
+\newcommand{\normksbacpt}[1]{ \normalize{ \cpt{#1} } }
+\newcommand{\bbcpt}[1]{\cpt{#1}^{ \operatorname{BB} }}
+\newcommand{\gitcpt}[1]{\cpt{#1}^{ \operatorname{GIT} }}
+\newcommand{\semifan}[1]{ \mathcal{#1} }
+\newcommand{\semifans}[1]{ \semifan{#1}_{\bullet} }
+\newcommand{\semitorfan}{\semifans{F}}
+\newcommand{\semitorcpt}[1]{\cpt{#1}^{\semitorfan}}
+\newcommand{\semifancpt}[2]{\cpt{#1}^{#2}}
+\newcommand{\torfan}{ \Sigma }
+\newcommand{\torfans}{\torfan_{\bullet}}
+\newcommand{\torcpt}[1]{ \semifancpt{#1}{ \torfans } }
+\newcommand{\coxfan}{\torfan^{\operatorname{Cox}}}
+\newcommand{\coxfans}{\torfans^{\operatorname{Cox}}}
+\newcommand{\coxcpt}[1]{\semifancpt{#1}{\coxfans}}
+\newcommand{\BBfan}{\Sigma^{\operatorname{BB}}}
+\newcommand{\halfpd}[1]{D_{#1}}
+\newcommand{\fullpd}[1]{\Omega_{#1}}
+\newcommand{\dmodgamma}[2]{ {#1}/{#2} }
+% ===== End compactification macros =====
+%
 \newcommand{\discgroup}[1]{A_{#1}}
 \newcommand{\diverges}[0]{\mapstofrom}
 \newcommand{\langL}[1]{ {}^{L}{#1} }
