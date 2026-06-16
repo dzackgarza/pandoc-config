@@ -60,12 +60,42 @@ def render_tikz(filepath: str, output_dir: str) -> bool:
     return True
 
 def main():
+    import sys
+    output_dir = pathlib.Path("/home/dzack/.pandoc/figures/rendered")
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    if len(sys.argv) > 1:
+        target = sys.argv[1]
+        target_path = pathlib.Path(target)
+        if not target_path.exists():
+            base_dir = pathlib.Path("/home/dzack/.pandoc/figures")
+            potential_path = base_dir / target
+            if potential_path.exists():
+                target_path = potential_path
+            else:
+                for sub in ["tikz", "tikzcd"]:
+                    p = base_dir / sub / target
+                    if p.exists():
+                        target_path = p
+                        break
+                    p_tex = base_dir / sub / f"{target}.tex"
+                    if p_tex.exists():
+                        target_path = p_tex
+                        break
+        
+        if not target_path.exists() or not target_path.is_file():
+            print(f"Error: File {target} not found.")
+            sys.exit(1)
+        
+        print(f"Rendering single file: {target_path}")
+        if not render_tikz(str(target_path), str(output_dir)):
+            sys.exit(1)
+        sys.exit(0)
+
     tikz_dirs = [
         pathlib.Path("/home/dzack/.pandoc/figures/tikz"),
         pathlib.Path("/home/dzack/.pandoc/figures/tikzcd")
     ]
-    output_dir = pathlib.Path("/home/dzack/.pandoc/figures/rendered")
-    output_dir.mkdir(parents=True, exist_ok=True)
 
     success = True
     for tikz_dir in tikz_dirs:
@@ -76,7 +106,6 @@ def main():
             if not render_tikz(str(tex_file), str(output_dir)):
                 success = False
 
-    import sys
     if not success:
         sys.exit(1)
 

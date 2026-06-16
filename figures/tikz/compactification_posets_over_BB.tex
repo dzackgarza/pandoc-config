@@ -1,0 +1,86 @@
+﻿\begin{tikzpicture}[
+  node distance=1.7cm and 2.2cm,
+  every node/.style={font=\small},
+  cpt/.style={
+    draw,
+    rounded corners,
+    inner xsep=7pt,
+    inner ysep=5pt,
+    align=center
+  },
+  tor/.style={
+    cpt,
+    minimum width=2.3cm
+  },
+  semi/.style={
+    cpt,
+    minimum width=2.3cm,
+    dashed
+  },
+  map/.style={->, >=stealth, thick},
+  poset/.style={->, >=stealth, thin},
+  bbmap/.style={->, >=stealth, thick}
+]
+
+% Bottom Baily--Borel compactification
+\node[cpt, minimum width=4.0cm] (BB) at (0,0)
+  {$\bbcpt{F_T}$};
+
+% Toroidal compactifications: a small poset
+\node[tor] (Tor1) at (-3.2,2.0)
+  {$\semifancpt{F_T}{\Sigma_\bullet^1}$};
+\node[tor] (Tor2) at (0,2.0)
+  {$\semifancpt{F_T}{\Sigma_\bullet^2}$};
+\node[tor] (Tor3) at (3.2,2.0)
+  {$\semifancpt{F_T}{\Sigma_\bullet^3}$};
+
+\node[tor] (Tor12) at (-1.6,3.35)
+  {$\semifancpt{F_T}{\Sigma_\bullet^{1,2}}$};
+\node[tor] (Tor23) at (1.6,3.35)
+  {$\semifancpt{F_T}{\Sigma_\bullet^{2,3}}$};
+
+\node[tor] (TorTop) at (0,4.75)
+  {$\torcpt{F_T}$};
+
+% Poset refinement maps among toroidal compactifications
+\draw[poset] (TorTop) -- (Tor12);
+\draw[poset] (TorTop) -- (Tor23);
+\draw[poset] (Tor12) -- (Tor1);
+\draw[poset] (Tor12) -- (Tor2);
+\draw[poset] (Tor23) -- (Tor2);
+\draw[poset] (Tor23) -- (Tor3);
+
+% Toroidal maps to BB
+\draw[bbmap] (Tor1) -- (BB);
+\draw[bbmap] (Tor2) -- (BB);
+\draw[bbmap] (Tor3) -- (BB);
+
+% Semitoroidal compactifications mapping to toroidal ones
+\node[semi] (Semi1) at (-3.5,5.4)
+  {$\semifancpt{F_T}{\mcf_\bullet^2}$};
+\node[semi] (Semi2) at (3.5,5.4)
+  {$\semifancpt{F_T}{\mcf_\bullet^3}$};
+\node[semi] (Semi3) at (0,7)
+  {$\semifancpt{F_T}{\mcf_\bullet^1}$};
+
+\draw[map] (Semi1) -- (Tor1);
+\draw[map] (Semi1) -- (Tor12);
+
+\draw[map] (Semi2) -- (Tor3);
+\draw[map] (Semi2) -- (Tor23);
+
+\draw[map] (Semi3) -- (TorTop);
+\draw[map] (Semi3) -- (Semi1);
+\draw[map] (Semi3) -- (Semi2);
+
+% GIT and KSBA compactifications, separately mapping to BB
+\node[cpt] (GIT) at (6.3,1)
+  {$\gitcpt{\mcm}$};
+\node[cpt] (KSBA) at (6.3,4)
+  {$\ksbacpt{\mcm}$};
+
+\draw[map] (KSBA) to[out=-90, in=10] (BB);
+\draw[map] (GIT) to[out=-180, in=0] (BB);
+
+
+\end{tikzpicture}
