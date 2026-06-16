@@ -81,3 +81,19 @@
 % =============================================================================
 
 \def\thickness{0.7pt}
+
+% =============================================================================
+% On-the-fly TikZ SVG compiler and includer
+% =============================================================================
+\RequirePackage{svg}
+
+\newcommand{\ctikzsvg}[2][]{%
+  \immediate\write18{python3 /home/dzack/.pandoc/bin/render_figures.py #2}%
+  \begingroup
+  \filename@parse{#2}%
+  \begin{center}%
+    \includesvg[#1]{\filename@base}%
+  \end{center}%
+  \endgroup
+}
+
