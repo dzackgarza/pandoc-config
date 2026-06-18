@@ -1,0 +1,12 @@
+% shared.tikzstyles — the starter SHARED TikZ style palette for the global
+% figures dir, in TikZiT's native `\tikzstyle{NAME}=[...]` format. Every figure
+% the preview compiles \input's this one file (via standalone-tikz.tex), so a
+% style defined here is available to every tikzpicture/tikzcd block by name —
+% the one-style-file-shared-by-every-figure model TikZiT and Ipe use.
+%
+% Edit this file (or open it in TikZiT's style editor) to grow the shared
+% palette; changes apply to every figure on the next render. The companion
+% shared.tikzdefs holds shared preamble/macros (\pgfdeclarelayer, \def, ...).
+
+\tikzstyle{node}=[draw=black, shape=circle, minimum size=6mm, inner sep=1pt]
+\tikzstyle{dot}=[draw=black, fill=black, shape=circle, minimum size=2mm, inner sep=0pt]

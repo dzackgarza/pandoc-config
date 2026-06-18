@@ -25,6 +25,28 @@ local tikz_doc_template_str = template_file:read("*a")
 template_file:close()
 local tikz_doc_template = pandoc.template.compile(tikz_doc_template_str)
 
+-- Shared figure palette (Phase D / D-2 / P91): the absolute paths of the ONE
+-- shared .tikzstyles and .tikzdefs every figure \input's, supplied by the app
+-- from the config-declared [figures].tikzstyles / [figures].tikzdefs (render.sh
+-- exports them as TIKZSTYLES_FILE / TIKZDEFS_FILE). Both are required,
+-- config-validated ExistingFiles — no default, no fallback: a missing var when a
+-- figure is ACTUALLY compiled means the renderer wiring is broken, so fail loud
+-- rather than compile a figure that silently ignores the shared palette. Read
+-- LAZILY at compile time (not at filter load) so the doctor's empty-stdin
+-- invocation probe, which loads the filter but compiles no figure, does not
+-- require the render-context env.
+local function shared_palette()
+  local tikzstyles_file = os.getenv("TIKZSTYLES_FILE")
+  if not tikzstyles_file or tikzstyles_file == "" then
+    error("tikzcd.lua: TIKZSTYLES_FILE is not set (the config-declared shared .tikzstyles)")
+  end
+  local tikzdefs_file = os.getenv("TIKZDEFS_FILE")
+  if not tikzdefs_file or tikzdefs_file == "" then
+    error("tikzcd.lua: TIKZDEFS_FILE is not set (the config-declared shared .tikzdefs)")
+  end
+  return tikzstyles_file, tikzdefs_file
+end
+
 -- Shared compilation core: given full LaTeX source, compile to PDF then SVG.
 -- Returns (svg_path, pdf_path) or (nil, nil) on failure.
 local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir)
@@ -130,9 +152,32 @@ local function compile_tikz(source)
   end
 
   local resolved_source = resolve_inputs(source, doc_dir)
-  local hash = pandoc.sha1(resolved_source)
 
-  local ctx = { body = resolved_source }
+  -- The shared palette paths fill the template's $tikzdefs$/$tikzstyles$ \input
+  -- lines, so this figure compiles WITH the config-declared shared .tikzdefs +
+  -- .tikzstyles in scope (Phase D / D-2 / P91).
+  local tikzstyles_file, tikzdefs_file = shared_palette()
+
+  -- The cache key (hash) MUST fold in the shared palette CONTENT, not just the
+  -- figure body: the same body compiled against a different shared .tikzstyles is
+  -- a different figure (P91's discriminator changes only the shared file). Hashing
+  -- only the body would return a stale cached SVG when the shared file changes, so
+  -- read the shared files and include their bytes in the hash. Both are required
+  -- ExistingFiles (config-validated), so a read failure is a broken environment.
+  local function read_required(path, label)
+    local fh = io.open(path, "r")
+    if not fh then
+      error("tikzcd.lua: cannot read " .. label .. " at " .. path)
+    end
+    local content = fh:read("*a")
+    fh:close()
+    return content
+  end
+  local styles_content = read_required(tikzstyles_file, "shared .tikzstyles")
+  local defs_content = read_required(tikzdefs_file, "shared .tikzdefs")
+  local hash = pandoc.sha1(resolved_source .. "\0" .. defs_content .. "\0" .. styles_content)
+
+  local ctx = { body = resolved_source, tikzstyles = tikzstyles_file, tikzdefs = tikzdefs_file }
   -- pandoc 3.6's template.apply returns a Doc; render it to a string before
   -- writing the .tex file (io.write needs a string, not a Doc).
   local tex_source = pandoc.layout.render(pandoc.template.apply(tikz_doc_template, ctx))

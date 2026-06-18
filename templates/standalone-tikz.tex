@@ -1,12 +1,26 @@
 % Standalone TikZ compilation template for pandoc tikzcd filter.
-% The TIKZ-PLACEHOLDER line below is replaced by the filter.
+% The body placeholder below is replaced by the filter with the tikz source.
 \documentclass[tikz,border=2pt]{standalone}
 \usepackage{dzg-tikz}
 \usepackage{graphicx}
 \usepackage{import}
+% TikZiT native-format support: declares the dummy `tikzit ...` pgfkeys and the
+% standard layers so a NATIVE .tikzstyles palette (and .tikzdefs preamble) the
+% figure \input's below compiles unmodified (Phase D / D-2 / P91).
+\usepackage{tikzit}
 
 % Additional TikZ libraries beyond what dzg-preamble loads
 \usetikzlibrary{external}
+
+% Shared figure palette (Phase D / D-2 / P91): the ONE .tikzdefs preamble and the
+% ONE .tikzstyles style file every figure shares, \input here in the preamble so
+% a style/def declared in the shared file is in scope for THIS figure by name.
+% The absolute paths are filled by the tikzcd filter from the config-declared
+% [figures].tikzdefs / [figures].tikzstyles (TIKZDEFS_FILE / TIKZSTYLES_FILE in
+% the compile env). Both are required, config-validated ExistingFiles — never
+% defaulted, so the variables are always present in a booted app.
+\input{$tikzdefs$}
+\input{$tikzstyles$}
 
 \begin{document}
 \nopagecolor
