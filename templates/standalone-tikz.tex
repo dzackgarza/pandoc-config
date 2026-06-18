@@ -1,5 +1,9 @@
-% Standalone TikZ compilation template for pandoc tikzcd filter.
-% The body placeholder below is replaced by the filter with the tikz source.
+% Standalone TikZ compilation template for the pandoc tikzcd filter — the STARTER
+% per-figure preamble template ([figures].template, Phase D / D-3 / P92).
+% The angle-bracket source marker just before \end{document} (the QTikz .pgs
+% TemplateReplaceText convention) is replaced by the filter with the tikz figure
+% source; it must appear exactly once. The tikzdefs/tikzstyles template variables
+% are filled with the shared-palette paths (P91).
 \documentclass[tikz,border=2pt]{standalone}
 \usepackage{dzg-tikz}
 \usepackage{graphicx}
@@ -24,5 +28,5 @@
 
 \begin{document}
 \nopagecolor
-$body$
+<>
 \end{document}
