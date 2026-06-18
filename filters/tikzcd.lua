@@ -64,9 +64,67 @@ local function shared_palette()
   return tikzstyles_file, tikzdefs_file
 end
 
+-- Surface a figure-compile FAILURE to the app (Phase D / D-6 / P95). On a
+-- pdflatex failure the standard LaTeX log carries a bang-error block: a `! …`
+-- message line followed by an `l.NN  <source-prefix>` marker citing the line —
+-- in the GENERATED `.tex` — that aborted the compile. This recovers that
+-- diagnostic and writes ONE machine-parseable marker line per error to stderr so
+-- it flows into the renderer subprocess stderr the app captures as
+-- RenderResult.log (the figure-compile analog of the P11 pandoc log). The marker
+-- carries the line WITHIN the figure body (the pdflatex `.tex` line minus the
+-- preamble lines the template prepended before the figure source) and the EXACT
+-- verbatim figure-body source line at that position, so the app can map it back
+-- to the editor buffer's tikz SOURCE line. `figure_body` is the figure source the
+-- `<>` marker was replaced with; `preamble_lines` is the count of `.tex` lines
+-- BEFORE that source began. The parse contract is LaTeX's own bang-error format,
+-- not a bespoke shape — the same `! …` / `l.NN` block pplatex consumes.
+local function emit_figure_compile_error(log_path, figure_body, preamble_lines)
+  local lf = io.open(log_path, "r")
+  if not lf then
+    return
+  end
+  local log_text = lf:read("*a")
+  lf:close()
+
+  local body_lines = {}
+  for line in (figure_body .. "\n"):gmatch("(.-)\n") do
+    body_lines[#body_lines + 1] = line
+  end
+
+  local emitted = false
+  local log_lines = {}
+  for line in (log_text .. "\n"):gmatch("(.-)\n") do
+    log_lines[#log_lines + 1] = line
+  end
+  for i = 1, #log_lines do
+    local message = log_lines[i]:match("^!%s*(.+)$")
+    if message then
+      -- The source line is cited later in the block by an `l.NN` marker.
+      for j = i + 1, #log_lines do
+        local tex_line = log_lines[j]:match("^l%.(%d+)")
+        if tex_line then
+          local body_line = tonumber(tex_line) - preamble_lines
+          local src = body_lines[body_line]
+          if src and src ~= "" then
+            -- ONE marker line, pipe-delimited, source last (it is the only field
+            -- that may contain a literal `|` in practice — tikz source rarely
+            -- does — so the app splits on the FIRST two pipes only).
+            io.stderr:write("[tikzcd-figure-error] " .. body_line .. "|" .. message .. "|" .. src .. "\n")
+            emitted = true
+          end
+          break
+        end
+      end
+    end
+  end
+  return emitted
+end
+
 -- Shared compilation core: given full LaTeX source, compile to PDF then SVG.
--- Returns (svg_path, pdf_path) or (nil, nil) on failure.
-local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir)
+-- `figure_body` + `preamble_lines` let a FAILURE be surfaced to the app as a
+-- mapped figure-compile diagnostic (Phase D / D-6 / P95). Returns
+-- (svg_path, pdf_path) or (nil, nil) on failure.
+local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir, figure_body, preamble_lines)
   local svg_path = svg_dir .. "/dzgtikz-" .. hash .. ".svg"
   local pdf_path = svg_dir .. "/dzgtikz-" .. hash .. ".pdf"
 
@@ -99,6 +157,10 @@ local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir)
   local cmd1 = inputs_env .. "pdflatex -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " 2>&1"
   local ok1 = os.execute(cmd1)
   if not ok1 then
+    -- Surface the figure-compile diagnostic (mapped to the figure source line)
+    -- before tearing down the tmp dir, so the failure reaches the app instead of
+    -- being dropped to a bare stderr note (Phase D / D-6 / P95).
+    emit_figure_compile_error(tmp .. "/tikz.log", figure_body, preamble_lines)
     os.execute("rm -rf " .. tmp)
     return nil, nil
   end
@@ -211,9 +273,15 @@ local function compile_tikz(source)
   -- function replacement avoids gsub treating `%`/`\` in the source as special.
   local ctx = { tikzstyles = tikzstyles_file, tikzdefs = tikzdefs_file }
   local rendered = pandoc.layout.render(pandoc.template.apply(tikz_doc_template, ctx))
-  if not rendered:find("<>", 1, true) then
+  local marker_at = rendered:find("<>", 1, true)
+  if not marker_at then
     error("tikzcd.lua: per-figure template carries no `<>` source marker (QTikz convention)")
   end
+  -- The figure body begins on the SAME `.tex` line the `<>` marker sat on, so the
+  -- preamble line count (lines strictly BEFORE the body) is the number of
+  -- newlines in `rendered` before the marker (Phase D / D-6 / P95). A pdflatex
+  -- `l.NN` cite minus this yields the 1-based line WITHIN the figure body.
+  local preamble_lines = select(2, rendered:sub(1, marker_at - 1):gsub("\n", "\n"))
   local tex_source = rendered:gsub("<>", function() return resolved_source end)
 
   log("compile_tikz: hash=" .. hash .. " source_length=" .. #resolved_source)
@@ -221,7 +289,7 @@ local function compile_tikz(source)
     local preview = resolved_source:sub(1, 200):gsub("\n", "\\n")
     log("compile_tikz: source_preview: " .. preview)
   end
-  return run_pdflatex_and_convert(tex_source, "tikzcd", hash, doc_dir)
+  return run_pdflatex_and_convert(tex_source, "tikzcd", hash, doc_dir, resolved_source, preamble_lines)
 end
 
 -- Compile a full tikz document (from ```tikz code block) directly, no template.
@@ -235,7 +303,9 @@ local function compile_tikz_document(source)
 
   local resolved_source = resolve_inputs(source, doc_dir)
   local hash = pandoc.sha1(resolved_source)
-  return run_pdflatex_and_convert(resolved_source, "tikzfull", hash, doc_dir)
+  -- A full-document tikz code block IS its own `.tex`: no template preamble is
+  -- prepended, so a pdflatex `l.NN` cite is already the figure-body line.
+  return run_pdflatex_and_convert(resolved_source, "tikzfull", hash, doc_dir, resolved_source, 0)
 end
 
 -- Shared helpers for building output from a compiled SVG/PDF pair.
