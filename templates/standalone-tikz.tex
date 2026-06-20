@@ -1,32 +1,18 @@
-% Standalone TikZ compilation template for the pandoc tikzcd filter — the STARTER
-% per-figure preamble template ([figures].template, Phase D / D-3 / P92).
-% The angle-bracket source marker just before \end{document} (the QTikz .pgs
-% TemplateReplaceText convention) is replaced by the filter with the tikz figure
-% source; it must appear exactly once. The tikzdefs/tikzstyles template variables
-% are filled with the shared-palette paths (P91).
+% Standalone TikZ render template — the user-owned template the tikz renderer
+% wraps a tikz file in (the QTikz .pgs model: the body marker below is replaced
+% with the tikz file source, then compiled). The template OWNS its preamble via
+% \usepackage{dzg-tikz} (the user's centralized styles tree); the app injects
+% nothing — edit this template and your styles tree to control how every figure
+% compiles.
 \documentclass[tikz,border=2pt]{standalone}
 \usepackage{dzg-tikz}
 \usepackage{graphicx}
 \usepackage{import}
-% TikZiT native-format support: declares the dummy `tikzit ...` pgfkeys and the
-% standard layers so a NATIVE .tikzstyles palette (and .tikzdefs preamble) the
-% figure \input's below compiles unmodified (Phase D / D-2 / P91).
-\usepackage{tikzit}
 
 % Additional TikZ libraries beyond what dzg-preamble loads
 \usetikzlibrary{external}
 
-% Shared figure palette (Phase D / D-2 / P91): the ONE .tikzdefs preamble and the
-% ONE .tikzstyles style file every figure shares, \input here in the preamble so
-% a style/def declared in the shared file is in scope for THIS figure by name.
-% The absolute paths are filled by the tikzcd filter from the config-declared
-% [figures].tikzdefs / [figures].tikzstyles (TIKZDEFS_FILE / TIKZSTYLES_FILE in
-% the compile env). Both are required, config-validated ExistingFiles — never
-% defaulted, so the variables are always present in a booted app.
-\input{$tikzdefs$}
-\input{$tikzstyles$}
-
 \begin{document}
 \nopagecolor
-<>
+$body$
 \end{document}
