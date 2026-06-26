@@ -329,7 +329,7 @@
 \newcommand{\covol}[0]{\operatorname{coVol}}
 \newcommand{\Cox}[0]{{ \operatorname{Cox} }}
 \newcommand{\CP}[0]{{\mathbf{CP}}}
-\newcommand{\cpt}[0]{{ \operatorname{compact} }}
+% \cpt: moved to tier2 as 1-arg compactification wrapper \overline{#1}
 \newcommand{\Crit}[0]{\operatorname{Crit}}
 \newcommand{\crit}[0]{\operatorname{crit}}
 \newcommand{\cross}[0]{\times}
@@ -543,6 +543,7 @@
 \newcommand{\resultant}[0]{{\mathrm{res}}}
 \newcommand{\RHom}{\operatorname{\mathbb{R}Hom}}
 \newcommand{\Ric}[0]{\operatorname{Ric}}
+\newcommand{\rc}[0]{{\operatorname{rc}}}
 \newcommand{\rk}[0]{{\operatorname{rank}}}
 \newcommand{\rot}[0]{\operatorname{rot}}
 \newcommand{\rowspace}{\operatorname{rowspace}}
@@ -678,7 +679,7 @@
 \newcommand{\algcl}[0] { \operatorname{cl}^{\mathrm{alg}}}
 \newcommand{\sepcl}[0] { \operatorname{cl}^{\mathrm{sep}}}
 \newcommand{\iso}{ \isomorphic  }
-\newcommand{\IV}{ {\textrm{IV}} }
+\newcommand{\IV}{{\rm{IV}} }
 \newcommand{\K}[0]{{\mathsf{K}}}
 \newcommand{\kbar}{{ \overline{k} }}
 \newcommand{\kfq}[0]{K_{/\FF_q}}
@@ -1057,3 +1058,118 @@
 \newcommand{\utor}{^{\mathrm{tor}}}
 \newcommand{\di}{\operatorname{div}}
 \newcommand{\dnor}{_{\mathrm{nor}}}
+
+% --- Dissertation-specific moduli, lattice, and involution macros ---
+\newcommand{\fco}{F_{\Co}}
+\newcommand{\fell}{F_{ \mathrm{ell} } }
+\newcommand{\fen}{F_{\En}}
+\newcommand{\fent}{F_{\En, 2}}
+\newcommand{\fentwo}{F_{\En,2}}
+\newcommand{\ftd}{F_{2d}}
+\newcommand{\fken}{F_{(2,2,0)}}
+\newcommand{\fttz}{F_{(2,2,0)}}
+\newcommand{\ofco}{\overline{F}_{\Co}}
+\newcommand{\ofen}{\overline{F}_{\En}}
+\newcommand{\ofentwo}{\overline{F}_{\En,2}}
+\newcommand{\ofken}{\overline{F}_{(2,2,0)}}
+\newcommand{\ten}{T_{\En}}
+\newcommand{\tdp}{T_{\dP}}
+\newcommand{\sdp}{S_{\dP}}
+\newcommand{\sen}{S_{\En}}
+\newcommand{\gdp}{{\Gamma_{\dP}} }
+\newcommand{\gent}{{\Gamma_{\En, 2}} }
+\newcommand{\gell}{\Gamma^{ \mathrm{ell} } }
+\newcommand{\tell}{T_{ \mathrm{ell} } }
+\newcommand{\idp}{\iota_{\dP}}
+\newcommand{\ien}{\iota_{\En}}
+\newcommand{\Idp}{I_{\dP}}
+\newcommand{\Ien}{I_{\En}}
+\newcommand{\inik}{\iota_{ \Nik }}
+\newcommand{\Inik}{I_{ \Nik }}
+\newcommand{\ienzero}{\iota_{\En, 0}}
+\newcommand{\gref}{\Gamma\dref}
+\newcommand{\dref}{_{\rm r}}
+\newcommand{\OrthObs}{\Orth_*}
+\newcommand{\ADE}{\mathrm{ADE}}
+\newcommand{\ADEBC}{\mathrm{ADE}+\mathrm{BC}}
+\newcommand{\tADE}{\widetilde{ \ADE } }
+
+
+% ================================================================================
+% Migrated from legacy AE_Style.sty on 2026-06-16 (Approved Restoration)
+% ================================================================================
+
+% ----- Standard Math Operators -----
+\newcommand{\Bir}{\operatorname{Bir}}
+\newcommand{\Conv}{\operatorname{Conv}}
+\newcommand{\Exc}{\operatorname{Exc}}
+\newcommand{\GCD}{\operatorname{GCD}}
+\newcommand{\M}{\operatorname{M}}
+\newcommand{\Projm}{\operatorname{Projm}}
+\newcommand{\Specm}{\operatorname{Specm}}
+\newcommand{\Ver}{\operatorname{Ver}}
+\newcommand{\Vol}{\operatorname{Vol}}
+
+% ----- Arrows and Relations -----
+\newcommand{\isoto}{\xrightarrow{\sim}}
+\newcommand{\acts}{\curvearrowright}
+
+% ----- Miscellaneous Math Symbols -----
+\newcommand{\wh}{\widehat}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+\newcommand{\lrc}{\lrcorner}
+\newcommand{\llc}{\llcorner}
+\newcommand{\urc}{\urcorner}
+\newcommand{\ulc}{\ulcorner}
+\newcommand{\uopp}{^{\rm opp}}
+\newcommand{\ubb}{^{\rm BB}}
+\newcommand{\dto}{\Rightarrow}
+
+% ----- Project-Specific Abbreviations / Notations -----
+\newcommand{\fign}{Fig.~\ref{fig:discforms}}
+\newcommand{\fignb}{Fig.~\ref{fig:discforms} }
+\newcommand{\ditto}{}
+\newcommand{\hoV}{\widehat{\overline V}}
+\newcommand{\hoD}{\widehat{\overline D}}
+\newcommand{\ooT}{\overline{\overline T}}
+\newcommand{\ias}{\operatorname{IAS}^2}
+\newcommand{\lge}{_{\ge0}}
+\newcommand{\ocC}{\overline{\cC}}
+\newcommand{\lred}{_{\rm red}}
+\newcommand{\mr}{\bar r}
+\newcommand{\ma}{\bar a}
+\newcommand{\mdelta}{\bar \delta}
+\newcommand{\mk}{\bar k}
+\newcommand{\me}{\hat e}
+\newcommand{\miota}{\hat \iota}
+\newcommand{\hiota}{\hat \iota}
+\newcommand{\oPic}{\overline{\Pic}}
+\newcommand{\ucox}{^{\rm cox}}
+\newcommand{\lir}{_{\rm ir}}
+\newcommand{\usat}{^{\rm sat}}
+\newcommand{\Cur}{\operatorname{Cur}}
+\newcommand{\ohV}{\overline{\hV}}
+\newcommand{\dgen}{_{\rm gen}}
+\newcommand{\dmon}{_{\rm mon}}
+\newcommand{\dias}{_{\rm IAS}}
+\newcommand{\dram}{_{\rm ram}}
+\newcommand{\drel}{_{\rm rel}}
+\newcommand{\dirr}{_{\rm irr}}
+\newcommand{\vrel}{V\drel}
+\newcommand{\virr}{V\dirr}
+\newcommand{\wref}{W\dref}
+\newcommand{\chref}{\ch\dref}
+\newcommand{\fref}{\fF\dref}
+\newcommand{\fram}{\fF\dram}
+\newcommand{\relpart}{\operatorname{rel}}
+\newcommand{\irrpart}{\operatorname{irr}}
+\newcommand{\fcref}{\fC\dref}
+\newcommand{\fgen}{\fF_{\rm gen}}
+\newcommand{\fsfref}{\fF_S^{\fref}}
+\newcommand{\ofsfref}{\oF_S^{\fref}}
+\newcommand{\upar}{^{\rm par}}
+\newcommand{\dleft}{{}_{\rm left}}
+\newcommand{\dright}{{}_{\rm right}}
+\newcommand{\evn}{\text{even }n}
+\newcommand{\odn}{\text{odd }n}
