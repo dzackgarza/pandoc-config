@@ -12,26 +12,25 @@ local function log(msg)
 end
 
 -- Output directories
-local pandoc_dir = os.getenv("PANDOC_DIR") or (home .. "/dotfiles/pandoc")
+local pandoc_dir = os.getenv("PANDOC_DIR") or (home .. "/.pandoc")
 local figures_dir = os.getenv("FIGURES_DIR") or (home .. "/.pandoc/figures")
 local svg_dir = os.getenv("SVG_DIR") or (figures_dir .. "/rendered")
 
--- Per-figure preamble template (Phase D / D-3 / P92): the config-declared
--- standalone LaTeX document each figure body is wrapped in, supplied by the app
--- from [figures].template (render.sh exports it as FIGURE_TEMPLATE_FILE). It
--- carries the QTikz `.pgs` `<>` `TemplateReplaceText` marker where the figure
--- source is substituted, plus `$tikzdefs$`/`$tikzstyles$` markers the shared
--- palette paths fill (P91). Required, config-validated ExistingFile — no default,
--- no fallback to a baked-in template: a missing var when a figure is ACTUALLY
--- compiled means the renderer wiring is broken, so fail loud. Read LAZILY at
--- compile time (not at filter load) so the doctor's empty-stdin invocation probe,
--- which loads the filter but compiles no figure, needs no render-context env.
--- Returns (compiled_template, raw_template_string): the raw string is folded into
--- the figure cache key so swapping the template content changes the render.
+-- Per-figure preamble template: the standalone LaTeX document each figure body is
+-- wrapped in. It \usepackage's dzg-tikz, which \input's the broken-out macro files
+-- (the single source of truth for tikz styles/defs — the same files the MathJax
+-- path consumes), so the template carries the tikz macros directly; there is no
+-- separate shared .tikzstyles/.tikzdefs palette. Defaults to the bundled template
+-- under PANDOC_DIR (mirroring the PANDOC_DIR default above), overridable via
+-- FIGURE_TEMPLATE_FILE. Read LAZILY at compile time (not at filter load) so the
+-- doctor's empty-stdin invocation probe, which loads the filter but compiles no
+-- figure, needs no render-context env. Returns (compiled_template,
+-- raw_template_string): the raw string is folded into the figure cache key so
+-- swapping the template content changes the render.
 local function figure_template()
   local template_path = os.getenv("FIGURE_TEMPLATE_FILE")
   if not template_path or template_path == "" then
-    error("tikzcd.lua: FIGURE_TEMPLATE_FILE is not set (the config-declared per-figure template)")
+    template_path = pandoc_dir .. "/templates/standalone-tikz.tex"
   end
   local template_file = io.open(template_path, "r")
   if not template_file then
@@ -40,28 +39,6 @@ local function figure_template()
   local template_str = template_file:read("*a")
   template_file:close()
   return pandoc.template.compile(template_str), template_str
-end
-
--- Shared figure palette (Phase D / D-2 / P91): the absolute paths of the ONE
--- shared .tikzstyles and .tikzdefs every figure \input's, supplied by the app
--- from the config-declared [figures].tikzstyles / [figures].tikzdefs (render.sh
--- exports them as TIKZSTYLES_FILE / TIKZDEFS_FILE). Both are required,
--- config-validated ExistingFiles — no default, no fallback: a missing var when a
--- figure is ACTUALLY compiled means the renderer wiring is broken, so fail loud
--- rather than compile a figure that silently ignores the shared palette. Read
--- LAZILY at compile time (not at filter load) so the doctor's empty-stdin
--- invocation probe, which loads the filter but compiles no figure, does not
--- require the render-context env.
-local function shared_palette()
-  local tikzstyles_file = os.getenv("TIKZSTYLES_FILE")
-  if not tikzstyles_file or tikzstyles_file == "" then
-    error("tikzcd.lua: TIKZSTYLES_FILE is not set (the config-declared shared .tikzstyles)")
-  end
-  local tikzdefs_file = os.getenv("TIKZDEFS_FILE")
-  if not tikzdefs_file or tikzdefs_file == "" then
-    error("tikzcd.lua: TIKZDEFS_FILE is not set (the config-declared shared .tikzdefs)")
-  end
-  return tikzstyles_file, tikzdefs_file
 end
 
 -- Surface a figure-compile FAILURE to the app (Phase D / D-6 / P95). On a
@@ -154,7 +131,12 @@ local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir, f
     inputs_env = "TEXINPUTS=" .. styles_dir .. ":: "
   end
 
-  local cmd1 = inputs_env .. "pdflatex -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " 2>&1"
+  -- Discard pdflatex's stdout+stderr: a pandoc filter's stdout is its output
+  -- channel and must stay clean. The compile log would otherwise prepend to the
+  -- rendered document, breaking a downstream `pandoc -f latex` re-parse of the
+  -- output (the figure renders, but the log corrupts the stream). Diagnostics on
+  -- failure come from the .log file via emit_figure_compile_error, not this stream.
+  local cmd1 = inputs_env .. "pdflatex -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " >/dev/null 2>&1"
   local ok1 = os.execute(cmd1)
   if not ok1 then
     -- Surface the figure-compile diagnostic (mapped to the figure source line)
@@ -233,45 +215,24 @@ local function compile_tikz(source)
 
   local resolved_source = resolve_inputs(source, doc_dir)
 
-  -- The shared palette paths fill the template's $tikzdefs$/$tikzstyles$ \input
-  -- lines, so this figure compiles WITH the config-declared shared .tikzdefs +
-  -- .tikzstyles in scope (Phase D / D-2 / P91).
-  local tikzstyles_file, tikzdefs_file = shared_palette()
-
-  -- The config-declared per-figure preamble template (Phase D / D-3 / P92): the
-  -- standalone document this figure body is wrapped in. Read lazily here.
+  -- The per-figure preamble template wraps this figure body; it \usepackage's
+  -- dzg-tikz, so the broken-out macro files (styles/defs) are already in scope —
+  -- no separate shared palette is wired in. Read lazily here.
   local tikz_doc_template, template_str = figure_template()
 
-  -- The cache key (hash) MUST fold in the shared palette CONTENT and the TEMPLATE
-  -- content, not just the figure body: the same body compiled against a different
-  -- shared .tikzstyles (P91's discriminator) or a different per-figure template
-  -- (P92's discriminator swaps the template on disk) is a different figure.
-  -- Hashing only the body would return a stale cached SVG when either changes, so
-  -- read the shared files and include their bytes — and the template's bytes — in
-  -- the hash. All are required ExistingFiles (config-validated), so a read failure
-  -- is a broken environment.
-  local function read_required(path, label)
-    local fh = io.open(path, "r")
-    if not fh then
-      error("tikzcd.lua: cannot read " .. label .. " at " .. path)
-    end
-    local content = fh:read("*a")
-    fh:close()
-    return content
-  end
-  local styles_content = read_required(tikzstyles_file, "shared .tikzstyles")
-  local defs_content = read_required(tikzdefs_file, "shared .tikzdefs")
-  local hash = pandoc.sha1(
-    resolved_source .. "\0" .. defs_content .. "\0" .. styles_content .. "\0" .. template_str
-  )
+  -- The cache key (hash) folds in the TEMPLATE content as well as the figure body:
+  -- the same body compiled against a different per-figure template (its bytes carry
+  -- the dzg-tikz \usepackage / macro-file includes) is a different figure, so
+  -- hashing only the body would return a stale cached SVG when the template
+  -- changes.
+  local hash = pandoc.sha1(resolved_source .. "\0" .. template_str)
 
-  -- Fill the template's $tikzdefs$/$tikzstyles$ palette markers first (pandoc
-  -- template), then substitute the figure source at the QTikz `<>` marker. The
-  -- `<>` is plain text to pandoc's template engine (not a $...$ variable), so it
-  -- survives the render untouched; substituting it AFTER keeps the figure source
-  -- (which may contain `$` math) out of the pandoc-template pass entirely. A
-  -- function replacement avoids gsub treating `%`/`\` in the source as special.
-  local ctx = { tikzstyles = tikzstyles_file, tikzdefs = tikzdefs_file }
+  -- Substitute the figure source at the QTikz `<>` marker. The `<>` is plain text
+  -- to pandoc's template engine (not a $...$ variable), so it survives the render
+  -- untouched; substituting it AFTER keeps the figure source (which may contain
+  -- `$` math) out of the pandoc-template pass entirely. A function replacement
+  -- avoids gsub treating `%`/`\` in the source as special.
+  local ctx = {}
   local rendered = pandoc.layout.render(pandoc.template.apply(tikz_doc_template, ctx))
   local marker_at = rendered:find("<>", 1, true)
   if not marker_at then

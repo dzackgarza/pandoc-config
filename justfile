@@ -15,7 +15,7 @@ BUILD_DIR_PANDOC := ".build_pandoc"
 BUILD_DIR_TEX := ".build_tex"
 
 # --- Environment ---
-export PANDOC_DIR := home_dir() / "dotfiles/pandoc"
+export PANDOC_DIR := home_dir() / ".pandoc"
 export TEXINPUTS := ".:" + home_dir() + "/.pandoc/styles//:" + home_dir() + "/.pandoc/macros//:" + home_dir() + "/.pandoc/config//:" + env_var_or_default("TEXINPUTS", "")
 
 # --- Recipes ---
@@ -303,6 +303,9 @@ _test-tikz:
 
 # Run all tests (macros, templates, tikz compilation, filter)
 test: _test-macros _test-templates _test-tikz _test-tikz-filter
+
+# CI gate (run by the global pre-push hook): same full suite as `test`.
+test-ci: test
 
 # Test tikzcd filter on multiple scenarios
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.
