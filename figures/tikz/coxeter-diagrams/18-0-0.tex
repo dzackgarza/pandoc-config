@@ -1,0 +1,77 @@
+﻿% \usetikzlibrary{calc}
+
+\begin{tikzpicture}[
+  x=1cm,y=1cm,
+  pt/.style={
+    circle, draw=black, fill=white,
+    inner sep=0pt, minimum size=4.2pt, line width=0.7pt
+  },
+  dpt/.style={
+    circle, draw=black, double, double distance=0.7pt,
+    fill=white, inner sep=0pt, minimum size=5.2pt, line width=0.45pt
+  },
+  lbl/.style={font=\normalsize, inner sep=1pt}
+]
+
+% Symmetric outer triangle
+\coordinate (A)  at (0,6.6);
+\coordinate (L)  at (-4.8,0);
+\coordinate (R)  at ( 4.8,0);
+
+% Left side points
+\coordinate (P11) at ($(A)!1/6!(L)$);
+\coordinate (P12) at ($(A)!2/6!(L)$);
+\coordinate (P13) at ($(A)!3/6!(L)$);
+\coordinate (P14) at ($(A)!4/6!(L)$);
+\coordinate (P15) at ($(A)!5/6!(L)$);
+
+% Right side points
+\coordinate (P9)  at ($(A)!1/6!(R)$);
+\coordinate (P8)  at ($(A)!2/6!(R)$);
+\coordinate (P7)  at ($(A)!3/6!(R)$);
+\coordinate (P6)  at ($(A)!4/6!(R)$);
+\coordinate (P5)  at ($(A)!5/6!(R)$);
+
+% Bottom chains (chosen symmetrically)
+\coordinate (P17) at (-3.0,0);
+\coordinate (P18) at (-1.55,0);
+\coordinate (P2)  at ( 1.55,0);
+\coordinate (P3)  at ( 3.0,0);
+
+% Interior leaves (chosen symmetrically)
+\coordinate (P19) at (-2.15,1.15);
+\coordinate (P1)  at ( 2.15,1.15);
+
+% Draw edges
+\draw (A) -- (P11) -- (P12) -- (P13) -- (P14) -- (P15) -- (L);
+\draw (A) -- (P9)  -- (P8)  -- (P7)  -- (P6)  -- (P5)  -- (R);
+\draw (L) -- (P17) -- (P18);
+\draw (P2) -- (P3) -- (R);
+\draw (L) -- (P19);
+\draw (P1) -- (R);
+
+% Nodes
+\node[dpt,label={[lbl]90:$10$}] at (A)   {};
+\node[pt, label={[lbl]180:$11$}] at (P11) {};
+\node[dpt,label={[lbl]180:$12$}] at (P12) {};
+\node[pt, label={[lbl]180:$13$}] at (P13) {};
+\node[dpt,label={[lbl]180:$14$}] at (P14) {};
+\node[pt, label={[lbl]180:$15$}] at (P15) {};
+\node[dpt,label={[lbl]180:$16$}] at (L)   {};
+
+\node[pt, label={[lbl]0:$9$}]   at (P9)  {};
+\node[dpt,label={[lbl]0:$8$}]   at (P8)  {};
+\node[pt, label={[lbl]0:$7$}]   at (P7)  {};
+\node[dpt,label={[lbl]0:$6$}]   at (P6)  {};
+\node[pt, label={[lbl]0:$5$}]   at (P5)  {};
+\node[dpt,label={[lbl]0:$4$}]   at (R)   {};
+
+\node[pt, label={[lbl]270:$17$}] at (P17) {};
+\node[dpt,label={[lbl]270:$18$}] at (P18) {};
+\node[dpt,label={[lbl]270:$2$}]  at (P2)  {};
+\node[pt, label={[lbl]270:$3$}]  at (P3)  {};
+
+\node[pt, label={[lbl]0:$19$}]   at (P19) {};
+\node[pt, label={[lbl]180:$1$}]  at (P1)  {};
+
+\end{tikzpicture}

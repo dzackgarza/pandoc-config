@@ -1,4 +1,7 @@
-\begin{tikzpicture}
+﻿\begin{tikzpicture}
+   \node (m1) at (-2, 0) {$\bd \bbcpt{\fen}$};
+   \node (m2) at (-2, -4) {$\bd \bbcpt{F_{\Co}}$};
+  \draw[-latex, shorten >= 0.4em, dashed] (m2) to (m1);
     \node [rounded rectangle, draw, label={[label distance=0.75em]-90: $(10,10,0)_1$}, label={[label distance=0.5em]90: $\mathbb{RP}^2, \mathrm{div} = 1$}] (w0) at (0, 0) {$E_{10}(2)$};
     \node [rectangle, draw, anchor=west, label={[label distance=0.95em]-90: $(8,8,0)_0$}] (C12) at (2,0) {$E_8(2)$};
     \node [rounded rectangle, draw, label={[label distance=0.75em]-90: $(10, 8, 0)_1$}, label={[label distance=0.5em]90: $\mathbb{D}^2, \mathrm{div} = 2$}] (w1) at (5, 0) {$U \oplus E_8(2)$};
@@ -8,9 +11,9 @@
     \draw[-latex, shorten >= 0.4em] (w1) to (C12.east);
     \draw[-latex, shorten >= 0.4em] (w1) to (C2.west);
 
-\node [rounded rectangle, draw, label={[label distance=0.75em]-90: $(9,9,1)_1$}, label={[label distance=0.5em]90: $\mathbb{D}^2, \mathrm{div} = 2$}] (p1) at (5, -5) {$\langle 2 \rangle \oplus E_8(2)$};
+\node [rounded rectangle, draw, label={[label distance=0.75em]-90: $(9,9,1)_1$}, label={[label distance=0.5em]90: $\mathbb{D}^2, \mathrm{div} = 2$}] (p1) at (5, -4) {$\langle 2 \rangle \oplus E_8(2)$};
 
-\node [rectangle, draw, anchor=west, label={[label distance=0.95em]-90: $(7,7,1)_0$}] (C1) at (7.1,-5) {$A_1^{\oplus 7}$};
+\node [rectangle, draw, anchor=west, label={[label distance=0.95em]-90: $(7,7,1)_0$}] (C1) at (7.1,-4) {$A_1^{\oplus 7}$};
 \draw[-latex, shorten >= 0.4em] (p1) to (C1.west);
 \draw[-latex, shorten >= 2.4em, shorten <= 2.5em, dashed] (p1.north) to (w1.south) ;
 \draw[-latex, shorten >= 2.4em, shorten <= 2.5em, dashed] (C1.north) to (C2.south);

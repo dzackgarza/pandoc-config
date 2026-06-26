@@ -1,0 +1,69 @@
+﻿\begin{tikzpicture}[
+  scale=0.8,
+  latticept/.style={circle, fill=black!50, inner sep=0pt, minimum size=4.2pt},
+  blatticept/.style={fill=black},
+  openpt/.style={circle, draw=black, fill=white, line width=1.1pt,
+    inner sep=0pt, minimum size=8pt},
+  edge/.style={line width=2pt, line cap=round},
+  gridline/.style={gray!45, dashed, line width=0.35pt},
+  region/.style={fill=cyan!8, draw=none},
+  every node/.style={font=\small}
+]
+  % grid
+  \foreach \x in {-2,-1,...,4} {
+    \draw[gridline] (\x,-2.5) -- (\x,4.5);
+  }
+  \foreach \y in {-2,-1,...,4} {
+    \draw[gridline] (-2.5,\y) -- (4.5,\y);
+  }
+
+  % lattice points
+  \foreach \x in {-2,-1,...,4} {
+    \foreach \y in {-2,-1,...,4} {
+      \node[latticept] at (\x,\y) {};
+    }
+  }
+
+  % vertices
+  \coordinate (nw)    at (0,2);
+  \coordinate (ne)    at (2,2);
+  \coordinate (sw)    at (0,0);
+  \coordinate (se)    at (2,0);
+  \coordinate (pstar) at (2,2);
+
+  % shaded square
+  \fill[region] (nw) -- (ne) -- (se) -- (sw) -- cycle;
+
+  % boundary
+  \draw[edge] (nw) -- (ne);
+  \draw[edge] (ne) -- (se);
+  \draw[gray!70, line width=0.8pt] (sw) -- (se);
+  \draw[gray!70, line width=0.8pt] (nw) -- (sw);
+
+  % endpoints
+  \node[openpt] at (nw) {};
+  \node[openpt] at (sw) {};
+  \node[openpt] at (se) {};
+  \node[
+    star,
+    star points=5,
+    star point ratio=2.2,
+    draw=red,
+    fill=white,
+    line width=1.2pt,
+    minimum size=12pt,
+    inner sep=0pt
+  ] at (pstar) {};
+
+  % labels
+  \node[red, font=\Large] at (2.5,2.5) {$p_\ast$};
+
+  \node[font=\Large] at (1,1.4) {$D_4$};
+
+  % redraw lattice points on top of the shaded region
+  \node[latticept, blatticept] at (1,0) {};
+  \node[latticept, blatticept] at (0,1) {};
+  \node[latticept, blatticept] at (1,1) {};
+  \node[latticept, blatticept] at (2,1) {};
+  \node[latticept, blatticept] at (1,2) {};
+\end{tikzpicture}

@@ -1,0 +1,92 @@
+﻿\begin{tikzpicture}[
+  >=stealth,
+  node distance=1cm,
+  cusp/.style={circle, draw=black, fill=white, inner sep=0pt,
+    minimum size=7.5mm, font=\normalsize},
+  dcusp/.style={circle, double, draw=black, fill=white, inner sep=0pt,
+    minimum size=7.5mm, font=\normalsize},
+  boxcusp/.style={rectangle, draw=black, fill=white, inner sep=1.5pt,
+    minimum width=7mm, minimum height=6mm, font=\normalsize},
+  arr/.style={->, line width=0.55pt, shorten >=2pt, shorten <=2pt},
+  darr/.style={->, double, double distance=1.3pt, line width=0.35pt,
+    shorten >=2pt, shorten <=2pt},
+  dash/.style={->, dashed, line width=0.55pt, shorten >=2pt, shorten <=2pt},
+  lab/.style={font=\normalsize},
+  bluecusp/.style={cusp, draw=blue!70!black, text=blue!70!black, fill=blue!6},
+  blueboxcusp/.style={boxcusp, draw=blue!70!black, text=blue!70!black, fill=blue!6},
+  bluearr/.style={arr, draw=blue!70!black},
+  bluedarr/.style={darr, draw=blue!70!black}
+]
+
+\node at (-6, 2.5) {$\bd \bbcpt{\fent}$};
+
+% left-hand cusps
+\node[bluecusp] (c2) at (-5.8,0.35) {$2$};
+\node[boxcusp] (c12) at (-3.55,1.15) {$12$};
+\node[blueboxcusp] (c245) at (-3.55,-0.40) {$245$};
+
+\node[lab] at (-3.55,1.8) {$E_8^2$};
+\node[lab] at (-3.55,-1) {$D_{16}^{+}$};
+\node[lab] at (-5.8,-2.35) {$U\oplus E_8^2$};
+
+% middle cusps
+\node[dcusp]     (c1) at (-1.25,1.85) {$1$};
+\node[bluecusp]  (c3) at (-1.25,0.70) {$3$};
+\node[bluecusp]  (c4) at (-1.25,-0.45) {$4$};
+\node[bluecusp]  (c5) at (-1.25,-1.55) {$5$};
+
+\node[lab] at (-1.25,-2.35) {$U(2)\oplus E_8^2$};
+
+% right-hand cusps
+\node[boxcusp]     (c13) at (1.35,2.45) {$13$};
+\node[boxcusp]     (c14) at (1.35,1.75) {$14$};
+\node[boxcusp]     (c15) at (1.35,1.05) {$15$};
+\node[blueboxcusp] (c34) at (1.35,0.10) {$34$};
+\node[blueboxcusp] (c35) at (1.35,-0.65) {$35$};
+\node[blueboxcusp] (c45) at (1.35,-1.35) {$45$};
+\node[blueboxcusp] (c55) at (1.35,-2.20) {$55$};
+
+\node[lab, anchor=west] at (1.68,2.45) {$E_7^2C_2$};
+\node[lab, anchor=west] at (1.68,1.75) {$D_8^2$};
+\node[lab, anchor=west] at (1.68,1.05) {$A_{15}A_1(2)$};
+\node[lab, anchor=west] at (1.68,0.10) {$A_{15}A_1(2)$};
+\node[lab, anchor=west] at (1.68,-0.65) {$D_{12}D_4$};
+\node[lab, anchor=west] at (1.68,-1.35) {$D_8^2$};
+\node[lab, anchor=west] at (1.68,-2.20) {$E_7^2C_2$};
+
+% dashed vertical cusp maps
+\draw[dashed] (c2) -- (-5.8,-2.15);
+\draw[dashed] (c1) -- (c3);
+\draw[dashed] (c3) -- (c4);
+\draw[dashed] (c4) -- (c5);
+\draw[dashed] (c5) -- (-1.25,-2.15);
+
+% left arrows
+\draw[arr]      (c2) -- (c12);
+\draw[bluearr]  (c2) -- (c245);
+
+\draw[darr]      (c1) -- (c12);
+\draw[bluedarr]  (c4) -- (c245);
+\draw[bluedarr]  (c5) -- (c245);
+
+% right arrows
+\draw[arr]      (c1) -- (c13);
+\draw[arr]      (c1) -- (c14);
+\draw[arr]      (c1) -- (c15);
+
+\draw[bluearr]  (c3) -- (c34);
+\draw[bluearr]  (c3) -- (c35);
+
+\draw[bluearr]  (c4) -- (c34);
+\draw[bluearr]  (c4) -- (c45);
+
+\draw[bluearr]  (c5) -- (c35);
+\draw[bluearr]  (c5) -- (c45);
+\draw[bluearr]  (c5) -- (c55);
+
+% remaining black arrows
+\draw[arr]      (c3) -- (c13);
+\draw[arr]      (c4) -- (c14);
+\draw[arr]      (c5) -- (c15);
+
+\end{tikzpicture}

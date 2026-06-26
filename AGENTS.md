@@ -1,7 +1,6 @@
 # Pandoc Configuration
 
-Personal Pandoc and LaTeX configuration for generating PDFs from markdown and managing
-LaTeX macros.
+Personal Pandoc and LaTeX configuration for generating PDFs from markdown and managing LaTeX macros.
 
 ## Directory Structure
 

@@ -1,0 +1,182 @@
+﻿% \usetikzlibrary{arrows.meta,calc,positioning}
+
+\begin{tikzpicture}[
+  >=Latex,
+  line cap=round,
+  line join=round,
+  every node/.style={font=\small},
+  graph vertex/.style={circle,draw=black,minimum size=10pt, inner sep=1.6pt},
+  genus label/.style={black,font=\scriptsize,below=1pt},
+  poset node/.style={draw=black,minimum size=10pt,inner sep=0pt}
+]
+
+\def\loopsize{20}
+
+\pgfmathsetmacro{\xl}{4}
+\pgfmathsetmacro{\xll}{\xl - 1}
+\pgfmathsetmacro{\xr}{14}
+
+\def\ya{6}
+\def\yb{4}
+\def\yc{2}
+\def\yd{0}
+
+\def\xlp{\xl+3}
+\def\xrp{\xr-2}
+
+\pgfmathsetmacro{\xmid}{(\xlp + \xrp)/2}
+
+\newcommand{\IoneThreeDfourDiagram}{%
+  \mathord{\vcenter{\hbox{%
+    \begin{tikzpicture}[
+      x=1em,
+      y=1em,
+      rootmtwo/.style={
+        circle, draw, fill=white,
+        inner sep=0pt, minimum size=5pt
+      },
+      rootmfour/.style={
+        circle, draw, fill=black,
+        inner sep=0pt, minimum size=5pt
+      },
+      mfour/.style={
+        double,
+        double distance=1.3pt,
+        line width=0.35pt
+      }
+    ]
+      \def\edgelen{1.15}
+
+      % coordinates
+      \coordinate (a0) at (0,0);
+      \coordinate (a1) at (90:\edgelen);
+      \coordinate (a2) at (210:\edgelen);
+      \coordinate (a3) at (330:\edgelen);
+
+      % edges first
+      \draw[mfour] (a0) -- (a1);
+      \draw[mfour] (a0) -- (a2);
+      \draw[mfour] (a0) -- (a3);
+
+      % vertices on top
+      \node[rootmtwo]  at ($ (a0) - (0.15, 0)$) {};
+      \node[rootmfour] at ($ (a1) - (0.15, 0)$) {};
+      \node[rootmfour] at ($ (a2) - (0.15, 0)$) {};
+      \node[rootmfour] at ($ (a3) - (0.15, 0)$) {};
+    \end{tikzpicture}%
+  }}}%
+}
+
+% ---------------------------------------------------------------------------
+% Helpers
+% ---------------------------------------------------------------------------
+
+\newcommand{\gvertex}[3]{%
+  \node[graph vertex] (#1) at #2 {$#3$};
+}
+
+% ---------------------------------------------------------------------------
+% Global labels
+% ---------------------------------------------------------------------------
+
+\node[font=\Large,anchor=west] at (\xl-2,\ya+2)
+  {$\bd \overline{\mcm}_{2, 0} \cong \mathrm{Div}(24)\sm\ts{1} \cong \mathrm{SubDiag}\qty{\IoneThreeDfourDiagram \subseteq \I_{1, 3}(2)\tensor_\ZZ \RR}-\ts{\emptyset}$};
+
+\node[anchor=east] at (\xll,\ya) {dim $0$};
+\node[anchor=east] at (\xll,\yb) {dim $1$};
+\node[anchor=east] at (\xll,\yc) {dim $2$};
+\node[anchor=east] at (\xll,\yd) {dim $3$};
+
+% ---------------------------------------------------------------------------
+% Left column: stable graphs
+% ---------------------------------------------------------------------------
+
+% dim 0: two genus-0 vertices joined by an edge, each with a loop
+\begin{scope}[shift={(\xl,\ya)}]
+  \gvertex{omegaL}{(0,0)}{0}
+  \gvertex{omegaR}{(1.2,0)}{0}
+  \draw (omegaL) -- (omegaR);
+  \draw (omegaL) to[out=120,in=60,looseness=\loopsize] (omegaL);
+  \draw (omegaR) to[out=120,in=60,looseness=\loopsize] (omegaR);
+\end{scope}
+
+% dim 1: genus-1 vertex joined to a genus-0 vertex with a loop
+\begin{scope}[shift={(\xl,\yb)}]
+  \gvertex{nsL}{(0,0)}{1}
+  \gvertex{nsR}{(1.2,0)}{0}
+  \draw (nsL) -- (nsR);
+  \draw (nsR) to[out=120,in=60,looseness=\loopsize] (nsR);
+\end{scope}
+
+% dim 2: two genus-1 vertices joined by an edge
+\begin{scope}[shift={(\xl,\yc)}]
+  \gvertex{sL}{(0,0)}{1}
+  \gvertex{sR}{(1.2,0)}{1}
+  \draw (sL) -- (sR);
+\end{scope}
+
+% ---------------------------------------------------------------------------
+% Right column: stable graphs
+% ---------------------------------------------------------------------------
+
+
+% dim 0: theta graph (two vertices joined by three edges)
+\begin{scope}[shift={(\xr-0.6,\ya)}]
+  \gvertex{thetaL}{(0,0)}{0}
+  \gvertex{thetaR}{(1.2,0)}{0}
+  \draw (thetaL) -- (thetaR);
+  \draw (thetaL) to[out=50,in=130] (thetaR);
+  \draw (thetaL) to[out=-50,in=-130] (thetaR);
+\end{scope}
+
+% dim 1: one genus-0 vertex with two loops
+\begin{scope}[shift={(\xr,\yb)}]
+  \gvertex{nn}{(0,0)}{0}
+  \draw (nn) to[out=150,in=210,looseness=\loopsize] (nn);
+  \draw (nn) to[out=30,in=-30,looseness=\loopsize] (nn);
+\end{scope}
+
+% dim 2: one genus-1 vertex with one loop
+\begin{scope}[shift={(\xr,\yc)}]
+  \gvertex{n}{(0,0)}{1}
+  \draw (n) to[out=120,in=60,looseness=\loopsize] (n);
+\end{scope}
+
+% dim 3: one genus-2 vertex
+\begin{scope}[shift={(\xmid,\yd-1)}]
+  \gvertex{gTwo}{(0,0)}{2}
+\end{scope}
+
+% ---------------------------------------------------------------------------
+% Middle: Hasse diagram / poset nodes
+% ---------------------------------------------------------------------------
+
+
+\node[poset node] (Pomega) at (\xlp,\ya) {$2$};
+\node[poset node] (Pns)    at (\xlp,\yb) {$4$};
+\node[poset node] (Ps)     at (\xlp,\yc) {$8$};
+
+\node[poset node] (Ptheta) at (\xrp,\ya) {$3$};
+\node[poset node] (Pnn)    at (\xrp,\yb) {$6$};
+\node[poset node] (Pn)     at (\xrp,\yc) {$12$};
+
+\node[poset node] (Pg2)    at (\xmid,\yd) {$24$};
+
+% ---------------------------------------------------------------------------
+% Poset arrows
+% ---------------------------------------------------------------------------
+
+\draw[->] (Pomega) -- (Pns);
+\draw[->] (Pns) -- (Ps);
+
+\draw[->] (Ptheta) -- (Pnn);
+\draw[->] (Pnn) -- (Pn);
+
+\draw[->] (Pomega) -- (Pnn);
+\draw[->] (Pns) -- (Pn);
+
+\draw[->] (Ps) -- (Pg2);
+\draw[->] (Pn) -- (Pg2);
+
+
+\end{tikzpicture}

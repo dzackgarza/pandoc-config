@@ -8,3 +8,4 @@ __pycache__/
 # Pre-commit hook regenerates these LaTeX test PDFs nondeterministically
 # (embedded timestamps); they are build artifacts, not tracked reference outputs.
 tests/*.pdf
+figures/rendered/.cache.json

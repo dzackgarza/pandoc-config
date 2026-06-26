@@ -1,0 +1,151 @@
+﻿% Requires:
+% \usetikzlibrary{arrows.meta,calc,shapes.geometric}
+
+\begin{tikzpicture}[
+  x=1cm,
+  y=-1cm, % positive y points downward, to match the screenshot
+  >=Stealth,
+  line cap=round,
+  line join=round,
+  grid/.style={gray!35, line width=0.3pt},
+  ambient/.style={black!65, dashed, dash pattern=on 5pt off 4pt, line width=0.9pt},
+  inneredge/.style={black!65, line width=1.0pt},
+  blueseg/.style={blue!75, line width=2.4pt},
+  orangeseg/.style={orange!80!black, dashed, dash pattern=on 6pt off 4pt, line width=2.4pt},
+  sqfill/.style={fill=green!10, draw=none},
+  rednum/.style={red!85!black, font=\bfseries\Large},
+  blackdot/.style={circle, fill=black, inner sep=2.2pt},
+  redtri/.style={
+    isosceles triangle,
+    isosceles triangle apex angle=60,
+    shape border rotate=90,
+    draw=none,
+    fill=red!90!black,
+    minimum size=8pt,
+    inner sep=0pt
+  }
+]
+
+% ------------------------------------------------------------
+% Visible grid
+% ------------------------------------------------------------
+\draw[grid] (-2.5,-2.5) grid (5.5,5.5);
+
+% ------------------------------------------------------------
+% Key lattice coordinates
+% NW corner of the northwesternmost green square is (0,0)
+% ------------------------------------------------------------
+\coordinate (A) at (0,0);
+\coordinate (B) at (1,1);
+\coordinate (C) at (2,2);
+\coordinate (D) at (3,3);
+
+% red marked lattice points
+\coordinate (R1) at (1,2);
+\coordinate (R2) at (1,3);
+\coordinate (R3) at (2,1);
+\coordinate (R4) at (3,1);
+\coordinate (R5) at (3,3);
+
+% ambient diamond vertices
+\coordinate (L) at (-2,2);
+\coordinate (T) at (2,-2);
+\coordinate (Rt) at (5,1);
+\coordinate (Bm) at (1,5);
+
+% ------------------------------------------------------------
+% Pale green unit squares
+% top-left corners at integer lattice points
+% ------------------------------------------------------------
+\foreach \x/\y in {
+  0/0, 1/0,
+  0/1,
+  2/1,
+  1/2, 2/2
+}{
+  \fill[sqfill] (\x,\y) rectangle ++(1,1);
+}
+
+% ------------------------------------------------------------
+% Ambient dashed diamond and dashed lattice lines
+% ------------------------------------------------------------
+\draw[ambient] (L) -- (T) -- (Rt) -- (Bm) -- cycle;
+
+\draw[ambient] (0,0) -- (2,0);
+\draw[ambient] (2,-2) -- (2,2);
+\draw[ambient] (1,1) -- (5,1);
+\draw[ambient] (-2,2) -- (2,2);
+\draw[ambient] (1,3) -- (3,3);
+\draw[ambient] (0,0) -- (0,2);
+\draw[ambient] (1,1) -- (1,5);
+\draw[ambient] (3,1) -- (3,3);
+
+% ------------------------------------------------------------
+% Solid internal square edges / diagonals
+% ------------------------------------------------------------
+\draw[inneredge] (1,0) -- (1,1);
+\draw[inneredge] (0,1) -- (1,1);
+
+\draw[inneredge] (1,0) -- (2,1);
+\draw[inneredge] (0,1) -- (1,2);
+\draw[inneredge] (2,1) -- (3,2);
+\draw[inneredge] (1,2) -- (2,3);
+
+\draw[inneredge] (2,2) -- (2,3);
+\draw[inneredge] (2,2) -- (3,2);
+
+% ------------------------------------------------------------
+% Orange line ell_En : integer endpoints
+% passes through (1,2) and (2,1)
+% ------------------------------------------------------------
+\draw[orangeseg] (-1,4) -- (4,-1);
+
+% ------------------------------------------------------------
+% Blue line ell_dP : integer endpoints
+% solid from (0,0) to (1,1), dashed from (1,1) to (2,2),
+% solid from (2,2) to (3,3)
+% ------------------------------------------------------------
+\draw[blueseg] (0,0) -- (1,1);
+\draw[blueseg, dashed, dash pattern=on 5pt off 4pt] (1,1) -- (2,2);
+\draw[blueseg] (2,2) -- (3,3);
+
+% ------------------------------------------------------------
+% Black points
+% ------------------------------------------------------------
+\node[blackdot] at (2,2) {};
+\node[blackdot] at (2,3) {};
+\node[blackdot] at (3,2) {};
+
+% ------------------------------------------------------------
+% Red triangular markers
+% ------------------------------------------------------------
+\node[redtri] at (R1) {};
+\node[redtri] at (R2) {};
+\node[redtri] at (R3) {};
+\node[redtri] at (R4) {};
+\node[redtri] at (R5) {};
+
+% ------------------------------------------------------------
+% Red labels
+% ------------------------------------------------------------
+\node[rednum, anchor=north east] at ($(R1)+(-0.08,0.10)$) {$2$};
+\node[rednum, anchor=west]       at ($(R2)+(0.08,0.22)$) {$2$};
+\node[rednum, anchor=west]       at ($(R3)+(0.10,-0.08)$) {$2$};
+\node[rednum, anchor=west]       at ($(R4)+(0.10,0.22)$) {$2$};
+\node[rednum, anchor=west]       at ($(R5)+(0.08,0.22)$) {$16$};
+
+% ------------------------------------------------------------
+% Main label
+% ------------------------------------------------------------
+\node[font=\fontsize{26}{28}\selectfont] at (-1.0,-0.7) {$\Gamma(\mathcal{X}_0)$};
+
+% ------------------------------------------------------------
+% Direction arrows and labels
+% ------------------------------------------------------------
+\draw[orange!85!black, line width=1.6pt, <->] (3.95,-1.05) -- (4.95,-0.05);
+\node[orange!85!black, font=\bfseries\LARGE, anchor=west] at (4.85,-0.40) {$\ell_{\mathrm{En}}$};
+
+\draw[blue!75, line width=1.6pt, <->] (3.55,4.15) -- (4.65,3.05);
+\node[blue!75, font=\bfseries\LARGE, anchor=west] at (4.45,3.65) {$\ell_{\mathrm{dP}}$};
+
+\end{tikzpicture}

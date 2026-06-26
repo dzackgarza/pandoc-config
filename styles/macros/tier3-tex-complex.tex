@@ -121,3 +121,68 @@
 
 % Scaled and raised symbols
 \newcommand{\mypound}{\scalebox{0.8}{\raisebox{0.4ex}{\#}}}
+
+
+% ================================================================================
+% Migrated from legacy AE_Style.sty on 2026-06-16 (Approved Restoration)
+% ================================================================================
+
+% ----- TikZ dashed rational map arrow (LaTeX only) -----
+\newcommand*{\ratmap}[1][]{\mathbin{\tikz [baseline=-0.25ex,-latex, dashed,#1] \draw [#1] (0pt,0.5ex) -- (1.3em,0.5ex);}}
+
+% ----- Spacing / Alignment Protected Root Systems -----
+\newcommand{\p}{\prime}
+\newcommand{\pp}{{\prime\prime}}
+\newcommand{\ph}{\protect\kern -2pt\protect\phantom{.}}
+\newcommand{\ke}{\protect\kern -2pt}
+\newcommand{\kee}{\protect\kern -3pt}
+\newcommand{\php}{\ph^\p\ke}
+\newcommand{\phpp}{\ph^\pp\prime\ke}
+\newcommand{\myraise}{\raise.65pt}
+\newcommand{\phmi}{\myraise\hbox{$\ph^-$}\protect\kern -2pt}
+\newcommand{\phpl}{\myraise\hbox{$\ph^+$}\protect\kern -2pt}
+\newcommand{\otherbar}{\prime}
+\newcommand{\exo}{*}
+\newcommand{\mA}{\myraise\hbox{$\ph^-$}\protect\kern -4pt A}
+\newcommand{\mD}{\myraise\hbox{$\ph^-$}\protect\kern -2pt D}
+\newcommand{\mE}{\myraise\hbox{$\ph^-$}\protect\kern -2pt E}
+\newcommand{\mX}{\myraise\hbox{$\ph^-$}\protect\kern -2pt X}
+\newcommand{\mS}{\myraise\hbox{$\ph^-$}\protect\kern -2pt S}
+\newcommand{\foA}{\raise 1.17pt\hbox{$\ph^f$}\protect\kern -4pt A}
+\newcommand{\foD}{\myraise\hbox{$\ph^f$}\protect\kern -2pt D}
+\newcommand{\foE}{\myraise\hbox{$\ph^f$}\protect\kern -2pt E}
+\newcommand{\plA}{\myraise\hbox{$\ph^+$}\protect\kern -4pt A}
+\newcommand{\plD}{\myraise\hbox{$\ph^+$}\protect\kern -2pt D}
+\newcommand{\plE}{\myraise\hbox{$\ph^+$}\protect\kern -2pt E}
+\newcommand{\plX}{\myraise\hbox{$\ph^+$}\protect\kern -2pt X}
+\newcommand{\plS}{\myraise\hbox{$\ph^+$}\protect\kern -2pt S}
+\newcommand{\quA}{^?\kern -3pt A}
+\newcommand{\pA}{\php \kern -1pt A}
+\newcommand{\pD}{\php D}
+\newcommand{\pE}{\php E}
+\newcommand{\pX}{\php X}
+\newcommand{\pS}{\php S}
+\newcommand{\ppA}{\phpp \kern -1pt A}
+\newcommand{\ppD}{\phpp D}
+\newcommand{\ppE}{\phpp E}
+\newcommand{\ppX}{\phpp X}
+\newcommand{\ppS}{\phpp S}
+
+% ----- Alignment Test Blocks -----
+\newcommand{\testminusalignment}{%
+$A_2^-     \mA_3$  $A^-_0  \mA_0 A_0^-$
+
+$D_0^-  \mD_3$  $D^-_0  \mD_0 D_0^-$
+
+$E_0^-  \mE_3$  $E^-_0  \mE_0 E_0^-$
+}
+\newcommand{\testplusalignment}{%
+$A_2^+     \plA_3$  $A^+_0  \plA_0 A_0^+$
+
+$D_0^+  \plD_3$  $D^+_0  \plD_0 D_0^+$
+
+$E_0^+  \plE_3$  $E^+_0  \plE_0 E_0^+$
+}
+
+% ----- Table Row Color Helper -----
+\newcommand{\ccy}{\rowcolor{black!8}}

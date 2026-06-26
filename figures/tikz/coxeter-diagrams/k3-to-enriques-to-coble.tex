@@ -1,0 +1,219 @@
+﻿% Requires: \usetikzlibrary{calc,arrows.meta}
+
+\begin{tikzpicture}[
+  x=1cm,y=1cm,
+  >=Latex,
+  line cap=round,
+  line join=round,
+  pt/.style={
+    circle, draw=black, fill=white,
+    inner sep=0pt, minimum size=4.2pt, line width=0.7pt
+  },
+  dpt/.style={
+    circle, draw=black, double, double distance=0.7pt,
+    fill=white, inner sep=0pt, minimum size=5.4pt, line width=0.45pt
+  },
+  fpt/.style={
+    circle, draw=black, fill=black,
+    inner sep=0pt, minimum size=4.6pt, line width=0.7pt
+  },
+  toppt/.style={
+    circle, draw=black, fill=white,
+    inner sep=0pt, minimum size=4.6pt, line width=0.7pt
+  },
+  lbl/.style={font=\normalsize, inner sep=1pt}
+]
+
+% ------------------------------------------------------------------
+% Left panel: original symmetric triangle with numbering
+% ------------------------------------------------------------------
+\begin{scope}[shift={(0,0)}]
+
+\node at (2, 7) {$\bd_{0, 1}\bbcpt{ F_{(2,2,0)} }$};
+
+% Main vertices
+\coordinate (oA) at (0,6.8);
+\coordinate (oL) at (-4.8,0);
+\coordinate (oR) at ( 4.8,0);
+
+% Side points (exactly symmetric)
+\coordinate (o11) at ($(oA)!1/6!(oL)$);
+\coordinate (o12) at ($(oA)!2/6!(oL)$);
+\coordinate (o13) at ($(oA)!3/6!(oL)$);
+\coordinate (o14) at ($(oA)!4/6!(oL)$);
+\coordinate (o15) at ($(oA)!5/6!(oL)$);
+
+\coordinate (o9)  at ($(oA)!1/6!(oR)$);
+\coordinate (o8)  at ($(oA)!2/6!(oR)$);
+\coordinate (o7)  at ($(oA)!3/6!(oR)$);
+\coordinate (o6)  at ($(oA)!4/6!(oR)$);
+\coordinate (o5)  at ($(oA)!5/6!(oR)$);
+
+% Bottom chains and interior leaves (chosen symmetrically)
+\coordinate (o17) at (-3.00,0);
+\coordinate (o18) at (-1.55,0);
+\coordinate (o2)  at ( 1.55,0);
+\coordinate (o3)  at ( 3.00,0);
+
+\coordinate (o19) at (-2.15,1.12);
+\coordinate (o1)  at ( 2.15,1.12);
+
+% Edges
+\draw (oA) -- (o11) -- (o12) -- (o13) -- (o14) -- (o15) -- (oL);
+\draw (oA) -- (o9)  -- (o8)  -- (o7)  -- (o6)  -- (o5)  -- (oR);
+\draw (oL) -- (o17) -- (o18);
+\draw (o2) -- (o3) -- (oR);
+\draw (oL) -- (o19);
+\draw (o1) -- (oR);
+
+% Symmetry axis and fold indicator
+\draw[densely dotted, line width=1pt] (0,0) -- (0,6.8);
+\draw[<->, line width=0.9pt] (-1.45,2.55) -- (1.45,2.55);
+
+% Nodes + labels
+\node[dpt,label={[lbl]90:$10$}] at (oA)  {};
+\node[pt, label={[lbl]180:$11$}] at (o11) {};
+\node[dpt,label={[lbl]180:$12$}] at (o12) {};
+\node[pt, label={[lbl]180:$13$}] at (o13) {};
+\node[dpt,label={[lbl]180:$14$}] at (o14) {};
+\node[pt, label={[lbl]180:$15$}] at (o15) {};
+\node[dpt,label={[lbl]180:$16$}] at (oL)  {};
+
+\node[pt, label={[lbl]0:$9$}]  at (o9) {};
+\node[dpt,label={[lbl]0:$8$}]  at (o8) {};
+\node[pt, label={[lbl]0:$7$}]  at (o7) {};
+\node[dpt,label={[lbl]0:$6$}]  at (o6) {};
+\node[pt, label={[lbl]0:$5$}]  at (o5) {};
+\node[dpt,label={[lbl]-90:$4$}]  at (oR) {};
+
+\node[pt, label={[lbl]270:$17$}] at (o17) {};
+\node[dpt,label={[lbl]270:$18$}] at (o18) {};
+\node[dpt,label={[lbl]270:$2$}]  at (o2)  {};
+\node[pt, label={[lbl]270:$3$}]  at (o3)  {};
+
+\node[pt, label={[lbl]0:$19$}]   at (o19) {};
+\node[pt, label={[lbl]180:$1$}]  at (o1)  {};
+
+\end{scope}
+
+% ------------------------------------------------------------------
+% Right panel: folded diagram (= quotient by the symmetry)
+% ------------------------------------------------------------------
+\begin{scope}[shift={(7,0)}]
+\node at (1, 7) {$\bd_{0, 2}\bbcpt{ \fent }$};
+% Root is the identified pair 16/4
+\coordinate (f0)  at (0,0);
+
+% Folded outer side (same half-triangle geometry)
+\coordinate (f1)  at ($(f0)+(0.80,1.13)$);  % 15/5
+\coordinate (f2)  at ($(f0)+(1.60,2.27)$);  % 14/6
+\coordinate (f3)  at ($(f0)+(2.40,3.40)$);  % 13/7
+\coordinate (f4)  at ($(f0)+(3.20,4.53)$);  % 12/8
+\coordinate (f5)  at ($(f0)+(4.00,5.67)$);  % 11/9
+\coordinate (f6)  at ($(f0)+(4.80,6.80)$);  % 10
+
+% Folded bottom chain and interior branch
+\coordinate (fb1) at (1.55,0);    % 17/3
+\coordinate (fb2) at (3.00,0);    % 18/2
+\coordinate (fi)  at (2.15,1.12); % 19/1
+
+% Edges
+% Edges
+\draw (f0) -- (f1) -- (f2) -- (f3) -- (f4) -- (f5);
+\draw[double, double distance=1.0pt, line width=0.45pt] (f5) -- (f6);
+
+\draw (f0) -- (fb1) -- (fb2);
+\draw (f0) -- (fi);
+
+% Nodes
+\node[fpt]  at (f0)  {};
+\node[fpt]  at (f1)  {};
+\node[fpt]  at (f2)  {};
+\node[fpt]  at (f3)  {};
+\node[fpt]  at (f4)  {};
+\node[fpt]  at (f5)  {};
+\node[toppt] at (f6) {};
+\node[fpt]  at (fb1) {};
+\node[fpt]  at (fb2) {};
+\node[fpt]  at (fi)  {};
+
+% Labels (merged pairs)
+\node[lbl, anchor=north] at ([xshift=-1pt,yshift=-2pt]f0)  {$16/4$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f1)              {$15/5$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f2)              {$14/6$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f3)              {$13/7$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f4)              {$12/8$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f5)              {$11/9$};
+\node[lbl, anchor=east]      at ([xshift= -4 pt]f6)              {$10$};
+
+\node[lbl, anchor=north]      at ([yshift=-2pt]fb1)             {$17/3$};
+\node[lbl, anchor=north]      at ([yshift=-2pt]fb2)             {$18/2$};
+\node[lbl, anchor=west]       at ([xshift= 4pt]fi)              {$19/1$};
+
+\node[fill=blue!70, opacity=0.6, minimum size=10pt, circle] at (f3) {};
+\node[blue] at ($(f3) + (0.4, 0)$) {$\delta$};
+
+\end{scope}
+
+% ------------------------------------------------------------------
+% Right panel 2: Remove root hyperplane
+% ------------------------------------------------------------------
+\begin{scope}[shift={(12,0)}]
+
+\node at (2, 7) {$\bd_{0, 2}\bbcpt{ F_{\Co, 2} }$};
+
+% Root is the identified pair 16/4
+\coordinate (f0)  at (0,0);
+
+% Folded outer side (same half-triangle geometry)
+\coordinate (f1)  at ($(f0)+(0.80,1.13)$);  % 15/5
+\coordinate (f2)  at ($(f0)+(1.60,2.27)$);  % 14/6
+\coordinate (f3)  at ($(f0)+(2.40,3.40)$);  % 13/7
+\coordinate (f4)  at ($(f0)+(3.20,4.53)$);  % 12/8
+\coordinate (f5)  at ($(f0)+(4.00,5.67)$);  % 11/9
+\coordinate (f6)  at ($(f0)+(4.80,6.80)$);  % 10
+
+% Folded bottom chain and interior branch
+\coordinate (fb1) at (1.55,0);    % 17/3
+\coordinate (fb2) at (3.00,0);    % 18/2
+\coordinate (fi)  at (2.15,1.12); % 19/1
+
+% Edges
+% Edges
+\draw (f0) -- (f1) -- (f2) -- (f3) -- (f4) -- (f5);
+\draw[double, double distance=1.0pt, line width=0.45pt] (f5) -- (f6);
+
+\draw (f0) -- (fb1) -- (fb2);
+\draw (f0) -- (fi);
+
+% Nodes
+\node[fpt]  at (f0)  {};
+\node[fpt]  at (f1)  {};
+\node[fpt]  at (f2)  {};
+%\node[fpt]  at (f3)  {};
+\node[fpt]  at (f4)  {};
+\node[fpt]  at (f5)  {};
+\node[toppt] at (f6) {};
+\node[fpt]  at (fb1) {};
+\node[fpt]  at (fb2) {};
+\node[fpt]  at (fi)  {};
+
+% Labels (merged pairs)
+\node[lbl, anchor=north] at ([xshift=-1pt,yshift=-2pt]f0)  {$16/4$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f1)              {$15/5$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f2)              {$14/6$};
+%\node[lbl, anchor=east]       at ([xshift= -4pt]f3)              {$13/7$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f4)              {$12/8$};
+\node[lbl, anchor=east]       at ([xshift= -4pt]f5)              {$11/9$};
+\node[lbl, anchor=east]      at ([xshift= -4 pt]f6)              {$10$};
+
+\node[lbl, anchor=north]      at ([yshift=-2pt]fb1)             {$17/3$};
+\node[lbl, anchor=north]      at ([yshift=-2pt]fb2)             {$18/2$};
+\node[lbl, anchor=west]       at ([xshift= 4pt]fi)              {$19/1$};
+
+\end{scope}
+
+
+\draw[->]  (2.5, 7.5) to [bend left=30, "{Fold}"]   (7, 7.5);
+\draw[->]  (8.5, 7.5) to [bend left=30, "{Restrict to $\color{blue} \delta^\perp$}"]   (13.5, 7.5);
+\end{tikzpicture}

@@ -88,8 +88,9 @@
 \RequirePackage{svg}
 
 \newcommand{\ctikzsvg}[2][width=\linewidth]{%
-  \immediate\write18{python3 /home/dzack/.pandoc/bin/render_figures.py #2}%
   \begingroup
+  \CatchFileEdef\abspath{|kpsewhich "#2"}{\endlinechar=-1 }%
+  \immediate\write18{python3 /home/dzack/.pandoc/bin/render_figures.py \abspath}%
   \filename@parse{#2}%
   \begin{center}%
     \includesvg[#1]{/home/dzack/.pandoc/figures/rendered/\filename@base}%
