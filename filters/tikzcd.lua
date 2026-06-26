@@ -16,18 +16,115 @@ local pandoc_dir = os.getenv("PANDOC_DIR") or (home .. "/dotfiles/pandoc")
 local figures_dir = os.getenv("FIGURES_DIR") or (home .. "/.pandoc/figures")
 local svg_dir = os.getenv("SVG_DIR") or (figures_dir .. "/rendered")
 
-local template_path = pandoc_dir .. "/templates/standalone-tikz.tex"
-local template_file = io.open(template_path, "r")
-if not template_file then
-  error("tikzcd.lua: standalone template not found at " .. template_path)
+-- Per-figure preamble template (Phase D / D-3 / P92): the config-declared
+-- standalone LaTeX document each figure body is wrapped in, supplied by the app
+-- from [figures].template (render.sh exports it as FIGURE_TEMPLATE_FILE). It
+-- carries the QTikz `.pgs` `<>` `TemplateReplaceText` marker where the figure
+-- source is substituted, plus `$tikzdefs$`/`$tikzstyles$` markers the shared
+-- palette paths fill (P91). Required, config-validated ExistingFile — no default,
+-- no fallback to a baked-in template: a missing var when a figure is ACTUALLY
+-- compiled means the renderer wiring is broken, so fail loud. Read LAZILY at
+-- compile time (not at filter load) so the doctor's empty-stdin invocation probe,
+-- which loads the filter but compiles no figure, needs no render-context env.
+-- Returns (compiled_template, raw_template_string): the raw string is folded into
+-- the figure cache key so swapping the template content changes the render.
+local function figure_template()
+  local template_path = os.getenv("FIGURE_TEMPLATE_FILE")
+  if not template_path or template_path == "" then
+    error("tikzcd.lua: FIGURE_TEMPLATE_FILE is not set (the config-declared per-figure template)")
+  end
+  local template_file = io.open(template_path, "r")
+  if not template_file then
+    error("tikzcd.lua: per-figure template not found at " .. template_path)
+  end
+  local template_str = template_file:read("*a")
+  template_file:close()
+  return pandoc.template.compile(template_str), template_str
 end
-local tikz_doc_template_str = template_file:read("*a")
-template_file:close()
-local tikz_doc_template = pandoc.template.compile(tikz_doc_template_str)
+
+-- Shared figure palette (Phase D / D-2 / P91): the absolute paths of the ONE
+-- shared .tikzstyles and .tikzdefs every figure \input's, supplied by the app
+-- from the config-declared [figures].tikzstyles / [figures].tikzdefs (render.sh
+-- exports them as TIKZSTYLES_FILE / TIKZDEFS_FILE). Both are required,
+-- config-validated ExistingFiles — no default, no fallback: a missing var when a
+-- figure is ACTUALLY compiled means the renderer wiring is broken, so fail loud
+-- rather than compile a figure that silently ignores the shared palette. Read
+-- LAZILY at compile time (not at filter load) so the doctor's empty-stdin
+-- invocation probe, which loads the filter but compiles no figure, does not
+-- require the render-context env.
+local function shared_palette()
+  local tikzstyles_file = os.getenv("TIKZSTYLES_FILE")
+  if not tikzstyles_file or tikzstyles_file == "" then
+    error("tikzcd.lua: TIKZSTYLES_FILE is not set (the config-declared shared .tikzstyles)")
+  end
+  local tikzdefs_file = os.getenv("TIKZDEFS_FILE")
+  if not tikzdefs_file or tikzdefs_file == "" then
+    error("tikzcd.lua: TIKZDEFS_FILE is not set (the config-declared shared .tikzdefs)")
+  end
+  return tikzstyles_file, tikzdefs_file
+end
+
+-- Surface a figure-compile FAILURE to the app (Phase D / D-6 / P95). On a
+-- pdflatex failure the standard LaTeX log carries a bang-error block: a `! …`
+-- message line followed by an `l.NN  <source-prefix>` marker citing the line —
+-- in the GENERATED `.tex` — that aborted the compile. This recovers that
+-- diagnostic and writes ONE machine-parseable marker line per error to stderr so
+-- it flows into the renderer subprocess stderr the app captures as
+-- RenderResult.log (the figure-compile analog of the P11 pandoc log). The marker
+-- carries the line WITHIN the figure body (the pdflatex `.tex` line minus the
+-- preamble lines the template prepended before the figure source) and the EXACT
+-- verbatim figure-body source line at that position, so the app can map it back
+-- to the editor buffer's tikz SOURCE line. `figure_body` is the figure source the
+-- `<>` marker was replaced with; `preamble_lines` is the count of `.tex` lines
+-- BEFORE that source began. The parse contract is LaTeX's own bang-error format,
+-- not a bespoke shape — the same `! …` / `l.NN` block pplatex consumes.
+local function emit_figure_compile_error(log_path, figure_body, preamble_lines)
+  local lf = io.open(log_path, "r")
+  if not lf then
+    return
+  end
+  local log_text = lf:read("*a")
+  lf:close()
+
+  local body_lines = {}
+  for line in (figure_body .. "\n"):gmatch("(.-)\n") do
+    body_lines[#body_lines + 1] = line
+  end
+
+  local emitted = false
+  local log_lines = {}
+  for line in (log_text .. "\n"):gmatch("(.-)\n") do
+    log_lines[#log_lines + 1] = line
+  end
+  for i = 1, #log_lines do
+    local message = log_lines[i]:match("^!%s*(.+)$")
+    if message then
+      -- The source line is cited later in the block by an `l.NN` marker.
+      for j = i + 1, #log_lines do
+        local tex_line = log_lines[j]:match("^l%.(%d+)")
+        if tex_line then
+          local body_line = tonumber(tex_line) - preamble_lines
+          local src = body_lines[body_line]
+          if src and src ~= "" then
+            -- ONE marker line, pipe-delimited, source last (it is the only field
+            -- that may contain a literal `|` in practice — tikz source rarely
+            -- does — so the app splits on the FIRST two pipes only).
+            io.stderr:write("[tikzcd-figure-error] " .. body_line .. "|" .. message .. "|" .. src .. "\n")
+            emitted = true
+          end
+          break
+        end
+      end
+    end
+  end
+  return emitted
+end
 
 -- Shared compilation core: given full LaTeX source, compile to PDF then SVG.
--- Returns (svg_path, pdf_path) or (nil, nil) on failure.
-local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir)
+-- `figure_body` + `preamble_lines` let a FAILURE be surfaced to the app as a
+-- mapped figure-compile diagnostic (Phase D / D-6 / P95). Returns
+-- (svg_path, pdf_path) or (nil, nil) on failure.
+local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir, figure_body, preamble_lines)
   local svg_path = svg_dir .. "/dzgtikz-" .. hash .. ".svg"
   local pdf_path = svg_dir .. "/dzgtikz-" .. hash .. ".pdf"
 
@@ -60,6 +157,10 @@ local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir)
   local cmd1 = inputs_env .. "pdflatex -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " 2>&1"
   local ok1 = os.execute(cmd1)
   if not ok1 then
+    -- Surface the figure-compile diagnostic (mapped to the figure source line)
+    -- before tearing down the tmp dir, so the failure reaches the app instead of
+    -- being dropped to a bare stderr note (Phase D / D-6 / P95).
+    emit_figure_compile_error(tmp .. "/tikz.log", figure_body, preamble_lines)
     os.execute("rm -rf " .. tmp)
     return nil, nil
   end
@@ -120,7 +221,8 @@ local function resolve_inputs(text, base_dir, depth)
   return text
 end
 
--- Compile a tikz snippet (e.g. \begin{tikzcd}...) by wrapping in standalone template.
+-- Compile a tikz snippet (e.g. \begin{tikzcd}...) by wrapping it in the
+-- config-declared per-figure template (Phase D / D-3 / P92) at its `<>` marker.
 -- Returns (svg_path, pdf_path) or (nil, nil) on failure.
 local function compile_tikz(source)
   local doc_path = os.getenv("PANDOC_DOC_PATH")
@@ -130,19 +232,64 @@ local function compile_tikz(source)
   end
 
   local resolved_source = resolve_inputs(source, doc_dir)
-  local hash = pandoc.sha1(resolved_source)
 
-  local ctx = { body = resolved_source }
-  -- pandoc 3.6's template.apply returns a Doc; render it to a string before
-  -- writing the .tex file (io.write needs a string, not a Doc).
-  local tex_source = pandoc.layout.render(pandoc.template.apply(tikz_doc_template, ctx))
+  -- The shared palette paths fill the template's $tikzdefs$/$tikzstyles$ \input
+  -- lines, so this figure compiles WITH the config-declared shared .tikzdefs +
+  -- .tikzstyles in scope (Phase D / D-2 / P91).
+  local tikzstyles_file, tikzdefs_file = shared_palette()
+
+  -- The config-declared per-figure preamble template (Phase D / D-3 / P92): the
+  -- standalone document this figure body is wrapped in. Read lazily here.
+  local tikz_doc_template, template_str = figure_template()
+
+  -- The cache key (hash) MUST fold in the shared palette CONTENT and the TEMPLATE
+  -- content, not just the figure body: the same body compiled against a different
+  -- shared .tikzstyles (P91's discriminator) or a different per-figure template
+  -- (P92's discriminator swaps the template on disk) is a different figure.
+  -- Hashing only the body would return a stale cached SVG when either changes, so
+  -- read the shared files and include their bytes — and the template's bytes — in
+  -- the hash. All are required ExistingFiles (config-validated), so a read failure
+  -- is a broken environment.
+  local function read_required(path, label)
+    local fh = io.open(path, "r")
+    if not fh then
+      error("tikzcd.lua: cannot read " .. label .. " at " .. path)
+    end
+    local content = fh:read("*a")
+    fh:close()
+    return content
+  end
+  local styles_content = read_required(tikzstyles_file, "shared .tikzstyles")
+  local defs_content = read_required(tikzdefs_file, "shared .tikzdefs")
+  local hash = pandoc.sha1(
+    resolved_source .. "\0" .. defs_content .. "\0" .. styles_content .. "\0" .. template_str
+  )
+
+  -- Fill the template's $tikzdefs$/$tikzstyles$ palette markers first (pandoc
+  -- template), then substitute the figure source at the QTikz `<>` marker. The
+  -- `<>` is plain text to pandoc's template engine (not a $...$ variable), so it
+  -- survives the render untouched; substituting it AFTER keeps the figure source
+  -- (which may contain `$` math) out of the pandoc-template pass entirely. A
+  -- function replacement avoids gsub treating `%`/`\` in the source as special.
+  local ctx = { tikzstyles = tikzstyles_file, tikzdefs = tikzdefs_file }
+  local rendered = pandoc.layout.render(pandoc.template.apply(tikz_doc_template, ctx))
+  local marker_at = rendered:find("<>", 1, true)
+  if not marker_at then
+    error("tikzcd.lua: per-figure template carries no `<>` source marker (QTikz convention)")
+  end
+  -- The figure body begins on the SAME `.tex` line the `<>` marker sat on, so the
+  -- preamble line count (lines strictly BEFORE the body) is the number of
+  -- newlines in `rendered` before the marker (Phase D / D-6 / P95). A pdflatex
+  -- `l.NN` cite minus this yields the 1-based line WITHIN the figure body.
+  local preamble_lines = select(2, rendered:sub(1, marker_at - 1):gsub("\n", "\n"))
+  local tex_source = rendered:gsub("<>", function() return resolved_source end)
 
   log("compile_tikz: hash=" .. hash .. " source_length=" .. #resolved_source)
   if debug_mode then
     local preview = resolved_source:sub(1, 200):gsub("\n", "\\n")
     log("compile_tikz: source_preview: " .. preview)
   end
-  return run_pdflatex_and_convert(tex_source, "tikzcd", hash, doc_dir)
+  return run_pdflatex_and_convert(tex_source, "tikzcd", hash, doc_dir, resolved_source, preamble_lines)
 end
 
 -- Compile a full tikz document (from ```tikz code block) directly, no template.
@@ -156,7 +303,9 @@ local function compile_tikz_document(source)
 
   local resolved_source = resolve_inputs(source, doc_dir)
   local hash = pandoc.sha1(resolved_source)
-  return run_pdflatex_and_convert(resolved_source, "tikzfull", hash, doc_dir)
+  -- A full-document tikz code block IS its own `.tex`: no template preamble is
+  -- prepended, so a pdflatex `l.NN` cite is already the figure-body line.
+  return run_pdflatex_and_convert(resolved_source, "tikzfull", hash, doc_dir, resolved_source, 0)
 end
 
 -- Shared helpers for building output from a compiled SVG/PDF pair.
@@ -244,8 +393,16 @@ if FORMAT:match 'html' then
     log("RawBlock (html): processing tikz/pdftex block, length=" .. #el.text)
     local svg_path, _ = compile_tikz(el.text)
     if not svg_path then
-      log("RawBlock (html): compilation FAILED")
-      assert(svg_path, "tikzcd.lua: compilation failed for block")
+      -- A figure that does NOT compile under the active per-figure template
+      -- (Phase D / D-3 / P92: e.g. it requires a \usetikzlibrary the configured
+      -- template omits) is ABSENT from the preview — it produces no <svg> — while
+      -- the rest of the document still renders. The failure is loud in the filter
+      -- log (and the figure visibly does not appear); dropping the single block,
+      -- not aborting the whole render, is what makes a template swap observable in
+      -- the live preview. Return the raw latex block unchanged: pandoc's HTML
+      -- writer omits non-HTML raw blocks, so the failed figure leaves no element.
+      io.stderr:write("[tikzcd] figure did not compile under the active per-figure template; omitting it from the preview\n")
+      return el
     end
     log("RawBlock (html): compiled to " .. svg_path)
 

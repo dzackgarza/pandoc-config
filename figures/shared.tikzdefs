@@ -1,0 +1,10 @@
+% shared.tikzdefs — the starter SHARED TikZ preamble/definitions for the global
+% figures dir, in TikZiT's native .tikzdefs form: arbitrary preamble LaTeX
+% (color definitions, \pgfdeclarelayer, \def macros, \usetikzlibrary) shared by
+% every figure. The figure compile (standalone-tikz.tex) \input's this BEFORE
+% \begin{document}, so anything declared here is in scope for every figure.
+%
+% The companion shared.tikzstyles holds the named style palette
+% (\tikzstyle{NAME}=[...]). Keep STYLE definitions there and PREAMBLE here.
+
+\usetikzlibrary{calc,positioning}
