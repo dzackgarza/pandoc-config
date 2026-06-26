@@ -12,7 +12,7 @@ local function log(msg)
 end
 
 -- Output directories
-local pandoc_dir = os.getenv("PANDOC_DIR") or (home .. "/dotfiles/pandoc")
+local pandoc_dir = os.getenv("PANDOC_DIR") or (home .. "/.pandoc")
 local figures_dir = os.getenv("FIGURES_DIR") or (home .. "/.pandoc/figures")
 local svg_dir = os.getenv("SVG_DIR") or (figures_dir .. "/rendered")
 

@@ -18,7 +18,7 @@ BUILD_DIR_PANDOC := ".build_pandoc"
 BUILD_DIR_TEX := ".build_tex"
 
 # --- Environment ---
-export PANDOC_DIR := home_dir() / "dotfiles/pandoc"
+export PANDOC_DIR := home_dir() / ".pandoc"
 export TEXINPUTS := ".:" + home_dir() + "/.pandoc/styles//:" + home_dir() + "/.pandoc/macros//:" + home_dir() + "/.pandoc/config//:" + env_var_or_default("TEXINPUTS", "")
 
 # --- Recipes ---
