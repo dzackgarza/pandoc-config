@@ -1,0 +1,23 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{tikzpicture}[line width=0.8pt,scale=1.15]
+  \def\S{6}
+  \fill[blue!7] (0,0) rectangle (\S,\S);
+  % triangulation grid (3x3 cells) + diagonals
+  \foreach \i in {0,2,4,6}{ \draw[gray!55] (\i,0)--(\i,\S); \draw[gray!55] (0,\i)--(\S,\i); }
+  \foreach \i in {0,2,4}{ \foreach \j in {0,2,4}{ \draw[gray!55] (\i,\j)--(\i+2,\j+2); } }
+  % vertices
+  \foreach \i in {0,2,4,6}{ \foreach \j in {0,2,4,6}{ \fill[black] (\i,\j) circle (1.7pt); } }
+  % identified edges: a = horizontal single arrow (red); b = vertical double arrow (teal)
+  \draw[red,line width=1.8pt,-{Stealth[length=5mm]}] (0,0)--(\S,0);
+  \draw[red,line width=1.8pt,-{Stealth[length=5mm]}] (0,\S)--(\S,\S);
+  \draw[teal!80!black,line width=1.8pt,-{Stealth[length=4.5mm] Stealth[length=4.5mm]}] (0,0)--(0,\S);
+  \draw[teal!80!black,line width=1.8pt,-{Stealth[length=4.5mm] Stealth[length=4.5mm]}] (\S,0)--(\S,\S);
+  \node[red,below] at (\S/2,-0.15) {$a$};
+  \node[red,above] at (\S/2,\S+0.05) {$a$};
+  \node[teal!80!black,left] at (-0.18,\S/2) {$b$};
+  \node[teal!80!black,right] at (\S+0.18,\S/2) {$b$};
+\end{tikzpicture}
+\end{document}

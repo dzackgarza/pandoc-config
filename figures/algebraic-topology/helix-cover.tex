@@ -1,0 +1,33 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{decorations.markings,arrows.meta,calc}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,line width=1pt]
+  \def\R{1.9}      % helix radius (horizontal)
+  \def\vs{0.34}    % vertical rise per radian
+  \def\e{0.42}     % perspective squash
+  % ---- the helix = \mathbb{R} ----
+  \draw[blue!65!black,line width=1.3pt,smooth,samples=240,domain=0:25.133]
+    plot ({\R*cos(deg(\x))},{\vs*\x+\e*sin(deg(\x))});
+  \node[blue!65!black] at (-2.55,7.7) {$\mathbb{R}$};
+  % ---- fiber over basepoint: integer points where cos=1 (x=2*pi*k) ----
+  \foreach \k in {0,1,2,3,4}{
+    \pgfmathsetmacro\yy{\vs*(2*pi*\k)}
+    \fill[red!80!black] (\R,\yy) circle (2.4pt);
+  }
+  \node[red!80!black,right] at (\R+0.25,{\vs*(2*pi*4)}) {$\mathbb{Z}=p^{-1}(x_0)$};
+  % vertical fiber axis (dashed) down to the circle basepoint
+  \draw[red!70!black,dashed,line width=0.8pt] (\R,-1.55) -- (\R,{\vs*(2*pi*4)+0.3});
+  % ---- the circle S^1 (perspective ellipse) ----
+  \begin{scope}[shift={(0,-2.0)}]
+    \draw[black,line width=1.2pt] (0,0) ellipse [x radius=\R, y radius={\e}];
+    \fill (\R,0) circle (2.4pt);
+    \node[below right] at (\R+0.05,-0.08) {$x_0$};
+    \node at (-2.55,0.05) {$S^1$};
+  \end{scope}
+  % ---- covering map p ----
+  \draw[->,line width=1.2pt] (\R+0.95,2.4) to[out=-90,in=90] (\R+0.95,0.0);
+  \node[right] at (\R+1.0,1.2) {$p$};
+\end{tikzpicture}
+\end{document}
