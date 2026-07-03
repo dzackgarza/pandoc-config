@@ -9,3 +9,9 @@ __pycache__/
 # (embedded timestamps); they are build artifacts, not tracked reference outputs.
 tests/*.pdf
 figures/rendered/.cache.json
+figures/rendered/dzgtikz-*
+
+# Local agent-memory symlink and interrupted editing artifacts
+.hermes
+*.tmp
+*.orig
