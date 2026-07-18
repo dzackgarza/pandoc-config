@@ -23,8 +23,10 @@
 -- Env knobs (per language, <LANG> = PYTHON | LEAN | BASH | SH):
 --   RUN_CODE_<LANG>          full interpreter-command override (escape hatch)
 --   RUN_CODE_<LANG>_PROJECT  lake project dir; runs `lake env <cmd>` with that cwd
---   RUN_CODE_<LANG>_PREAMBLE text prepended to every cell before running (e.g.
---                            "import Mathlib") — off unless set; not shown in source
+--   RUN_CODE_<LANG>_PREAMBLE text prepended to every cell before running, not
+--                            shown in source. Lean defaults to "import Mathlib";
+--                            set it empty (RUN_CODE_LEAN_PREAMBLE=) to disable,
+--                            or to any value to replace it. Other langs: none.
 --   RUN_CODE_CACHE           cache dir (default $PANDOC_DIR/figures/run-code-cache)
 --   RUN_CODE_STRICT=1        abort the build on any nonzero exit instead of
 --                            rendering the error inline
@@ -38,6 +40,10 @@ local strict = os.getenv("RUN_CODE_STRICT") == "1"
 -- Deliberate cross-repo coupling (user decision 2026-07-18); if the spike is
 -- removed, set RUN_CODE_LEAN_PROJECT to another built mathlib project.
 local DEFAULT_LEAN_PROJECT = home .. "/research/computations/experiments/lean_category_dsl_spike"
+
+-- default import preamble per language (Lean gets Mathlib so cells skip boilerplate;
+-- resolved against the standard env above). Override/disable via RUN_CODE_<LANG>_PREAMBLE.
+local DEFAULT_PREAMBLE = { lean = "import Mathlib" }
 
 -- language registry: class -> { cmd = default interpreter, ext = temp-file extension }
 local runners = {
@@ -66,6 +72,15 @@ local function resolve(lang, spec)
   end
   local cmd = override or (project and ("lake env " .. spec.cmd)) or spec.cmd
   return cmd, project
+end
+
+-- import preamble for a language: unset -> language default; "" -> explicitly
+-- disabled; else -> the given text
+local function preamble_for(lang)
+  local v = os.getenv("RUN_CODE_" .. lang:upper() .. "_PREAMBLE")
+  if v == nil then return DEFAULT_PREAMBLE[lang] end
+  if v == "" then return nil end
+  return v
 end
 
 -- pick the single registered language class on a block, or nil
@@ -114,7 +129,7 @@ function CodeBlock(el)
 
   local spec = runners[lang]
   local cmd, cwd = resolve(lang, spec)
-  local preamble = getenv("RUN_CODE_" .. lang:upper() .. "_PREAMBLE")
+  local preamble = preamble_for(lang)
   local run_src = preamble and (preamble .. "\n" .. el.text) or el.text
 
   -- cache key folds in everything that changes the result: command, env dir,

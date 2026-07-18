@@ -81,6 +81,11 @@ def _lean_usable() -> bool:
 
 @pytest.mark.skipif(not _lean_usable(), reason="no Lean toolchain configured (elan default stable)")
 def test_lean_run(tmp_path: Path) -> None:
-    html = render("```{.lean .run}\n#eval 2 + 2\n```\n", tmp_path)
+    # disable the default Mathlib preamble so this stays a fast bare-execution proof
+    html = render(
+        "```{.lean .run}\n#eval 2 + 2\n```\n",
+        tmp_path,
+        extra_env={"RUN_CODE_LEAN_PREAMBLE": ""},
+    )
     assert "4" in html
     assert "code-output" in html
