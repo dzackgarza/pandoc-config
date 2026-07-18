@@ -14,21 +14,30 @@
 -- `sage` is deliberately NOT registered here: Sage cells are owned by the
 -- dedicated sagemath-pandoc-filter (panflute, runs under `sage --python`).
 --
--- Each language maps to an argv-0 command + file extension. The command is
--- overridable via env (e.g. RUN_CODE_LEAN="lake env lean") because real Lean
--- setups need a lake project env for mathlib; a bare `lean` only elaborates
--- toolchain-free snippets.
+-- Lean imports (Mathlib etc.) are resolved by Lake, not the toolchain, so Lean
+-- cells run inside a prebuilt lake project via `lake env lean`. The default is
+-- the research DSL-spike env below (mathlib + batteries + aesop + Paperproof,
+-- already compiled); any build overrides it with RUN_CODE_LEAN_PROJECT, and a
+-- local project's own lakefile naturally wins.
 --
--- Env knobs:
---   RUN_CODE_<LANG>   override the interpreter command for a language
---   RUN_CODE_CACHE    cache dir (default $PANDOC_DIR/figures/run-code-cache)
---   RUN_CODE_STRICT=1 abort the build on any nonzero exit instead of rendering
---                     the error inline
+-- Env knobs (per language, <LANG> = PYTHON | LEAN | BASH | SH):
+--   RUN_CODE_<LANG>          full interpreter-command override (escape hatch)
+--   RUN_CODE_<LANG>_PROJECT  lake project dir; runs `lake env <cmd>` with that cwd
+--   RUN_CODE_<LANG>_PREAMBLE text prepended to every cell before running (e.g.
+--                            "import Mathlib") — off unless set; not shown in source
+--   RUN_CODE_CACHE           cache dir (default $PANDOC_DIR/figures/run-code-cache)
+--   RUN_CODE_STRICT=1        abort the build on any nonzero exit instead of
+--                            rendering the error inline
 
 local home = os.getenv("HOME")
 local pandoc_dir = os.getenv("PANDOC_DIR") or (home .. "/.pandoc")
 local cache_dir = os.getenv("RUN_CODE_CACHE") or (pandoc_dir .. "/figures/run-code-cache")
 local strict = os.getenv("RUN_CODE_STRICT") == "1"
+
+-- Chosen standard Lean env: the research DSL spike's prebuilt lake project.
+-- Deliberate cross-repo coupling (user decision 2026-07-18); if the spike is
+-- removed, set RUN_CODE_LEAN_PROJECT to another built mathlib project.
+local DEFAULT_LEAN_PROJECT = home .. "/research/computations/experiments/lean_category_dsl_spike"
 
 -- language registry: class -> { cmd = default interpreter, ext = temp-file extension }
 local runners = {
@@ -38,9 +47,25 @@ local runners = {
   lean   = { cmd = "lean",    ext = "lean" },
 }
 
-local function command_for(lang, spec)
-  local override = os.getenv("RUN_CODE_" .. lang:upper())
-  return (override and override ~= "") and override or spec.cmd
+local function getenv(name)
+  local v = os.getenv(name)
+  if v and v ~= "" then return v end
+  return nil
+end
+
+-- resolve how a language runs: returns (command_string, cwd_or_nil).
+-- RUN_CODE_<LANG> overrides the interpreter; a project dir switches to
+-- `lake env <cmd>` run from that dir so imports resolve. Lean defaults to the
+-- standard env above.
+local function resolve(lang, spec)
+  local U = lang:upper()
+  local override = getenv("RUN_CODE_" .. U)
+  local project = getenv("RUN_CODE_" .. U .. "_PROJECT")
+  if lang == "lean" and project == nil and override == nil then
+    project = DEFAULT_LEAN_PROJECT
+  end
+  local cmd = override or (project and ("lake env " .. spec.cmd)) or spec.cmd
+  return cmd, project
 end
 
 -- pick the single registered language class on a block, or nil
@@ -64,15 +89,15 @@ local function write_file(path, s)
   local f = assert(io.open(path, "w")); f:write(s); f:close()
 end
 
--- run `code` through the language's interpreter, capturing combined stdout+stderr
--- and the exit code. Returns (output_string, ok_boolean).
-local function execute(lang, spec, code)
+-- run `code` through `cmd` (optionally from `cwd`), capturing combined
+-- stdout+stderr and the exit code. Returns (output_string, ok_boolean).
+local function execute(cmd, cwd, code, ext)
   local out, ok
   pandoc.system.with_temporary_directory("run_code", function(dir)
-    local src = dir .. "/cell." .. spec.ext
+    local src = dir .. "/cell." .. ext
     write_file(src, code)
-    local cmd = command_for(lang, spec) .. " " .. src .. " 2>&1"
-    local h = assert(io.popen(cmd, "r"))
+    local full = (cwd and ("cd " .. cwd .. " && ") or "") .. cmd .. " " .. src .. " 2>&1"
+    local h = assert(io.popen(full, "r"))
     out = h:read("*a") or ""
     local _, _, code_exit = h:close()
     ok = (code_exit == 0)
@@ -88,7 +113,13 @@ function CodeBlock(el)
   if not (run or silent) then return nil end
 
   local spec = runners[lang]
-  local key = pandoc.sha1(lang .. "\0" .. command_for(lang, spec) .. "\0" .. el.text)
+  local cmd, cwd = resolve(lang, spec)
+  local preamble = getenv("RUN_CODE_" .. lang:upper() .. "_PREAMBLE")
+  local run_src = preamble and (preamble .. "\n" .. el.text) or el.text
+
+  -- cache key folds in everything that changes the result: command, env dir,
+  -- preamble, and the (preamble-augmented) source.
+  local key = pandoc.sha1(table.concat({ lang, cmd, cwd or "", preamble or "", run_src }, "\0"))
   local cache_path = cache_dir .. "/" .. key
   local cached = read_file(cache_path)
 
@@ -99,7 +130,7 @@ function CodeBlock(el)
     output = cached:sub(3)
   else
     os.execute("mkdir -p " .. cache_dir)
-    output, ok = execute(lang, spec, el.text)
+    output, ok = execute(cmd, cwd, run_src, spec.ext)
     write_file(cache_path, (ok and "1" or "0") .. "\n" .. output)
   end
 
@@ -109,7 +140,7 @@ function CodeBlock(el)
 
   if silent then return {} end
 
-  -- keep the source block (display + highlighting), append the captured output
+  -- keep the source block (display + highlighting, WITHOUT preamble), append output
   output = output:gsub("%s+$", "")
   local out_class = ok and "code-output" or "code-error"
   local blocks = { el }

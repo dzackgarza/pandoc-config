@@ -14,19 +14,22 @@ import pytest
 FILTER = Path(__file__).resolve().parent.parent / "filters" / "run_code.lua"
 
 
-def render(md: str, tmp_path: Path) -> str:
+def render(md: str, tmp_path: Path, extra_env: dict | None = None) -> str:
     """Render markdown to HTML through run_code.lua, cache isolated to tmp_path."""
     src = tmp_path / "in.md"
     src.write_text(md)
+    env = {
+        "HOME": str(Path.home()),
+        "PATH": __import__("os").environ["PATH"],
+        "RUN_CODE_CACHE": str(tmp_path / "cache"),
+    }
+    if extra_env:
+        env.update(extra_env)
     proc = subprocess.run(
         ["pandoc", str(src), "--lua-filter", str(FILTER), "-t", "html"],
         capture_output=True,
         text=True,
-        env={
-            "HOME": str(Path.home()),
-            "PATH": __import__("os").environ["PATH"],
-            "RUN_CODE_CACHE": str(tmp_path / "cache"),
-        },
+        env=env,
     )
     assert proc.returncode == 0, f"pandoc failed (non-strict should never abort):\n{proc.stderr}"
     return proc.stdout
@@ -55,6 +58,18 @@ def test_error_rendered_inline_without_aborting(tmp_path: Path) -> None:
     html = render("```{.python .run}\n1 / 0\n```\n", tmp_path)
     assert "code-error" in html
     assert "ZeroDivisionError" in html
+
+
+def test_preamble_is_prepended_but_not_shown(tmp_path: Path) -> None:
+    # preamble makes `math` available without the cell importing it, and the
+    # preamble itself must not appear in the displayed source.
+    html = render(
+        "```{.python .run}\nprint(round(math.pi, 2))\n```\n",
+        tmp_path,
+        extra_env={"RUN_CODE_PYTHON_PREAMBLE": "import math"},
+    )
+    assert "3.14" in html          # preamble import resolved at run time
+    assert "import math" not in html  # preamble not leaked into the source block
 
 
 def _lean_usable() -> bool:
