@@ -6,8 +6,9 @@
 # Fixture provenance: workspace/*.md are copies of
 # zettlr-pandoc/test/fixtures/reference-workspace/ProjectA/ files
 # (Theorems.md verbatim; Halphen_Surfaces.md with its cross-file lemma
-# key aligned to lem:kodaira:embedding and a bare @thm:torelli
-# reference added so both citation shapes are exercised).
+# key aligned to lem:kodaira:embedding, a bare @thm:torelli reference,
+# and prefixed/suffixed/suppressed citation shapes added so authored
+# citation text is exercised).
 #
 # Assertions run on the intermediate .tex only. Full latexmk/PDF runs
 # are owned by the recipes' normal use, so this script invokes the
@@ -62,6 +63,19 @@ check 'cluster [@thm:torelli; @lem:kodaira:embedding] becomes \cref{thm:torelli,
 check 'theorem environment emitted (\begin{theorem})' grep -F '\begin{theorem}' "$TEX"
 check 'bibliography citation [@Ols04, Lem. 7.1] untouched (natbib/biblatex path)' \
   grep -F '\autocite[Lem. 7.1]{Ols04}' "$TEX"
+
+# Authored citation text must survive into the .tex. The LaTeX writer
+# wraps lines at ~72 cols, so multi-word matches run on a
+# whitespace-flattened copy of the output.
+flat_grep() { tr -s '[:space:]' ' ' < "$1" | grep -qF "$2"; }
+check 'prefixed citation [see @thm:torelli] keeps its prefix (see \cref{thm:torelli})' \
+  flat_grep "$TEX" 'see \cref{thm:torelli}'
+check 'suffixed citation [@thm:torelli, part (ii)] keeps its suffix (\cref{thm:torelli}, part (ii))' \
+  flat_grep "$TEX" '\cref{thm:torelli}, part (ii)'
+check 'suppressed citation [-@thm:torelli] emits number-only \ref{thm:torelli}' \
+  grep -F '\ref{thm:torelli}' "$TEX"
+check 'cluster items keep per-item text (see \cref{thm:torelli}; \cref{lem:kodaira:embedding}, part (ii))' \
+  flat_grep "$TEX" 'see \cref{thm:torelli}; \cref{lem:kodaira:embedding}, part (ii)'
 
 # --- 1b. filenames containing spaces stay single arguments -----------
 # Zettlr Project documents can have spaces in their names; the public

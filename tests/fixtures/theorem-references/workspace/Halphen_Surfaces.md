@@ -16,3 +16,8 @@ it should display the semistable limit of the double fiber.
 For the construction of the pencil see [@Ols04, Lem. 7.1], which treats the
 logarithmic case in arbitrary characteristic. The moduli-theoretic
 consequences are collected in @sec:moduli of the lattice notes.
+
+The reduction step is [see @thm:torelli], the refinement is
+[@thm:torelli, part (ii)], and Torelli's theorem [-@thm:torelli] gives the
+bare numeric form. Both directions follow from
+[see @thm:torelli; @lem:kodaira:embedding, part (ii)].
