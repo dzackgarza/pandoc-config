@@ -35,6 +35,21 @@ check() {
   fi
 }
 
+# --- 0. cross-repo prefix canary -------------------------------------
+# The filter's ref_prefixes table hand-mirrors THEOREM_DIV_PREFIXES in
+# zettlr-pandoc source/common/util/pandoc-quick-reference.ts (the
+# authoritative registry; its keys are re-exported as THEOREM_FAMILIES
+# by source/types/common/references.ts). This is the ONE hardcoded copy
+# of that list in this repo's tests: if either repo adds, removes, or
+# renames a prefix without updating the other, this assertion trips.
+echo "[1/6] theorem prefix registry matches zettlr-pandoc"
+EXPECTED_PREFIXES="ass clm conj cor def ex exr lem obs prob prop qst rmk thm warn"
+ACTUAL_PREFIXES=$(sed -n '/^local ref_prefixes = {/,/^}/p' \
+    "$REPO/filters/convert_amsthm_envs.lua" \
+  | grep -o '[a-z]\+=true' | sed 's/=true$//' | sort | xargs)
+check "filter ref_prefixes == THEOREM_DIV_PREFIXES keys ($EXPECTED_PREFIXES)" \
+  test "$ACTUAL_PREFIXES" = "$EXPECTED_PREFIXES"
+
 # --- Workspace setup -------------------------------------------------
 mkdir -p "$SCRATCH/workspace"
 cp "$REPO/tests/fixtures/theorem-references/workspace/Theorems.md" "$SCRATCH/workspace/"
@@ -44,7 +59,7 @@ cp "$REPO/tests/fixtures/theorem-references/references.bib" "$SCRATCH/workspace/
 cd "$SCRATCH/workspace"
 
 # --- 1. compile-pandoc-project pandoc stage: two ordered inputs ------
-echo "[1/5] compile-pandoc-project tex stage (Theorems.md Halphen_Surfaces.md)"
+echo "[2/6] compile-pandoc-project tex stage (Theorems.md Halphen_Surfaces.md)"
 just --justfile "$REPO/justfile" \
   _compile-pandoc-tex crossref research_draft.tex "$SCRATCH/workspace/refs.bib" .build_pandoc \
   Theorems.md Halphen_Surfaces.md
@@ -84,7 +99,7 @@ check 'cluster items keep per-item text (see \cref{thm:torelli}; \cref{lem:kodai
 # Zettlr Project documents can have spaces in their names; the public
 # recipe forwards each input as its own shell positional
 # ([positional-arguments]), so a spaced filename must survive verbatim.
-echo "[2/5] ordered run with a filename containing a space"
+echo "[3/6] ordered run with a filename containing a space"
 cp "$REPO/tests/fixtures/theorem-references/workspace/Coble_Lattice_Table.md" \
    "$SCRATCH/workspace/Coble Lattice Table.md"
 just --justfile "$REPO/justfile" \
@@ -103,7 +118,7 @@ check "cross-file table ref from spaced file resolves (\\cref{tbl:coble-lattices
   grep -F '\cref{tbl:coble-lattices}' "$TEX_SPACED"
 
 # --- 2. proof divs stay unlabeled ------------------------------------
-echo "[3/5] proof divs unnumbered/unlabeled"
+echo "[4/6] proof divs unnumbered/unlabeled"
 check 'proof div emitted as \begin{proof}' grep -F '\begin{proof}' "$TEX"
 check 'proof div id produced no label (thm:should-not-index absent)' \
   bash -c "! grep -q 'thm:should-not-index' '$TEX'"
@@ -117,8 +132,8 @@ check 'empty-key id produced no label (\label{thm:} absent)' \
 # Scope of the claim: the sample contains theorem divs with the legacy
 # title=/ref= attribute syntax and NO theorem-family citations, so this
 # proves byte-stability of the attribute-style sample only. Theorem
-# citations on the legacy path intentionally changed (see step 5).
-echo "[4/5] compile-pandoc attribute-style sample byte-stability"
+# citations on the legacy path intentionally changed (see step 6).
+echo "[5/6] compile-pandoc attribute-style sample byte-stability"
 mkdir -p "$SCRATCH/single"
 cd "$SCRATCH/single"
 cp "$REPO/tests/fixtures/theorem-references/attribute_style_sample.md" .
@@ -134,7 +149,7 @@ check "attribute-style sample byte-stable (byte-identical to pre-change baseline
 # path too, so @thm:-family citations there now emit native \cref
 # instead of falling through to natbib/biblatex. That change is the
 # feature; this step blesses it as the intended legacy-path behavior.
-echo "[5/5] compile-pandoc legacy path: theorem citations emit \\cref"
+echo "[6/6] compile-pandoc legacy path: theorem citations emit \\cref"
 mkdir -p "$SCRATCH/legacy"
 cd "$SCRATCH/legacy"
 cp "$REPO/tests/fixtures/theorem-references/legacy_theorem_citation_sample.md" .
