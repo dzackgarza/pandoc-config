@@ -350,6 +350,14 @@ test: _test-macros _test-templates _test-tikz _test-tikz-filter
 # CI gate (run by the global pre-push hook): same full suite as `test`.
 test-ci: test
 
+# Test workspace-resolved theorem references (compile-pandoc-project
+# tex stage on ordered inputs) and byte-stability of the compile-pandoc
+# attribute-style theorem path. Runs in a throwaway scratch dir; asserts
+# on the intermediate .tex only (PDF compilation is owned by the
+# recipes' normal use).
+test-references:
+  bash "{{justfile_directory()}}/tests/test-project-references.sh"
+
 # Test tikzcd filter on multiple scenarios
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.
 _test-tikz-filter:
