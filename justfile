@@ -240,16 +240,21 @@ compile-pandoc-project output_name template +input_files:
 _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   #!/usr/bin/env bash
   set -euo pipefail
+  CROSSREF_ARGS=()
+  case "{{crossref_mode}}" in
+    crossref) CROSSREF_ARGS=(-F pandoc-crossref -M cref=true) ;;
+    no-crossref) ;;
+    *)
+      echo "❌ _compile-pandoc-tex: unknown crossref_mode '{{crossref_mode}}' (expected 'crossref' or 'no-crossref')" >&2
+      exit 1
+      ;;
+  esac
+
   ROOT="{{invocation_directory()}}"
   mkdir -p "$ROOT/{{build_dir}}"
 
   # Symlink global bib for easy resolution
   ln -sf "{{bib_source}}" "$ROOT/global.bib"
-
-  CROSSREF_ARGS=()
-  if [ "{{crossref_mode}}" = "crossref" ]; then
-    CROSSREF_ARGS=(-F pandoc-crossref -M cref=true)
-  fi
 
   # Run pandoc from ROOT to ensure relative include.lua paths work correctly
   cd "$ROOT"
