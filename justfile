@@ -194,7 +194,18 @@ compile-pandoc input_file="main.md" output_name="output" template="research_draf
 # PANDOC_BIB_SOURCE / PANDOC_BUILD_DIR environment variables instead of
 # positionally (defaults identical to compile-pandoc).
 # Usage: just pandoc::compile-pandoc-project <output_name> <template> <file1.md> [file2.md ...]
-compile-pandoc-project output_name template +input_files: (_compile-pandoc-tex "crossref" template PROJECT_BIB_SOURCE PROJECT_BUILD_DIR input_files) (_compile-pandoc-latexmk output_name PROJECT_BUILD_DIR)
+# The variadic cannot be forwarded as a just dependency argument: just
+# joins it into a single string, which would word-split filenames
+# containing spaces. [positional-arguments] passes each recipe argument
+# through as a real shell positional, so "${@:3}" preserves per-file
+# quoting into the nested just invocation.
+[positional-arguments]
+compile-pandoc-project output_name template +input_files:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  cd "{{invocation_directory()}}"
+  just --justfile "{{justfile()}}" _compile-pandoc-tex crossref "{{template}}" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
+  just --justfile "{{justfile()}}" _compile-pandoc-latexmk "{{output_name}}" "{{PROJECT_BUILD_DIR}}"
 
 # Shared pandoc stage: markdown -> build_dir/output.tex.
 # Filters resolve from this justfile's checkout (not $HOME/.pandoc), so
@@ -207,7 +218,11 @@ compile-pandoc-project output_name template +input_files: (_compile-pandoc-tex "
 # receives its divs intact. compile-pandoc stays crossref-free: crossref
 # injects a header-includes block into LaTeX output, which would break
 # the byte-stable single-file surface.
+# [positional-arguments] exposes the arguments as "$1".."$N" so the
+# variadic input list can be consumed as "${@:5}" with per-file quoting
+# (filenames with spaces stay single arguments).
 [private]
+[positional-arguments]
 _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -224,7 +239,7 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
 
   # Run pandoc from ROOT to ensure relative include.lua paths work correctly
   cd "$ROOT"
-  pandoc {{input_files}} \
+  pandoc "${@:5}" \
       --lua-filter="{{justfile_directory()}}/filters/include.lua" \
       "${CROSSREF_ARGS[@]}" \
       --lua-filter="{{justfile_directory()}}/filters/convert_amsthm_envs.lua" \
