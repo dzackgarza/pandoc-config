@@ -48,6 +48,19 @@ require "utilities"
 -- Citation clusters containing any non-theorem-family key (e.g.
 -- [@Ols04, Lem. 7.1]) are passed through untouched for bibliography
 -- processing. Proof divs are never labeled, even when an id is authored.
+--
+-- Div labeling is DELIBERATELY more permissive than citation rewriting:
+-- any authored non-empty id that does not end in ':' becomes a \label
+-- verbatim (e.g. ::: {.theorem #torelli} emits \label{torelli}), while
+-- only family-prefixed keys (thm:/lem:/... per ref_prefixes) are
+-- rewritten from @-citations to \cref. A generic id is therefore a
+-- valid LaTeX target for hand-authored \cref/\ref but is invisible to
+-- the editor's reference model (zettlr-pandoc's extract-references
+-- indexes family-prefixed keys only) and to @-citation syntax. Authors
+-- who want workspace navigation, completion, and rename must use
+-- family-prefixed ids; bare ids are a LaTeX-only escape hatch kept for
+-- legacy documents (issue zettlr-pandoc#5 item B22 records this
+-- asymmetry as intended).
 -- \cref requires cleveref, which is loaded unconditionally by
 -- dzg-unified.sty (used by research_draft/koma-article/ams-article
 -- templates) and by research_paper.tex directly.
