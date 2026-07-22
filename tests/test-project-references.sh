@@ -14,7 +14,7 @@
 # citation text is exercised).
 #
 # Assertions run on the intermediate .tex, plus one plain-branch
-# latexmk gate (step 7) and one fail-loud mode-validation gate (step 8): the pandoc stages invoked here
+# latexmk gate per style branch (plain: step 7; arxiv: step 9) and one fail-loud mode-validation gate (step 8): the pandoc stages invoked here
 # (_compile-pandoc-tex) are exactly the first dependency of
 # compile-pandoc-project ("crossref" mode) and of compile-pandoc
 # ("no-crossref" mode), and step 7 compiles the crossref-stage .tex
@@ -44,7 +44,7 @@ check() {
 # by source/types/common/references.ts). This is the ONE hardcoded copy
 # of that list in this repo's tests: if either repo adds, removes, or
 # renames a prefix without updating the other, this assertion trips.
-echo "[1/8] theorem prefix registry matches zettlr-pandoc"
+echo "[1/9] theorem prefix registry matches zettlr-pandoc"
 EXPECTED_PREFIXES="ass clm conj cor def ex exr lem obs prob prop qst rmk thm warn"
 ACTUAL_PREFIXES=$(sed -n '/^local ref_prefixes = {/,/^}/p' \
     "$REPO/filters/convert_amsthm_envs.lua" \
@@ -61,7 +61,7 @@ cp "$REPO/tests/fixtures/theorem-references/references.bib" "$SCRATCH/workspace/
 cd "$SCRATCH/workspace"
 
 # --- 1. compile-pandoc-project pandoc stage: two ordered inputs ------
-echo "[2/8] compile-pandoc-project tex stage (Theorems.md Halphen_Surfaces.md)"
+echo "[2/9] compile-pandoc-project tex stage (Theorems.md Halphen_Surfaces.md)"
 just --justfile "$REPO/justfile" \
   _compile-pandoc-tex crossref research_draft.tex "$SCRATCH/workspace/refs.bib" .build_pandoc \
   Theorems.md Halphen_Surfaces.md
@@ -101,7 +101,7 @@ check 'cluster items keep per-item text (see \cref{thm:torelli}; \cref{lem:kodai
 # Zettlr Project documents can have spaces in their names; the public
 # recipe forwards each input as its own shell positional
 # ([positional-arguments]), so a spaced filename must survive verbatim.
-echo "[3/8] ordered run with a filename containing a space"
+echo "[3/9] ordered run with a filename containing a space"
 cp "$REPO/tests/fixtures/theorem-references/workspace/Coble_Lattice_Table.md" \
    "$SCRATCH/workspace/Coble Lattice Table.md"
 just --justfile "$REPO/justfile" \
@@ -120,7 +120,7 @@ check "cross-file table ref from spaced file resolves (\\cref{tbl:coble-lattices
   grep -F '\cref{tbl:coble-lattices}' "$TEX_SPACED"
 
 # --- 2. proof divs stay unlabeled ------------------------------------
-echo "[4/8] proof divs unnumbered/unlabeled"
+echo "[4/9] proof divs unnumbered/unlabeled"
 check 'proof div emitted as \begin{proof}' grep -F '\begin{proof}' "$TEX"
 check 'proof div id produced no label (thm:should-not-index absent)' \
   bash -c "! grep -q 'thm:should-not-index' '$TEX'"
@@ -135,7 +135,7 @@ check 'empty-key id produced no label (\label{thm:} absent)' \
 # title=/ref= attribute syntax and NO theorem-family citations, so this
 # proves byte-stability of the attribute-style sample only. Theorem
 # citations on the legacy path intentionally changed (see step 6).
-echo "[5/8] compile-pandoc attribute-style sample byte-stability"
+echo "[5/9] compile-pandoc attribute-style sample byte-stability"
 mkdir -p "$SCRATCH/single"
 cd "$SCRATCH/single"
 cp "$REPO/tests/fixtures/theorem-references/attribute_style_sample.md" .
@@ -151,7 +151,7 @@ check "attribute-style sample byte-stable (byte-identical to pre-change baseline
 # path too, so @thm:-family citations there now emit native \cref
 # instead of falling through to natbib/biblatex. That change is the
 # feature; this step blesses it as the intended legacy-path behavior.
-echo "[6/8] compile-pandoc legacy path: theorem citations emit \\cref"
+echo "[6/9] compile-pandoc legacy path: theorem citations emit \\cref"
 mkdir -p "$SCRATCH/legacy"
 cd "$SCRATCH/legacy"
 cp "$REPO/tests/fixtures/theorem-references/legacy_theorem_citation_sample.md" .
@@ -175,7 +175,7 @@ check 'legacy-path prefixed citation keeps its prefix (see \cref{thm:legacy-tore
 # TEXINPUTS resolves ~/.pandoc, which may be a different deployment.
 # No -f: an undefined environment must fail the exit code instead of
 # being masked the way compile-pandoc's latexmk stage masks it.
-echo "[7/8] plain-branch latexmk compile of the all-theorem-classes fixture"
+echo "[7/9] plain-branch latexmk compile of the all-theorem-classes fixture"
 mkdir -p "$SCRATCH/latexmk-plain"
 cd "$SCRATCH/latexmk-plain"
 cp "$SCRATCH/workspace/.build_pandoc/output.tex" .
@@ -199,7 +199,7 @@ check "output.log has no undefined-environment errors" \
 # pandoc-crossref from the chain (issue zettlr-pandoc#5 item B19). The
 # validation runs before any side effect, so this probe must fail
 # without creating build dirs or symlinks.
-echo "[8/8] _compile-pandoc-tex rejects an unknown crossref_mode"
+echo "[8/9] _compile-pandoc-tex rejects an unknown crossref_mode"
 mkdir -p "$SCRATCH/mode-probe"
 cd "$SCRATCH/mode-probe"
 MODE_RC=0
@@ -211,6 +211,38 @@ check "unknown mode names the flag and the accepted values" \
   grep -q "unknown crossref_mode 'crosref'" mode-probe.out
 check "validation precedes side effects (no build dir created)" \
   bash -c "! test -e '$SCRATCH/mode-probe/.build'"
+
+# --- 9. arxiv-branch latexmk compile of the all-theorem-classes fixture
+# Sibling of step 7 for the ARXIV style branch (issue #7: exercise was
+# undefined there; also covers the research_paper.tex option-clash and
+# text-mode \qed regressions fixed alongside it). The template is pinned
+# by absolute path so pandoc does not resolve it through ~/.pandoc.
+echo "[9/9] arxiv-branch latexmk compile of the all-theorem-classes fixture"
+mkdir -p "$SCRATCH/arxiv-ws"
+cp "$REPO/tests/fixtures/theorem-references/workspace/Theorems.md" "$SCRATCH/arxiv-ws/"
+cp "$REPO/tests/fixtures/theorem-references/references.bib" "$SCRATCH/arxiv-ws/refs.bib"
+cd "$SCRATCH/arxiv-ws"
+just --justfile "$REPO/justfile" \
+  _compile-pandoc-tex crossref "$REPO/templates/research_paper.tex" \
+  "$SCRATCH/arxiv-ws/refs.bib" .build_arxiv Theorems.md
+mkdir -p "$SCRATCH/latexmk-arxiv"
+cd "$SCRATCH/latexmk-arxiv"
+cp "$SCRATCH/arxiv-ws/.build_arxiv/output.tex" .
+cp "$REPO/tests/fixtures/theorem-references/references.bib" global.bib
+ARXIV_RC=0
+TEXINPUTS=".:$REPO/styles//:$REPO/config//:" BIBINPUTS=".:" \
+  latexmk -pdf -interaction=nonstopmode -gg output.tex > latexmk.log 2>&1 \
+  || ARXIV_RC=$?
+if [ "$ARXIV_RC" -ne 0 ]; then
+  echo "  latexmk exited $ARXIV_RC; LaTeX errors:"
+  { grep -n '^!' output.log | head -20; } || true
+fi
+check "arxiv-branch latexmk exits 0 (was 12: exercise undefined)" \
+  test "$ARXIV_RC" -eq 0
+check "arxiv output.log has no undefined-environment errors" \
+  bash -c "! grep -q 'Environment .* undefined' output.log"
+check "arxiv output.log has no LaTeX errors at all" \
+  bash -c "! grep -q '^!' output.log"
 
 # --- Result ----------------------------------------------------------
 if [ "$FAILURES" -eq 0 ]; then
