@@ -829,7 +829,11 @@
 \newcommand{\projectivelim}[0]{\varprojlim}
 \newcommand{\projresolve}[0]{\rightrightarrows}
 \newcommand{\proportional}{ \propto }
-\renewcommand{\qed}[0]{\hfill\blacksquare}
+% \ensuremath: amsthm's \popQED emits \qed in TEXT mode at \end{proof}
+% (the arxiv branch uses stock amsthm proof); bare \blacksquare there is
+% "Missing $ inserted". The plain branch's proof wraps it as $\qed$
+% (environments.tex), which \ensuremath leaves unchanged.
+\renewcommand{\qed}[0]{\hfill\ensuremath{\blacksquare}}
 \newcommand{\rational}[0]{\torational}
 \newcommand{\rationalmap}[0]{\dashrightarrow}
 \newcommand{\semidirect}[0]{\rtimes}
