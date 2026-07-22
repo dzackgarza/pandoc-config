@@ -1,0 +1,85 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass{amsart}
+\usepackage{dzg-unified}
+% dzg-unified provides: amsmath, amsthm, amssymb, amsfonts, mathtools,
+% mathrsfs, stmaryrd, bm, esint, upgreek, graphicx, xcolor[dvipsnames],
+% tikz, tikz-cd, etoolbox, xparse, pgfornament, marginnote
+
+\newif\ifshort
+\shortfalse
+
+\usepackage{hyperref}
+\hypersetup{colorlinks,citecolor=blue,linktocpage,hyperindex=true,backref=true}
+\newcommand\todoinline[1]{\todo[inline]{#1}}
+
+\title{Research Draft}
+\date{\today}
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{fontenc}
+
+\newdimen\figrasterwd
+\figrasterwd\textwidth
+\floatplacement{figure}{H}
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+\makeatletter
+\AddToHook{cmd/section/before}{\FloatBarrier}
+\AddToHook{cmd/subsection/before}{\FloatBarrier}
+\makeatother
+
+\usetikzlibrary{arrows.meta, cd, fadings, patterns, calc, matrix, positioning, decorations, decorations.pathreplacing, decorations.markings, shapes, backgrounds, fit, shapes.geometric, intersections, hobby, matrix,arrows,decorations.pathmorphing}
+\tikzfading[name=fade out, inner color=transparent!0, outer color=transparent!100]
+
+% biblatex is provided by dzg-unified
+\addbibresource{global.bib}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+
+% Pandoc compatibility macros
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Standard Pandoc macros for figures
+
+\makeatletter
+\providecommand{\pandocbounded}[1]{#1}
+\makeatother
+
+
+
+\begin{document}
+
+
+\maketitle
+\tableofcontents
+
+\newpage
+
+\section{Attribute-style theorem
+sample}\label{attribute-style-theorem-sample}
+
+\begin{theorem}[T]\label{thm:x}
+
+Body of the attribute-style theorem, citing \autocite[Lem. 7.1]{Ols04}.
+
+\end{theorem}
+
+\begin{proof}
+
+Attribute-style proof body referencing the theorem.
+
+\end{proof}
+
+Trailing paragraph after the environments.
+
+\clearpage
+ \printbibliography
+
+\end{document}
