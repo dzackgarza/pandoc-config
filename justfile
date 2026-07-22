@@ -14,6 +14,12 @@ GLOBAL_FIGURES_DIR := env_var_or_default("FIGURES_DIR", home_dir() / "figures")
 BUILD_DIR_PANDOC := ".build_pandoc"
 BUILD_DIR_TEX := ".build_tex"
 
+# compile-pandoc-project defaults: its variadic input list must be the
+# last parameter, so bib_source/build_dir are env-var overridable here
+# rather than positional. Defaults match compile-pandoc exactly.
+PROJECT_BIB_SOURCE := env_var_or_default("PANDOC_BIB_SOURCE", GLOBAL_BIB_SOURCE)
+PROJECT_BUILD_DIR := env_var_or_default("PANDOC_BUILD_DIR", BUILD_DIR_PANDOC)
+
 # --- Environment ---
 export PANDOC_DIR := home_dir() / ".pandoc"
 export TEXINPUTS := ".:" + home_dir() + "/.pandoc/styles//:" + home_dir() + "/.pandoc/macros//:" + home_dir() + "/.pandoc/config//:" + env_var_or_default("TEXINPUTS", "")
@@ -178,21 +184,51 @@ compile-tex main_file="main.tex" output_name="paper" bib_source=GLOBAL_BIB_SOURC
   cp "$ROOT/{{build_dir}}/${FILE%.tex}.pdf" "$ROOT/{{output_name}}-$(date +%d-%m-%y).pdf"
 
 # Compile Pandoc source to PDF via LaTeX
-compile-pandoc input_file="main.md" output_name="output" template="research_draft.tex" bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC:
+compile-pandoc input_file="main.md" output_name="output" template="research_draft.tex" bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex "no-crossref" template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
+
+# Compile multiple ordered Pandoc sources into one project PDF.
+# Inputs are passed to pandoc verbatim, in the given order, and
+# pandoc-crossref resolves {#fig:}/{#tbl:}/{#eq:}/{#sec:}/{#lst:}
+# targets across file boundaries. Since the variadic input list must be
+# the last parameter, bib_source/build_dir are overridden via the
+# PANDOC_BIB_SOURCE / PANDOC_BUILD_DIR environment variables instead of
+# positionally (defaults identical to compile-pandoc).
+# Usage: just pandoc::compile-pandoc-project <output_name> <template> <file1.md> [file2.md ...]
+compile-pandoc-project output_name template +input_files: (_compile-pandoc-tex "crossref" template PROJECT_BIB_SOURCE PROJECT_BUILD_DIR input_files) (_compile-pandoc-latexmk output_name PROJECT_BUILD_DIR)
+
+# Shared pandoc stage: markdown -> build_dir/output.tex.
+# Filters resolve from this justfile's checkout (not $HOME/.pandoc), so
+# an explicit --justfile invocation runs THIS checkout's filters.
+# pandoc-crossref (crossref mode, used by compile-pandoc-project) must
+# run after include.lua so it sees the fully transcluded document, and
+# before convert_amsthm_envs.lua: crossref rewrites the
+# @fig:/@tbl:/@eq:/@sec:/@lst: families and passes theorem divs and
+# @thm:-family citations through untouched, so the theorem filter still
+# receives its divs intact. compile-pandoc stays crossref-free: crossref
+# injects a header-includes block into LaTeX output, which would break
+# the byte-stable single-file surface.
+[private]
+_compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
   mkdir -p "$ROOT/{{build_dir}}"
-  
+
   # Symlink global bib for easy resolution
   ln -sf "{{bib_source}}" "$ROOT/global.bib"
 
+  CROSSREF_ARGS=()
+  if [ "{{crossref_mode}}" = "crossref" ]; then
+    CROSSREF_ARGS=(-F pandoc-crossref -M cref=true)
+  fi
+
   # Run pandoc from ROOT to ensure relative include.lua paths work correctly
   cd "$ROOT"
-  pandoc "{{input_file}}" \
-      --lua-filter="$HOME/.pandoc/filters/include.lua" \
-      --lua-filter="$HOME/.pandoc/filters/convert_amsthm_envs.lua" \
-      --lua-filter="$HOME/.pandoc/filters/select_images.lua" \
+  pandoc {{input_files}} \
+      --lua-filter="{{justfile_directory()}}/filters/include.lua" \
+      "${CROSSREF_ARGS[@]}" \
+      --lua-filter="{{justfile_directory()}}/filters/convert_amsthm_envs.lua" \
+      --lua-filter="{{justfile_directory()}}/filters/select_images.lua" \
       --natbib \
       --bibliography="global.bib" \
       --template={{template}} \
@@ -200,7 +236,14 @@ compile-pandoc input_file="main.md" output_name="output" template="research_draf
       --number-sections \
       --toc --toc-depth=2 \
       -s -o "{{build_dir}}/output.tex"
-  
+
+# Shared latexmk stage: build_dir/output.tex -> PDF copied to ROOT.
+[private]
+_compile-pandoc-latexmk output_name build_dir:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  ROOT="{{invocation_directory()}}"
+  cd "$ROOT"
   cd "{{build_dir}}"
   # BIBINPUTS setup (Augment environment with project root so global.bib is found)
   export BIBINPUTS=".:$ROOT:${BIBINPUTS:-}"
