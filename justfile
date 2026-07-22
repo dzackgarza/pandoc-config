@@ -380,10 +380,11 @@ test: _test-macros _test-templates _test-tikz _test-tikz-filter
 test-ci: test
 
 # Test workspace-resolved theorem references (compile-pandoc-project
-# tex stage on ordered inputs) and byte-stability of the compile-pandoc
-# attribute-style theorem path. Runs in a throwaway scratch dir; asserts
-# on the intermediate .tex only (PDF compilation is owned by the
-# recipes' normal use).
+# tex stage on ordered inputs), byte-stability of the compile-pandoc
+# attribute-style theorem path, and a plain-branch latexmk gate proving
+# every filter-emitted theorem environment is defined in this
+# checkout's environments.tex (issue #6). Runs in a throwaway scratch
+# dir.
 test-references:
   bash "{{justfile_directory()}}/tests/test-project-references.sh"
 
