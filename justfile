@@ -14,6 +14,12 @@ GLOBAL_FIGURES_DIR := env_var_or_default("FIGURES_DIR", home_dir() / "figures")
 BUILD_DIR_PANDOC := ".build_pandoc"
 BUILD_DIR_TEX := ".build_tex"
 
+# Default LaTeX template for the compile-pandoc family. Single source:
+# compile-pandoc's parameter default and compile-pandoc-project's
+# sentinel ('' or '-') both resolve here, so callers never have to
+# duplicate the template name.
+DEFAULT_TEMPLATE := "research_draft.tex"
+
 # compile-pandoc-project defaults: its variadic input list must be the
 # last parameter, so bib_source/build_dir are env-var overridable here
 # rather than positional. Defaults match compile-pandoc exactly.
@@ -184,7 +190,7 @@ compile-tex main_file="main.tex" output_name="paper" bib_source=GLOBAL_BIB_SOURC
   cp "$ROOT/{{build_dir}}/${FILE%.tex}.pdf" "$ROOT/{{output_name}}-$(date +%d-%m-%y).pdf"
 
 # Compile Pandoc source to PDF via LaTeX
-compile-pandoc input_file="main.md" output_name="output" template="research_draft.tex" bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex "no-crossref" template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
+compile-pandoc input_file="main.md" output_name="output" template=DEFAULT_TEMPLATE bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex "no-crossref" template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
 
 # Compile multiple ordered Pandoc sources into one project PDF.
 # Inputs are passed to pandoc verbatim, in the given order, and
@@ -194,6 +200,10 @@ compile-pandoc input_file="main.md" output_name="output" template="research_draf
 # PANDOC_BIB_SOURCE / PANDOC_BUILD_DIR environment variables instead of
 # positionally (defaults identical to compile-pandoc).
 # Usage: just pandoc::compile-pandoc-project <output_name> <template> <file1.md> [file2.md ...]
+# The template slot sits before the variadic, so it cannot be omitted
+# positionally; pass '' or '-' as a sentinel to use the recipe's own
+# default (DEFAULT_TEMPLATE, shared with compile-pandoc) without naming
+# it. Real template names keep working unchanged.
 # The variadic cannot be forwarded as a just dependency argument: just
 # joins it into a single string, which would word-split filenames
 # containing spaces. [positional-arguments] passes each recipe argument
@@ -204,7 +214,11 @@ compile-pandoc-project output_name template +input_files:
   #!/usr/bin/env bash
   set -euo pipefail
   cd "{{invocation_directory()}}"
-  just --justfile "{{justfile()}}" _compile-pandoc-tex crossref "{{template}}" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
+  TEMPLATE="{{template}}"
+  if [ -z "$TEMPLATE" ] || [ "$TEMPLATE" = "-" ]; then
+    TEMPLATE="{{DEFAULT_TEMPLATE}}"
+  fi
+  just --justfile "{{justfile()}}" _compile-pandoc-tex crossref "$TEMPLATE" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
   just --justfile "{{justfile()}}" _compile-pandoc-latexmk "{{output_name}}" "{{PROJECT_BUILD_DIR}}"
 
 # Shared pandoc stage: markdown -> build_dir/output.tex.
