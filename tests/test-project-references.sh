@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # test-project-references.sh — proof harness for compile-pandoc-project
-# (ordered multi-file inputs, workspace-resolved theorem references) and
-# for byte-stability of the compile-pandoc attribute-style theorem path.
+# (ordered multi-file inputs, workspace-resolved theorem references),
+# for byte-stability of the compile-pandoc attribute-style sample (which
+# contains no theorem-family citations), and for the intended native
+# \cref behavior of theorem-family citations on the legacy single-file
+# compile-pandoc path.
 #
 # Fixture provenance: workspace/*.md are copies of
 # zettlr-pandoc/test/fixtures/reference-workspace/ProjectA/ files
@@ -41,7 +44,7 @@ cp "$REPO/tests/fixtures/theorem-references/references.bib" "$SCRATCH/workspace/
 cd "$SCRATCH/workspace"
 
 # --- 1. compile-pandoc-project pandoc stage: two ordered inputs ------
-echo "[1/4] compile-pandoc-project tex stage (Theorems.md Halphen_Surfaces.md)"
+echo "[1/5] compile-pandoc-project tex stage (Theorems.md Halphen_Surfaces.md)"
 just --justfile "$REPO/justfile" \
   _compile-pandoc-tex crossref research_draft.tex "$SCRATCH/workspace/refs.bib" .build_pandoc \
   Theorems.md Halphen_Surfaces.md
@@ -81,7 +84,7 @@ check 'cluster items keep per-item text (see \cref{thm:torelli}; \cref{lem:kodai
 # Zettlr Project documents can have spaces in their names; the public
 # recipe forwards each input as its own shell positional
 # ([positional-arguments]), so a spaced filename must survive verbatim.
-echo "[2/4] ordered run with a filename containing a space"
+echo "[2/5] ordered run with a filename containing a space"
 cp "$REPO/tests/fixtures/theorem-references/workspace/Coble_Lattice_Table.md" \
    "$SCRATCH/workspace/Coble Lattice Table.md"
 just --justfile "$REPO/justfile" \
@@ -100,18 +103,22 @@ check "cross-file table ref from spaced file resolves (\\cref{tbl:coble-lattices
   grep -F '\cref{tbl:coble-lattices}' "$TEX_SPACED"
 
 # --- 2. proof divs stay unlabeled ------------------------------------
-echo "[3/4] proof divs unnumbered/unlabeled"
+echo "[3/5] proof divs unnumbered/unlabeled"
 check 'proof div emitted as \begin{proof}' grep -F '\begin{proof}' "$TEX"
 check 'proof div id produced no label (thm:should-not-index absent)' \
   bash -c "! grep -q 'thm:should-not-index' '$TEX'"
 check 'empty-key id produced no label (\label{thm:} absent)' \
   bash -c "! grep -qF '\\label{thm:}' '$TEX'"
 
-# --- 3. compile-pandoc attribute path: byte-for-byte vs baseline -----
+# --- 3. compile-pandoc attribute-style sample: byte-for-byte ---------
 # The baseline was generated with the pre-change filter at commit
 # 81792cc; this run uses compile-pandoc's tex stage (its exact defaults:
 # no-crossref, research_draft.tex, bib symlinked as global.bib).
-echo "[4/4] compile-pandoc attribute-style path byte-stability"
+# Scope of the claim: the sample contains theorem divs with the legacy
+# title=/ref= attribute syntax and NO theorem-family citations, so this
+# proves byte-stability of the attribute-style sample only. Theorem
+# citations on the legacy path intentionally changed (see step 5).
+echo "[4/5] compile-pandoc attribute-style sample byte-stability"
 mkdir -p "$SCRATCH/single"
 cd "$SCRATCH/single"
 cp "$REPO/tests/fixtures/theorem-references/attribute_style_sample.md" .
@@ -119,8 +126,27 @@ cp "$REPO/tests/fixtures/theorem-references/references.bib" refs.bib
 just --justfile "$REPO/justfile" \
   _compile-pandoc-tex no-crossref research_draft.tex "$SCRATCH/single/refs.bib" .build_pandoc \
   attribute_style_sample.md
-check "attribute-style .tex byte-identical to pre-change baseline" \
+check "attribute-style sample byte-stable (byte-identical to pre-change baseline; sample has no theorem citations)" \
   diff "$REPO/tests/fixtures/theorem-references/expected_attribute_style.tex" .build_pandoc/output.tex
+
+# --- 4. legacy path: theorem citations become native \cref -----------
+# The shared Cite handler runs on the legacy single-file compile-pandoc
+# path too, so @thm:-family citations there now emit native \cref
+# instead of falling through to natbib/biblatex. That change is the
+# feature; this step blesses it as the intended legacy-path behavior.
+echo "[5/5] compile-pandoc legacy path: theorem citations emit \\cref"
+mkdir -p "$SCRATCH/legacy"
+cd "$SCRATCH/legacy"
+cp "$REPO/tests/fixtures/theorem-references/legacy_theorem_citation_sample.md" .
+cp "$REPO/tests/fixtures/theorem-references/references.bib" refs.bib
+just --justfile "$REPO/justfile" \
+  _compile-pandoc-tex no-crossref research_draft.tex "$SCRATCH/legacy/refs.bib" .build_pandoc \
+  legacy_theorem_citation_sample.md
+TEX_LEGACY=".build_pandoc/output.tex"
+check 'legacy-path bare @thm:legacy-torelli becomes \cref{thm:legacy-torelli}' \
+  grep -F '\cref{thm:legacy-torelli}' "$TEX_LEGACY"
+check 'legacy-path prefixed citation keeps its prefix (see \cref{thm:legacy-torelli})' \
+  flat_grep "$TEX_LEGACY" 'see \cref{thm:legacy-torelli}'
 
 # --- Result ----------------------------------------------------------
 if [ "$FAILURES" -eq 0 ]; then
