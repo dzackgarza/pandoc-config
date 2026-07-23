@@ -304,6 +304,10 @@ _test-tikz:
 # Run all tests (macros, templates, tikz compilation, filter)
 test: _test-macros _test-templates _test-tikz _test-tikz-filter
 
+# Commit-tier gate entry point expected by the machine-wide ai-review-ci hook;
+# this repo's commit-tier QC is its own test suite.
+test-commit: test
+
 # CI gate (run by the global pre-push hook): same full suite as `test`.
 test-ci: test
 

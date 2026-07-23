@@ -45,7 +45,15 @@ def render_tikz(filepath: str, output_dir: str, cache: dict, force: bool = False
         # Wrap in shorthand or ensure environment is correct
         pass
 
-    tex_content = TEMPLATE.replace("$body$", content)
+    # The standalone template's insertion marker changed from "$body$" to the
+    # QTikz-style "<>" (see templates/standalone-tikz.tex); support both so a
+    # marker mismatch can never again produce blank renders silently.
+    if "<>" in TEMPLATE:
+        tex_content = TEMPLATE.replace("<>", content)
+    elif "$body$" in TEMPLATE:
+        tex_content = TEMPLATE.replace("$body$", content)
+    else:
+        raise RuntimeError("standalone-tikz.tex has no insertion marker (<> or $body$)")
     
     with tempfile.TemporaryDirectory() as tmpdir:
         tex_file = os.path.join(tmpdir, f"{name}.tex")
@@ -114,11 +122,9 @@ def main():
         if not args:
             sys.exit(0)
 
-    if not args:
-        print("Error: No target file specified. Use --all to render all figures.")
-        sys.exit(1)
-
-    target = args[0].strip()
+    # The pandoc::render-figures recipe invokes this with no arguments; default
+    # to rendering everything rather than erroring.
+    target = args[0].strip() if args else "--all"
 
     # Load cache
     cache = {}
