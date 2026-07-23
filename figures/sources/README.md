@@ -12,6 +12,7 @@ files an author opens to change a picture.
 | `sterk2_ias2_template.tikz` | TikZ | drawing template for the Sterk-2 IAS2 diagrams |
 | `sterk_ias_export.svg`, `sterk_ias_export_v2.svg` | Inkscape/GeoGebra export | intermediate exports of the same IAS |
 | `nikulin_diagram_axes_scaffold.tikz` | pgfplots | the empty 22x11 axis grid the Nikulin 2-elementary diagram is drawn on |
+| `tikzit-coble-palette.sty` | TikZiT | the node/edge palette (`black node`, `white node`, `doubled node`, `starred node`, `double edge`, …) the Coble TikZ figures were drawn against; needed to reopen them in TikZiT |
 
 Consolidated from `research/writing/Coble Paper Draft`, where they were the only
 copies.
