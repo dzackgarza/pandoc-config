@@ -20,6 +20,49 @@
 -- The LaTeX branch emits pf2.sty commands; the consuming template must load a
 -- compatible Lamport-proof implementation because the commands are not part
 -- of standard LaTeX.
+--
+-- Write prose proofs by keeping each claim and its justification in separate
+-- blocks. Use `.pf-step` for a claim, `.pf-proof` for its prose justification,
+-- and `.pf-qed` when a branch is complete. Add an ID only to steps that later
+-- need a reference. The filter then supplies stable numbers without putting
+-- numbers in the source text.
+--
+-- Example source:
+--   ::: {.pf #odd-sum numbering=short}
+--
+--   ::: {.pf-step #claim}
+--   The sum of two odd integers is even.
+--
+--   :::: {.pf-proof}
+--   Write the integers as $2a+1$ and $2b+1$.
+--   Their sum is $2(a+b+1)$, which is even.
+--   ::::
+--
+--   :::
+--
+--   ::: {.pf-qed}
+--   This proves [the claim](#claim){.pf-ref}.
+--   :::
+--
+--   :::
+--
+-- Fenced divs must be enabled in Pandoc. A proof root may contain only steps;
+-- each step may contain ordinary prose, one nested proof, or nested steps.
+-- `numbering=long` selects labels such as 1.1.2; the default is `short`.
+--
+-- References:
+-- - Lamport, “How to Write a Proof”:
+--   https://www.microsoft.com/en-us/research/publication/how-to-write-a-proof/
+-- - Lamport, “How to Write a 21st Century Proof”:
+--   https://lamport.org/pubs/proof.pdf
+-- - Lamport's `pf2.sty` reference implementation:
+--   https://lamport.azurewebsites.net/latex/pf2.sty
+-- - TLA+ hierarchical-proof overview:
+--   https://lamport.azurewebsites.net/tla/tla2.html
+-- - Pandoc fenced divs:
+--   https://pandoc.org/MANUAL.html#extension-fenced_divs
+-- - Pandoc Lua filter API:
+--   https://pandoc.org/lua-filters.html
 
 local clause_classes = {
   ["pf-assume"] = "assume",
