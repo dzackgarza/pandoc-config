@@ -426,6 +426,10 @@ test-commit: test
 # CI gate (run by the global pre-push hook): same full suite as `test`.
 test-ci: test
 
+# Push-tier entry point expected by the machine-wide ai-review-ci hook.
+[private]
+test-push: test-ci
+
 # Test workspace-resolved theorem references (compile-pandoc-project
 # tex stage on ordered inputs), byte-stability of the compile-pandoc
 # attribute-style theorem path, and a plain-branch latexmk gate proving
