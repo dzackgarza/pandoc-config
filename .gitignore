@@ -1,15 +1,22 @@
 # Regenerable artifacts — kept out of the standalone pandoc-config repo
 venv/
+.venv/
+node_modules/
 .ruff_cache/
 .serena/cache/
 .serena/project.local.yml
 __pycache__/
 *.log
+*.aux
 # Pre-commit hook regenerates these LaTeX test PDFs nondeterministically
 # (embedded timestamps); they are build artifacts, not tracked reference outputs.
 tests/*.pdf
 figures/rendered/.cache.json
 figures/rendered/dzgtikz-*
+plans/*.b64
+plans/*.log
+plans/*.pdf
+plans/*.png
 
 # Local agent-memory symlink and interrupted editing artifacts
 .hermes
