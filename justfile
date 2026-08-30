@@ -302,7 +302,7 @@ _test-tikz:
   fi
 
 # Run all tests (macros, templates, tikz compilation, filter)
-test: _test-macros _test-templates _test-tikz _test-tikz-filter
+test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof
 
 # Commit-tier gate entry point expected by the machine-wide ai-review-ci hook;
 # this repo's commit-tier QC is its own test suite.
@@ -315,6 +315,10 @@ test-ci: test
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.
 _test-tikz-filter:
   python3 "{{justfile_directory()}}/tests/test-tikz-filter.py"
+
+# Test Lamport-style proof parsing, numbering, references, and LaTeX output
+_test-lamport-proof:
+  python3 "{{justfile_directory()}}/tests/test-lamport-proof.py"
 
 
 # Generate MathJax 3 macro configuration (JS/TS/JSON) from canonical tier .tex files.
