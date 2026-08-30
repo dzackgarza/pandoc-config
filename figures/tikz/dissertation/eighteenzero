@@ -1,0 +1,37 @@
+﻿\begin{tikzpicture}%[x={(1,0)}, y={(60:1)}]
+
+\draw (0,0)--(0,6)--(6,0)--(4,0) (2,0)--(0,0)
+(0,0)--(1,1) (6,0)--(4,1);
+
+\node[dwh] at (2,0) {};
+\node[swh] at (2,0) {};
+\node[wh] at (1,0) {};
+\node[dwh] at (0,0) {};
+\node[swh] at (0, 0) {};
+\node[wh] at (0,1) {};
+\node[dwh] at (0,2) {};
+\node[swh] at (0,2) {};
+\node[wh] at (0,3) {};
+\node[dwh] at (0,4) {};
+\node[swh] at (0,4) {};
+\node[wh] at (0,5) {};
+\node[dwh] at (0,6) {};
+\node[swh] at (0,6) {};
+\node[wh] at (1,5) {};
+\node[dwh] at (2,4) {};
+\node[swh] at (2,4) {};
+\node[wh] at (3,3) {};
+\node[dwh] at (4,2) {};
+\node[swh] at (4,2) {};
+\node[wh] at (5,1) {};
+\node[dwh] at (6,0) {};
+\node[swh] at (6,0) {};
+\node[wh] at (5,0) {};
+\node[dwh] at (4,0) {};
+\node[swh] at (4,0) {};
+
+\node[wh] at (1,1) {};
+\node[wh] at (4,1) {};
+
+
+\end{tikzpicture}

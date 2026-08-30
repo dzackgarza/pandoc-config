@@ -1,0 +1,19 @@
+﻿\begin{tikzpicture}
+
+\begin{scope}
+\input{18_0_0.tikz}
+\draw[-{Stealth[length=2mm, width=2mm]}, line width=1.5pt, opacity=0.6, red, dashed] 
+   ($(r6)!2/10!(r12)$) to[out=90, in=90] ($(r6)!8/10!(r12)$);
+% 
+
+\draw[dashed, red, line width=1.2pt, opacity=0.8] ($(r9) + (-0.125,0.25)$) to ($(r1)!1/2!(r17) + (0.75/2,-0.75)$);
+
+ \draw[-{Stealth[length=3mm, width=2mm]}, line width=1.5pt, opacity=0.6, red] ($(r11) + (1,0.5)$) to($(r11) + (4,0.5)$);
+
+\end{scope}
+
+\begin{scope}[shift={(8,0)}]
+\input{raw_Sterk2}
+\end{scope}
+
+\end{tikzpicture}

@@ -1,0 +1,18 @@
+﻿\begin{tikzpicture}
+\begin{scope}[scale=1.2]
+\input{18_2_0.tikz}
+\draw[<->, foldarrow] 
+    ($(r8)!1/2!(r18) + (0.1,0)$) to[out=195, in=165] ($(r6)!1/2!(r20) + (0.1, 0)$);
+\draw[<->, foldarrow] 
+    ($(r14)!1/2!(r19) + (0,0)$) to[out=195, in=165] ($(r16)!1/2!(r17) + (0, 0)$);
+\draw[dashed, red, line width=2pt, opacity=0.8] ($(r15) + (-0.1,0)$) to ($(r7) + (0.1,0)$);
+% 
+\draw[->, line width=2pt, opacity=0.6, red] ($(r7) + (0.25,0.5)$) to($(r7) + (1.75,0.5)$);
+
+\end{scope}
+
+\begin{scope}[shift={(7,2*1.2)}, scale=0.6]
+\input{raw_Sterk4}
+\end{scope}
+
+\end{tikzpicture}

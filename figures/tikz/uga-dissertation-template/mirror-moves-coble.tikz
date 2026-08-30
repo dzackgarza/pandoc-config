@@ -1,0 +1,22 @@
+﻿\begin{tikzcd}[row sep=large, column sep=0.65em]
+% https://q.uiver.app/#q=WzAsMTUsWzUsNSwiKDcsIDcsIDEpXzAiLFsyMjIsMTAwLDYwLDFdXSxbNSwxLCIoMTEsIDExLCAxKV8yIl0sWzUsMywiKDksIDksIDEpXzEiLFsyMjIsMTAwLDYwLDFdXSxbNiw1LCIoNywgNywgMClfMCIsWzAsNjAsNjAsMV1dLFs4LDUsIlxcYnVsbGV0Il0sWzksNSwiXFxidWxsZXQiXSxbMTAsNSwiXFxidWxsZXQiXSxbMiw1LCJcXGJ1bGxldCJdLFsxLDUsIlxcYnVsbGV0Il0sWzksMywiKDksIDksIDApXzEiLFswLDYwLDYwLDFdXSxbMCw1LCJcXGJ1bGxldCJdLFsxLDMsIig5LCAxMSwgMSlfMSIsWzAsNjAsNjAsMV1dLFs0LDUsIig3LDksMSlfMCIsWzAsNjAsNjAsMV1dLFs1LDAsIigxMSwgMTEsMSlfMSJdLFs1LDQsIlxcYnVsbGV0Il0sWzEsMl0sWzEsOV0sWzEsMTFdLFsxMSwxMF0sWzExLDhdLFsxMSw3XSxbMiwxMl0sWzIsMF0sWzIsM10sWzksNV0sWzksNF0sWzksNl0sWzEzLDFdXQ==
+	&&&&& {(11, 11,1)_1} \\
+	&&&&& {(11, 11, 1)_2} \\
+	\\
+	& \textcolor{rgb,255:red,214;green,92;blue,92}{(9, 11, 1)_1} &&&& \textcolor{rgb,255:red,51;green,112;blue,255}{(9, 9, 1)_1} &&&& \textcolor{rgb,255:red,214;green,92;blue,92}{(9, 9, 0)_1} \\
+	&&&&&  \\
+	\bullet & \bullet & \bullet && \textcolor{rgb,255:red,214;green,92;blue,92}{(7,9,1)_0} & \textcolor{rgb,255:red,51;green,112;blue,255}{(7, 7, 1)_0} & \textcolor{rgb,255:red,214;green,92;blue,92}{(7, 7, 0)_0} && \bullet & \bullet & \bullet
+	\arrow[from=1-6, to=2-6]
+	\arrow[from=2-6, to=4-2]
+	\arrow[from=2-6, to=4-6]
+	\arrow[from=2-6, to=4-10]
+	\arrow[from=4-2, to=6-1]
+	\arrow[from=4-2, to=6-2]
+	\arrow[from=4-2, to=6-3]
+	\arrow[from=4-6, to=6-5]
+	\arrow[from=4-6, to=6-6]
+	\arrow[from=4-6, to=6-7]
+	\arrow[from=4-10, to=6-9]
+	\arrow[from=4-10, to=6-10]
+	\arrow[from=4-10, to=6-11]
+\end{tikzcd}

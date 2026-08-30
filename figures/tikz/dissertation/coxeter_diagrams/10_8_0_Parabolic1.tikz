@@ -1,0 +1,19 @@
+﻿\begin{tikzpicture}
+
+\begin{scope}[y={(60:1)}]
+
+\input{raw_10_8_0}
+
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (1) to  (4) to (9);
+\draw[hlt] (2) to (4);
+\end{scope}
+
+\node at (2, -1) {$\tilde E_8(2) \subset (10, 8, 0)_1$};
+
+\end{pgfonlayer}
+
+\end{scope}
+
+\end{tikzpicture}

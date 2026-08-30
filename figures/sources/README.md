@@ -16,3 +16,9 @@ files an author opens to change a picture.
 
 Consolidated from `research/writing/Coble Paper Draft`, where they were the only
 copies.
+
+The repository also owns the imported TikZ source trees in
+`figures/tikz/dissertation/`, `figures/tikz/uga-dissertation-template/`, and
+`figures/tikz/visualizations/`. The original paths in the notes and dissertation
+repositories are symlinks to these directories, so existing documents keep their
+relative `\input` paths while the editable sources have one canonical owner.

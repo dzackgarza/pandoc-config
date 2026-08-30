@@ -1,0 +1,27 @@
+% \begin{tikzpicture}[scale=0.8]
+
+% 	\draw[line width=1.0pt] (0,0) -- (0,2);
+% 	\draw[line width=1.0pt] (2,0) -- (0,2);
+% 	\draw[line width=1.0pt] (2,0) -- (2,2);
+
+% 	\fill (0,0) circle (3pt);
+% 	\fill (2,0) circle (3pt);
+% 	\draw [fill=white] (0,2) circle[radius=3pt];
+% 	\draw [fill=white] (2,2) circle[radius=3pt];
+
+% \end{tikzpicture}
+
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=black node, label=above:{$q_1$}] (0) at (0, 0) {};
+		\node [style=white node, label=above:{$Y_{12}$}] (1) at (2, 0) {};
+		\node [style=black node, label=above:{$q_2$}] (2) at (4, 0) {};
+		\node [style=white node, label=above:{$Y_2$}] (3) at (6, 0) {};
+        \node [style=none, label=above:{$\Munpol$}] at (3, 1) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=Arrow] (0) to (1);
+		\draw [style=Arrow] (2) to (1);
+		\draw [style=Arrow] (2) to (3);
+	\end{pgfonlayer}
+\end{tikzpicture}

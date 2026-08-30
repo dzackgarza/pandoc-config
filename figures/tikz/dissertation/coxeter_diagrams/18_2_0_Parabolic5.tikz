@@ -1,0 +1,16 @@
+﻿\begin{tikzpicture}
+\input{18_2_0.tikz}
+\node[above of = r11] (label) {\Large $E_8D_8$};
+
+\begin{pgfonlayer}{main}
+    \begin{scope}[transparency group]
+    \draw[hlt] (r3) -- (r1) -- (r13) -- (r12);
+		\draw[hlt] (r1) -- (r17);
+		\draw[hlt] (r10) -- (r9) -- (r5) -- (r4);
+		\draw[hlt] (r18) -- (r9);
+		\draw[hlt] (r20) -- (r5);
+    \end{scope}
+	\end{pgfonlayer}
+
+
+\end{tikzpicture}

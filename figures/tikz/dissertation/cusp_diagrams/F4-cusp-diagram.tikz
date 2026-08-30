@@ -1,0 +1,38 @@
+﻿\begin{tikzpicture}[scale=1]
+
+% Nodes
+\node[BB cusp point] (P0) at (3,0) {$e$};
+
+\node[rectangle, draw, minimum width=1.5cm] (C1) at (0,4) {$A_1(2)E_8^2$};
+\node[BB cusp curve] (C2) at (0,3) {$A_1(2)D_{16}$};
+\node[BB cusp curve] (C3) at (0,2) {$D_9E_8$};
+\node[BB cusp curve] (C4) at (0,1) {$A_3E_7^2$};
+\node[BB cusp curve] (C5) at (0,0) {$D_{17}$};
+\node[BB cusp curve] (C6) at (0, -1) {$D_5 D_{12}$};
+\node[BB cusp curve] (C7) at (0, -2) {$A_1(2)D_8^2$};
+\node[BB cusp curve] (C8) at (0,-3) {$A_1^2A_{15}$};
+\node[BB cusp curve] (C9) at (0,-4) {$A_{11}E_6$};
+
+\node (HmodSL2Z) at (0,-4.75) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+
+% Arrows
+\draw[BB cusp arrow reverse] (C1.east) -- (P0);
+\draw[BB cusp arrow reverse] (C2.east) -- (P0);
+\draw[BB cusp arrow reverse] (C3.east) -- (P0);
+\draw[BB cusp arrow reverse] (C4.east) -- (P0);
+\draw[BB cusp arrow reverse] (C5.east) -- (P0);
+\draw[BB cusp arrow reverse] (C6.east) -- (P0);
+\draw[BB cusp arrow reverse] (C7.east) -- (P0);
+\draw[BB cusp arrow reverse] (C8.east) -- (P0);
+\draw[BB cusp arrow reverse] (C9.east) -- (P0);
+
+
+\node at (3,4.25) {\underline{$F_4$}};
+
+\draw [BB cusp brace]
+  (-1,-4.75) -- (1,-4.75) node[midway,yshift=-3em]{$(0, 17)$};
+
+\draw [BB cusp brace]
+  (2,-4.75) -- (4,-4.75) node[midway,yshift=-3em]{$A_1(2) \oplus U \oplus E_8^2$};
+
+\end{tikzpicture}

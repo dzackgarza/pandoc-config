@@ -1,0 +1,26 @@
+% \usepackage{tkz-euclide}
+\begin{tikzpicture}[scale=5]
+
+  \def\sectors{18}
+  \def\s{\the\numexpr\sectors-1\relax}
+    \foreach \i in {0,1,2,...,\s} {
+        \tkzDefPoint({\i*360/\sectors}:1){P\i}
+        \tkzDefPoint({\i*360/\sectors}:1.2){PL\i}
+        \tkzLabelPoint[red](PL\i){$P_{\i}$};
+    }
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(1.04,0){A}
+  \tkzClipCircle(O,A)
+    \foreach [evaluate={
+              \j=int(mod(\i + 1,\sectors));
+              }] \i in {0,1,2,...,\s} {
+        \tkzDrawCircle[orthogonal through={P\i} and {P\j}](O,A);
+        \tkzDrawPoints[color=black,fill=red,size=6](P\i);
+    }
+    % \tkzDefMidPoint(P1,P2) \tkzGetPoint{M}
+    % \tkzDrawPoints[color=black,fill=red,size=6](M);
+    % \tkzDrawArc[color=blue, delta=10](M,P2)(P1)
+    % \tkzDefMidPoint(P2,P3) \tkzGetPoint{M2}
+    % \tkzDrawPoints[color=black,fill=red,size=6](M2);
+    % \tkzDrawArc[color=blue, delta=10](M2,P3)(P2)
+\end{tikzpicture}

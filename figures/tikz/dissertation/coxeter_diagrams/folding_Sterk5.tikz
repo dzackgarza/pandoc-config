@@ -1,0 +1,13 @@
+﻿\begin{tikzpicture}
+\begin{scope}[scale=1.2]
+\input{18_2_0.tikz}
+\draw[->, line width=2pt, opacity=0.6, red] ($(r7) + (0.25,0.5)$) to($(r7) + (1.75,0.5)$);
+\foreach \i in {2,4,6,...,16}
+\reflectnode{r\i};
+\end{scope}
+
+\begin{scope}[shift={(7,0)}, scale=1.2]
+\input{raw_Sterk5}
+\end{scope}
+
+\end{tikzpicture}

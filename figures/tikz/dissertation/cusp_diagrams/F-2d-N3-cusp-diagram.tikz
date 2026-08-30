@@ -1,0 +1,45 @@
+﻿\begin{tikzpicture}[scale=1]
+
+% Nodes
+\node[BB cusp point] (P0) at (2,0) {$p_0$};
+\node[BB cusp point] (P1) at (6,0) {$p_1$};
+
+\node[BB cusp curve] (C1) at (0,2) {$C_1$};
+\node[BB cusp curve] (C2) at (0,1) {$C_2$};
+\node (dots1) at (0,0) {$\vdots$};
+\node[BB cusp curve] (Cnm1) at (0,-1) {$C_{n-1}$};
+\node[BB cusp curve] (Cn) at (0,-2) {$C_n$};
+
+\node (HmodSL2Z) at (0,-2.75) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+
+\node[BB cusp curve] (C1p) at (4,2) {$C_1^{(3)}$};
+\node[BB cusp curve] (C2p) at (4,1) {$C_2^{(3)}$};
+\node (dots2) at (4,0) {$\vdots$};
+\node[BB cusp curve] (Cnm1p) at (4,-1) {$C_{m-1}^{(3)}$};
+\node[BB cusp curve] (Cnp) at (4,-2) {$C_m^{(3)}$};
+
+\node (HmodGamma) at (4,-2.75) {$\mathbb{H}/\Gamma'(3)$};
+
+% Arrows (reversed with Latex style)
+\draw[BB cusp arrow] (P0) -- (C1.east);
+\draw[BB cusp arrow] (P0) -- (C2.east);
+\draw[BB cusp arrow] (P0) -- (Cn.east);
+\draw[BB cusp arrow] (P0) -- (Cnm1.east);
+
+
+\draw[{Latex[length=2mm]}-, thick] (C1p.west) -- (P0);
+\draw[{Latex[length=2mm]}-, thick] (C2p.west) -- (P0);
+\draw[{Latex[length=2mm]}-, thick] (Cnm1p.west) -- (P0);
+\draw[{Latex[length=2mm]}-, thick] (Cnp.west) -- (P0);
+
+
+\draw[BB cusp arrow] (P1) -- (C1p.east);
+\draw[BB cusp arrow] (P1) -- (C2p.east);
+\draw[BB cusp arrow] (P1) -- (Cnm1p.east);
+\draw[BB cusp arrow] (P1) -- (Cnp.east);
+
+
+% Text "N=3" at bottom left
+\node at (2,-2) {\underline{$N=3$}};
+
+\end{tikzpicture}

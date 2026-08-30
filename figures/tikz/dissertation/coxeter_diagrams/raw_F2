@@ -1,0 +1,56 @@
+\begin{pgfonlayer}{nodelayer}
+% Define the main triangle coordinates
+\coordinate (A) at (0,0);
+\coordinate (B) at (7,0);
+\coordinate (C) at (3.5,6);
+
+\node[style=black node, label=below left:{$r_0$}] (r0) at ($(A)$) {};
+\node[style=black node, label=below right:{$r_6$}] (r6) at ($(B)$) {};
+\node[style=black node, label=above:{$r_{12}$}] (r12) at ($(C)$) {};
+
+% Place nodes on the edges of the triangle
+\foreach \i in {1,...,5} {
+	\pgfmathsetmacro\z{int(\i+6)}
+	\pgfmathsetmacro\zz{int(\i+12)}
+
+    \node[style=black node, label=below:{$r_\i$}] (r\i) at ($(A)!\i/6!(B)$) {};
+    \node[style=black node, label=above right:{$r_{\z}$}] (r\z) at ($(B)!\i/6!(C)$) {};
+    \node[style=black node, label=above left:{$r_{\zz}$}] (r\zz) at ($(C)!\i/6!(A)$) {};
+}
+
+\node[style=black node, label=below right:{$r_{18}$}] (r18) at ($(A)!2.5/10!(r9)$) {};
+\node[style=black node, label=below right:{$r_{21}$}] (r21) at ($(A)!4.5/10!(r9)$) {};
+
+\node[style=black node, label=below left:{$r_{19}$}] (r19) at ($(B)!2.5/10!(r15)$) {};
+\node[style=black node, label=below left:{$r_{22}$}] (r22) at ($(B)!4.5/10!(r15)$) {};
+
+\node[style=black node, label=left:{$r_{20}$}] (r20) at ($(C)!2.5/10!(r3)$) {};
+\node[style=black node, label=left:{$r_{23}$}] (r23) at ($(C)!4.5/10!(r3)$) {};
+
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+
+\foreach \i in {0,1,...,16} {
+	\pgfmathsetmacro\z{int(\i+1)}
+	\draw[style=plain edge] (r\i) to (r\z);
+}
+\draw[style=plain edge] (r17) to (r0);
+
+\draw[style=plain edge] (r0) to (r18);
+\draw[style=thick edge] (r18) -- node[above, sloped]{$\infty$}(r21);
+\draw[style=thick edge] (r21) -- node[above, sloped, near end]{$\infty$}(r9);
+
+\draw[style=plain edge] (r6) to (r19);
+\draw[style=thick edge] (r19) -- node[above, sloped]{$\infty$}(r22);
+\draw[style=thick edge] (r22) -- node[above, sloped, near end]{$\infty$}(r15);
+
+\draw[style=plain edge] (r12) to (r20);
+\draw[style=thick edge] (r20) -- node[right]{$\infty$}(r23);
+\draw[style=thick edge] (r23) -- node[right, near end]{$\infty$}(r3);
+
+\draw[style=dashed edge] (r21) to (r22);
+\draw[style=dashed edge] (r22) to (r23);
+\draw[style=dashed edge] (r23) to (r21);
+
+\end{pgfonlayer}
+

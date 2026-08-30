@@ -1,0 +1,128 @@
+﻿
+\input{ADE_macros.tikz}
+
+\begin{tikzpicture}
+
+\begin{scope}
+\begin{pgfonlayer}{nodelayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0,0) grid (4,4);
+\draw[blue, very thick] (0,4) -- (4,0);
+\fill[blue!50, opacity=0.2]  (0,0) -- (0,4) -- (4,0) -- cycle;
+\draw[black, very thick, opacity=0.3] (4,0) to (0,0) to (0,4);
+
+\end{pgfonlayer}
+
+\node[ADE blue node, label={left:$y^4$}] at (0, 4) {};
+\node[ADE blue node, label={right:$xy^3$}] at (1, 3) {};
+\node[ADE blue node, label={right:$x^2y^2$}] at (2, 2) {};
+\node[ADE blue node, label={right:$x^3y$}] at (3, 1) {};
+\node[ADE blue node, label={below:$x^4$}] at (4, 0) {};
+
+\node[label={below left:$1$}] at (0,0) {};
+\node[label={left:$y$}] at (0,1) {};
+\node[label={left:$y^2$}] at (0,2) {};
+\node[label={left:$y^3$}] at (0,3) {};
+
+\node[label={above:$xy$}] at (1,1) {};
+
+\node[label={below:$x$}] at (1,0) {};
+\node[label={below:$x^2$}] at (2,0) {};
+\node[label={below:$x^3$}] at (3,0) {};
+
+\node[ADE black node] at (0,0) {};
+\node[ADE black node] at (0,2) {};
+\node[ADE black node] at (2,0) {};
+
+\node[ADE white node] at (0,1) {};
+\node[ADE white node] at (1,0) {};
+\node[ADE white node] at (3,0) {};
+\node[ADE white node] at (0,3) {};
+\node[ADE white node] at (1,1) {};
+
+\end{pgfonlayer}
+
+\begin{pgfonlayer}{edgelayer}
+\draw[ADE plain edge] (0,3) -- (0,0) -- (3,0);
+\draw[ADE plain edge] (0,0) -- (1,1);
+\end{pgfonlayer}
+
+% 
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (0,3) -- (0,0) -- (3,0);
+\draw[hlt] (0,0) -- (1,1);
+\end{scope}
+\node at (3.5,4.35) {\Large $\tilde E_7$};
+
+\draw[BB cusp brace, blue] (2,2) to node[midway, yshift=2.25em,xshift=1.95em] {$2$} (0, 4);
+\draw[BB cusp brace, blue] (4,0.1) to node[midway, yshift=2.25em,xshift=1.95em] {$2$} (2.1, 2);
+\end{pgfonlayer}
+
+\end{scope}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{scope}[shift={(6,0.5)}]
+\begin{pgfonlayer}{nodelayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0,0) grid (6,3);
+\draw[blue, very thick] (0,3) -- (6,0);
+\fill[blue!50, opacity=0.2]  (0,0) -- (0,3) -- (6,0) -- cycle;
+\draw[black, very thick, opacity=0.3] (6,0) to (0,0) to (0,3);
+
+\end{pgfonlayer}
+
+\node[ADE blue node, label={left:$y^3$}] at (0, 3) {};
+
+\node[ADE blue node, label={right:$x^2y^2$}] at (2, 2) {};
+\node[ADE blue node, label={right:$x^4y$}] at (4, 1) {};
+\node[ADE blue node, label={below:$x^6$}] at (6, 0) {};
+
+\node[label={below left:$1$}] at (0,0) {};
+\node[label={left:$y$}] at (0,1) {};
+\node[label={left:$y^2$}] at (0,2) {};
+
+
+\node[label={below:$x$}] at (1,0) {};
+\node[label={below:$x^2$}] at (2,0) {};
+\node[label={below:$x^3$}] at (3,0) {};
+\node[label={below:$x^4$}] at (4,0) {};
+\node[label={below:$x^5$}] at (5,0) {};
+
+
+\node[ADE black node] at (0,0) {};
+\node[ADE black node] at (0,2) {};
+\node[ADE black node] at (2,0) {};
+\node[ADE black node] at (4,0) {};
+
+
+\node[ADE white node] at (0,1) {};
+\node[ADE white node] at (1,0) {};
+\node[ADE white node] at (3,0) {};
+\node[ADE white node] at (5,0) {};
+\node[ADE white node] at (1,1) {};
+
+\end{pgfonlayer}
+
+\begin{pgfonlayer}{edgelayer}
+\draw[ADE plain edge] (0,2) -- (0,0) -- (5,0);
+\draw[ADE plain edge] (0,0) -- (1,1);
+\end{pgfonlayer}
+
+% 
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (0,2) -- (0,0) -- (5,0);
+\draw[hlt] (0,0) -- (1,1);
+\end{scope}
+\node at (5.5,3.35) {\Large $\tilde E_8^{-}$};
+\end{pgfonlayer}
+
+\draw[BB cusp brace, blue] (4,1) to node[midway, yshift=2.9em,xshift=1.25em] {$2$} (0, 3);
+\draw[BB cusp brace, blue] (6,0) to node[midway, yshift=2.9em,xshift=1.25em] {$1$} (4.25, .9);
+
+
+\end{scope}
+
+\end{tikzpicture}

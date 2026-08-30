@@ -1,0 +1,13 @@
+﻿    \begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=cusp curve] (1) at (0, 3) {$C_{12}$};
+        \node [style=BB cusp point] (2) at (3, 0) {$p_2$};
+        \node [style=cusp curve] (3) at (3, 3) {$C_2$};
+        \node [style=BB cusp point] (4) at (0, 0) {$p_1$};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw[BB cusp arrow] (4) to (1);
+        \draw[BB cusp arrow] (2) to (1);
+        \draw[BB cusp arrow] (2) to (3);
+    \end{pgfonlayer}
+    \end{tikzpicture}

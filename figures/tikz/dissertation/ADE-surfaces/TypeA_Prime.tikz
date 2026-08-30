@@ -1,0 +1,31 @@
+﻿\input{ADE_macros.tikz}
+
+\begin{tikzpicture}[]
+\pgfmathsetmacro{\total}{0}
+\foreach \m in {3,...,6}
+{
+\begin{scope}[shift={(\total, 0)}]
+\ADEPrimeAn{\m}
+\ifthenelse{\not\isodd{\npone}}{
+\node at (\dmaxt + 0.5, 3) {\Large $'A_\n$};
+\draw[BB cusp brace, blue] (\dmax+.25,.25) to node[midway, yshift=2em,xshift=2.75em] {$2$} (2.25, 2.25);
+
+\draw[BB cusp brace, blue] (2,2) to node[midway, yshift=3em,xshift=-1.5em] {$1$} (0,1);
+
+}{
+\node at (\dmaxt+0.5, 3) {\Large $'A_\n^-$};
+\draw[BB cusp brace, blue] (\dmax,0) to node[midway, yshift=1.25em,xshift=2.75em] {$1$} (2, 2);
+
+\draw[BB cusp brace, blue] (2,2) to node[midway, yshift=3em,xshift=-1.5em] {$1$} (0,1);
+
+}
+\begin{pgfonlayer}{background}
+\draw[black, very thick, opacity=0.3] (0,0) to (\dmax,0);
+\end{pgfonlayer}
+
+
+\end{scope}
+\pgfmathtruncatemacro{\newtotal}{\total + \m+2}
+  \xdef\total{\newtotal} % make the new total globally available
+}
+\end{tikzpicture}

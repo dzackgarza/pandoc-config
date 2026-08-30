@@ -1,0 +1,36 @@
+﻿% Left column of nodes
+  \node[white node, label={left:$r_0$}] (0) at (0,0) {};
+  \node[four node, label={left:$r_1$}] (1) at (0,2) {};
+  \node[four node, label={above:$r_2$}] (2) at (0,4) {};
+  
+  % Top row of nodes
+  \node[four node, label={above:$r_3$}] (3) at (2,4) {};
+  \node[four node, label={above:$r_4$}] (4) at (4,4) {};
+  \node[four node, label={above:$r_5$}] (5) at (6,4) {};
+  \node[four node, label={above:$r_6$}] (6) at (8,4) {};
+  
+  % Right column of nodes
+  \node[four node, label={right:$r_7$}] (7) at (8,2) {};
+  \node[white node, label={right:$r_8$}] (8) at (8,0) {};
+  
+  % Diagonal nodes
+  \node[four node, label={below left:$r_9$}] (9) at (2,2) {};
+  \node[four node, label={below right:$r_{10}$}] (10) at (6,2) {};
+  
+  % Vertical edges on left side
+  \draw[double edge] (0) -- (1);
+  \draw[plain edge] (1) -- (2);
+  
+  % Horizontal edges at top
+  \draw[plain edge] (2) -- (3);
+  \draw[plain edge] (3) -- (4);
+  \draw[plain edge] (4) -- (5);
+  \draw[plain edge] (5) -- (6);
+  
+  % Vertical edges on right side
+  \draw[plain edge] (6) -- (7);
+  \draw[double edge] (7) -- (8);
+  
+  % Diagonal edges
+  \draw[plain edge] (2) -- (9);
+  \draw[plain edge] (6) -- (10);

@@ -1,0 +1,4 @@
+﻿\begin{tikzpicture}
+\node at (0,0) {\dynkin[ply=2,scale=3]{D}{oo.oooo}};
+\node at (0.03,-0.4-1.5) {\dynkin[scale=3,arrows=false]{B}{oo.oo*}};
+\end{tikzpicture}

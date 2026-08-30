@@ -1,0 +1,75 @@
+﻿\begin{tikzpicture}
+\begin{pgfonlayer}{nodelayer}
+% Define the square corners
+\coordinate (A) at (0,0);
+\coordinate (B) at (6,0);
+\coordinate (C) at (6,6);
+\coordinate (D) at (0,6);
+
+ \node[style=black node,label=below left:{$r_{0}$}] (r0) at ($(A)$) {};
+\node[style=black node,label=below right:{$r_{4}$}] (r4) at ($(B)$) {};
+\node[style=black node,label=above right:{$r_{8}$}] (r8) at ($(C)$) {};
+\node[style=black node,label=above left:{$r_{12}$}] (r12) at ($(D)$) {};
+
+% Place nodes on the edges of the square
+\foreach \i in {1,2,3} {
+		\pgfmathsetmacro\z{int(\i+4)}
+		\pgfmathsetmacro\zz{int(\i+8)}
+		\pgfmathsetmacro\zzz{int(\i+12)}
+    \node[style=black node,label=below:{$r_{\i}$}] (r\i) at ($(A)!\i/4!(B)$) {};
+    \node[style=black node,label=right:{$r_{\z}$}] (r\z) at ($(B)!\i/4!(C)$) {};
+    \node[style=black node,label=above:{$r_{\zz}$}] (r\zz) at ($(C)!\i/4!(D)$) {};
+    \node[style=black node,label=left:{$r_{\zzz}$}] (r\zzz) at ($(D)!\i/4!(A)$) {};
+}
+
+\node[style=black node,label=above right:{$r_{19}$}] (r19) at ($(r12)!1/8!(r4)$) {};
+\node[style=black node,label=below left:{$r_{17}$}] (r17) at ($(r4)!1/8!(r12)$) {};
+
+\node[style=black node,label=below right:{$r_{16}$}] (r16) at ($(r0)!1/8!(r8)$) {};
+\node[style=black node,label=above left:{$r_{18}$}] (r18) at ($(r8)!1/8!(r0)$) {};
+
+% Draw central hexagon
+\coordinate (r10_5) at ($(r10)!0.5!(r11)$);
+\coordinate (r1_5) at ($(r1)!0.5!(r2)$);
+\coordinate (r9_5) at ($(r9)!0.5!(r10)$);
+\coordinate (r2_5) at ($(r2)!0.5!(r3)$);
+
+\node[style=black node,label=above left:{$r_{23}$}] (r23) at ($(r10_5)!1/3!(r1_5)$) {};
+\node[style=black node,label=below left:{$r_{20}$}] (r20) at ($(r10_5)!2/3!(r1_5)$) {};
+
+\node[style=black node,label=above right:{$r_{22}$}] (r22) at ($(r9_5)!1/3!(r2_5)$) {};
+\node[style=black node,label=below right:{$r_{21}$}] (r21) at ($(r9_5)!2/3!(r2_5)$) {};
+\end{pgfonlayer}
+
+\begin{pgfonlayer}{edgelayer}
+
+\foreach \i in {0,1,...,14}{
+\pgfmathsetmacro\z{int(\i+1)}
+\draw[style=plain edge] (r\i) to (r\z);
+}
+\draw[style=plain edge] (r15) to (r0);
+
+
+\draw[style=plain edge] (r0) to (r16);
+\draw[style=plain edge] (r4) to (r17);
+\draw[style=plain edge] (r8) to (r18);
+\draw[style=plain edge] (r12) to (r19);
+
+\draw[style=plain edge] (r16) to (r23);
+\draw[style=plain edge] (r16) to (r21);
+
+\draw[style=plain edge] (r17) to (r20);
+\draw[style=plain edge] (r17) to (r22);
+
+\draw[style=plain edge] (r18) to (r23);
+\draw[style=plain edge] (r18) to (r21);
+
+\draw[style=plain edge] (r19) to (r22);
+\draw[style=plain edge] (r19) to (r20);
+
+\draw[style=thick edge] (r23) to node[right]{$\infty$}(r20);
+\draw[style=thick edge] (r22) to node[left]{$\infty$}(r21);
+
+\end{pgfonlayer}
+
+\end{tikzpicture}

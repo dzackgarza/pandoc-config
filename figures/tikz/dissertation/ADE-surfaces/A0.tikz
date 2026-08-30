@@ -1,0 +1,33 @@
+﻿\begin{tikzpicture}[scale=0.75, yscale=2]
+
+\node (A) at (0,0) {};
+\node (Ap) at (0,1) {};
+\node (B) at (0, 2) {};
+\node (C) at (1, 0) {};
+
+\begin{pgfonlayer}{nodelayer}
+\node[label={below:$1$}] at (0, 0) {};
+\node[label={left:$y$}] at (0,1) {};
+\node[ADE blue node] at (0,0) {};
+\node[ADE blue node, label={below:$x$}] at (C) {};
+\node[ADE blue node, label={left:$y^2$}] at (B) {};
+\node[ADE blue node] at (0,1) {};
+
+\end{pgfonlayer}
+
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0, 0) grid (2,2);
+\draw[blue, very thick] (A.center) -- (B.center) -- (C.center);
+\fill[blue!50, opacity=0.2] (A.center) -- (B.center) -- (C.center) -- cycle;
+\end{pgfonlayer}
+
+\begin{pgfonlayer}{main}
+
+\draw[BB cusp brace, color=blue] (1,0) to node[midway, yshift=1.5em,xshift=2.75em] {$1$} (-0.4, 1.95);
+\draw[BB cusp brace, color=blue] (0,2) to node[midway,yshift=0.1em, xshift=-2.9em] {$2$} (0, 0);
+\node at (1.5,2.25) {\Large $A_0^{-}$};
+
+\end{pgfonlayer}
+
+
+\end{tikzpicture}

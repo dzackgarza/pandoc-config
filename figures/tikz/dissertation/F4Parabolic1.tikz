@@ -1,0 +1,16 @@
+﻿\begin{tikzpicture}
+\kthreeffour
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+
+\fill[cyan] \convexpath{r0,r4}{4pt};
+\fill[cyan] \convexpath{r4,r8}{4pt};
+\fill[cyan] \convexpath{r8,r12}{4pt};
+\fill[cyan] \convexpath{r12,r0}{4pt};
+
+\end{scope}
+\end{pgfonlayer}
+\node at (3, 5.25) {\Large $A_1E_8^2$};
+
+
+\end{tikzpicture}

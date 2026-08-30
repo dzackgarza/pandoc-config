@@ -1,0 +1,20 @@
+﻿\begin{tikzpicture}
+
+\begin{scope}[scale=1.2]
+\input{18_2_0.tikz}
+\draw[->, foldarrow] 
+     ($(r15)!3/4!(r7)$) arc (0:175:1cm);
+\draw[->, foldarrow] 
+   ($(r15)!1/4!(r7)$) arc (180:355:1cm);
+
+\draw[->, line width=2pt, opacity=0.6, red] ($(r7) + (0.25,0.5)$) to($(r7) + (1.75,0.5)$);
+
+
+
+\end{scope}
+
+\begin{scope}[shift={(7,0)},scale=0.8]
+\input{raw_Sterk1}
+\end{scope}
+
+\end{tikzpicture}

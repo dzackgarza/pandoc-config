@@ -1,0 +1,39 @@
+﻿\begin{pgfonlayer}{nodelayer}
+    \node[style=four node, label={below left:$r_{1}$}] (r1) at (0,0) {};
+    \node[style=four node, label={below:$r_{2}$}] (r2) at (2,0) {};
+    \node[style=four node, label={below right:$r_{3}$}] (r3) at (4,0) {};
+    \node[style=four node, label={right:$r_{4}$}] (r4) at (4,2) {};
+    \node[style=four node, label={above right:$r_{5}$}] (r5) at (4,4) {};
+    \node[style=four node, label={above:$r_{6}$}] (r6) at (2,4) {};
+    \node[style=four node, label={above left:$r_{7}$}] (r7) at (0,4) {};
+    \node[style=four node, label={left:$r_{8}$}] (r8) at (0,2) {};
+
+    \node[style=white node, label={above left:$r_{9}$}] (r9) at (1,1) {};
+    \node[style=white node, label={below:$r_{10}$}] (r10) at (3,3) {};
+    \node[style=white node, label={below left:$r_{11}$}] (r11) at (1,3) {};
+    \node[style=white node, label={above:$r_{12}$}] (r12) at (3,1) {};
+
+    \node[style=four node, label={above:$r_{13}$}] (r13) at (2,2.5) {};
+    \node[style=four node, label={below:$r_{14}$}] (r14) at (2,1.5) {};
+		\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\foreach \i in {1,...,7} {
+	\pgfmathsetmacro\ip{int(\i+1 )}
+	\draw[style=plain edge] (r\i) to (r\ip);
+}
+\draw[style=plain edge] (r8) to (r1);
+\draw[style=double edge] (r1) to (r9);
+\draw[style=double edge] (r3) to (r12);
+\draw[style=double edge] (r5) to (r10);
+\draw[style=double edge] (r7) to (r11);
+
+\draw[style=double edge] (r10) to (r13);
+\draw[style=double edge] (r13) to (r9);
+
+\draw[style=double edge] (r11) to (r14);
+\draw[style=double edge] (r14) to (r12);
+
+\draw[style=thick edge] (r13) to (r14);
+
+\end{pgfonlayer}
+  

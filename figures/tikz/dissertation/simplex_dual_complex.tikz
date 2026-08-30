@@ -1,0 +1,67 @@
+﻿\begin{tikzpicture}[scale=2]
+% Define coordinates for the tetrahedron vertices
+\coordinate (H1) at (0,0);
+\coordinate (H2) at (4,0);
+\coordinate (H3) at (3,2);
+\coordinate (H4) at (2,3);
+
+% Draw the background grid
+%\draw[lightgray!50, step=0.5] (-0.5,-0.5) grid (5,3.5);
+
+% Draw the faces of the tetrahedron
+% Background faces first
+
+
+% Cyan edges
+\draw[cyan, thick] (H1) -- (H2);
+\draw[cyan, thick, dashed] (H1) -- (H3);
+\draw[cyan, thick] (H1) -- (H4);
+\draw[cyan, thick] (H2) -- (H3);
+\draw[cyan, thick] (H3) -- (H4);
+\draw[cyan, thick] (H2) -- (H4);
+
+
+% Add vertex labels
+\filldraw[black] (H1) circle (2pt) node[below left] {$H_1$};
+\filldraw[black] (H2) circle (2pt) node[below right] {$H_2$};
+\filldraw[black] (H3) circle (2pt) node[above right] {$H_3$};
+\filldraw[black] (H4) circle (2pt) node[above] {$H_4$};
+
+% Add edge labels
+\node[cyan] at (1,-0.25) {$L_{12}$};
+\node[cyan] at (3.5,1.4) {$L_{23}$};
+\node[cyan] at (2.6,2.7) {$L_{34}$};
+\node[cyan] at (0.8,1.8) {$L_{14}$};
+\node[cyan] at (1.5,1.2) {$L_{13}$};
+\node[cyan] at (3,1.2) {$L_{24}$};
+
+% Add face labels
+\node[red] at (0.1,1) (P124) {$P_{124}$};
+\node[red] at (3.6,2.2) (P234) {$P_{234}$};
+\node[red] at (1,2.6) (P134) {$P_{134}$};
+\node[red] at (3,-0.25) (P123) {$P_{123}$};
+
+
+\draw[->, red, thick, bend right=10] (P124) to (2,1);
+\draw[->, red, thick, bend right=30] (P234) to (2.7,2.1);
+
+\begin{scope}[on background layer]
+
+\draw[->, red, thick, bend left=30, dashed] (P134) to (2,2.1);
+
+\draw[->, red, thick, bend left=30, dashed] (P123) to (2.5,0.25);
+
+    % Face P234 (lightly shaded in red)
+    \fill[red!10, opacity=0.8] (H2) -- (H3) -- (H4) -- cycle;
+    
+    % Face P134 (lightly shaded in red with striped pattern)
+    \fill[pattern=north east lines, pattern color=red!30, opacity=0.3] (H1) -- (H3) -- (H4) -- cycle;
+
+		\fill[pattern=vertical lines, pattern color=red, opacity=0.45] (H2) -- (H3) -- (H4) -- cycle;
+
+%	\fill[pattern=horizontal lines, pattern color=red, opacity=0.5] (H1) -- (H2) -- (H4) -- cycle;
+
+\fill[color=red, opacity=0.15] (H1) -- (H2) -- (H3) -- cycle;
+\fill[color=red!40, opacity=0.1] (H1) -- (H3) -- (H4) -- cycle;
+\end{scope}
+\end{tikzpicture}

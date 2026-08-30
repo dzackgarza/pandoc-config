@@ -1,0 +1,267 @@
+﻿\begin{tikzpicture}[scale=2]
+
+\begin{pgfonlayer}{nodelayer}
+
+\newcounter{nodecount}
+\setcounter{nodecount}{0}
+\def\currentx{0}
+\def\currenty{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx0{1}
+\def\vy0{-1}
+\pgfmathsetmacro{\nextx}{\currentx + 3*\vx0}
+\pgfmathsetmacro{\nexty}{\currenty + 3*\vy0}
+
+\node[style=black node, label={[above right=0.4cm]\Large $p_{0}$  }] (p_0) at (0, 0) {};
+\node[style=black node] (bls1) at ($(p_0) + (\vx0,\vy0)$) {};
+\node[style=black node] (bls2) at ($(p_0) + 2*(\vx0,\vy0)$) {};
+\draw[style=IAS edge,-] (p_0) -- (bls1);
+\draw[style=IAS edge, opacity=0.4, dashed, ultra thick, -] (bls1) -- (bls2);
+\draw[style=IAS edge,] (bls2) -- (\nextx, \nexty) node[near start, black, below left] {\Large $v_0=(\ell_0 + {1\over 2}\ell_{16})\cdot(1,-1)$};
+
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx1{2}
+\def\vy1{-1}
+\pgfmathsetmacro{\nextx}{\currentx + \vx1}
+\pgfmathsetmacro{\nexty}{\currenty + \vy1}
+\node[style=black node, label={[above right=0.4cm]\Large $p_{1}$  }] (p_1) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, below left] {\Large $v_1={1\over 2}\ell_1\cdot(2, -1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx2{1}
+\def\vy2{0}
+\pgfmathsetmacro{\nextx}{\currentx + \vx2}
+\pgfmathsetmacro{\nexty}{\currenty + \vy2}
+\node[style=black node, label={[above=0.4cm]\Large $p_{2}$  }] (p_2) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, below=0.5cm] {\Large $v_2=\ell_2\cdot(1, 0)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx3{2}
+\def\vy3{1}
+\pgfmathsetmacro{\nextx}{\currentx + \vx3}
+\pgfmathsetmacro{\nexty}{\currenty + \vy3}
+\node[style=black node, label={[above=0.4cm]\Large $p_{3}$  }] (p_3) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, below right] {\Large $v_3={1\over 2}\ell_3\cdot(2, 1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx4{1}
+\def\vy4{1}
+\pgfmathsetmacro{\nextx}{\currentx + 3*\vx4}
+\pgfmathsetmacro{\nexty}{\currenty + 3*\vy4}
+\node[style=black node, label={[above left=0.4cm]\Large $p_{4}$  }] (p_4) at (\currentx, \currenty) {};
+\node[style=black node] (brs1) at ($(p_4) + (\vx4,\vy4)$) {};
+\node[style=black node] (brs2) at ($(p_4) + 2*(\vx4,\vy4)$) {};
+\draw[style=IAS edge,-] (p_4) -- (brs1);
+\draw[style=IAS edge, opacity=0.4, dashed, ultra thick, -] (brs1) -- (brs2);
+\draw[style=IAS edge,] (brs2) -- (\nextx, \nexty) node[near start, black, below right] {\Large $v_4=(\ell_4 + {1\over 2}\ell_{17})\cdot(1,1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx5{1}
+\def\vy5{2}
+\pgfmathsetmacro{\nextx}{\currentx + \vx5}
+\pgfmathsetmacro{\nexty}{\currenty + \vy5}
+\node[style=black node, label={[left=0.4cm]\Large $p_{5}$  }] (p_5) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, below right] {\Large $v_5={1\over 2}\ell_5\cdot (1,2)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx6{0}
+\def\vy6{1}
+\pgfmathsetmacro{\nextx}{\currentx + \vx6}
+\pgfmathsetmacro{\nexty}{\currenty + \vy6}
+\node[style=black node, label={[left=0.4cm]\Large $p_{6}$  }] (p_6) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, right] {\Large $v_6=\ell_6\cdot(0, 1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx7{-1}
+\def\vy7{2}
+\pgfmathsetmacro{\nextx}{\currentx + \vx7}
+\pgfmathsetmacro{\nexty}{\currenty + \vy7}
+\node[style=black node, label={[left=0.4cm]\Large $p_{7}$  }] (p_7) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, right] {\Large $v_7={1\over 2}\ell_7 \cdot(-1, 2)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx8{-1}
+\def\vy8{1}
+\pgfmathsetmacro{\nextx}{\currentx + 3*\vx8}
+\pgfmathsetmacro{\nexty}{\currenty + 3*\vy8}
+\node[style=black node, label={[left=0.4cm]\Large $p_{8}$  }] (p_8) at (\currentx, \currenty) {};
+\node[style=black node] (trs1) at ($(p_8) + (\vx8,\vy8)$) {};
+\node[style=black node] (trs2) at ($(p_8) + 2*(\vx8,\vy8)$) {};
+\draw[style=IAS edge,-] (p_8) -- (trs1);
+\draw[style=IAS edge, opacity=0.4, dashed, ultra thick, -] (trs1) -- (trs2);
+\draw[style=IAS edge,] (trs2) -- (\nextx, \nexty) node[near start, black, above right] {\Large $v_8=(\ell_8 + {1\over 2}\ell_{18})\cdot(-1, 1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx9{-2}
+\def\vy9{1}
+\pgfmathsetmacro{\nextx}{\currentx + \vx9}
+\pgfmathsetmacro{\nexty}{\currenty + \vy9}
+\node[style=black node, label={[below left=0.4cm]\Large $p_{9}$  }] (p_9) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, above right] {\Large $v_9={1\over 2}\ell_9\cdot(-2, 1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx10{-1}
+\def\vy10{0}
+\pgfmathsetmacro{\nextx}{\currentx + \vx10}
+\pgfmathsetmacro{\nexty}{\currenty + \vy10}
+\node[style=black node, label={[below=0.4cm]\Large $p_{10}$  }] (p_10) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, above=0.5cm] {\Large $v_{10}=\ell_{10}\cdot(-1, 0)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx11{-2}
+\def\vy11{-1}
+\pgfmathsetmacro{\nextx}{\currentx + \vx11}
+\pgfmathsetmacro{\nexty}{\currenty + \vy11}
+\node[style=black node, label={[below=0.4cm]\Large $p_{11}$  }] (p_11) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, above left] {\Large $v_{11}={1\over 2}\ell_{11}\cdot(-2, -1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx12{-1}
+\def\vy12{-1}
+\pgfmathsetmacro{\nextx}{\currentx + 3*\vx12}
+\pgfmathsetmacro{\nexty}{\currenty + 3*\vy12}
+\node[style=black node, label={[below right=0.4cm]\Large $p_{12}$  }] (p_12) at (\currentx, \currenty) {};
+\node[style=black node] (tls1) at ($(p_12) + (\vx12,\vy12)$) {};
+\node[style=black node] (tls2) at ($(p_12) + 2*(\vx12,\vy12)$) {};
+\draw[style=IAS edge,-] (p_12) -- (tls1);
+\draw[style=IAS edge, opacity=0.4, dashed, ultra thick, -] (tls1) -- (tls2);
+\draw[style=IAS edge,] (tls2) -- (\nextx, \nexty) node[near start, black, above left] {\Large $v_{12}=(\ell_{12} + {1\over 2}\ell_{19})\cdot(-1, 1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx13{-1}
+\def\vy13{-2}
+\pgfmathsetmacro{\nextx}{\currentx + \vx13}
+\pgfmathsetmacro{\nexty}{\currenty + \vy13}
+\node[style=black node, label={[right=0.4cm]\Large $p_{13}$  }] (p_13) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, left] {\Large $v_{13}={1\over 2}\ell_{13}\cdot(-1,-2)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx14{0}
+\def\vy14{-1}
+\pgfmathsetmacro{\nextx}{\currentx + \vx14}
+\pgfmathsetmacro{\nexty}{\currenty + \vy14}
+\node[style=black node, label={[right=0.4cm]\Large $p_{14}$  }] (p_14) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, left] {\Large $v_{14}=\ell_{14}\cdot(0, -1)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vx15{1}
+\def\vy15{-2}
+\pgfmathsetmacro{\nextx}{\currentx + \vx15}
+\pgfmathsetmacro{\nexty}{\currenty + \vy15}
+\node[style=black node, label={[right=0.4cm]\Large $p_{15}$  }] (p_15) at (\currentx, \currenty) {};
+\draw[style=IAS edge] (\currentx,\currenty) -- (\nextx, \nexty) node[midway, black, left] {\Large $v_{15}={1\over 2}\ell_{15}\cdot(1, -2)$};
+\let\currentx\nextx
+\let\currenty\nexty
+\stepcounter{nodecount}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\coordinate (bl_surgery) at (1,0);
+\coordinate (br_surgery) at (0,1);
+\coordinate (tr_surgery) at (-1,0);
+\coordinate (tl_surgery) at (0,-1);
+
+\node[IAS star, label={[below right=0.5cm]\Large $p_{16}$} ] (surg1) at ($(bls1) + 1*(bl_surgery)$) {};
+\node[IAS star, label={[below left=0.5cm]\Large $p_{17}$}] (surg2) at ($(brs1) + 1*(br_surgery)$) {};
+\node[IAS star, label={[above left=0.2cm]\Large $p_{18}$}] (surg3) at ($(trs1) + 1*(tr_surgery)$) {};
+\node[IAS star, label={[above right=0.2cm]\Large $p_{19}$}] (surg4) at ($(tls1) + 1*(tl_surgery)$) {};
+
+\node[style=IAS star, opacity=0.8, label={[left=0.25cm, red] \Large $1$} ] at (p_0) {};
+\node[style=IAS star, opacity=0.8, label={[below left=0.25cm, red] \Large $1$} ] at (p_1) {};
+\node[style=IAS star, opacity=0.8, label={[below left=0.4cm, red] \Large $1$} ] at (p_2) {};
+\node[style=IAS star, opacity=0.8, label={[below right=0.4cm, red] \Large $1$} ] at (p_3) {};
+\node[style=IAS star, opacity=0.8, label={[below right=0.25cm, red] \Large $1$} ] at (p_4) {};
+\node[style=IAS star, opacity=0.8, label={[right=0.25cm, red] \Large $1$} ] at (p_5) {};
+\node[style=IAS star, opacity=0.8, label={[below right=0.4cm, red] \Large $1$} ] at (p_6) {};
+\node[style=IAS star, opacity=0.8, label={[right=0.3cm, red] \Large $1$} ] at (p_7) {};
+\node[style=IAS star, opacity=0.8, label={[above right, red] \Large $1$} ] at (p_8) {};
+\node[style=IAS star, opacity=0.8, label={[right=0.2cm, red] \Large $1$} ] at (p_9) {};
+\node[style=IAS star, opacity=0.8, label={[right=0.2cm, red] \Large $1$} ] at (p_10) {};
+\node[style=IAS star, opacity=0.8, label={[left=0.2cm, red] \Large $1$} ] at (p_11) {};
+\node[style=IAS star, opacity=0.8, label={[left=0.2cm, red] \Large $1$} ] at (p_12) {};
+\node[style=IAS star, opacity=0.8, label={[above left, red] \Large $1$} ] at (p_13) {};
+\node[style=IAS star, opacity=0.8, label={[left=0.3cm, red] \Large $1$} ] at (p_14) {};
+\node[style=IAS star, opacity=0.8, label={[below left=0.4cm, red] \Large $1$} ] at (p_15) {};
+
+\node[style=IAS star, opacity=0.8, label={[above left=-0.1cm and 0.2cm, red] \Large $1$} ] at (surg1) {};
+\node[style=IAS star, opacity=0.8, label={[above right=-0.1cm and 0.2cm, red] \Large $1$} ] at (surg2) {};
+\node[style=IAS star, opacity=0.8, label={[below right=0.5cm and 0.2cm, red] \Large $1$} ] at (surg3) {};
+\node[style=IAS star, opacity=0.8, label={[below left= 0.5cm and 0.2cm, red] \Large $1$} ] at (surg4) {};
+
+\draw[draw=none] (bls1) to coordinate[pos=.5] (M1) (bls2);
+\draw[IAS edge, dashed,-, ultra thick, red] (M1) -- (surg1);
+
+\draw[draw=none] (brs1) to coordinate[pos=.5] (M2) (brs2);
+\draw[IAS edge, dashed,-, ultra thick, red] (M2) -- (surg2);
+
+\draw[draw=none] (trs1) to coordinate[pos=.5] (M3) (trs2);
+\draw[IAS edge, dashed,-, ultra thick, red] (M3) -- (surg3);
+
+\draw[draw=none] (tls1) to coordinate[pos=.5] (M4) (tls2);
+\draw[IAS edge, dashed,-, ultra thick, red] (M4) -- (surg4);
+
+
+\draw[IAS edge, dotted,-, ultra thick, red] (surg1) -- node[near start, right=0.6cm, black] {\Large $\ell_{20}$} (surg3);
+\draw[IAS edge, dotted,-, ultra thick, red] (surg2) -- node[near start, right=0.6cm, black] {\Large $\ell_{21}$} (surg4);
+
+
+\end{pgfonlayer}
+
+\begin{pgfonlayer}{edgelayer}
+\draw[style=IAS surgery cutout] (bls1) -- (surg1) -- (bls2);
+\draw[style=IAS surgery cutout] (brs1) -- (surg2) -- (brs2);
+\draw[style=IAS surgery cutout] (trs1) -- (surg3) -- (trs2);
+\draw[style=IAS surgery cutout] (tls1) -- (surg4) -- (tls2);
+
+\draw[IAS edge, red, ultra thick] (bls1) -- node[at end, above left=0.75cm and -1cm, black, opacity=1] {\Large $v_{16} = {1\over 2}\ell_{16}\cdot(1,0)$} (surg1);
+\draw[IAS edge, red, ultra thick] (brs1) -- node[near start, left, black, opacity=1] {\Large $v_{17} = {1\over 2}\ell_{17}\cdot (0,1)$} (surg2);
+\draw[IAS edge, red, ultra thick] (trs1) -- node[at end, below right=0.75cm and -1.25cm, black, opacity=1] {\Large $v_{18} = {1\over 2}\ell_{18}\cdot(-1,0)$} (surg3);
+\draw[IAS edge, red, ultra thick] (tls1) -- node[midway, above right=0cm and 0.0cm, black, opacity=1] {\Large $v_{19}={1\over 2}\ell_{19}\cdot(0,-1)$} (surg4);
+\end{pgfonlayer}
+
+\begin{pgfonlayer}{background}
+\fill[style=IAS background] (p_0.center) \foreach \i in {1,...,15} { -- (p_\i) } -- cycle;
+\draw[style=IAS grid] (-3,-5) grid (14,10);
+
+\draw[style=IAS surgery background] (bls1.center) -- (surg1.center) -- (bls2.center) -- cycle;
+\draw[style=IAS surgery background] (brs1.center) -- (surg2.center) -- (brs2.center) -- cycle;
+\draw[style=IAS surgery background] (trs1.center) -- (surg3.center) -- (trs2.center) -- cycle;
+\draw[style=IAS surgery background] (tls1.center) -- (surg4.center) -- (tls2.center) -- cycle;
+
+
+
+\end{pgfonlayer}
+
+
+\end{tikzpicture}

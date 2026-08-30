@@ -1,0 +1,17 @@
+﻿\input{ADE_macros.tikz}
+
+\begin{tikzpicture}[]
+% \ADEPrimePrimeAn{6}
+\pgfmathsetmacro{\total}{0}
+\foreach \m in {6,...,9}
+{
+\begin{scope}[shift={(\total, 0)}]
+\ADEPrimePrimeAn{\m}
+\draw[BB cusp brace, blue] (\dmaxtt-0.3,0.7) to node[midway, yshift=2em,xshift=2em] {$1$} (1.95, 1.75);
+\draw[BB cusp brace, blue] (2,2) to node[midway, yshift=3em,xshift=-1.5em] {$1$} (0,1);
+
+\end{scope}
+\pgfmathtruncatemacro{\newtotal}{\total + \m-1}
+  \xdef\total{\newtotal} % make the new total globally available
+}
+\end{tikzpicture}

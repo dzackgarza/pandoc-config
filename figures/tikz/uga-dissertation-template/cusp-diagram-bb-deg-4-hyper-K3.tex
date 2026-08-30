@@ -1,0 +1,84 @@
+% \begin{tikzpicture}[scale=0.8]
+
+% 	\draw[line width=1.0pt] (0,0) -- (2,1);
+% 	\draw[line width=1.0pt] (0,0) -- (2,-1);
+% 	\draw[line width=1.0pt] (2,1) -- (4,0);
+% 	\draw[line width=1.0pt] (2,-1) -- (4,0);
+% 	\draw[line width=1.0pt] (4,0) -- (6,1);
+% 	\draw[line width=1.0pt] (4,0) -- (6,2);
+% 	\draw[line width=1.0pt] (4,0) -- (6,3);
+% 	\draw[line width=1.0pt] (4,0) -- (6,-1);
+% 	\draw[line width=1.0pt] (4,0) -- (6,-2);
+% 	\draw[line width=1.0pt] (4,0) -- (6,-3);
+
+% 	\fill (0,0) circle (3pt);
+% 	\draw [fill=white] (2,1) circle[radius=3pt];
+% 	\draw [fill=white] (2,-1) circle[radius=3pt];
+% 	\fill (4,0) circle (3pt);
+% 	\draw [fill=white] (6,1) circle[radius=3pt];
+% 	\draw [fill=white] (6,2) circle[radius=3pt];
+% 	\draw [fill=white] (6,3) circle[radius=3pt];
+% 	\draw [fill=white] (6,-1) circle[radius=3pt];
+% 	\draw [fill=white] (6,-2) circle[radius=3pt];
+% 	\draw [fill=white] (6,-3) circle[radius=3pt];
+
+% %	\node at (-2-0.5,1.5) {{\scriptsize$\{1\}$}};
+
+% \end{tikzpicture}
+
+% \begin{tikzpicture}[scale=0.8]
+
+% 	\draw[line width=1.0pt] (0,0) -- (2,1);
+% 	\draw[line width=1.0pt] (0,0) -- (2,-1);
+% 	\draw[line width=1.0pt] (2,1) -- (4,0);
+% 	\draw[line width=1.0pt] (2,-1) -- (4,0);
+% 	\draw[line width=1.0pt] (4,0) -- (6,1);
+% 	\draw[line width=1.0pt] (4,0) -- (6,2);
+% 	\draw[line width=1.0pt] (4,0) -- (6,3);
+% 	\draw[line width=1.0pt] (4,0) -- (6,-1);
+% 	\draw[line width=1.0pt] (4,0) -- (6,-2);
+% 	\draw[line width=1.0pt] (4,0) -- (6,-3);
+
+% 	\fill (0,0) circle (3pt);
+% 	\draw [fill=white] (2,1) circle[radius=3pt];
+% 	\draw [fill=white] (2,-1) circle[radius=3pt];
+% 	\fill (4,0) circle (3pt);
+% 	\draw [fill=white] (6,1) circle[radius=3pt];
+% 	\draw [fill=white] (6,2) circle[radius=3pt];
+% 	\draw [fill=white] (6,3) circle[radius=3pt];
+% 	\draw [fill=white] (6,-1) circle[radius=3pt];
+% 	\draw [fill=white] (6,-2) circle[radius=3pt];
+% 	\draw [fill=white] (6,-3) circle[radius=3pt];
+
+% %	\node at (-2-0.5,1.5) {{\scriptsize$\{1\}$}};
+
+% \end{tikzpicture}
+
+
+\begin{tikzpicture}[scale=0.4]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=black node, label={[label distance=0.75em]120:$r_1: U \oplus E_8\sumpower{2}$} ] (0) at (-6, 0) {};
+		\node [style=white node,label=above:{$Z_{12}^1: E_8\sumpower{2}$}] (1) at (-2, 1) {};
+		\node [style=white node, label=below:{$Z_{12}^2: D_{16}*$}] (2) at (-2, -1) {};
+		\node [style=black node, label={[label distance=1em]90:$r_2: U(2) \oplus E_8\sumpower{2}$} ] (3) at (4, 0) {};
+		\node [style=white node, label=right:{$Z_{2}^1: D_8^2*$}] (4) at (11, 5) {};
+		\node [style=white node, label=right:{$Z_{2}^2: E_7\sumpower{2} \oplus A_1\sumpower{2}*$}] (5) at (11, 3) {};
+		\node [style=white node, label=right:{$Z_{2}^3: E_8\oplus D_8$}] (6) at (11, 1) {};
+		\node [style=white node, label=right:{$Z_{2}^4: D_{12}\oplus D_4*$}] (7) at (11, -1) {};
+		\node [style=white node, label=right:{$Z_{2}^5: D_{16}$}] (8) at (11, -3) {};
+		\node [style=white node, label=right:{$Z_{2}^6: A_{15} \oplus A_1(2)*$}] (9) at (11, -5) {};
+    \node [style=none, label=above:{$\Mhe$}] at (4, 4.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=Arrow] (0) to (1);
+		\draw [style=Arrow] (3) to (1);
+		\draw [style=Arrow] (0) to (2);
+		\draw [style=Arrow] (3) to (8);
+		\draw [style=Arrow] (3) to (7);
+		\draw [style=Arrow] (3) to (6);
+		\draw [style=Arrow] (3) to (5);
+		\draw [style=Arrow] (3) to (4);
+		\draw [style=Arrow] (3) to (9);
+		\draw [style=Arrow] (3) to (2);
+	\end{pgfonlayer}
+\end{tikzpicture}

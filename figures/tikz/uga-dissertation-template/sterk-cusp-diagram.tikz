@@ -1,0 +1,49 @@
+﻿
+\begin{tikzpicture}
+
+\node[rounded rectangle, draw,minimum width=1cm] (v2) at (0, 0) {$2$};
+
+\node[rectangle, draw,minimum width=1cm,label={[label distance=0.25em]-90: $12$}] (C12) at (2, 1) {$E_8^2$};
+\node[rectangle, draw,minimum width=1cm,label={[label distance=0.25em]-90: $245$}] (C245) at (2, -1) {$D_{16}^+$};
+
+
+\node[rounded rectangle, draw,minimum width=1cm] (v1) at (4, 2) {$1$};
+\node[rounded rectangle, draw,minimum width=1cm] (v3) at (4, .75) {$3$};
+\node[rounded rectangle, draw,minimum width=1cm] (v4) at (4, -0.5) {$4$};
+\node[rounded rectangle, draw,minimum width=1cm] (v5) at (4, -2) {$5$};
+
+\node[rectangle, draw,minimum width=1.5cm,label={[label distance=0.25em]0: $13$}] (C13) at (7, 3) {$E_7^2C_2$};
+\node[rectangle, draw,minimum width=1.5cm,label={[label distance=0.25em]0: $14$}] (C14) at (7, 2) {$D_8^2$};
+\node[rectangle, draw,minimum width=1.5cm,label={[label distance=0.25em]0: $15$}] (C15) at (7, 1) {$A_{15}A_1(2)$};
+
+\node[rectangle, draw,minimum width=1.5cm,label={[label distance=0.25em]0: $34$}] (C34) at (7, 0) {$A_{15}A_1(2)$};
+
+\node[rectangle, draw,minimum width=1.5cm,label={[label distance=0.25em]0: $35$}] (C35) at (7, -1) {$D_{12}D_4$};
+\node[rectangle, draw,minimum width=1.5cm,label={[label distance=0.25em]0: $45$}] (C45) at (7, -2) {$D_8^2$};
+\node[rectangle, draw,minimum width=1.5cm,label={[label distance=0.25em]0: $55$}] (C55) at (7, -3) {$E_7^2C_2$};
+
+\draw[-latex, shorten >= 0.4em] (v2) to (C12.west);
+\draw[-latex, shorten >= 0.4em] (v2) to (C245.west);
+
+\draw[-latex, shorten >= 0.4em] (v1) to (C12.east);
+\draw[-latex, shorten >= 0.4em] (v4) to (C245.east);
+\draw[-latex, shorten >= 0.4em] (v5) to (C245.east);
+
+\draw[-latex, shorten >= 0.4em] (v1) to (C13.west);
+\draw[-latex, shorten >= 0.4em] (v1) to (C14.west);
+\draw[-latex, shorten >= 0.4em] (v1) to (C15.west);
+
+\draw[-latex, shorten >= 0.4em] (v3) to (C13.west);
+\draw[-latex, shorten >= 0.4em] (v3) to (C34.west);
+\draw[-latex, shorten >= 0.4em] (v3) to (C35.west);
+
+\draw[-latex, shorten >= 0.4em] (v4) to (C14.west);
+\draw[-latex, shorten >= 0.4em] (v4) to (C34.west);
+\draw[-latex, shorten >= 0.4em] (v4) to (C45.west);
+
+\draw[-latex, shorten >= 0.4em] (v5) to (C15.west);
+\draw[-latex, shorten >= 0.4em] (v5) to (C35.west);
+\draw[-latex, shorten >= 0.4em] (v5) to (C45.west);
+\draw[-latex, shorten >= 0.4em] (v5) to (C55.west);
+
+\end{tikzpicture}

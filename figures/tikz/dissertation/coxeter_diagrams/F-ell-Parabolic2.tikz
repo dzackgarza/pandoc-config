@@ -1,0 +1,11 @@
+﻿\begin{tikzpicture}
+\input{raw-F-ell}
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (r2) to (r3) to (r9) to (r15) to (r16);
+\draw[hlt] (r3) to (r0);
+\draw[hlt] (r15) to (r18);
+\end{scope}
+\end{pgfonlayer}
+\node at (1, 5.5) {\Large $D_{16}$};
+\end{tikzpicture}

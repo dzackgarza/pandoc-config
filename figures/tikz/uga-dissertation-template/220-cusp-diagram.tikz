@@ -1,0 +1,55 @@
+﻿
+\begin{tikzpicture}
+
+\node[rounded rectangle, draw,minimum width=2cm] (v0) at (0, 0) {$U \oplus E_8^2$};
+
+\node[rectangle, draw,minimum width=1.5cm] (Ca) at (2.12, 1) {$E_8^2$};
+
+\node[rectangle, draw,minimum width=1.5cm] (Cb) at (2.12, -1) {$D_{16}^+$};
+
+\node[rounded rectangle, draw,minimum width=2cm] (v1) at (4.5, 0) {$U(2) \oplus E_8^2$};
+
+
+\node[rectangle, draw,minimum width=1.5cm] (C1) at (8, 3) {$D_8^2$};
+\node[rectangle, draw,minimum width=1.5cm] (C2) at (8, 2) {$E_7^2C_2$};
+\node[rectangle, draw,minimum width=1.5cm] (C3) at (8, 1) {$E_8D_8$};
+
+\node[rectangle, draw,minimum width=1.5cm] (C4) at (8, -1) {$D_{12}D_4$};
+\node[rectangle, draw,minimum width=1.5cm] (C5) at (8, -2) {$D_{16}$};
+\node[rectangle, draw,minimum width=1.5cm] (C6) at (8, -3) {$A_{15}A_1(2)$};
+
+\draw[-latex, shorten >= 0.4em] (v0) to (Ca.west);
+\draw[-latex, shorten >= 0.4em] (v0) to (Cb.west);
+
+\draw[-latex, shorten >= 0.4em] (v1) to (Ca.east);
+\draw[-latex, shorten >= 0.4em] (v1) to (Cb.east);
+
+\draw[-latex, shorten >= 0.4em] (v1) to (C1.west);
+\draw[-latex, shorten >= 0.4em] (v1) to (C2.west);
+\draw[-latex, shorten >= 0.4em] (v1) to (C3.west);
+
+\draw[-latex, shorten >= 0.4em] (v1) to (C4.west);
+\draw[-latex, shorten >= 0.4em] (v1) to (C5.west);
+\draw[-latex, shorten >= 0.4em] (v1) to (C6.west);
+
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=4ex}]
+  (-0.7,-3) -- (0.75,-3) node[midway,yshift=-3em]{$(18,0,0)_1$};
+
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=4ex}]
+  (1.5,-3) -- (3,-3) node[midway,yshift=-3em]{$(16,0,0)_0$};
+
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=4ex}]
+  (4,-3) -- (5.2,-3) node[midway,yshift=-3em]{$(18,2,0)_1$};
+
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=4ex}]
+  (7.3,-3) -- (8.8,-3) node[midway,yshift=-3em]{$(16,2,0)_0$};
+
+\node at (0, 1) {$\mathrm{div} = 2$};
+
+\node at (4.5, 1) {$\mathrm{div} = 1$};
+
+\node at (2.2, 2) {$\mathrm{div} = (2, 1)$};
+
+\node at (8, 4) {$\mathrm{div} = (1, ?)$};
+
+\end{tikzpicture}

@@ -1,0 +1,31 @@
+﻿\tikzset{y={(60:1)}}
+\begin{pgfonlayer}{nodelayer}
+\node[style=white node, label={below:$r_1$}] (r1) at (2,0) {};
+\node[style=white node, label={below:$r_2$}] (r2) at (1,0) {};
+\node[style=white node, label={below:$r_3$}] (r3) at (0,0) {};
+\node[style=white node, label={left:$r_4$}] (r4) at (0,1) {};
+\node[style=white node, label={left:$r_5$}] (r5) at (0,2) {};
+\node[style=white node, label={left:$r_6$}] (r6) at (0,3) {};
+\node[style=white node, label={left:$r_{7}$}] (r7) at (0,4) {};
+\node[style=white node, label={left:$r_{8}$}] (r8) at (0,5) {};
+\node[style=white node, label={above:$r_{9}$}] (r9) at (0,6) {};
+\node[style=white node, label={right:$r_{10}$}] (r10) at (1,5) {};
+\node[style=white node, label={right:$r_{11}$}] (r11) at (2,4) {};
+\node[style=white node, label={right:$r_{12}$}] (r12) at (3,3) {};
+\node[style=white node, label={right:$r_{13}$}] (r13) at (4,2) {};
+\node[style=white node, label={right:$r_{14}$}] (r14) at (5,1) {};
+\node[style=white node, label={below:$r_{15}$}] (r15) at (6,0) {};
+\node[style=white node, label={below:$r_{16}$}] (r16) at (5,0) {};
+\node[style=white node, label={below:$r_{17}$}] (r17) at (4,0) {};
+\node[style=white node, label={right:$r_{18}$}] (r18) at (1,1) {};
+\node[style=white node, label={left:$r_{19}$}] (r19) at (4,1) {};
+\end{pgfonlayer}
+
+\begin{pgfonlayer}{edgelayer}
+\foreach \i in {1,...,16} {
+	\pgfmathsetmacro\ip{int(\i+1)}
+	\draw[style=plain edge] (r\i) to (r\ip);
+}
+\draw[style=plain edge] (r3) to (r18);
+\draw[style=plain edge] (r15) to (r19);
+\end{pgfonlayer}

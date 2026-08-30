@@ -1,0 +1,25 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=black node] (0) at (0, 0) {};
+		\node [style=black node] (1) at (1, 0) {};
+		\node [style=black node] (2) at (2, 0) {};
+		\node [style=black node] (3) at (2, 1) {};
+		\node [style=black node] (4) at (3, 0) {};
+		\node [style=black node] (5) at (4, 0) {};
+		\node [style=black node] (6) at (5, 0) {};
+		\node [style=black node] (7) at (6, 0) {};
+		\node [style=black node] (8) at (7, 0) {};
+		\node [style=white node] (9) at (8, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0) to (1);
+		\draw (1) to (2);
+		\draw (2) to (3);
+		\draw (2) to (4);
+		\draw (4) to (5);
+		\draw (5) to (6);
+		\draw (6) to (7);
+		\draw (7) to (8);
+		\draw [style=double edge] (8) to (9);
+	\end{pgfonlayer}
+\end{tikzpicture}

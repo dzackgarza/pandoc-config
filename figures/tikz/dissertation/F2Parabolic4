@@ -1,0 +1,14 @@
+﻿\begin{tikzpicture}[scale=1.2]
+\kthreeftwo
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+
+\fill[cyan] \convexpath{r0,r6}{4pt};
+\fill[cyan] \convexpath{r6,r12}{4pt};
+\fill[cyan] \convexpath{r12,r0}{4pt};
+
+\end{scope}
+\end{pgfonlayer}
+\node at (1, 5.5) {\Huge $A_{17}$};
+
+\end{tikzpicture}

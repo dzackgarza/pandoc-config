@@ -1,0 +1,12 @@
+﻿    \begin{tikzpicture}
+    \input{eighteenzero.tikz}
+	\begin{pgfonlayer}{main}
+    \begin{scope}[transparency group]
+    \draw[hlt] (r1) -- (r3) -- (r8);
+    \draw[hlt] (r3) -- (r18);
+    \draw[hlt] (r17) -- (r15) -- (r10);
+    \draw[hlt] (r15) -- (r19);
+    \end{scope}
+	\end{pgfonlayer}
+    \node[right = of r9] (label) {\Large $E_8^2$};
+\end{tikzpicture}

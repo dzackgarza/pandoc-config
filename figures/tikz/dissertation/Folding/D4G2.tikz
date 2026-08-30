@@ -1,0 +1,4 @@
+﻿\begin{tikzpicture}
+\node at (0,0) {\dynkin[ply=3,scale=3]{D}{oooo}};
+\node at (-0.52, -0.12-2) {\dynkin[scale=3,arrows=false, edge length=0.35cm]{G}{2}};
+\end{tikzpicture}

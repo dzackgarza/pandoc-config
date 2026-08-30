@@ -1,0 +1,46 @@
+﻿\begin{tikzpicture}[decoration=snake]
+
+\node[style=black node] (p1) at (0, 0) {};
+
+\node[style=black node] (p2) at (2, 0) {};
+
+\node[style=black node] (p3) at (4, 2) {};
+
+\node[style=black node] (p4) at (4, -2) {};
+
+\node[style=black node] (p5) at (6, 0) {};
+
+\node[style=black node] (p6) at (6, -2) {};
+
+%\draw[shorten >= 0.2em, decorate] (p1) to (p2.west);
+\draw[BB cusp arrow] (p2) to node[midway, fill=white, circle] {\scriptsize $U$}(p3.west);
+\draw[BB cusp arrow, style=double] (p2) to node[midway, fill=white, circle] {\scriptsize $U(2)$}(p4.west);
+
+\draw[BB cusp arrow, style=double] (p3) to node[midway, fill=white, circle] {\scriptsize $U(2)$} (p5.west);
+\draw[BB cusp arrow] (p4) to node[midway, fill=white, circle] {\scriptsize $U$} (p5.west);
+
+\draw[BB cusp arrow, style=double] (p4) to node[midway, fill=white, circle] {\scriptsize $U(2)$}(p6.west);
+
+\draw [-latex,decorate, ->]
+(0,0) -- (1.8,0);
+
+\node at (0, 3)  (S) {$S$};
+\node at (2, 3)  (T) {$T$};
+\node at (4, 3)  (Tbar) {$\bar{T}$};
+\node at (6, 3)  (Tbarbar) {$\bar{\bar{T}}$};
+
+\node[above = 0.1cm of p3] {\scriptsize $(10, 10, 0)_1$};
+\node[right= 0.1cm of p2] {\scriptsize $(12, 10, 0)_2$};
+\node[below = 0.1cm of p4] {\scriptsize $(10, 8, 0)_1$};
+\node[right = 0.1cm of p5] {\scriptsize $(8, 8, 0)_0$};
+\node[right = 0.1cm of p6] {\scriptsize $(8, 6, 0)_0$};
+
+\begin{pgfonlayer}{background}
+\draw[gray, dashed, opacity=0.4] ($(S)!1/2!(T) + (0, 0.25)$) to ($(S)!1/2!(T) + (0,-5.6)$);
+
+\draw[gray, dashed, opacity=0.4] ($(T)!1/2!(Tbar) + (0, 0.25)$) to ($(T)!1/2!(Tbar) + (0,-5.6)$);
+
+\draw[gray, dashed, opacity=0.4] ($(Tbar)!1/2!(Tbarbar) + (0, 0.25)$) to ($(Tbar)!1/2!(Tbarbar) + (0,-5.6)$);
+\end{pgfonlayer}
+
+\end{tikzpicture}

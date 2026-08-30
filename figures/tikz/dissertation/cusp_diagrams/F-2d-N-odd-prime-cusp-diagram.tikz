@@ -1,0 +1,60 @@
+﻿\begin{tikzpicture}[scale=1.5]
+
+% Left side nodes
+\node[BB cusp curve] (c1) at (0,2) {$C_1$};
+\node[BB cusp curve]  (c2) at (0,1) {$C_2$};
+\node[scale=2] at (0,0) {$\vdots$};
+\node[BB cusp curve]  (cnm1) at (0,-1) {$C_{m-1}$};
+\node[BB cusp curve]  (cn) at (0,-2) {$C_m$};
+
+\node at (0,-2.5) {$H/\operatorname{SL}_2(\mathbb{Z})$};
+\node at (4,-2.5) {$H/\Gamma'(N)$};
+\node at (2,2.5) {$\underline{N \text{ an odd prime}}$ };
+
+% Center node
+\node[BB cusp point] (p0) at (2,0) {$p_0$};
+
+% Right side nodes
+\node[BB cusp curve] (c15) at (4,2) {$C_1^{(N)}$};
+\node[BB cusp curve] (c25) at (4,1) {$C_2^{(N)}$};
+\node[scale=2] at (4,0) {$\vdots$};
+\node[BB cusp curve]  (cnm15) at (4,-1) {$C_{n-1}^{(N)}$};
+\node[BB cusp curve]  (cn5) at (4,-2) {$C_n^{(N)}$};
+
+\node[BB cusp point] (p1) at (7,1.5) {$p_1$};
+\node[BB cusp point] (p2) at (7,0.5) {$p_2$};
+\node[scale=2] at (7,-0.5) {$\vdots$};
+\node[BB cusp point] (pn) at (7,-1.5) {$p_{N-1\over 2}$};
+
+
+% Arrows
+\draw[BB cusp arrow] (p0) -- (c1.e) ;
+\draw[BB cusp arrow] (p0) -- (c2.e);
+\draw[BB cusp arrow] (p0) -- (cnm1.e);
+\draw[BB cusp arrow] (p0) -- (cn.e);
+
+\draw[BB cusp arrow] (p0) -- node[above] {$N-1\over 2$} (c15.west);
+\draw[BB cusp arrow] (p0) -- node[above] {$N-1\over 2$} (c25.west);
+\draw[BB cusp arrow] (p0) -- node[above] {$N-1\over 2$} (cnm15.west);
+\draw[BB cusp arrow] (p0) -- node[above] {$N-1\over 2$} (cn5.west);
+
+
+\draw[BB cusp arrow] (p1) -- (c15.e);
+\draw[BB cusp arrow] (p1) -- (c25.e);
+\draw[BB cusp arrow] (p1) -- (cnm15.e);
+\draw[BB cusp arrow] (p1) -- (cn5.e);
+
+
+\draw[BB cusp arrow] (p2) -- (c15.e);
+\draw[BB cusp arrow] (p2) -- (c25.e);
+\draw[BB cusp arrow] (p2) -- (cnm15.e);
+\draw[BB cusp arrow] (p2) -- (cn5.e);
+
+
+\draw[BB cusp arrow] (pn) -- (c15.e);
+\draw[BB cusp arrow] (pn) -- (c25.e);
+\draw[BB cusp arrow] (pn) -- (cnm15.e);
+\draw[BB cusp arrow] (pn) -- (cn5.e);
+
+
+\end{tikzpicture}

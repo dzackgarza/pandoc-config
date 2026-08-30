@@ -1,0 +1,22 @@
+﻿\begin{tikzpicture}[scale=1.2]
+\kthreeftwo
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+
+\fill[cyan] \convexpath{r0,r17}{4pt};
+\fill[cyan] \convexpath{r0,r6}{4pt};
+\fill[cyan] \convexpath{r6,r7}{4pt};
+
+\fill[cyan] \convexpath{r0,r18}{4pt};
+\fill[cyan] \convexpath{r6,r19}{4pt};
+
+\fill[cyan] \convexpath{r15,r12}{4pt};
+\fill[cyan] \convexpath{r9,r12}{4pt};
+\fill[cyan] \convexpath{r20,r12}{4pt};
+
+
+\end{scope}
+\end{pgfonlayer}
+\node at (1, 5.5) {\Huge $E_7D_{10}$};
+
+\end{tikzpicture}

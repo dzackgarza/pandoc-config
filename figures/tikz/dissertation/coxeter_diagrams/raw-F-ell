@@ -1,0 +1,46 @@
+﻿\begin{pgfonlayer}{nodelayer}
+% Define the main triangle coordinates
+\coordinate (A) at (0,0);
+\coordinate (B) at (7,0);
+\coordinate (C) at (3.5,6);
+
+\node[style=two node, label=below left:{$r_3$}] (r3) at ($(A)$) {};
+\node[style=two node, label=above:{$r_{9}$}] (r9) at ($(C)$) {};
+\node[style=two node, label=below right:{$r_{15}$}] (r15) at ($(B)$) {};
+
+% Place nodes on the edges of the triangle
+\foreach \i in {1,...,5} {
+	\pgfmathsetmacro\zlab{int(\i+3)}
+\pgfmathsetmacro\zzlab{int(\i+9)}
+
+	\pgfmathsetmacro\z{int(\i+6)}
+	\pgfmathsetmacro\zz{int(\i+12)}
+
+    \node[style=two node, label=above left:{$r_{\zlab}$}] (r\zlab) at ($(A)!\i/6!(C)$) {};
+    \node[style=two node, label=above right:{$r_{\zzlab}$}] (r\zzlab) at ($(C)!\i/6!(B)$) {};
+}
+
+
+\node[style=two node, label=above right:{$r_{0}$}] (r0) at ($(r3)!3/10!(r12)$) {};
+\node[style=two node, label=above left:{$r_{18}$}] (r18) at ($(r15)!3/10!(r6)$) {};
+
+\node[style=two node, label=below:{$r_{2}$}] (r2) at ($(A)!1/6!(B)$) {};
+\node[style=two node, label=below:{$r_{1}$}] (r1) at ($(A)!2/6!(B)$) {};
+
+\node[style=two node, label=below:{$r_{17}$}] (r17) at ($(A)!4/6!(B)$) {};
+\node[style=two node, label=below:{$r_{16}$}] (r16) at ($(A)!5/6!(B)$) {};
+
+
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+
+\foreach \i in {1,...,16} {
+	\pgfmathsetmacro\ip{int(\i+1)}
+
+	\draw[style=plain edge] (r\i) to (r\ip);
+}
+
+\draw[style=plain edge] (r3) to (r0);
+\draw[style=plain edge] (r15) to (r18);
+
+\end{pgfonlayer}

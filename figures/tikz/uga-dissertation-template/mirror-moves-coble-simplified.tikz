@@ -1,0 +1,30 @@
+﻿\begin{tikzpicture}[decoration=snake]
+
+\node[style=black node 
+	,label={[label distance=0.75em]-90: $(11,11,1)_1$}
+	,label={[label distance=0.75em]90: $S$}
+] (p1) at (0, 0) {};
+\node[style=black node 
+	,label={[label distance=0.75em]-90: $(11,11,1)_2$}
+	,label={[label distance=0.75em]90: $T$}
+] (p2) at (2, 0) {};
+\node[style=black node 
+	,label={[label distance=0.75em]-90: $(9,9,1)_1$}
+	,label={[label distance=0.75em]90: $\bar T$}
+] (p3) at (4, 0) {};
+\node[style=black node 
+	,label={[label distance=0.75em]-90: $(7,7,1)_0$}
+	,label={[label distance=0.75em]90: $\bar{\bar{T}}$}
+] (p4) at (6, 0) {};
+
+%\draw[shorten >= 0.2em, decorate] (p1) to (p2.west);
+\draw[-latex, shorten >= 0.4em, style=double] (p2) to (p3.west);
+\draw[-latex, shorten >= 0.4em, style=double] (p3) to (p4.west);
+
+\draw [-latex,decorate, ->]
+(0.2,0) -- (1.8,0);
+
+\node at (2.75, 0.20) {$U(2)$};
+\node at (4.75, 0.20) {$U(2)$};
+
+\end{tikzpicture}

@@ -1,0 +1,53 @@
+﻿\begin{tikzpicture}[decoration=snake]
+
+\node[style=white node] (p1) at (0, 0) {};
+
+\node[style=white node] (p2) at (2, 0) {};
+
+\node[style=white node] (p3) at (4, 2) {};
+
+\node[style=white node] (p4) at (4, -2) {};
+
+\node[style=white node] (p5) at (6, 0) {};
+
+\node[style=white node] (p6) at (6, -2) {};
+
+
+
+%\draw[shorten >= 0.2em, decorate] (p1) to (p2.west);
+\draw[-latex, shorten >= 0.4em] (p2) to (p3.west);
+\draw[-latex, shorten >= 0.4em, style=double] (p2) to (p4.west);
+
+\draw[-latex, shorten >= 0.4em, style=double] (p3) to (p5.west);
+\draw[-latex, shorten >= 0.4em] (p4) to (p5.west);
+
+\draw[-latex, shorten >= 0.4em, style=double] (p4) to (p6.west);
+
+
+\draw [-latex,decorate, ->]
+(0.2,0) -- (1.8,0);
+
+\node at (3.25, .75) {$U$};
+\node at (4.7, 0.75) {$U(2)$};
+
+\node at (3.25, -.75) {$U(2)$};
+\node at (4.7, -0.75) {$U$};
+
+\node at (4.7, -2.25) {$U(2)$};
+
+
+\node at (0, 3) {$S$};
+\node at (2, 3) {$T$};
+\node at (4, 3) {$\bar{T}$};
+\node at (6, 3) {$\bar{\bar{T}}$};
+
+\node at (-0.5, 0.5) {$(10, 10, 0)_1$};
+\node at (1.5, 0.5) {$(12, 10, 0)_2$};
+
+\node at (3.5, 2.5) {$(10, 10, 0)_1$};
+\node at (3.5, -2.5) {$(10, 8, 0)_1$};
+
+\node at (6.5, 0.5) {$(8, 8, 0)_0$};
+\node at (6.5, -1.5) {$(8, 6, 0)_0$};
+
+\end{tikzpicture}

@@ -1,0 +1,12 @@
+﻿\begin{tikzpicture}
+\input{18_2_0.tikz}
+\node[above of = r11] (label) {\Large $D_{16}$};
+
+\begin{pgfonlayer}{main}
+    \begin{scope}[transparency group]
+    \draw[hlt] (r14) -- (r13) -- (r9) -- (r5) -- (r1) -- (r17) -- (r21);
+		\draw[hlt] (r13) -- (r19);
+    \end{scope}
+	\end{pgfonlayer}
+
+\end{tikzpicture}

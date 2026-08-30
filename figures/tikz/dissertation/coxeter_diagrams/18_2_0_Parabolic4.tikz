@@ -1,0 +1,15 @@
+﻿\begin{tikzpicture}
+\input{18_2_0.tikz}
+\node[above of = r11] (label) {\Large $E_7^2C_2$};
+
+\begin{pgfonlayer}{main}
+    \begin{scope}[transparency group]
+    \draw[hlt] (r4) -- (r1) -- (r14);
+		\draw[hlt] (r1) -- (r17);
+		\draw[hlt] (r12) -- (r9) -- (r6);
+		\draw[hlt] (r9) -- (r18);
+		\draw[hlt] (r19) -- (r22) -- (r20);
+    \end{scope}
+	\end{pgfonlayer}
+
+\end{tikzpicture}

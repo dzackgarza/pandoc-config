@@ -1,0 +1,14 @@
+﻿\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (0, 0) {};
+		\node [style=none] (1) at (4, 3) {};
+		\node [style=none] (2) at (0, 4) {};
+		\node [style=none] (3) at (4, 0) {};
+		\node [style=black node, label=above:{$p_{2}$}] (4) at (1, 2) {};
+		\node [style=black node, label=above:{$p_{1}$}] (6) at (2.75, 3) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [bend left=45] (0) edge["$C_{12}$" very near start] (1);
+		\draw [bend left=60, looseness=0.50] (3) edge["$C_{2}$" near start] (2);
+	\end{pgfonlayer}
+    \end{tikzpicture}

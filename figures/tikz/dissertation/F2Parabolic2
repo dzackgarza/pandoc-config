@@ -1,0 +1,14 @@
+﻿\begin{tikzpicture}[scale=1.2]
+\kthreeftwo
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (r1) to (r0) to (r12) to (r6) to (r5);
+\draw[hlt] (r0) to (r18);
+\draw[hlt] (r6) to (r19);
+\draw[hlt] (r23) to (r3);
+\end{scope}
+\end{pgfonlayer}
+
+\node at (1, 5.5) {\Huge $A_1D_{16}$};
+
+\end{tikzpicture}

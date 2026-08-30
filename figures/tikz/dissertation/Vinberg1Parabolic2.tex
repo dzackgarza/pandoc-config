@@ -1,0 +1,54 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node] (1) at (0, 0) {};
+		\node [style=black node] (2) at (-2, 0) {};
+		\node [style=black node] (3) at (2, 0) {};
+		\node [style=white node] (4) at (1, 2) {};
+		\node [style=white node] (5) at (-1, 2) {};
+		\node [style=black node] (6) at (0, 4) {};
+		\node [style=black node] (7) at (2, 8) {};
+		\node [style=white node] (8) at (1, 6) {};
+		\node [style=white node] (9) at (3, 10) {};
+		\node [style=black node] (10) at (4, 12) {};
+		\node [style=white node] (11) at (5, 10) {};
+		\node [style=white node] (12) at (7, 6) {};
+		\node [style=white node] (13) at (9, 2) {};
+		\node [style=black node] (14) at (6, 8) {};
+		\node [style=black node] (15) at (8, 4) {};
+		\node [style=black node] (16) at (10, 0) {};
+		\node [style=black node] (17) at (6, 0) {};
+		\node [style=white node] (18) at (8, 0) {};
+		\node [style=white node] (19) at (7, 2) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (1) to (3);
+		\draw (2) to (1);
+		\draw (2) to (4);
+		\draw (2) to (5);
+		\draw (5) to (6);
+		\draw (6) to (8);
+		\draw (8) to (7);
+		\draw (7) to (9);
+		\draw (9) to (10);
+		\draw (10) to (11);
+		\draw (11) to (14);
+		\draw (12) to (14);
+		\draw (15) to (12);
+		\draw (15) to (13);
+		\draw (16) to (13);
+		\draw (16) to (18);
+		\draw (18) to (17);
+		\draw (16) to (19);
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{main}
+  \begin{scope}[transparency group]
+	\fill[cyan] \convexpath{1,2}{8pt};
+	\fill[cyan] \convexpath{2,4}{8pt};	
+	\fill[cyan] \convexpath{2,5,6,7,8,9,10}{8pt};		
+	\fill[cyan] \convexpath{10,11,12,13,14,15,16}{8pt};
+	\fill[cyan] \convexpath{16,18}{8pt};	
+	\fill[cyan] \convexpath{16,19}{8pt};		
+  \end{scope}
+	\end{pgfonlayer}
+  \node at (5.5, 12) {\Huge $D_{16}*$};
+\end{tikzpicture}

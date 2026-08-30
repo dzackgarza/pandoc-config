@@ -1,0 +1,24 @@
+﻿
+\input{ADE_macros.tikz}
+
+\begin{tikzpicture}
+\pgfmathsetmacro{\total}{0}
+\foreach \l in {6,8,10}%{5,...,8}
+{
+\begin{scope}[shift={(\total, 0)}]
+\ADEDntilde{\l}
+
+\node at ($(C) + (-0.5,3.25)$) {\Large $\tilde D_{\l}$};
+\draw[BB cusp brace, color=blue] (\npone,2.25) to node[midway,yshift=3em, xshift=0em] {$\npone$} (0, 2.25);
+
+\begin{pgfonlayer}{background}
+\draw[black, very thick, opacity=0.3] (0,2) to (0,0) to (\npone,0) to (\npone, 2);
+\end{pgfonlayer}
+
+\end{scope}
+\pgfmathtruncatemacro{\newtotal}{\total + \l}
+  \xdef\total{\newtotal} % make the new total globally available
+}
+
+
+\end{tikzpicture}

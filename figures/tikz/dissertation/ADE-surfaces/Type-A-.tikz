@@ -1,0 +1,27 @@
+﻿\input{ADE_macros.tikz}
+\begin{tikzpicture}[]
+\pgfmathsetmacro{\total}{0}
+\foreach \m in {3,...,6}
+{
+\begin{scope}[shift={(\total, 0)}]
+\ADEmAnm{\m}
+
+\ifthenelse{\not\isodd{\npone}}{
+\node at (\npone+0.5, 2.35) {\Large $^{-}A_\n^{-}$};
+\draw[BB cusp brace, color=blue] (\nptwo-0.25,-0.1) to node[midway, yshift=2.5em,xshift=1.25em] {$1$} (0, 1.75);
+\draw[BB cusp brace, color=blue] (0.5,2) to node[midway,yshift=-0.75em, xshift=-2.7em] {$1$} (1.25, .25);
+}{
+\node at (\npone+0.5, 2.35) {\Large $^{-}A_\n$};
+\draw[BB cusp brace, color=blue] (\nptwo-0.25,0.25) to node[midway, yshift=2.5em,xshift=1.25em] {$2$} (0.25, 2);
+\draw[BB cusp brace, color=blue] (0.5,2) to node[midway,yshift=-1.25em, xshift=-2.7em] {$1$} (1.25, 0.25);
+}
+
+\begin{pgfonlayer}{background}
+\draw[black, very thick, opacity=0.3] (1,0) to (\n+2,0);
+\end{pgfonlayer}
+
+\end{scope}
+\pgfmathtruncatemacro{\newtotal}{\total + \m+3}
+  \xdef\total{\newtotal} % make the new total globally available
+}
+\end{tikzpicture}

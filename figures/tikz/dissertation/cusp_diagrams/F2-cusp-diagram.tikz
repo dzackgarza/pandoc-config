@@ -1,0 +1,25 @@
+﻿\begin{tikzpicture}
+
+% Nodes
+\node[BB cusp point] (P0) at (3,0) {$A_1 \oplus U \oplus E_8^2$};
+\node[BB cusp curve] (C1) at (0,1.5) {$A_1E_8^2$};
+\node[BB cusp curve] (C2) at (0,0.5) {$D_{10}E_7$};
+\node[BB cusp curve] (C3) at (0, -0.5) {$A_1D_{16}$};
+\node[BB cusp curve] (C4) at (0, -1.5) {$A_{17}$};
+\node (HmodSL2Z) at (0,-3.25) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+
+% Arrows
+\draw[BB cusp arrow reverse] (C1.east) -- (P0);
+\draw[BB cusp arrow reverse] (C2.east) -- (P0);
+\draw[BB cusp arrow reverse] (C3.east) -- (P0);
+\draw[BB cusp arrow reverse] (C4.east) -- (P0);
+
+\node at (3,-3.25) {\underline{$F_2$}};
+
+\draw [BB cusp brace]
+  (-1,-1.5) -- (1,-1.5) node[midway,yshift=-3em]{$(17,1,1)_0$};
+
+\draw [BB cusp brace]
+  (2,-1.5) -- (4,-1.5) node[midway,yshift=-3em]{$(19,1,1)_1$};
+
+\end{tikzpicture}

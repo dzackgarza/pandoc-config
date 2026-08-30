@@ -1,0 +1,20 @@
+﻿\begin{tikzpicture}[scale=1]
+% Nodes
+\node[BB cusp point] (P0) at (3,0) {$p_0$};
+\node[rectangle, draw, minimum width=1.5cm] (C1) at (0,2) {$C_1$};
+\node[BB cusp curve] (C2) at (0,1) {$C_2$};
+\node (dots) at (0,0) {$\vdots$};
+\node[BB cusp curve] (Cnm1) at (0, -1) {$C_{n-1}$};
+\node[BB cusp curve] (Cn) at (0, -2) {$C_n$};
+\node (HmodSL2Z) at (0,-2.75) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+
+% Arrows
+\draw[BB cusp arrow reverse] (C1.east) -- (P0);
+\draw[BB cusp arrow reverse] (C2.east) -- (P0);
+\draw[BB cusp arrow reverse] (Cnm1.east) -- (P0);
+\draw[BB cusp arrow reverse] (Cn.east) -- (P0);
+
+% Text "N=1" at bottom left
+\node at (3,-2.75) {\underline{$N=1$}};
+
+\end{tikzpicture}

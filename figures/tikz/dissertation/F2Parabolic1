@@ -1,0 +1,19 @@
+﻿\begin{tikzpicture}[scale=1.2]
+\kthreeftwo
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+
+\fill[cyan] \convexpath{r2,r0}{4pt};
+\fill[cyan] \convexpath{r0,r13}{4pt};
+\fill[cyan] \convexpath{r6,r11}{4pt};
+\fill[cyan] \convexpath{r4,r6}{4pt};
+\fill[cyan] \convexpath{r20,r23}{4pt};
+
+\fill[cyan] \convexpath{r0,r18}{4pt};
+\fill[cyan] \convexpath{r6,r19}{4pt};
+
+\end{scope}
+\end{pgfonlayer}
+\node at (1, 5.5) {\Huge $A_1E_8^2$};
+
+\end{tikzpicture}

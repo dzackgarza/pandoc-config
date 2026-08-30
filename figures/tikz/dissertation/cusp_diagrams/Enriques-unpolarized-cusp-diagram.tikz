@@ -1,0 +1,23 @@
+﻿\begin{tikzpicture}
+\node [BB  cusp point, ] (w0) at (0, 0) {$E_{10}(2)$};
+\node [BB cusp curve] (C12) at (3,0) {$E_8(2)$};
+\node [BB cusp point] (w1) at (6, 0) {$U \oplus E_8(2)$};
+\node [BB cusp curve] (C2) at (9,0) {$A_1^{\oplus 8}*$};
+
+\draw[BB cusp arrow] (w0) to (C12.west);
+\draw[BB cusp arrow] (w1) to (C12.east);
+\draw[BB cusp arrow] (w1) to (C2.west);
+
+\node[above = 0.1cm of w0] {\scriptsize $\mathrm{div}\gens{e} = 1$};
+\draw [BB cusp brace] (-1,0) -- (1,0) node[midway,yshift=-3em]{$\mathbb{RP}^2,\, (10,10,0)_1$};
+
+\node[above = 0.1cm of C12] {\scriptsize $\mathrm{div}\gens{e, e'} = (1, 2)$};
+\draw [BB cusp brace] (2,0) -- (4,0) node[midway,yshift=-3em]{$(8,8,0)_0$};
+
+\node[above = 0.1cm of w1] {\scriptsize $\mathrm{div}\gens{e'} = 2$};
+\draw [BB cusp brace] (5,0) -- (7,0) node[midway,yshift=-3em]{$\mathbb{D}^2, \, (10,8,0)_1$};
+
+\node[above = 0.1cm of C2] {\scriptsize $\mathrm{div}\gens{e', 2e+2f+2\bar\alpha_1} = (2, 2)$};
+\draw [BB cusp brace] (8,0) -- (10,0) node[midway,yshift=-3em]{$(8,6,0)_0$};
+
+\end{tikzpicture}
