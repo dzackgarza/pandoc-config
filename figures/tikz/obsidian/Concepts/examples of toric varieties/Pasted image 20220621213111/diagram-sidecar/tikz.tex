@@ -1,0 +1,67 @@
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+    patterns,  % for hatching
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzpicture}[scale=1.8]
+
+% --- Lattice dots ---
+% All integer points (x,y) with x in [0,3], y in [0,2]
+\foreach \x in {0,1,2,3} {
+  \foreach \y in {0,1,2} {
+    \fill[black] (\x,\y) circle (2pt);
+  }
+}
+
+% --- Hatched cones ---
+% Cone sigma_0: spanned by e1=(1,0) and e2=(0,1), first quadrant
+% Shade as triangular region (0,0)--(3,0)--(0,3)
+\fill[pattern=north east lines, pattern color=gray!50]
+  (0,0) -- (3,0) -- (0,3) -- cycle;
+
+% Cone sigma_1: spanned by e1=(1,0) and 2e1-e2=(2,-1)
+% Shade as triangular region (0,0)--(3,0)--(4,-2)
+\fill[pattern=north east lines, pattern color=gray!50]
+  (0,0) -- (3,0) -- (4,-2) -- cycle;
+
+% --- Rays (arrows from origin) ---
+% Ray e1 = (1,0) — extend to x=3
+\draw[->, thick] (0,0) -- (3,0) node[below] {$e_1$};
+
+% Ray e2 = (0,1) — extend to y=2.5
+\draw[->, thick] (0,0) -- (0,2.5) node[left] {$e_2$};
+
+% Ray 2e1-e2 = (2,-1) — extend to (4,-2)
+\draw[->, thick] (0,0) -- (4,-2) node[below right] {$2e_1 - e_2$};
+
+% --- Origin label ---
+\node[below left] at (0,0) {$0$};
+
+\end{tikzpicture}
+\end{document}

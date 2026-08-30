@@ -1,0 +1,203 @@
+% tikz.tex -- Adams SS E2-page chart (Steenrod algebra action on U\otimes U)
+% Auto-generated from canonical.yaml
+% 4-column dot diagram with h0 lines, Sq1/Sq2 arcs, and diagonal sum decompositions
+%
+% Diagram context: H*(MO∧MO; F2) as a module over the Steenrod algebra A2 at p=2
+% Columns (left-to-right):
+%   1: U\otimes U tower (10 dots) with labels at bottom, mid-height, and upper
+%   2: U\otimes w1^2U + w2U\otimes U tower (9 dots)
+%   3: w2^2U\otimes U tower (7 dots)
+%   4: w2^2U\otimes w1^2U + w2^3U\otimes U tower (6 dots)
+
+\documentclass[tikz,border=4pt]{standalone}
+
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+\tikzset{>=Stealth}
+
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+    dot/.style={circle, fill=black, inner sep=1.8pt, outer sep=0.5pt},
+    empty/.style={circle, fill=none, draw=none, inner sep=0pt, outer sep=0pt, minimum size=0pt},
+    hzero/.style={no head, draw=black, thick},
+    sqone/.style={no head, draw=black, thick, bend left=35},
+    sqtwo/.style={no head, draw=black, thick, bend left=55},
+    diag/.style={no head, draw=black, thick, dashed},
+    bottomlabel/.style={anchor=north, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+
+% Adams SS E2-page chart: 4 columns of dots with h0, Sq1, Sq2, and diagonal sum decompositions
+% 
+% Matrix layout: 10 rows x 4 columns (tikz-cd row 1 = top of chart, row 10 = bottom)
+% Column 1: 10 dots (rows 1-10)
+% Column 2:  9 dots (rows 2-10)
+% Column 3:  7 dots (rows 4-10)
+% Column 4:  6 dots (rows 5-10)
+
+\begin{tikzcd}[
+    ampersand replacement=\&,
+    column sep={3em},
+    row sep={0.7em},
+    cells={nodes={empty}},
+]
+% Row  1 (top of chart) — col1 only
+|[dot]|{}
+  \arrow[to=2-1, hzero]{}
+  \arrow[to=3-1, sqone]{}
+  \arrow[to=4-1, sqtwo]{}
+\& |[empty]|{} \& |[empty]|{} \& |[empty]|{} \\
+% Row  2 — col1, col2
+|[dot,label={[labelnode,anchor=west]right:$w_2U\otimes U$}]|{}
+  \arrow[to=3-1, hzero]{}
+  \arrow[to=4-1, sqone]{}
+  \arrow[to=5-1, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=3-2, hzero]{}
+  \arrow[to=4-2, sqone]{}
+  \arrow[to=5-2, sqtwo]{}
+\& |[empty]|{} \& |[empty]|{} \\
+% Row  3 — col1, col2
+|[dot]|{}
+  \arrow[to=4-1, hzero]{}
+  \arrow[to=5-1, sqone]{}
+  \arrow[to=6-1, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=4-2, hzero]{}
+  \arrow[to=5-2, sqone]{}
+  \arrow[to=6-2, sqtwo]{}
+\& |[empty]|{} \& |[empty]|{} \\
+% Row  4 — col1, col2, col3
+|[dot]|{}
+  \arrow[to=5-1, hzero]{}
+  \arrow[to=6-1, sqone]{}
+  \arrow[to=7-1, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=5-2, hzero]{}
+  \arrow[to=6-2, sqone]{}
+  \arrow[to=7-2, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=5-3, hzero]{}
+  \arrow[to=6-3, sqone]{}
+  \arrow[to=7-3, sqtwo]{}
+\& |[empty]|{} \\
+% Row  5 — all 4 columns
+|[dot]|{}
+  \arrow[to=6-1, hzero]{}
+  \arrow[to=7-1, sqone]{}
+  \arrow[to=8-1, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=6-2, hzero]{}
+  \arrow[to=7-2, sqone]{}
+  \arrow[to=8-2, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=6-3, hzero]{}
+  \arrow[to=7-3, sqone]{}
+  \arrow[to=8-3, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=6-4, hzero]{}
+  \arrow[to=7-4, sqone]{}
+  \arrow[to=8-4, sqtwo]{}
+\\
+% Row  6 (mid-height) — all 4 columns
+|[dot,label={[labelnode,anchor=west]right:$U\otimes w_1U$}]|{}
+  \arrow[to=7-1, hzero]{}
+  \arrow[to=8-1, sqone]{}
+  \arrow[to=9-1, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=7-2, hzero]{}
+  \arrow[to=8-2, sqone]{}
+  \arrow[to=9-2, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=7-3, hzero]{}
+  \arrow[to=8-3, sqone]{}
+  \arrow[to=9-3, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=7-4, hzero]{}
+  \arrow[to=8-4, sqone]{}
+  \arrow[to=9-4, sqtwo]{}
+\\
+% Row  7 — all 4 columns
+|[dot]|{}
+  \arrow[to=8-1, hzero]{}
+  \arrow[to=9-1, sqone]{}
+  \arrow[to=10-1, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=8-2, hzero]{}
+  \arrow[to=9-2, sqone]{}
+  \arrow[to=10-2, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=8-3, hzero]{}
+  \arrow[to=9-3, sqone]{}
+  \arrow[to=10-3, sqtwo]{}
+\& |[dot]|{}
+  \arrow[to=8-4, hzero]{}
+  \arrow[to=9-4, sqone]{}
+  \arrow[to=10-4, sqtwo]{}
+\\
+% Row  8 — all 4 columns
+|[dot]|{}
+  \arrow[to=9-1, hzero]{}
+  \arrow[to=10-1, sqone]{}
+\& |[dot]|{}
+  \arrow[to=9-2, hzero]{}
+  \arrow[to=10-2, sqone]{}
+\& |[dot]|{}
+  \arrow[to=9-3, hzero]{}
+  \arrow[to=10-3, sqone]{}
+\& |[dot]|{}
+  \arrow[to=9-4, hzero]{}
+  \arrow[to=10-4, sqone]{}
+\\
+% Row  9 — all 4 columns
+|[dot]|{}
+  \arrow[to=10-1, hzero]{}
+\& |[dot]|{}
+  \arrow[to=10-2, hzero]{}
+\& |[dot]|{}
+  \arrow[to=10-3, hzero]{}
+\& |[dot]|{}
+  \arrow[to=10-4, hzero]{}
+\\
+% Row 10 (bottom of chart) — all 4 columns
+|[dot]|{}
+\& |[dot]|{}
+  \arrow[to=6-1, diag]{}  %% col2 bottom -> col1 mid-height (sum decomposition)
+\& |[dot]|{}
+\& |[dot]|{}
+  \arrow[to=8-3, diag]{}  %% col4 bottom -> col3 (sum decomposition, review-02 direction)
+\\
+\end{tikzcd}
+
+% Column labels placed below the chart
+% Shift baseline to position labels just below the bottom row of dots
+\vspace{0.5em}
+
+\begin{center}
+\begin{tabular}{cccc}
+$U\otimes U$ &
+$U\otimes w_1^2U + w_2U\otimes U$ &
+$w_2^2U\otimes U$ &
+$w_2^2U\otimes w_1^2U + w_2^3U\otimes U$
+\end{tabular}
+\end{center}
+
+\end{document}

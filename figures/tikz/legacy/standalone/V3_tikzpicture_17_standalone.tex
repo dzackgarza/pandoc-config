@@ -1,0 +1,44 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 17
+
+\begin{tikzpicture}
+\sterkfive
+  \node[above = 0.1cm of 21] (N) {$N$};
+  \node[below = 0.1cm of 22] (S) {$S$};
+\end{tikzpicture}
+
+
+\end{document}

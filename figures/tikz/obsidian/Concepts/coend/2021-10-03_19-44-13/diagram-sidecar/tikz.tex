@@ -1,0 +1,54 @@
+% TikZ for Twisted Arrow Category Commutative Square
+% Generated from canonical.yaml (2021-10-03_19-44-13)
+% Preamble: .agents/plans/references/tikz-preamble.tex
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+% Twisted arrow category commutative square
+% A morphism (h,k): f -> f' in Tw(C)
+%
+% Layout:
+%   X ───h───→ X'
+%   f           f'
+%   ↓           ↓
+%   Y ←───k─── Y'
+%
+% Commutativity: f ∘ k = f' ∘ h   (with k: Y' → Y as drawn)
+%
+\begin{tikzcd}
+  X \arrow[r,"h"] \arrow[d,"f"'] &
+  X' \arrow[d,"f'"] \\[1em]
+  Y &
+  Y' \arrow[l,"k"']
+\end{tikzcd}
+
+\end{document}

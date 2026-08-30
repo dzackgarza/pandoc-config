@@ -1,0 +1,58 @@
+% TikZ — E8 Dynkin Diagram
+% Canonical topology: 7-6-5-4-3-2-1 (horizontal spine) with 5-8 branch
+% Generated from canonical.yaml — non-Bourbaki labeling 1-8
+% Uses shared preamble from ../.agents/plans/references/tikz-preamble.tex
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+}
+
+\tikzset{>=Stealth}
+
+\begin{document}
+\begin{tikzpicture}[>=Stealth, scale=1.2]
+
+% --- Coordinates ---
+% Horizontal spine: node 7 (left) through node 1 (right)
+% Vertical branch: node 8 (below node 5)
+\def\spacing{1.5}
+
+% Node positions (x, y)
+% 7 at (0,0), 6 at (\spacing,0), 5 at (2\spacing,0), 4 at (3\spacing,0),
+% 3 at (4\spacing,0), 2 at (5\spacing,0), 1 at (6\spacing,0)
+% 8 at (2\spacing, -\spacing)
+
+% --- Edges (single lines, simply-laced) ---
+\draw (0,0) -- (\spacing,0);          % 7--6
+\draw (\spacing,0) -- (2*\spacing,0); % 6--5
+\draw (2*\spacing,0) -- (3*\spacing,0); % 5--4
+\draw (3*\spacing,0) -- (4*\spacing,0); % 4--3
+\draw (4*\spacing,0) -- (5*\spacing,0); % 3--2
+\draw (5*\spacing,0) -- (6*\spacing,0); % 2--1
+\draw (2*\spacing,0) -- (2*\spacing,-\spacing); % 5--8
+
+% --- Nodes (filled black circles) ---
+% Horizontal spine: nodes 7,6,5,4,3,2,1
+\foreach \x in {0,\spacing,2*\spacing,3*\spacing,4*\spacing,5*\spacing,6*\spacing} {
+    \draw[fill=black] (\x,0) circle (0.12);
+}
+% Branch node 8
+\draw[fill=black] (2*\spacing,-\spacing) circle (0.12);
+
+% --- Labels (above for spine, right for branch) ---
+\node[above, font=\small] at (0,0)           {7};
+\node[above, font=\small] at (\spacing,0)    {6};
+\node[above, font=\small] at (2*\spacing,0)  {5};
+\node[above, font=\small] at (3*\spacing,0)  {4};
+\node[above, font=\small] at (4*\spacing,0)  {3};
+\node[above, font=\small] at (5*\spacing,0)  {2};
+\node[above, font=\small] at (6*\spacing,0)  {1};
+\node[right, font=\small] at (2*\spacing,-\spacing) {8};
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,44 @@
+\documentclass[tikz,border=2pt]{standalone}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+% CP^2 Hopf map pushout square
+% ℂP² ≅ S² ∪_η D⁴  (attach a 4-cell to S² via the Hopf fibration η)
+\begin{tikzcd}
+S^3 \arrow[r] \arrow[d, "\eta"'] \arrow[dr, phantom, "\ulcorner" very near start]
+    & D^4 \arrow[d] \\
+S^2 \arrow[r]
+    & \mathbb{C}P^2
+\end{tikzcd}
+\end{document}

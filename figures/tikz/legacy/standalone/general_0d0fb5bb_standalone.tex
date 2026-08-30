@@ -1,0 +1,58 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram: general
+% Source: diss/archive/Dissertation.md (diagram #9)
+% Duplicates: 2 total copies
+% Type: tikzpicture
+
+\begin{tikzpicture}
+[scale=0.3, baseline=-0.5ex, thick, every node/.style={scale=0.6}]
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=none] (0) at (-2, -1) {};
+        \node [style=none] (1) at (2, -1) {};
+        \node [style=none] (2) at (2, 1) {};
+        \node [style=none] (3) at (-2, 1) {};
+        \node [style=none] (4) at (-1, -2) {};
+        \node [style=none] (5) at (1, -2) {};
+        \node [style=none] (6) at (1, 2) {};
+        \node [style=none] (7) at (-1, 2) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw (0.center) edge["0" below] (1.center);
+        \draw (5.center) edge["0" right] (6.center);
+        \draw (2.center) edge["0" above] (3.center);
+        \draw (7.center) edge["0" left]  (4.center);
+    \end{pgfonlayer}
+
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,12 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzcd
+% Category: general
+% Index: 0
+
+\begin{tikzcd}
+& {E_2} \\
+{E_\emptyset} && {F_{4, h.e.}}
+\arrow[from=1-2, to=2-1, "\phi_1"']
+\arrow[from=1-2, to=2-3, "\phi_2"]
+\end{tikzcd}

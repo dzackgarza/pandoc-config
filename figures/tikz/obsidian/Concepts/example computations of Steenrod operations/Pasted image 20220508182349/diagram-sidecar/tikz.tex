@@ -1,0 +1,124 @@
+% tikz.tex
+% A1-module structure diagram for BO1, MO1, BU1, MU1
+% Generated from canonical.yaml (Beaudry & Campbell, Figure 4)
+\documentclass[tikz,border=2pt]{standalone}
+
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+\tikzset{>=Stealth}
+
+\tikzcdset{
+    arrows={>=Stealth},
+}
+
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+
+\begin{tikzcd}[
+    row sep=1.5em,
+    column sep=2.5em,
+    ampersand replacement=\&,
+  ]
+  % Row 1: Column headers
+  |[labelnode, font=\bfseries]|{H^*(\mathrm{BO}_1)}
+  \& |[labelnode, font=\bfseries]|{H^*(\mathrm{MO}_1)}
+  \& |[labelnode, font=\bfseries]|{H^*(\mathrm{BU}_1)}
+  \& |[labelnode, font=\bfseries]|{H^*(\mathrm{MU}_1)}
+  \\
+  % Row 2: Phantom row (open-ended Sq2 arrows terminate here)
+  |[draw=none]|{\phantom{w_1^8}}
+  \& |[draw=none]|{\phantom{w_1^7U}}
+  \& |[draw=none]|{\phantom{w_2^4}}
+  \& |[draw=none]|{\phantom{w_2^3U}}
+  \\
+  % Row 3: Degree 8
+  |[mathnode]|{w_1^8}
+  \& |[mathnode]|{w_1^7U}
+  \& |[mathnode]|{w_2^4}
+  \& |[mathnode]|{w_2^3U}
+  \\
+  % Row 4: Degree 7
+  |[mathnode]|{w_1^7}
+  \& |[mathnode]|{w_1^6U}
+  \& |[draw=none]|{\phantom{w_2^4}}
+  \& |[draw=none]|{\phantom{w_2^3U}}
+  \\
+  % Row 5: Degree 6
+  |[mathnode]|{w_1^6}
+  \& |[mathnode]|{w_1^5U}
+  \& |[mathnode]|{w_2^3}
+  \& |[mathnode]|{w_2^2U}
+  \\
+  % Row 6: Degree 5
+  |[mathnode]|{w_1^5}
+  \& |[mathnode]|{w_1^4U}
+  \& |[draw=none]|{\phantom{w_2^4}}
+  \& |[draw=none]|{\phantom{w_2^3U}}
+  \\
+  % Row 7: Degree 4
+  |[mathnode]|{w_1^4}
+  \& |[mathnode]|{w_1^3U}
+  \& |[mathnode]|{w_2^2}
+  \& |[mathnode]|{w_2U}
+  \\
+  % Row 8: Degree 3
+  |[mathnode]|{w_1^3}
+  \& |[mathnode]|{w_1^2U}
+  \& |[draw=none]|{\phantom{w_2^4}}
+  \& |[draw=none]|{\phantom{w_2^3U}}
+  \\
+  % Row 9: Degree 2
+  |[mathnode]|{w_1^2}
+  \& |[mathnode]|{w_1U}
+  \& |[mathnode]|{w_2}
+  \& |[mathnode]|{U}
+  \\
+  % Row 10: Degree 1
+  |[mathnode]|{w_1}
+  \& |[mathnode]|{U}
+  \& |[draw=none]|{\phantom{w_2^4}}
+  \& |[draw=none]|{\phantom{w_2^3U}}
+  \\
+  % Column 1: BO1 -- Sq1
+  \ar[from=10-1, to=9-1, "\mathrm{Sq}^1"']
+  \ar[from=8-1, to=7-1, "\mathrm{Sq}^1"']
+  \ar[from=6-1, to=5-1, "\mathrm{Sq}^1"']
+  \ar[from=4-1, to=3-1, "\mathrm{Sq}^1"']
+  % Column 1: BO1 -- Sq2
+  \ar[from=9-1, to=7-1, bend right=35, "\mathrm{Sq}^2"']
+  \ar[from=8-1, to=6-1, bend left=35, "\mathrm{Sq}^2"]
+  \ar[from=5-1, to=3-1, bend right=35, "\mathrm{Sq}^2"']
+  \ar[from=4-1, to=2-1, bend left=35, "\mathrm{Sq}^2"]
+  % Column 2: MO1 -- Sq1
+  \ar[from=10-2, to=9-2, "\mathrm{Sq}^1"']
+  \ar[from=8-2, to=7-2, "\mathrm{Sq}^1"']
+  \ar[from=6-2, to=5-2, "\mathrm{Sq}^1"']
+  \ar[from=4-2, to=3-2, "\mathrm{Sq}^1"']
+  % Column 2: MO1 -- Sq2
+  \ar[from=9-2, to=7-2, bend right=35, "\mathrm{Sq}^2"']
+  \ar[from=8-2, to=6-2, bend left=35, "\mathrm{Sq}^2"]
+  \ar[from=6-2, to=4-2, bend right=35, "\mathrm{Sq}^2"']
+  \ar[from=4-2, to=2-2, bend left=35, "\mathrm{Sq}^2"]
+  % Column 3: BU1 -- Sq2 only
+  \ar[from=9-3, to=7-3, bend right=30, "\mathrm{Sq}^2"']
+  \ar[from=5-3, to=3-3, bend left=30, "\mathrm{Sq}^2"]
+  % Column 4: MU1 -- Sq2 only
+  \ar[from=9-4, to=7-4, bend right=30, "\mathrm{Sq}^2"']
+  \ar[from=5-4, to=3-4, bend left=30, "\mathrm{Sq}^2"]
+\end{tikzcd}
+
+\end{document}

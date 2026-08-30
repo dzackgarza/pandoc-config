@@ -1,0 +1,48 @@
+% TikZ commutative triangle: universal property of Kähler differentials Ω¹_{B/A}
+% Generated from canonical.yaml
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+% Right-angle commutative triangle:
+%   B -------d------→ Ω¹_{B/A}
+%   │                ╱
+%   │ γ             ╱ ∃!
+%   │              ╱
+%   ↓             ╱
+%   M
+\begin{tikzcd}
+    B \arrow[r, "d"] \arrow[d, "\gamma"'] &
+    \Omega^{1}_{B/A} \arrow[dl, dashed, "\exists!"] \\
+    M
+\end{tikzcd}
+\end{document}

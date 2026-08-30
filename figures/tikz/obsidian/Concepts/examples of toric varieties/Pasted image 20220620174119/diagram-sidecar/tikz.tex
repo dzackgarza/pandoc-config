@@ -1,0 +1,114 @@
+% tikz.tex — Two-panel diagram: quadrilateral polytope P_{2,4} and its normal fan Σ_P
+% Generated from canonical.yaml (Diagram: Pasted image 20220620174119)
+% Reference: Cox-Little-Schenck "Toric Varieties", Example 2.3.16
+% Preamble: /home/dzack/notes/.agents/plans/references/tikz-preamble.tex
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+
+\begin{tikzpicture}[
+    scale=0.7,
+    every node/.style={font=\small},
+    dot/.style={circle, fill=black, inner sep=2pt},
+]
+
+% ============================================================
+% LEFT PANEL: Lattice polytope P_{2,4}
+% ============================================================
+\begin{scope}[local bounding box=polytope]
+    % ---- Polytope interior fill ----
+    \fill[lightgray] (0,0) -- (0,1) -- (4,1) -- (2,0) -- cycle;
+
+    % ---- Polytope edges ----
+    \draw[thick] (0,0) -- (0,1) -- (4,1) -- (2,0) -- cycle;
+
+    % ---- Lattice points ----
+    % Vertices
+    \fill[black] (0,0) circle (2.5pt);
+    \fill[black] (0,1) circle (2.5pt);
+    \fill[black] (4,1) circle (2.5pt);
+    \fill[black] (2,0) circle (2.5pt);
+    % Intermediate lattice points
+    \fill[black] (1,0) circle (2pt);
+    \fill[black] (1,1) circle (2pt);
+    \fill[black] (2,1) circle (2pt);
+    \fill[black] (3,1) circle (2pt);
+
+    % ---- Labels ----
+    \node[below left]  at (0,0) {$v_1$};
+    \node[above left]  at (0,1) {$v_2$};
+    \node[above right] at (4,1) {$v_3$};
+    \node[below right] at (2,0) {$v_4$};
+    \node at (1.55,0.45) {$P = P_{2,4}$};
+\end{scope}
+
+% ============================================================
+% RIGHT PANEL: Normal fan Σ_P (4-ray inward-normal fan)
+% ============================================================
+\begin{scope}[xshift=7.5cm, local bounding box=fan]
+    % ---- Shade the four cone regions ----
+    % σ₁ = Cone(ρ₁, ρ₂) — NE quadrant
+    \fill[lightgray, opacity=0.6] (0,0) -- (2.5,0) -- (0,2.5) -- cycle;
+    % σ₂ = Cone(ρ₂, ρ₃) — SE quadrant
+    \fill[lightgray, opacity=0.6] (0,0) -- (2.5,0) -- (0,-2.5) -- cycle;
+    % σ₃ = Cone(ρ₃, ρ₄) — SW quadrant (wide cone)
+    \fill[lightgray, opacity=0.6] (0,0) -- (0,-2.5) -- (-1.5,3) -- cycle;
+    % σ₄ = Cone(ρ₄, ρ₁) — NW quadrant (narrow cone)
+    \fill[lightgray, opacity=0.6] (0,0) -- (-1.5,3) -- (0,2.5) -- cycle;
+
+    % ---- Rays with arrowheads ----
+    % ρ₁ = (0,1) — inward normal to bottom edge
+    \draw[->, >=Stealth, thick, blue] (0,0) -- (0,2.5) node[above] {$\rho_1 = (0,1)$};
+    % ρ₂ = (1,0) — inward normal to left edge
+    \draw[->, >=Stealth, thick, blue] (0,0) -- (2.5,0) node[right] {$\rho_2 = (1,0)$};
+    % ρ₃ = (0,-1) — inward normal to top edge
+    \draw[->, >=Stealth, thick, blue] (0,0) -- (0,-2.5) node[below] {$\rho_3 = (0,-1)$};
+    % ρ₄ = (-1,2) — inward normal to diagonal edge
+    \draw[->, >=Stealth, thick, blue] (0,0) -- (-1.5,3) node[above left] {$\rho_4 = (-1,2)$};
+
+    % ---- Origin dot ----
+    \fill[black] (0,0) circle (2.5pt);
+
+    % ---- Cone labels ----
+    \node at (1.4,1.4)  {$\sigma_1$};
+    \node at (1.4,-1.4) {$\sigma_2$};
+    \node at (-0.7,-0.7){$\sigma_3$};
+    \node at (-0.6,1.0) {$\sigma_4$};
+
+    % ---- Fan label ----
+    \node at (-1.0,2.0) {$\Sigma_P$};
+\end{scope}
+
+\end{tikzpicture}
+
+\end{document}

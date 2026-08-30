@@ -1,0 +1,102 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 6
+
+\begin{tikzpicture}
+[scale=1.0]
+% Top left
+\begin{scope}
+\eighteenlab
+\draw [red,thick,domain=5:175, -{Latex[length=2mm]}, opacity=0.2] plot ({cos(\x) + 2}, {sin(\x) + 2} );
+    \draw [red,thick,domain=185:355, -{Latex[length=2mm]}, opacity=0.2] plot ({cos(\x) + 2}, {sin(\x) + 2} );
+%\draw[hlt] (1) -- (5) -- (9) -- (13) -- (1);
+%\draw[hlt] (21) -- (22);
+\end{scope}
+
+% Top right
+\begin{scope}[shift={(6,0)}, scale=0.68]
+\node at (-1.5, 3) {$\xlongrightarrow{\mathrm{r}}$};
+\sterkone
+%\draw[hlt] (ste1-1) -- (ste1-3) -- (ste1-5) -- (ste1-7) -- (ste1-1);
+%\draw[hlt] (ste1-10) -- (ste1-11);
+\end{scope}
+
+% 2nd row left
+\begin{scope}[shift={(0,-6)}]
+\eighteenlab
+\draw [color=red, dotted, thick, opacity=0.5] (-0.8,-0.8) -- (4.8,4.8);
+\draw [<->, color=red, opacity=0.3, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (1,2) -- (2, 1);
+%\draw[hlt] (14) -- (1) -- (4);
+%\draw[hlt] (12) -- (9) -- (6);
+%\draw[hlt] (20) -- (21) -- (18);
+%\draw[hlt] (1) -- (17);
+%\draw[hlt] (9) -- (19);
+\end{scope}
+
+% 2nd row right
+\begin{scope}[shift={(6,-6)}, scale=0.68]
+\sterkthree
+\node at (-1.5, 3) {$\xlongrightarrow{\mathrm{d}}$};
+%\draw[hlt] (ste3-2) -- (ste3-5) -- (ste3-8);
+%\draw[hlt] (ste3-5) -- (ste3-10);
+%\draw[hlt] (ste3-11) -- (ste3-12);
+\end{scope}
+
+% 3rd row left
+\begin{scope}[shift={(0,-12)}]
+\eighteenlab
+\draw [color=red, dotted, thick] (-0.5,2) -- (4.5, 2);
+    \draw [<->, color=red, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (1.5,1) -- (1.5, 3);
+%\draw[hlt] (12) -- (13) -- (1) -- (2);
+%\draw[hlt] (10) -- (9) -- (5) -- (4);
+%\draw[hlt] (1) -- (17);
+%\draw[hlt] (5) -- (18);
+%\draw[hlt] (9) -- (19);
+%\draw[hlt] (13) -- (20);
+\end{scope}
+
+% 3rd row right
+\begin{scope}[shift={(6,-12)}, scale=0.68]
+\sterkfour
+\node at (-1.5, 3) {$\xlongrightarrow{\mathrm{h}}$};
+%\draw[hlt] (ste4-1) -- (ste4-3) -- (ste4-4);
+%\draw[hlt] (ste4-9) -- (ste4-7) -- (ste4-6);
+%\draw[hlt] (ste4-3) -- (ste4-10);
+%\draw[hlt] (ste4-7) -- (ste4-11);
+\end{scope}
+\end{tikzpicture}
+
+
+\end{document}

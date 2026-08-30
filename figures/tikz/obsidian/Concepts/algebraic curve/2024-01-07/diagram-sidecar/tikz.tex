@@ -1,0 +1,234 @@
+% TikZ for Algebraic Curve Comparison Chart
+% 6 rows x 3 columns: Equations (left) | Real Plots (middle) | Riemann Surfaces (right)
+% Generated from canonical.yaml per Phase 5 specification.
+% Uses shared preamble conventions from .agents/plans/references/tikz-preamble.tex
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    backgrounds,
+}
+
+\tikzset{>=Stealth}
+
+\begin{document}
+
+\begin{tikzpicture}[>=Stealth]
+
+% ============================================================
+% LAYOUT CONSTANTS (all distances in cm)
+% ============================================================
+\def\colA{0}       % left column (equations)
+\def\colB{4.8}     % middle column (real plots)
+\def\colC{10.0}    % right column (Riemann surfaces)
+\def\rowH{0}       % vertical center of row 1
+\def\rowSep{3.6}   % spacing between row centers
+
+% ============================================================
+% ROW 1 — ELLIPSE (degree 2, genus 0)
+% ============================================================
+% Equation
+\node[align=center, font=\small] at (\colA, \rowH)
+  {$x^2/a^2 + y^2/b^2 = 1$};
+
+% Real plot: ellipse
+\begin{scope}[shift={(\colB, \rowH)}, scale=0.75]
+  \draw[thick] (0,0) ellipse (1.8 and 1.2);
+  \fill[black] (0,0) circle (1.5pt);
+\end{scope}
+
+% Riemann surface: sphere
+\begin{scope}[shift={(\colC, \rowH)}, scale=0.75]
+  \draw[thick] (0,0) circle (1.5);
+  \draw[thick] (-1.5,0) arc (180:0:1.5 and 0.55);
+  \draw[thick, dashed] (1.5,0) arc (0:180:1.5 and 0.55);
+  \fill (-1.15,0.2) circle (2pt) node[above left, inner sep=1pt] {$\infty_1$};
+  \fill (1.15,0.2) circle (2pt) node[above right, inner sep=1pt] {$\infty_2$};
+\end{scope}
+
+% ============================================================
+% ROW 2 — ELLIPTIC CURVE (one real component, degree 3, genus 1)
+% ============================================================
+\begin{scope}[shift={(0, -\rowSep)}]
+\node[align=center, font=\small] at (\colA, 0)
+  {$y^2 = x^3 + x^2 + 1$};
+
+\begin{scope}[shift={(\colB, 0)}, scale=0.75]
+  \draw[->, thin, gray!40] (-2.3,0) -- (2.5,0);
+  \draw[->, thin, gray!40] (0,-1.8) -- (0,1.8);
+  \draw[thick, samples=120, smooth, variable=\x, domain=-1.85:-0.65]
+    plot (\x, {0.6*sqrt(max(0, \x*\x*\x + \x*\x + 1))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=-1.85:-0.65]
+    plot (\x, {-0.6*sqrt(max(0, \x*\x*\x + \x*\x + 1))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=-0.3:2.2]
+    plot (\x, {0.6*sqrt(max(0, \x*\x*\x + \x*\x + 1))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=-0.3:2.2]
+    plot (\x, {-0.6*sqrt(max(0, \x*\x*\x + \x*\x + 1))});
+  \fill[black] (0,0) circle (1pt);
+\end{scope}
+
+\begin{scope}[shift={(\colC, 0)}, scale=0.75]
+  \draw[thick] (0,0) ellipse (2 and 1.3);
+  \draw[thick] (0,0) ellipse (0.8 and 0.45);
+  \draw[thick, dashed] (0.8,0) arc (0:180:0.8 and 0.45);
+  \draw[thick] (0.8,0.45) .. controls (1.4,0.7) and (1.9,0.4) .. (2,0);
+  \draw[thick] (0.8,-0.45) .. controls (1.4,-0.7) and (1.9,-0.4) .. (2,0);
+  \draw[thick, dashed] (-0.8,0.45) .. controls (-1.4,0.7) and (-1.9,0.4) .. (-2,0);
+  \draw[thick, dashed] (-0.8,-0.45) .. controls (-1.4,-0.7) and (-1.9,-0.4) .. (-2,0);
+  \fill (2.1,0) circle (2pt) node[right, inner sep=1pt] {$\infty$};
+\end{scope}
+\end{scope}
+
+% ============================================================
+% ROW 3 — ELLIPTIC CURVE (two real components, degree 3, genus 1)
+% ============================================================
+\begin{scope}[shift={(0, -2*\rowSep)}]
+\node[align=center, font=\small] at (\colA, 0)
+  {$y^2 = x^3 - x$};
+
+\begin{scope}[shift={(\colB, 0)}, scale=0.75]
+  \draw[->, thin, gray!40] (-2.3,0) -- (2.7,0);
+  \draw[->, thin, gray!40] (0,-1.8) -- (0,1.8);
+  \draw[thick, samples=120, smooth, variable=\x, domain=-0.98:-0.05]
+    plot (\x, {0.7*sqrt(max(0, \x*\x*\x - \x))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=-0.98:-0.05]
+    plot (\x, {-0.7*sqrt(max(0, \x*\x*\x - \x))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=1.05:2.5]
+    plot (\x, {0.7*sqrt(max(0, \x*\x*\x - \x))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=1.05:2.5]
+    plot (\x, {-0.7*sqrt(max(0, \x*\x*\x - \x))});
+  \fill[black] (0,0) circle (1pt);
+\end{scope}
+
+\begin{scope}[shift={(\colC, 0)}, scale=0.75]
+  \draw[thick] (0,0) ellipse (2 and 1.3);
+  \draw[thick] (0,0) ellipse (0.8 and 0.45);
+  \draw[thick, dashed] (0.8,0) arc (0:180:0.8 and 0.45);
+  \draw[thick] (0.8,0.45) .. controls (1.4,0.7) and (1.9,0.4) .. (2,0);
+  \draw[thick] (0.8,-0.45) .. controls (1.4,-0.7) and (1.9,-0.4) .. (2,0);
+  \draw[thick, dashed] (-0.8,0.45) .. controls (-1.4,0.7) and (-1.9,0.4) .. (-2,0);
+  \draw[thick, dashed] (-0.8,-0.45) .. controls (-1.4,-0.7) and (-1.9,-0.4) .. (-2,0);
+  \fill (2.1,0) circle (2pt) node[right, inner sep=1pt] {$\infty$};
+\end{scope}
+\end{scope}
+
+% ============================================================
+% ROW 4 — NODAL CUBIC (degree 3, singular)
+% ============================================================
+\begin{scope}[shift={(0, -3*\rowSep)}]
+\node[align=center, font=\small] at (\colA, 0)
+  {$y^2 = x^3 + x^2$};
+
+\begin{scope}[shift={(\colB, 0)}, scale=0.75]
+  \draw[->, thin, gray!40] (-2.3,0) -- (2.7,0);
+  \draw[->, thin, gray!40] (0,-1.8) -- (0,1.8);
+  \draw[thick, samples=120, smooth, variable=\x, domain=-0.95:-0.05]
+    plot (\x, {0.7*abs(\x)*sqrt(max(0, \x+1))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=-0.95:-0.05]
+    plot (\x, {-0.7*abs(\x)*sqrt(max(0, \x+1))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=0.05:2.3]
+    plot (\x, {0.7*\x*sqrt(max(0, \x+1))});
+  \draw[thick, samples=120, smooth, variable=\x, domain=0.05:2.3]
+    plot (\x, {-0.7*\x*sqrt(max(0, \x+1))});
+  \fill[black] (0,0) circle (2.5pt);
+\end{scope}
+
+\begin{scope}[shift={(\colC, 0)}, scale=0.75]
+  \draw[thick] (0,0) ellipse (2 and 1.3);
+  \draw[thick, dashed] (0.6,0) arc (0:180:0.6 and 0.35);
+  \draw[thick] (0.6,0.35) .. controls (1.2,0.6) and (1.7,0.3) .. (1.9,0);
+  \draw[thick] (0.6,-0.35) .. controls (1.0,-0.9) and (0.6,-1.2) .. (0,-1.3);
+  \draw[thick, dashed] (-0.6,0.35) .. controls (-1.2,0.6) and (-1.7,0.3) .. (-1.9,0);
+  \draw[thick, dashed] (-0.6,-0.35) .. controls (-1.0,-0.9) and (-0.6,-1.2) .. (0,-1.3);
+  \fill (0,-1.3) circle (2.5pt);
+  \fill (2.1,0) circle (2pt) node[right, inner sep=1pt] {$\infty$};
+\end{scope}
+\end{scope}
+
+% ============================================================
+% ROW 5 — CUSPIDAL CUBIC (degree 3, singular)
+% ============================================================
+\begin{scope}[shift={(0, -4*\rowSep)}]
+\node[align=center, font=\small] at (\colA, 0)
+  {$y^2 = x^3$};
+
+\begin{scope}[shift={(\colB, 0)}, scale=0.75]
+  \draw[->, thin, gray!40] (-1.5,0) -- (2.7,0);
+  \draw[->, thin, gray!40] (0,-1.8) -- (0,1.8);
+  \draw[thick, samples=120, smooth, variable=\x, domain=0:2.3]
+    plot (\x, {0.7*pow(\x, 1.5)});
+  \draw[thick, samples=120, smooth, variable=\x, domain=0:2.3]
+    plot (\x, {-0.7*pow(\x, 1.5)});
+  \fill[black] (0,0) circle (2.5pt);
+\end{scope}
+
+\begin{scope}[shift={(\colC, 0)}, scale=0.75]
+  \draw[thick] (0.3,0) .. controls (-0.2,1.2) and (-1.2,1.0) .. (-1.8,0);
+  \draw[thick] (0.3,0) .. controls (-0.2,-1.2) and (-1.2,-1.0) .. (-1.8,0);
+  \draw[thick] (0.3,0) .. controls (1.2,1.1) and (1.5,0.5) .. (1.5,0);
+  \draw[thick] (0.3,0) .. controls (1.2,-1.1) and (1.5,-0.5) .. (1.5,0);
+  \draw[thick] (0.3,1.0) .. controls (0.8,0.3) .. (1.5,0);
+  \draw[thick] (0.3,-1.0) .. controls (0.8,-0.3) .. (1.5,0);
+  \draw[thick, dashed] (-1.5,0.2) .. controls (-0.8,0.6) and (0.5,0.5) .. (1.2,0.1);
+  \fill (-1.8,0) circle (2.5pt);
+  \fill (1.65,0) circle (2pt) node[right, inner sep=1pt] {$\infty$};
+\end{scope}
+\end{scope}
+
+% ============================================================
+% ROW 6 — FERMAT QUARTIC (degree 4, genus 3)
+% ============================================================
+\begin{scope}[shift={(0, -5*\rowSep)}]
+\node[align=center, font=\small] at (\colA, 0)
+  {$x^4 + y^4 = 1$};
+
+\begin{scope}[shift={(\colB, 0)}, scale=0.75]
+  \draw[->, thin, gray!40] (-2.3,0) -- (2.3,0);
+  \draw[->, thin, gray!40] (0,-1.8) -- (0,1.8);
+  % Squircle via parametric superellipse
+  \draw[thick, samples=200, smooth, variable=\t, domain=0:360]
+    plot ({1.8*pow(abs(cos(\t)), 0.5)*sign(cos(\t))},
+          {1.2*pow(abs(sin(\t)), 0.5)*sign(sin(\t))});
+  \fill[black] (0,0) circle (1pt);
+\end{scope}
+
+\begin{scope}[shift={(\colC, 0)}, scale=0.75]
+  % Genus-3 surface: triple torus
+  % Left torus
+  \draw[thick] (-2.5,0) ellipse (1 and 1.2);
+  \draw[thick] (-2.5,0) ellipse (0.35 and 0.4);
+  \draw[thick, dashed] (-2.15,0) arc (0:180:0.35 and 0.4);
+  % Middle torus
+  \draw[thick] (0,0) ellipse (1 and 1.2);
+  \draw[thick] (0,0) ellipse (0.35 and 0.4);
+  \draw[thick, dashed] (0.35,0) arc (0:180:0.35 and 0.4);
+  % Right torus
+  \draw[thick] (2.5,0) ellipse (1 and 1.2);
+  \draw[thick] (2.5,0) ellipse (0.35 and 0.4);
+  \draw[thick, dashed] (2.85,0) arc (0:180:0.35 and 0.4);
+  % Top bridges
+  \draw[thick] (-1.5,0.4) .. controls (-0.5,0.9) .. (0,0.6);
+  \draw[thick] (0,0.6) .. controls (0.5,0.9) .. (1.5,0.4);
+  % Bottom bridges
+  \draw[thick] (-1.5,-0.4) .. controls (-0.5,-0.9) .. (0,-0.6);
+  \draw[thick] (0,-0.6) .. controls (0.5,-0.9) .. (1.5,-0.4);
+  % Back bridges (dashed)
+  \draw[thick, dashed] (-1.5,0.4) .. controls (-1.0,0.9) .. (-0.5,0.6);
+  \draw[thick, dashed] (0.5,0.6) .. controls (1.0,0.9) .. (1.5,0.4);
+  \draw[thick, dashed] (-1.5,-0.4) .. controls (-1.0,-0.9) .. (-0.5,-0.6);
+  \draw[thick, dashed] (0.5,-0.6) .. controls (1.0,-0.9) .. (1.5,-0.4);
+  % Four points at infinity
+  \fill (-1.0,0.65) circle (2pt) node[above, inner sep=1pt] {$\infty_1$};
+  \fill (1.0,0.65) circle (2pt) node[above, inner sep=1pt] {$\infty_2$};
+  \fill (-1.0,-0.65) circle (2pt) node[below, inner sep=1pt] {$\infty_3$};
+  \fill (1.0,-0.65) circle (2pt) node[below, inner sep=1pt] {$\infty_4$};
+\end{scope}
+\end{scope}
+
+\end{tikzpicture}
+\end{document}

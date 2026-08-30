@@ -1,0 +1,47 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: dev/tex/packages/TikZ-Style-Demo.tex
+% Type: tikzpicture
+% Category: compactifications
+% Index: 1
+
+\begin{tikzpicture}
+[cusp diagram]
+% Semantic node styles
+\node[zero cusp] (c1) at (0,0) {\cusptype{18}{2}{0}_1};
+\node[one cusp] (r1) at (3,0) {$E_8^2$};
+% Semantic arrow style
+\draw[cusp inclusion] (c1) -- (r1);
+\end{tikzpicture}
+
+
+\end{document}

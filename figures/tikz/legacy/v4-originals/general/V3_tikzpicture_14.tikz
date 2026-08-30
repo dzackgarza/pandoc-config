@@ -1,0 +1,10 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 14
+
+\begin{tikzpicture}
+[x={(1,0)}, y={(60:1)}]
+  \sterktwo
+\end{tikzpicture}

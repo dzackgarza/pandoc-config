@@ -1,0 +1,19 @@
+% TikZ Diagram: algebraic-surfaces
+% Source: diss/archive/old-notes/K3/K3Surfaces.md (diagram #1)
+% Duplicates: 2 total copies
+% Type: tikzcd
+
+\begin{tikzcd}
+
+	&& {h^{n,n}} \\
+	& {h^{n-q, n-p}} && {h^{n-p, n-q}} \\
+	{h^{n, 0}} &&&& {h^{0, n}} \\
+	& {h^{p, q}} \\
+	&& {h^{0,0}} \\
+	&& {}
+	\arrow[dashed, no head, from=1-3, to=5-3]
+	\arrow[curve={height=-12pt}, Rightarrow, no head, from=4-2, to=2-4]
+	\arrow[dashed, no head, from=3-1, to=3-5]
+	\arrow[Rightarrow, no head, from=2-4, to=2-2]
+
+\end{tikzcd}

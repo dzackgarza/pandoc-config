@@ -1,0 +1,15 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/en-revised-Oct05.tex
+% Type: tikzcd
+% Category: general
+% Index: 0
+
+\begin{tikzcd}
+X \arrow{d}[swap]{\pi} \arrow[swap]{r}{\psi}
+  \arrow[bend left=20]{rr}{\psi'}
+  & Z \arrow{d}[swap]{\rho}
+  & Z' \arrow{dl}{\rho'} 
+  \\
+  Y\arrow[swap]{r}{\varphi} 
+  & W
+\end{tikzcd}

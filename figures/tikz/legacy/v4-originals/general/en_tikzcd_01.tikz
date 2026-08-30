@@ -1,0 +1,16 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/en.tex
+% Type: tikzcd
+% Category: general
+% Index: 1
+
+\begin{tikzcd}
+(X,D+\epsilon R) \arrow{d}{\pi}
+      \arrow[swap]{r}{\psi}
+      \arrow[bend left=15,swap]{rr}{\psi'}
+      & (Z,D_Z + \epsilon R_Z) \arrow{d}{\rho} 
+      & (Z',D_{Z'} + \epsilon R_{Z'}) \arrow{dl}{\rho'} 
+      \\
+      (Y,C +\fraceps B) \arrow[swap]{r}{\varphi} 
+      & (W,C_W + \fraceps B_W)
+\end{tikzcd}

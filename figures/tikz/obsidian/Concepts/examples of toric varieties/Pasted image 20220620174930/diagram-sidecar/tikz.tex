@@ -1,0 +1,45 @@
+% P1 Fan Diagram — Normal fan of an interval (Example 2.4.10)
+% Source: canonical.yaml (resolutions C001, C002, C003)
+% Generated: 2026-05-09
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+\tikzset{>=Stealth}
+
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzpicture}
+  % Horizontal line (no arrowheads — resolution C001)
+  \draw[thick] (-3,0) -- (3,0);
+
+  % Single solid black dot at origin (resolution C002, C003)
+  \fill[black] (0,0) circle (2.5pt);
+
+  % Labels below the line
+  \node[below, font=\small] at (-2.2,0) {$\sigma_1$};
+  \node[below, font=\small] at (0,-0.15) {$0$};
+  \node[below, font=\small] at (2.2,0) {$\sigma_0$};
+\end{tikzpicture}
+\end{document}

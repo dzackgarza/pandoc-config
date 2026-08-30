@@ -1,0 +1,40 @@
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+% Homotopy Lifting Extension Property (HLEP) diagram for cofibration
+\begin{tikzcd}
+    W \ar[r] \ar[d, "\mathrm{in}_0"']
+    & Y^{X} \ar[d, "i^*"] \\
+    I \times W \ar[r, "\widetilde{f}"'] \ar[ru, dashed, "\widetilde{H}"']
+    & Y^{A}
+\end{tikzcd}
+\end{document}

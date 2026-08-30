@@ -1,0 +1,51 @@
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+\usepackage{amsmath,amssymb}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+% E^n page of the Serre spectral sequence for the path-loop fibration
+% ΩS^n → PS^n → S^n (n ≥ 2).
+%
+% Two nonzero columns: p = 0 and p = n.
+% Rows at q = 0, n-1, 2n-2, 3n-3.
+% Three d_n differentials of bidegree (-n, n-1).
+\begin{tikzcd}
+  & 0 & n \\
+  3n-3 & \mathbb{Z} & \mathbb{Z} \\
+  2n-2 & \mathbb{Z} & \mathbb{Z} \\
+  n-1  & \mathbb{Z} & \mathbb{Z} \\
+  0    & \mathbb{Z} & \mathbb{Z}
+  \arrow[from=5-3, to=4-2, "d_n"]
+  \arrow[from=4-3, to=3-2, "d_n"]
+  \arrow[from=3-3, to=2-2, "d_n"]
+\end{tikzcd}
+\end{document}

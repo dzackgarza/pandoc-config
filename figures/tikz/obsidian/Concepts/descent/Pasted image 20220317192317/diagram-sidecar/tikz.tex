@@ -1,0 +1,86 @@
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+\tikzset{>=Stealth}
+
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+
+\begin{tikzcd}[
+  every matrix/.append style={name=cd},
+  row sep=3.5em,
+  column sep=4.5em,
+  execute at end picture={
+    \begin{scope}[on background layer]
+      % Region 1 — top-left 2x2 (Associativity of M-module action)
+      \node[ellipse, draw=red, thick, fill=red, fill opacity=0.08,
+            label={[red]above right:{\sffamily\bfseries 1}},
+            fit=(cd-1-1)(cd-1-2)(cd-2-1)(cd-2-2)] {};
+      % Region 2 — left triangle (Unit law of the M-module)
+      \node[ellipse, draw=blue, thick, fill=blue, fill opacity=0.08,
+            label={[blue]below:{\sffamily\bfseries 2}},
+            fit=(cd-2-1)(cd-3-1)(cd-2-2)] {};
+      % Region 3 — top-right 2x2 (delta is M-module morphism)
+      \node[ellipse, draw=green!60!black, thick, fill=green!60!black,
+            fill opacity=0.08,
+            label={[green!60!black]above:{\sffamily\bfseries 3}},
+            fit=(cd-1-2)(cd-1-3)(cd-2-2)(cd-2-3)] {};
+      % Region 4 — bottom-right 2x2 (Coassociativity of descent datum)
+      \node[ellipse, draw=orange, thick, fill=orange, fill opacity=0.08,
+            label={[orange]below:{\sffamily\bfseries 4}},
+            fit=(cd-2-2)(cd-2-3)(cd-3-2)(cd-3-3)] {};
+      % Region 5 — bottom-left triangle (Counit law for L_M-coaction)
+      \node[ellipse, draw=purple, thick, fill=purple, fill opacity=0.08,
+            label={[purple]below right:{\sffamily\bfseries 5}},
+            fit=(cd-3-1)(cd-3-2)(cd-2-2)] {};
+    \end{scope}
+  }
+]
+  M^2(x)
+    \arrow[r, "M(\varrho)"]
+    \arrow[d, "\mu_x"'] &
+  M(x)
+    \arrow[r, "M(\delta)"]
+    \arrow[d, "\varrho"'] &
+  M^2(x)
+    \arrow[d, "\mu_x"] \\
+  M(x)
+    \arrow[r, "\varrho"']
+    \arrow[d, "\eta_x"'] &
+  x
+    \arrow[r, "\delta"]
+    \arrow[d, "\delta"'] &
+  M(x)
+    \arrow[d, "M(\eta_x)"] \\
+  x
+    \arrow[ru, "id_x", double, double equal sign distance]
+    \arrow[u, "\eta_x"] &
+  M(x)
+    \arrow[l, "\varrho"']
+    \arrow[r, "M(\delta)"] &
+  M^2(x)
+\end{tikzcd}
+
+\end{document}

@@ -1,0 +1,13 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 3
+
+\begin{tikzpicture}
+[scale=1.0]
+\eighteenlab
+\begin{scope}[shift={(6,0)}, x={(1,0)}, y={(60:1)}]
+\eighteenzero
+\end{scope}
+\end{tikzpicture}

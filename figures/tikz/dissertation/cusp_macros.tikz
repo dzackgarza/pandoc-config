@@ -1,0 +1,474 @@
+% Declare layers
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+% Change highlight color and width
+\tikzset{
+  highlight edge/.style={line width=8pt, blue!60, opacity=0.6,  line cap=round}
+}
+
+
+
+% Coxeter–Vinberg diagram styles
+\tikzset{
+  normal edge/.style={line width=1pt},
+  thick edge/.style={line width=2pt},
+  doubled edge/.style={double, line width=0.8pt, double distance=1.5pt},
+  dotted edge/.style={dotted, line width=1pt},
+  white node/.style={circle, fill=white, draw=black, line width=1pt, inner sep=2pt},
+  black node/.style={circle, fill=black, inner sep=2pt},
+  doubled node/.style={
+    circle, fill=white, draw=black, line width=1pt, inner sep=3pt,
+    path picture={\draw[black, line width=1pt] 
+      (path picture bounding box.center) circle (2pt);}
+  }
+}
+
+
+% Syntax:
+% \cuspone{xshift}{yshift}
+\def\cusponelabels{0}
+\newcommand{\cuspone}[2]{%
+\begin{scope}[shift={(#1,#2)}]%
+% Pre-determine all label content based on \cusponelabels flag
+\def\cusponelabelzero{\ifthenelse{\equal{\cusponelabels}{1}}{$r_0$}{}}%
+\def\cusponelabelone{\ifthenelse{\equal{\cusponelabels}{1}}{$r_1$}{}}%
+\def\cusponelabeltwo{\ifthenelse{\equal{\cusponelabels}{1}}{$r_2$}{}}%
+\def\cusponelabelthree{\ifthenelse{\equal{\cusponelabels}{1}}{$r_3$}{}}%
+\def\cusponelabelfour{\ifthenelse{\equal{\cusponelabels}{1}}{$r_4$}{}}%
+\def\cusponelabelfive{\ifthenelse{\equal{\cusponelabels}{1}}{$r_5$}{}}%
+\def\cusponelabelsix{\ifthenelse{\equal{\cusponelabels}{1}}{$r_6$}{}}%
+\def\cusponelabelseven{\ifthenelse{\equal{\cusponelabels}{1}}{$r_7$}{}}%
+\def\cusponelabeleight{\ifthenelse{\equal{\cusponelabels}{1}}{$r_8$}{}}%
+\def\cusponelabelnine{\ifthenelse{\equal{\cusponelabels}{1}}{$r_9$}{}}%
+\def\cusponelabelten{\ifthenelse{\equal{\cusponelabels}{1}}{$r_{10}$}{}}%
+\def\cusponelabeleleven{\ifthenelse{\equal{\cusponelabels}{1}}{$r_{11}$}{}}%
+
+
+% Square perimeter nodes
+\node[black node,label=below: \cusponelabelzero] (n0) at (0,0) {};
+\node[black node,label=below: \cusponelabelone] (n1) at (2,0) {};
+\node[black node,label=below: \cusponelabeltwo] (n2) at (4,0) {};
+\node[black node,label=right: \cusponelabelthree] (n3) at (4,2) {};
+\node[black node,label=above: \cusponelabelfour] (n4) at (4,4) {};
+\node[black node,label=above: \cusponelabelfive] (n5) at (2,4) {};
+\node[black node,label=above: \cusponelabelsix] (n6) at (0,4) {};
+\node[black node,label=left: \cusponelabelseven] (n7) at (0,2) {};
+
+% Diagonal nodes
+\node[black node,label=above: \cusponelabeleight] (n8) at (0.75,0.75) {};
+\node[black node,label=above: \cusponelabelnine] (n9) at (1.5,1.5) {};
+\node[black node,label=above: \cusponelabelten] (n10) at (2.25,2.25) {};
+\node[black node,label=above: \cusponelabeleleven] (n11) at (3,3) {};
+
+
+\begin{pgfonlayer}{background}
+\draw[] (n0) -- (n1) -- (n2) -- (n3) -- (n4) -- (n5) -- (n6) -- (n7) -- (n0);
+\draw[] (n0) -- (n8);
+\draw[] (n10) -- (n4);
+\draw[thick edge] (n8) -- (n9) -- (n10) -- (n11);
+\end{pgfonlayer}
+\end{scope}%
+}
+
+
+% Set this to 1 to show labels, 0 to hide them
+\def\cusptwolabels{0}
+
+\newcommand{\cusptwo}[2]{
+    \begin{scope}[shift={(#1,#2)}]
+    
+    % Pre-determine all label content based on \cusptwolabels flag
+    \def\cusptwolabelzero{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_0$}{}}%
+    \def\cusptwolabelone{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_1$}{}}%
+    \def\cusptwolabeltwo{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_2$}{}}%
+    \def\cusptwolabelthree{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_3$}{}}%
+    \def\cusptwolabelfour{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_4$}{}}%
+    \def\cusptwolabelfive{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_5$}{}}%
+    \def\cusptwolabelsix{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_6$}{}}%
+    \def\cusptwolabelseven{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_7$}{}}%
+    \def\cusptwolabeleight{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_8$}{}}%
+    \def\cusptwolabelnine{\ifthenelse{\equal{\cusptwolabels}{1}}{$r_9$}{}}%
+    
+    % Define triangle corners to match cusptwocover precisely
+    \coordinate (A) at (0,0);    % bottom left
+    \coordinate (B) at (4,0);    % bottom right  
+    \coordinate (C) at (2,4);    % top
+    
+    % Calculate positions along edges (same as cusptwocover)
+    \foreach \i in {0,1,...,5} {
+        \pgfmathsetmacro{\t}{\i/5}
+        \coordinate (bottom\i) at ($(A)!\t!(B)$);
+    }
+    
+    \foreach \i in {0,1,...,6} {
+        \pgfmathsetmacro{\t}{\i/6}
+        \coordinate (right\i) at ($(B)!\t!(C)$);
+    }
+    
+    \foreach \i in {0,1,...,6} {
+        \pgfmathsetmacro{\t}{\i/6}
+        \coordinate (left\i) at ($(C)!\t!(A)$);
+    }
+    
+    % Node 0 at top (white, even -> doubled)
+    \node[white node, label=above:\cusptwolabelzero] (n0) at (right6) {};
+    
+    % Nodes 1-5 on left edge (now black)
+    \node[black node, label=left:\cusptwolabelone] (n1) at (left1) {};
+    \node[black node, label=left:\cusptwolabeltwo] (n2) at (left2) {};
+    \node[black node, label=left:\cusptwolabelthree] (n3) at (left3) {};
+    \node[black node, label=left:\cusptwolabelfour] (n4) at (left4) {};
+    \node[black node, label=left:\cusptwolabelfive] (n5) at (left5) {};
+    
+    % Nodes 6-8 on bottom edge (now black)
+    \node[black node, label=below:\cusptwolabelsix] (n6) at (bottom0) {};
+    \node[black node, label=below:\cusptwolabelseven] (n7) at (bottom1) {};
+    \node[black node, label=below:\cusptwolabeleight] (n8) at (bottom2) {};
+    
+    % Interior node 9 (now black)
+    \coordinate (interior9) at ($(A)!0.3!(B)!0.2!(C)$);
+    \node[black node, label=below:\cusptwolabelnine] (n9) at (interior9) {};
+    
+    \begin{pgfonlayer}{background}
+    % Edges: path 1-2-3-4-5-6-7-8 and edge 6-9
+    \draw[normal edge] (n1) -- (n2) -- (n3) -- (n4) -- (n5) -- (n6) -- (n7) -- (n8);
+    \draw[normal edge] (n6) -- (n9);
+    
+    % Double edge 0-1 (white to black)
+    \draw[doubled edge] (n0) -- (n1);
+    \end{pgfonlayer}
+    
+    \end{scope}
+}
+
+\def\cuspthreelabels{0}
+
+\newcommand{\cuspthree}[2]{
+    \begin{scope}[shift={(#1,#2)}]
+    
+    % Pre-determine all label content based on \cuspthreelabels flag
+    \def\cuspthreelabelzero{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_0$}{}}%
+    \def\cuspthreelabelone{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_1$}{}}%
+    \def\cuspthreelabeltwo{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_2$}{}}%
+    \def\cuspthreelabelthree{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_3$}{}}%
+    \def\cuspthreelabelfour{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_4$}{}}%
+    \def\cuspthreelabelfive{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_5$}{}}%
+    \def\cuspthreelabelsix{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_6$}{}}%
+    \def\cuspthreelabelseven{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_7$}{}}%
+    \def\cuspthreelabeleight{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_8$}{}}%
+    \def\cuspthreelabelnine{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_9$}{}}%
+    \def\cuspthreelabelten{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_{10}$}{}}%
+    \def\cuspthreelabeleleven{\ifthenelse{\equal{\cuspthreelabels}{1}}{$r_{11}$}{}}%
+    
+    % White nodes
+    \node[white node, label=below:\cuspthreelabelzero] (n0) at (0,0) {};
+    \node[white node, label=above:\cuspthreelabelone] (n1) at (4,4) {};
+    
+    % Black nodes
+    \node[black node, label=left:\cuspthreelabeltwo] (n2) at (0,1) {};
+    \node[black node, label=left:\cuspthreelabelthree] (n3) at (0,2) {};
+    \node[black node, label=left:\cuspthreelabelfour] (n4) at (0,3) {};
+    \node[black node, label=left:\cuspthreelabelfive] (n5) at (0,4) {};
+    \node[black node, label=above:\cuspthreelabelsix] (n6) at (1,4) {};
+    \node[black node, label=above:\cuspthreelabelseven] (n7) at (2,4) {};
+    \node[black node, label=above:\cuspthreelabeleight] (n8) at (3,4) {};
+    \node[black node, label=right:\cuspthreelabelnine] (n9) at (1,3) {};
+    \node[black node, label=left:\cuspthreelabelten] (n10) at (1.33,1.33) {};
+    \node[black node, label=right:\cuspthreelabeleleven] (n11) at (2.67,2.67) {};
+    
+    \begin{pgfonlayer}{background}
+    \draw[normal edge] (n5) -- (n6) -- (n7) -- (n8);
+    \draw[normal edge] (n2) -- (n3) -- (n4) -- (n5);
+    \draw[normal edge] (n5) -- (n9);
+    \draw[thick edge] (n10) -- (n11);
+    \draw[doubled edge] (n8) -- (n1);
+    \draw[doubled edge] (n2) -- (n0);
+    \draw[doubled edge] (n0) -- (n10);
+    \draw[doubled edge] (n11) -- (n1);
+    \end{pgfonlayer}
+    \end{scope}
+}
+
+\def\cuspfourlabels{0}
+
+\newcommand{\cuspfour}[2]{
+    \begin{scope}[shift={(#1,#2)}]
+    
+    % Pre-determine all label content based on \cuspfourlabels flag
+    \def\cuspfourlabelzero{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_0$}{}}%
+    \def\cuspfourlabelone{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_1$}{}}%
+    \def\cuspfourlabeltwo{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_2$}{}}%
+    \def\cuspfourlabelthree{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_3$}{}}%
+    \def\cuspfourlabelfour{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_4$}{}}%
+    \def\cuspfourlabelfive{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_5$}{}}%
+    \def\cuspfourlabelsix{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_6$}{}}%
+    \def\cuspfourlabelseven{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_7$}{}}%
+    \def\cuspfourlabeleight{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_8$}{}}%
+    \def\cuspfourlabelnine{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_9$}{}}%
+    \def\cuspfourlabelten{\ifthenelse{\equal{\cuspfourlabels}{1}}{$r_{10}$}{}}%
+    
+    % External nodes
+    \node[white node, label=left:\cuspfourlabelzero] (n0) at (0,2) {};
+    \node[black node, label=left:\cuspfourlabelone] (n1) at (0,3) {};
+    \node[black node, label=left:\cuspfourlabeltwo] (n2) at (0,4) {};
+    \node[black node, label=above:\cuspfourlabelthree] (n3) at (1,4) {};
+    \node[black node, label=above:\cuspfourlabelfour] (n4) at (2,4) {};
+    \node[black node, label=above:\cuspfourlabelfive] (n5) at (3,4) {};
+    \node[black node, label=above:\cuspfourlabelsix] (n6) at (4,4) {};
+    \node[black node, label=right:\cuspfourlabelseven] (n7) at (4,3) {};
+    \node[white node, label=right:\cuspfourlabeleight] (n8) at (4,2) {};
+    
+    % Internal arms
+    \node[black node, label=below:\cuspfourlabelnine] (n9) at (1,3) {};
+    \node[black node, label=below:\cuspfourlabelten] (n10) at (3,3) {};
+    
+    \begin{pgfonlayer}{background}
+    \draw[normal edge] (n2) -- (n3) -- (n4) -- (n5) -- (n6);
+    \draw[normal edge] (n1) -- (n2);
+    \draw[normal edge] (n6) -- (n7);
+    \draw[doubled edge] (n1) -- (n0);
+    \draw[doubled edge] (n7) -- (n8);
+    \draw[normal edge] (n2) -- (n9);
+    \draw[normal edge] (n6) -- (n10);
+    \end{pgfonlayer}
+    \end{scope}
+}
+
+% Set this to 1 to show labels, 0 to hide them
+\def\cuspfivelabels{0}
+
+\newcommand{\cuspfive}[2]{
+    \begin{scope}[shift={(#1,#2)}]
+    
+    % Pre-determine all label content based on \cuspfivelabels flag
+    \def\cuspfivelabelzero{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_0$}{}}%
+    \def\cuspfivelabelone{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_1$}{}}%
+    \def\cuspfivelabeltwo{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_2$}{}}%
+    \def\cuspfivelabelthree{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_3$}{}}%
+    \def\cuspfivelabelfour{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_4$}{}}%
+    \def\cuspfivelabelfive{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_5$}{}}%
+    \def\cuspfivelabelsix{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_6$}{}}%
+    \def\cuspfivelabelseven{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_7$}{}}%
+    \def\cuspfivelabeleight{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_8$}{}}%
+    \def\cuspfivelabelnine{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_9$}{}}%
+    \def\cuspfivelabelten{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_{10}$}{}}%
+    \def\cuspfivelabeleleven{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_{11}$}{}}%
+    \def\cuspfivelabeltwelve{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_{12}$}{}}%
+    \def\cuspfivelabelthirteen{\ifthenelse{\equal{\cuspfivelabels}{1}}{$r_{13}$}{}}%
+    
+    % Outer square black nodes
+    \node[black node, label=below:\cuspfivelabelzero] (n0) at (0,0) {};
+    \node[black node, label=below:\cuspfivelabelone] (n1) at (2,0) {};
+    \node[black node, label=below:\cuspfivelabeltwo] (n2) at (4,0) {};
+    \node[black node, label=right:\cuspfivelabelthree] (n3) at (4,2) {};
+    \node[black node, label=above:\cuspfivelabelfour] (n4) at (4,4) {};
+    \node[black node, label=above:\cuspfivelabelfive] (n5) at (2,4) {};
+    \node[black node, label=above:\cuspfivelabelsix] (n6) at (0,4) {};
+    \node[black node, label=left:\cuspfivelabelseven] (n7) at (0,2) {};
+    
+    % White nodes
+    \node[white node, label=left:\cuspfivelabeleight] (n8) at (1,1) {};
+    \node[white node, label=right:\cuspfivelabelnine] (n9) at (3,1) {};
+    \node[white node, label=right:\cuspfivelabelten] (n10) at (3,3) {};
+    \node[white node, label=left:\cuspfivelabeleleven] (n11) at (1,3) {};
+    
+    % Interior black nodes
+    \node[black node, label=below:\cuspfivelabeltwelve] (n12) at (2,1.6) {};
+    \node[black node, label=above:\cuspfivelabelthirteen] (n13) at (2,2.4) {};
+    
+    \begin{pgfonlayer}{background}
+    \draw[normal edge] (n0) -- (n1) -- (n2) -- (n3) -- (n4) -- (n5) -- (n6) -- (n7) -- (n0);
+    \draw[doubled edge] (n0) -- (n8);
+    \draw[doubled edge] (n2) -- (n9);
+    \draw[doubled edge] (n4) -- (n10);
+    \draw[doubled edge] (n6) -- (n11);
+    \draw[thick edge] (n12) -- (n13);
+    \draw[doubled edge] (n8) -- (n13);
+    \draw[doubled edge] (n9) -- (n12);
+    \draw[doubled edge] (n11) -- (n12);
+    \draw[doubled edge] (n10) -- (n13);
+    \end{pgfonlayer}
+    \end{scope}
+}
+
+\newcommand{\cuspsix}[3][true]{
+    \begin{scope}[shift={(#2,#3)}]
+    % Outer square - even numbered nodes get double circles
+    \node[doubled node] (b00) at (0,0) {};    % node 0
+    \node[white node] (b10) at (1,0) {};           % node 1
+    \node[doubled node] (b20) at (2,0) {};    % node 2
+    \node[white node] (b30) at (3,0) {};           % node 3
+    \node[doubled node] (b40) at (4,0) {};    % node 4
+    \node[white node] (b41) at (4,1) {};           % node 5
+    \node[doubled node] (b42) at (4,2) {};    % node 6
+    \node[white node] (b43) at (4,3) {};           % node 7
+    \node[doubled node] (b44) at (4,4) {};    % node 8
+    \node[white node] (b34) at (3,4) {};           % node 9
+    \node[doubled node] (b24) at (2,4) {};    % node 10
+    \node[white node] (b14) at (1,4) {};           % node 11
+    \node[doubled node] (b04) at (0,4) {};    % node 12
+    \node[white node] (b03) at (0,3) {};           % node 13
+    \node[doubled node] (b02) at (0,2) {};    % node 14
+    \node[white node] (b01) at (0,1) {};           % node 15
+    % Interior white nodes (same positions as cusp 5)
+    \node[white node] (w11) at (1,1) {};           % node 16
+    \node[white node] (w31) at (3,1) {};           % node 17
+    \node[white node] (w33) at (3,3) {};           % node 18
+    \node[white node] (w13) at (1,3) {};           % node 19
+    % Interior black nodes (same as cusp 5)
+    \node[black node] (interior1) at (2,1.6) {};  % node 21
+    \node[black node] (interior2) at (2,2.4) {};  % node 20
+    
+    \begin{pgfonlayer}{background}
+    % Outer perimeter with all the new nodes
+    \draw[normal edge] (b00) -- (b10) -- (b20) -- (b30) -- (b40) -- (b41) -- (b42) -- (b43) -- (b44) -- (b34) -- (b24) -- (b14) -- (b04) -- (b03) -- (b02) -- (b01) -- (b00);
+    % Connections from corners to interior white nodes (doubled edges since white-to-white)
+    \draw[doubled edge] (b00) -- (w11);
+    \draw[doubled edge] (b40) -- (w31);
+    \draw[doubled edge] (b44) -- (w33);
+    \draw[doubled edge] (b04) -- (w13);
+    % The barbell in the middle
+    \draw[thick edge] (interior1) -- (interior2);
+    % Connections from interior white nodes to barbell (doubled edges since white-to-black)
+    \draw[doubled edge] (w11) -- (interior2);
+    \draw[doubled edge] (w31) -- (interior1);
+    \draw[doubled edge] (w13) -- (interior1);
+    \draw[doubled edge] (w33) -- (interior2);
+    \end{pgfonlayer}
+    
+    % Add labels - simplified conditional
+    \def\showlabels{#1}
+    \ifx\showlabels\undefined
+        \cuspsixlabels
+    \else
+        \def\truevalue{true}
+        \ifx\showlabels\truevalue
+            \cuspsixlabels
+        \fi
+    \fi
+    \end{scope}
+}
+
+% Helper macro for cuspsix labels  
+\newcommand{\cuspsixlabels}{
+    \node[below left] at (0,-0.08) {\tiny 0};
+    \node[below] at (1,-0.08) {\tiny 1};
+    \node[below] at (2,-0.08) {\tiny 2};
+    \node[below] at (3,-0.08) {\tiny 3};
+    \node[below right] at (4,-0.08) {\tiny 4};
+    \node[right] at (4.08,1) {\tiny 5};
+    \node[right] at (4.08,2) {\tiny 6};
+    \node[right] at (4.08,3) {\tiny 7};
+    \node[above right] at (4,4.08) {\tiny 8};
+    \node[above] at (3,4.08) {\tiny 9};
+    \node[above] at (2,4.08) {\tiny 10};
+    \node[above] at (1,4.08) {\tiny 11};
+    \node[above left] at (0,4.08) {\tiny 12};
+    \node[left] at (-0.08,3) {\tiny 13};
+    \node[left] at (-0.08,2) {\tiny 14};
+    \node[left] at (-0.08,1) {\tiny 15};
+    \node[above] at (0.85,1.15) {\tiny 16};
+    \node[above] at (3,1.15) {\tiny 17};
+    \node[below] at (3,2.85) {\tiny 18};
+    \node[below] at (1,2.85) {\tiny 19};
+    \node[above] at (2,2.5) {\tiny 20};
+    \node[below] at (2,1.5) {\tiny 21};
+}
+
+
+\newcommand{\cusptwocover}[2]{
+    \begin{scope}[shift={(#1,#2)}]
+    
+    % Define triangle corners to match the scale of other diagrams
+    \coordinate (A) at (0,0);    % bottom left
+    \coordinate (B) at (4,0);    % bottom right  
+    \coordinate (C) at (2,4);    % top
+    
+    % Define how many nodes on each edge
+    \def\bottomnodes{6}  % nodes 16,17,18,2,3,4
+    \def\rightnodes{7}   % nodes 4,5,6,7,8,9,10  
+    \def\leftnodes{7}    % nodes 10,11,12,13,14,15,16
+    
+    % Calculate positions along bottom edge A to B
+    \foreach \i in {0,1,...,5} {
+        \pgfmathsetmacro{\t}{\i/5}
+        \coordinate (bottom\i) at ($(A)!\t!(B)$);
+    }
+    
+    % Calculate positions along right edge B to C  
+    \foreach \i in {0,1,...,6} {
+        \pgfmathsetmacro{\t}{\i/6}
+        \coordinate (right\i) at ($(B)!\t!(C)$);
+    }
+    
+    % Calculate positions along left edge C to A
+    \foreach \i in {0,1,...,6} {
+        \pgfmathsetmacro{\t}{\i/6}
+        \coordinate (left\i) at ($(C)!\t!(A)$);
+    }
+    
+    % Place perimeter nodes with automatic styling based on node number
+    % Bottom edge: 16,17,18,2,3,4
+    \node[doubled node] (n16) at (bottom0) {};
+    \node[white node] (n17) at (bottom1) {};
+    \node[doubled node] (n18) at (bottom2) {};
+    \node[doubled node] (n2) at (bottom3) {};
+    \node[white node] (n3) at (bottom4) {};
+    \node[doubled node] (n4) at (bottom5) {};
+    
+    % Right edge: 5,6,7,8,9,10 (skip 4 as it's already placed)
+    \node[white node] (n5) at (right1) {};
+    \node[doubled node] (n6) at (right2) {};
+    \node[white node] (n7) at (right3) {};
+    \node[doubled node] (n8) at (right4) {};
+    \node[white node] (n9) at (right5) {};
+    \node[doubled node] (n10) at (right6) {};
+    
+    % Left edge: 11,12,13,14,15 (skip 10 and 16 as already placed)
+    \node[white node] (n11) at (left1) {};
+    \node[doubled node] (n12) at (left2) {};
+    \node[white node] (n13) at (left3) {};
+    \node[doubled node] (n14) at (left4) {};
+    \node[white node] (n15) at (left5) {};
+    
+    % Interior nodes at computed positions
+    \coordinate (interior1) at ($(A)!0.7!(B)!0.2!(C)$);  % node 1
+    \coordinate (interior19) at ($(A)!0.3!(B)!0.2!(C)$); % node 19
+    
+    \node[white node] (n1) at (interior1) {};
+    \node[white node] (n19) at (interior19) {};
+    
+    % Labels with consistent spacing using coordinate offsets
+    \node[below left] at ($(bottom0) + (-0.08,-0.08)$) {\tiny 16};
+    \node[below] at ($(bottom1) + (0,-0.08)$) {\tiny 17};
+    \node[below] at ($(bottom2) + (0,-0.08)$) {\tiny 18};
+    \node[below] at ($(bottom3) + (0,-0.08)$) {\tiny 2};
+    \node[below] at ($(bottom4) + (0,-0.08)$) {\tiny 3};
+    \node[below right] at ($(bottom5) + (0.08,-0.08)$) {\tiny 4};
+    \node[right] at ($(right1) + (0.08,0)$) {\tiny 5};
+    \node[right] at ($(right2) + (0.08,0)$) {\tiny 6};
+    \node[right] at ($(right3) + (0.08,0)$) {\tiny 7};
+    \node[right] at ($(right4) + (0.08,0)$) {\tiny 8};
+    \node[right] at ($(right5) + (0.08,0)$) {\tiny 9};
+    \node[above] at ($(right6) + (0,0.08)$) {\tiny 10};
+    \node[left] at ($(left1) + (-0.08,0)$) {\tiny 11};
+    \node[left] at ($(left2) + (-0.08,0)$) {\tiny 12};
+    \node[left] at ($(left3) + (-0.08,0)$) {\tiny 13};
+    \node[left] at ($(left4) + (-0.08,0)$) {\tiny 14};
+    \node[left] at ($(left5) + (-0.08,0)$) {\tiny 15};
+    \node[above] at ($(interior1) + (-0.08,0)$) {\tiny 1};
+    \node[above] at ($(interior19) + (0.08,0)$) {\tiny 19};
+    
+    \begin{pgfonlayer}{background}
+    % Path 2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18
+    \draw[normal edge] (n2) -- (n3) -- (n4) -- (n5) -- (n6) -- (n7) -- (n8) -- (n9) -- (n10) -- (n11) -- (n12) -- (n13) -- (n14) -- (n15) -- (n16) -- (n17) -- (n18);
+    
+    % Additional edges
+    \draw[normal edge] (n16) -- (n19);
+    \draw[normal edge] (n1) -- (n4);
+    \end{pgfonlayer}
+    
+    \end{scope}
+}

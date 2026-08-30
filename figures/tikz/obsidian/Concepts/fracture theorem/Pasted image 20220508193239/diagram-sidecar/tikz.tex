@@ -1,0 +1,48 @@
+% tikz.tex
+% Sullivan Arithmetic Fracture Square (homotopy pullback)
+% Generated from canonical.yaml (fused from transcription, review-02, review-03)
+%
+% Nodes: X, ∏_p \hat{X}_p, X_Q, (∏_p \hat{X}_p)_Q
+% 4 unlabeled arrows forming a commutative square
+% Trailing period after BR node (sentence punctuation from source)
+% Pullback corner mark (\lrcorner) added per review-03 recommendation
+% Uses \widehat (wide hat) per canonical.yaml §notation resolution
+
+\documentclass[tikz,border=2pt]{standalone}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+\tikzset{>=Stealth}
+
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzcd}
+X \arrow[r] \arrow[d] \arrow[dr,phantom,"\lrcorner",very near start] &
+\prod_p \widehat{X}_p \arrow[d] \\
+X_{\mathbb{Q}} \arrow[r] &
+(\prod_p \widehat{X}_p)_{\mathbb{Q}} .
+\end{tikzcd}
+\end{document}

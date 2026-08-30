@@ -1,0 +1,28 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 7
+
+\begin{tikzpicture}
+[x={(1,0)}, y={(60:1)}]
+\eighteenzero
+
+\draw [color=red, dotted, thick, opacity=0.5] (3.5,-1) -- (-0.5, 7);
+\draw [<->, color=red, opacity=0.3, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (1.25,2) -- (2.75, 2);
+
+\draw[hlt] (2, 0) -- (0, 0) -- (1, 1);
+\draw[hlt] (0, 0) -- (0, 5);
+\draw[hlt] (1, 5) -- (6, 0);
+\draw[hlt] (4, 1) -- (6, 0) -- (4, 0);
+
+
+\begin{scope}[shift={(8,0)}]
+\node at (-3, 4) {$\xlongrightarrow{v}$};
+\sterktwo
+
+\draw[hlt] (2, 0) -- (0, 0) -- (1, 1);
+\draw[hlt] (0,0) -- (0, 5);
+
+\end{scope}
+\end{tikzpicture}

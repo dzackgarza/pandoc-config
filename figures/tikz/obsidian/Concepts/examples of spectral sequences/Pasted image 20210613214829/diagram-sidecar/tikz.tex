@@ -1,0 +1,45 @@
+% tikz.tex — E^2 page of homological Serre spectral sequence
+% Generated from canonical.yaml
+% Fibration F → E → B with F ≅ S^1
+% Two rows (q=0,1), five d^2 differentials (p,0) → (p-2,1) for p=2..6
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,cd}
+\tikzset{>=Stealth}
+\tikzcdset{arrows={>=Stealth},row sep/normal=4em,column sep/normal=3.5em}
+\begin{document}
+\begin{tikzpicture}
+  % The spectral sequence grid
+  \node (E2) {
+    $\begin{tikzcd}
+      % Row 1: q = 1 (top row)
+        \mathbb{Z}
+      & H_1(B)
+      & H_2(B)
+      & H_3(B)
+      & H_4(B)
+      & H_5(B)
+      & H_6(B)
+      & \cdots
+      \\
+      % Row 2: q = 0 (bottom row)
+        \mathbb{Z}
+      & H_1(B)
+      & H_2(B) \arrow[to=1-1]
+      & H_3(B) \arrow[to=1-2]
+      & H_4(B) \arrow[to=1-3]
+      & H_5(B) \arrow[to=1-4]
+      & H_6(B) \arrow[to=1-5]
+      & \cdots
+    \end{tikzcd}$
+  };
+  % L-shaped axes
+  \draw ([xshift=-0.8em,yshift=-1.2em]E2.south west) --
+        ([xshift=0.5em,yshift=-1.2em]E2.south east);
+  \draw ([xshift=-0.8em,yshift=1.2em]E2.north west) --
+        ([xshift=-0.8em,yshift=-1.2em]E2.south west);
+  % Axis labels
+  \node[below,font=\small] at ([xshift=1em]E2.south east) {$p$ (base degree)};
+  \node[left,font=\small] at ([yshift=1em]E2.north west)  {$q$ (fiber degree)};
+\end{tikzpicture}
+\end{document}

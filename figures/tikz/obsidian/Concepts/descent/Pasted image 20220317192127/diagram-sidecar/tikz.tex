@@ -1,0 +1,76 @@
+% Descent Theory Monad-Comonad Correspondence Diagram (Fig. 1.1)
+% Canonical TikZ rendering based on canonical.yaml
+% Sources: review-02.md, review-03.md, extraction.md
+%
+% Diagram elements:
+%   C (top-left), M-Mod_C (bottom-center), Desc_C(M) (top-right)
+%   (L_M)-Comod_(M-Mod_C) above Desc_C(M), connected by "def." double bar
+%   F_M: C -> M-Mod_C, U_M: M-Mod_C -> C
+%   F^{L_M}: M-Mod_C -> Desc_C(M), U^{L_M}: Desc_C(M) -> M-Mod_C
+%   Q_M: C -> Desc_C(M) (top horizontal)
+%   Loop M on C, loop L_M on M-Mod_C
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usepackage{amsmath}
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+
+% The diagram is a 3x3 matrix with the following layout:
+%   row 1:  [empty,          empty,                (L_M)-Comod...]
+%   row 2:  [C,              empty,                Desc_C(M)     ]
+%   row 3:  [empty,          M-Mod_C,              empty          ]
+\begin{tikzcd}[
+    row sep=2.5em,
+    column sep=5em,
+]
+  &
+  &
+  (L_M)\text{-Comod}_{(M\text{-Mod}_{\mathcal{C}})}
+    \arrow[d, "\text{def.}", no head, double equal sign distance] \\
+  \mathcal{C}
+    \arrow[rr, "Q_M"]
+    \arrow[dr, "F_M"']
+    \arrow[loop above, "M", looseness=8, out=120, in=60]
+  &
+  &
+  \operatorname{Desc}_{\mathcal{C}}(M)
+    \arrow[dl, "U^{L_M}"']
+  \\
+  &
+  M\text{-Mod}_{\mathcal{C}}
+    \arrow[ul, "U_M"]
+    \arrow[ur, "F^{L_M}"]
+    \arrow[loop below, "L_M \mathrel{:=} F_MU_M", looseness=8, out=-60, in=-120]
+  &
+\end{tikzcd}
+
+\end{document}

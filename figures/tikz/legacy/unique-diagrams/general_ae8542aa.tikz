@@ -1,0 +1,19 @@
+% TikZ Diagram: general
+% Source: diss/archive/old-notes/oral-exams/figures/2_1x.md (diagram #0)
+% Duplicates: 27 total copies
+% Type: tikzcd
+
+\begin{tikzcd}
+
+	{\Open(X)} &&& \Ab\Grp \\
+	U && {F(U)} && {G(U)} \\
+	\\
+	V && {F(V)} && {G(V)}
+	\arrow["{\eta_V}", from=4-3, to=4-5]
+	\arrow["{\eta_U}", from=2-3, to=2-5]
+	\arrow[""{name=0, anchor=center, inner sep=0}, "{\mathrm{Res}_F(U, V)}", from=2-3, to=4-3]
+	\arrow["{\mathrm{Res}_G(U, V)}", from=2-5, to=4-5]
+	\arrow[""{name=1, anchor=center, inner sep=0}, hook, from=4-1, to=2-1]
+	\arrow["{F, G}", shorten <=15pt, shorten >=15pt, Rightarrow, from=1, to=0]
+
+\end{tikzcd}

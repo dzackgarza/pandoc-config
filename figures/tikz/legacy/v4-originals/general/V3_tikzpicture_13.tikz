@@ -1,0 +1,9 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 13
+
+\begin{tikzpicture}
+\sterkone
+\end{tikzpicture}

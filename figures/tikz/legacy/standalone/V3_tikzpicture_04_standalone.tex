@@ -1,0 +1,56 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: compactifications
+% Index: 4
+
+\begin{tikzpicture}
+\node[circle, draw, label={$U(2)\oplus E_8(2)$}, color=red] (evencusp) at (0,0) {$q_a$};
+    \node [circle, draw, label={$U\oplus E_8(2)$}] (oddcusp) at (6,0) {$q_b$};
+    
+    \node[rectangle, draw, color=green] (E82) at (3,0) {$E_8(2)$};
+
+    \node [rectangle, draw] (D82) at (9,0) {$D_8^\dagger$};
+    
+    \draw[-latex, shorten >= 0.4em] (evencusp) to (E82);
+    \draw[-latex, shorten >= 0.4em] (oddcusp) to (E82);
+    \draw[-latex, shorten >= 0.4em] (oddcusp) to (D82);
+
+    \node[color=red] at (0,-1) {$(10,10,0)_1$};
+    \node[color=green] at (3,-1) {$(8,8,0)_0$};
+    \node at (6,-1) {$(10,8,0)_1$};
+    \node at (9,-1) {$(8,6,0)_0$};
+\end{tikzpicture}
+
+
+\end{document}

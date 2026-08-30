@@ -1,0 +1,11 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/main.tex
+% Type: tikzpicture
+% Category: lattice-theory
+% Index: 2
+
+\begin{tikzpicture}
+[thick,scale=1.7, every node/.style={transform shape}]
+\tikzset{/Dynkin diagram/label directions={above,above, above, right}}
+\dynkin[labels={e_1, e_2, e_{\drlap{13} }, e_{\drlap{14} }, e_{\drlap{15} }, e_{\drlap{16}} }, edge length=0.6cm]D{}
+\end{tikzpicture}

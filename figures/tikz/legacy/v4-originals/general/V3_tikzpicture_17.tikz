@@ -1,0 +1,11 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 17
+
+\begin{tikzpicture}
+\sterkfive
+  \node[above = 0.1cm of 21] (N) {$N$};
+  \node[below = 0.1cm of 22] (S) {$S$};
+\end{tikzpicture}

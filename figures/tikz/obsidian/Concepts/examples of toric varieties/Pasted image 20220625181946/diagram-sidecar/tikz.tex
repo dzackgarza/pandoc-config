@@ -1,0 +1,104 @@
+% tikz.tex
+% Fan for blowup of A^2 at origin
+% Generated from canonical.yaml
+% Diagram: Pasted image 20220625181946
+% Blowup of A^2 at origin: 3 rays (1,0), (0,1), (1,1); 2 maximal cones
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzpicture}[scale=1.3]
+
+% ============================================
+% GRID AND LATTICE POINTS
+% ============================================
+
+% Light grid lines covering [0,3.5] x [0,3.5]
+\draw[very thin, gray!30] (0,0) grid (3.5,3.5);
+
+% Lattice points Z^2 in [0,3] x [0,3]
+\foreach \x in {0,1,2,3}
+  \foreach \y in {0,1,2,3}
+    \fill[black] (\x,\y) circle (1.2pt);
+
+% ============================================
+% SHADED MAXIMAL CONES (behind rays)
+% ============================================
+
+% sigma_0: cone between (0,1) and (1,1) — region {x>=0, y>=0, y>=x}
+\fill[blue!15, opacity=0.6]
+  (0,0) -- (0,3.3) -- (3.3,3.3) -- cycle;
+
+% sigma_1: cone between (1,1) and (1,0) — region {x>=0, y>=0, y<=x}
+\fill[green!15, opacity=0.6]
+  (0,0) -- (3.3,0) -- (3.3,3.3) -- cycle;
+
+% ============================================
+% RAYS (all unidirectional, pointing away from origin)
+% ============================================
+
+% Ray rho_1 = (0,1) — vertical, solid
+\draw[->, thick] (0,0) -- (0,3.3);
+
+% Ray rho_3 = (1,0) — horizontal, solid
+\draw[->, thick] (0,0) -- (3.3,0);
+
+% Ray rho_2 = (1,1) — diagonal, dashed (exceptional divisor E)
+\draw[->, thick, dashed] (0,0) -- (3.3,3.3);
+
+% ============================================
+% RAY GENERATOR LABELS
+% ============================================
+
+\node[labelnode, right] at (0.3, 2.8) {$v_1 = (0,1)$};
+\node[labelnode, above] at (2.8, 0.3) {$v_3 = (1,0)$};
+\node[labelnode, above right] at (2.8, 2.8) {$v_2 = (1,1)$};
+
+% ============================================
+% CONE LABELS
+% ============================================
+
+\node[mathnode] at (0.7, 1.8) {$\sigma_0$};
+\node[mathnode] at (1.8, 0.7) {$\sigma_1$};
+
+% ============================================
+% ORIGIN LABEL
+% ============================================
+
+\node[labelnode, below left] at (0,0) {$0$};
+
+% ============================================
+% LEGEND
+% ============================================
+
+\node[draw, very thin, labelnode, align=left] at (4.0, 3.0) {
+  $v_1 = (0,1)$\\
+  $v_2 = (1,1)$ (exceptional)\\
+  $v_3 = (1,0)$\\
+  $\sigma_0 = \mathrm{Cone}(v_1,v_2)$\\
+  $\sigma_1 = \mathrm{Cone}(v_2,v_3)$
+};
+
+\end{tikzpicture}
+\end{document}

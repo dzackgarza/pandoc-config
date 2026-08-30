@@ -1,0 +1,44 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram: general
+% Source: diss/archive/old-notes/K3/K3Surfaces.md (diagram #2)
+% Duplicates: 45 total copies
+% Type: tikzpicture
+
+\begin{tikzpicture}
+
+\fontsize{45pt}{1em} 
+\node (node_one) at (0,0) { \import{/home/zack/SparkleShare/github.com/Notes/Class_Notes/2023/Spring/k3surfaces/sections/figures}{2023-01-10_10-42.pdf_tex} };
+
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,64 @@
+% =============================================================================
+% File: tikz.tex
+% Diagram: Descent Condition Commutative Square (Morphism of Descent Data)
+% Source definition: canonical.yaml
+% Original image: img-0.jpeg.png
+% Generator: Phase 5 subagent
+% =============================================================================
+% Uses the shared tikz preamble for diagram atomization pipeline.
+% =============================================================================
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+
+% Descent condition commutative square:
+% Compatibility condition for a morphism of descent data {alpha_i}.
+% Both paths from the top-left (pr2*xi_j) to the bottom-right (pr1*eta_i)
+% must be equal:
+%   psi_ij ∘ pr2*alpha_j = pr1*alpha_i ∘ phi_ij
+
+\begin{tikzcd}
+\mathrm{pr}_2^* \xi_j
+    \arrow[r, "\mathrm{pr}_2^* \alpha_j"]
+    \arrow[d, "\phi_{ij}"']
+&
+\mathrm{pr}_2^* \eta_j
+    \arrow[d, "\psi_{ij}"]
+\\
+\mathrm{pr}_1^* \xi_i
+    \arrow[r, "\mathrm{pr}_1^* \alpha_i"']
+&
+\mathrm{pr}_1^* \eta_i
+\end{tikzcd}
+
+\end{document}

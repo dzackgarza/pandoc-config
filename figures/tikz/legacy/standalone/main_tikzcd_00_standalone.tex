@@ -1,0 +1,45 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/main.tex
+% Type: tikzcd
+% Category: general
+% Index: 0
+
+\begin{tikzcd}
+& {\Mpol} \\
+	{\Munpol} && {\Mhe}
+	\arrow[from=1-2, to=2-1, "\text{Finite}"']
+	\arrow[from=1-2, to=2-3, "\text{Finite-to-one}"]
+\end{tikzcd}
+
+
+\end{document}

@@ -1,0 +1,65 @@
+% =============================================================================
+% tikz.tex — Deformation Quantization Pullback Square
+% Canonical source: canonical.yaml
+% Diagram: Pullback (Cartesian) square encoding the classical limit of a
+%           formal deformation (deformation quantization context)
+% =============================================================================
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Math packages (for \mathbb, \mathcal, etc.)
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+
+% Deformation Quantization Pullback Square
+% X  ──⊂/↪──  𝕏
+% |            |
+% |            | π
+% ↓            ↓
+% o  ──∈/↪──  𝔻
+%
+% Commutativity: π ∘ (X↪𝕏) = (X→o) ∘ (o↪𝔻)
+% Pullback condition: X ≅ 𝕏 ×_𝔻 {o}
+
+\begin{tikzcd}
+X \arrow[r, hook, "\subset"'] \arrow[d, "\pi|_X"']
+&
+\mathbb{X} \arrow[d, "\pi"]
+\\
+o \arrow[r, hook, "\in"']
+&
+\mathbb{D}
+\end{tikzcd}
+
+\end{document}

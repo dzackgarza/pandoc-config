@@ -1,0 +1,241 @@
+% TikZ diagram — Pedagogical toric variety illustration
+% Generated from canonical.yaml (Pasted image 20220621115247)
+% Left panel: 3D algebraic surface rendering (toric surface with 3-fold symmetry)
+% Right panel: lattice polytope triangle with vertices (0,0), (2,1), (1,2)
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+\tikzset{>=Stealth}
+
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzpicture}[scale=0.7, font=\sffamily]
+
+% ============================================================
+% LEFT PANEL: 3D Toric Surface Rendering
+% ============================================================
+\begin{scope}[shift={(-8, 0)}, scale=1.1]
+    %
+    % We render a smooth toric surface with three-fold rotational symmetry.
+    % The surface has three "lobes" or "tentacles" radiating outward from a
+    % central saddle region. Blue exterior / orange-brown interior.
+    %
+    % Coordinate system for the 3D rendering (isometric-like projection):
+    % x = (cos(30)*0.86, -sin(30)*0.86)
+    % y = (cos(150)*0.86, -sin(150)*0.86)
+    % z = (0, 1)
+    % Three-fold symmetric: lobes at 90, 210, 330 degrees in the xy-plane.
+    %
+
+    % === Background / back side of the surface (orange/brown interior) ===
+    % Back lobe (behind, at ~210 deg)
+    \fill[fill=orange!60!brown!50, draw=orange!40!brown, line width=0.4pt]
+        (0, 0.2)
+        .. controls (-0.8, 0.6) and (-1.8, 0.2) .. (-2.2, -0.5)
+        .. controls (-2.6, -1.2) and (-2.4, -1.8) .. (-1.6, -1.4)
+        .. controls (-0.8, -1.0) and (-0.3, -0.4) .. (0, -0.2);
+
+    % Left-back lobe wing (connecting back lobe to center)
+    \fill[fill=orange!50!brown!40, draw=orange!30!brown, line width=0.4pt]
+        (0, 0.2)
+        .. controls (-0.5, 0.8) and (-1.2, 1.0) .. (-1.8, 0.6)
+        .. controls (-2.2, 0.3) and (-2.4, -0.2) .. (-2.2, -0.5);
+
+    % === Interior cavity (visible underneath) ===
+    \fill[fill=brown!60!orange!60, draw=brown!40!orange!50, line width=0.3pt]
+        (0, -0.3)
+        .. controls (0.8, -0.6) and (1.4, -1.0) .. (1.0, -1.6)
+        .. controls (0.6, -2.0) and (0.2, -2.2) .. (-0.4, -2.0)
+        .. controls (-1.0, -1.8) and (-1.4, -1.4) .. (-1.6, -1.4);
+
+    % Interior highlight
+    \fill[fill=brown!30!orange!30]
+        (-0.2, -0.8)
+        .. controls (0.2, -0.6) and (0.6, -1.0) .. (0.4, -1.4)
+        .. controls (0.2, -1.6) and (-0.2, -1.6) .. (-0.4, -1.4)
+        .. controls (-0.6, -1.2) and (-0.4, -0.9) .. cycle;
+
+    % === Front surface (blue exterior, top side) ===
+    % Right-front lobe (at ~330 deg)
+    \fill[fill=blue!50!purple!50, draw=blue!50!black, line width=0.6pt]
+        (0, 0.3)
+        .. controls (0.8, 0.7) and (1.8, 1.2) .. (2.4, 0.6)
+        .. controls (2.8, 0.2) and (2.9, -0.4) .. (2.4, -0.8)
+        .. controls (1.8, -1.2) and (1.2, -1.0) .. (0.8, -0.6)
+        .. controls (0.4, -0.3) and (0.2, 0) .. (0, -0.1);
+
+    % Left-front lobe (at ~90 deg)
+    \fill[fill=blue!55!purple!45, draw=blue!50!black, line width=0.6pt]
+        (0, 0.3)
+        .. controls (-0.8, 1.0) and (-1.5, 1.8) .. (-2.0, 1.6)
+        .. controls (-2.6, 1.4) and (-2.8, 0.8) .. (-2.4, 0.4)
+        .. controls (-1.8, 0) and (-1.2, -0.2) .. (-0.8, 0)
+        .. controls (-0.4, 0.2) and (-0.2, 0.3) .. (0, 0.1);
+
+    % Central saddle / dome region
+    \fill[fill=blue!50!purple!55, draw=blue!50!black, line width=0.5pt]
+        (0, 0.4)
+        .. controls (0.6, 0.6) and (1.0, 0.5) .. (1.4, 0.2)
+        .. controls (1.0, 0.1) and (0.5, 0) .. (0, 0)
+        .. controls (-0.5, 0) and (-1.0, 0.1) .. (-1.4, 0.2)
+        .. controls (-1.0, 0.5) and (-0.6, 0.6) .. (0, 0.4);
+
+    % Top highlight on the surface
+    \fill[fill=blue!40!white!50, opacity=0.5]
+        (0, 0.35)
+        .. controls (0.4, 0.5) and (0.7, 0.4) .. (0.9, 0.25)
+        .. controls (0.5, 0.2) and (0.25, 0.15) .. (0, 0.15)
+        .. controls (-0.25, 0.15) and (-0.5, 0.2) .. (-0.9, 0.25)
+        .. controls (-0.7, 0.4) and (-0.4, 0.5) .. cycle;
+
+    % === Wireframe mesh lines (giving 3D structure) ===
+    % Meridian curves on the right-front lobe
+    \foreach \t in {0.2, 0.5, 0.8} {
+        \draw[blue!70!black, opacity=0.35, line width=0.3pt]
+            (0, 0.3)
+            .. controls (0.8*\t, 0.7*\t) and (1.8*\t, 1.2*\t) .. (2.4*\t, 0.6*\t)
+            .. controls (2.8*\t, 0.2*\t) and (2.9*\t, -0.4*\t) .. (2.4*\t, -0.8*\t);
+    }
+
+    % Meridian curves on the left-front lobe
+    \foreach \t in {0.2, 0.5, 0.8} {
+        \draw[blue!70!black, opacity=0.35, line width=0.3pt]
+            (0, 0.3)
+            .. controls (-0.8*\t, 1.0*\t) and (-1.5*\t, 1.8*\t) .. (-2.0*\t, 1.6*\t)
+            .. controls (-2.6*\t, 1.4*\t) and (-2.8*\t, 0.8*\t) .. (-2.4*\t, 0.4*\t);
+    }
+
+    % Meridian curves on the back lobe
+    \foreach \t in {0.3, 0.6, 0.9} {
+        \draw[orange!60!brown!50, opacity=0.3, line width=0.3pt]
+            (0, 0.2)
+            .. controls (-0.8*\t, 0.6*\t) and (-1.8*\t, 0.2*\t) .. (-2.2*\t, -0.5*\t)
+            .. controls (-2.6*\t, -1.2*\t) and (-2.4*\t, -1.8*\t) .. (-1.6*\t, -1.4*\t);
+    }
+
+    % Latitude-like concentric curves
+    \foreach \r in {0.3, 0.6, 0.9, 1.2, 1.5} {
+        \draw[blue!60!black, opacity=0.25, line width=0.3pt]
+            (0, 0.25)
+            .. controls (\r*0.6, \r*0.4) and (\r*0.8, \r*0.1) .. (\r*0.4, -\r*0.3)
+            .. controls (0, -\r*0.4) and (-\r*0.4, -\r*0.3) .. (-\r*0.8, \r*0.1)
+            .. controls (-\r*0.6, \r*0.4) and (0, \r*0.5) .. cycle;
+    }
+
+    % === Coordinate axes at base ===
+    % X-axis (right)
+    \draw[->, thick, black!70] (-0.5, -2.8) -- (2.5, -2.8)
+        node[labelnode, right] {$x$};
+    % Y-axis (up)
+    \draw[->, thick, black!70] (-0.5, -2.8) -- (-0.5, 0)
+        node[labelnode, above] {$y$};
+    % Z-axis (diagonal depth)
+    \draw[->, thick, black!50, dashed] (-0.5, -2.8) -- (1.5, -3.8)
+        node[labelnode, below right] {$z$};
+
+    % Axis ticks
+    \foreach \x in {0, 1, 2} {
+        \draw[black!50] (\x - 0.5, -2.85) -- (\x - 0.5, -2.75);
+    }
+    \foreach \y in {-2, -1} {
+        \draw[black!50] (-0.55, \y) -- (-0.45, \y);
+    }
+
+    % Origin label
+    \node[labelnode, below left] at (-0.5, -2.8) {$0$};
+
+    % Panel label
+    \node[font=\small\itshape, above] at (0.5, 2.2) {Toric surface $X_\Delta$};
+
+\end{scope}
+
+% ============================================================
+% RIGHT PANEL: Lattice Polytope (Purple Triangle on Z^2 Grid)
+% ============================================================
+\begin{scope}[shift={(3, -1)}, scale=0.9]
+
+    % === Integer lattice (Z^2 grid of black dots) ===
+    % The triangle covers the region from (0,0) to (2,1) to (1,2).
+    % Extend the grid slightly beyond: x in [-1,4], y in [-1,4]
+    \foreach \x in {-1, 0, 1, 2, 3, 4, 5} {
+        \foreach \y in {-1, 0, 1, 2, 3, 4, 5} {
+            \fill[black!60] (\x, \y) circle (1.5pt);
+        }
+    }
+
+    % === Purple shaded triangle (lattice polytope) ===
+    % Vertices: (0,0), (2,1), (1,2)
+    \fill[fill=purple!45!magenta!35, draw=blue!70!black, line width=1.2pt]
+        (0, 0) -- (2, 1) -- (1, 2) -- cycle;
+
+    % Re-draw the triangle boundary in blue (per canonical.yaml)
+    \draw[blue!70!black, line width=1.4pt]
+        (0, 0) -- (2, 1) -- (1, 2) -- cycle;
+
+    % === Highlighted lattice points ===
+    % Vertices: (0,0), (2,1), (1,2) — large circles
+    \filldraw[blue!80!black] (0, 0) circle (3.5pt);
+    \filldraw[blue!80!black] (2, 1) circle (3.5pt);
+    \filldraw[blue!80!black] (1, 2) circle (3.5pt);
+
+    % Interior point: (1,1) — large circle with highlight
+    \filldraw[purple!70!red] (1, 1) circle (3.5pt);
+    \draw[purple!90!red, line width=0.6pt] (1, 1) circle (4.5pt);
+
+    % === Subtle normal fan rays (dashed, from origin through vertices) ===
+    \draw[dashed, blue!40!black, line width=0.4pt, opacity=0.5]
+        (0, 0) -- (2.8, 1.4);
+    \draw[dashed, blue!40!black, line width=0.4pt, opacity=0.5]
+        (0, 0) -- (1.4, 2.8);
+
+    % === Coordinate axes ===
+    \draw[->, thick, black!60] (-0.3, 0) -- (5.2, 0)
+        node[labelnode, right] {$m_1$};
+    \draw[->, thick, black!60] (0, -0.3) -- (0, 5.2)
+        node[labelnode, above] {$m_2$};
+
+    % === Axis labels ===
+    \foreach \x in {0, 1, 2, 3, 4} {
+        \node[labelnode, below] at (\x, 0) {$\x$};
+    }
+    \foreach \y in {0, 1, 2, 3, 4} {
+        \node[labelnode, left] at (0, \y) {$\y$};
+    }
+
+    % === Vertex coordinate labels ===
+    \node[labelnode, below left] at (0, 0) {$(0,0)$};
+    \node[labelnode, below right] at (2, 1) {$(2,1)$};
+    \node[labelnode, above] at (1, 2) {$(1,2)$};
+    \node[labelnode, above right] at (1, 1) {$(1,1)$};
+
+    % Panel label
+    \node[font=\small\itshape, above] at (2.5, 5.5) {Lattice polytope $\Delta$};
+
+\end{scope}
+
+% ============================================================
+% LINKING ARROW between panels
+% ============================================================
+\draw[->, thick, purple!60!blue!70, line width=1.2pt, decorate,
+      decoration={markings, mark=at position 0.5 with {\arrow[scale=1.5]{Stealth}}}]
+    (-3.5, 1.5) -- (-1.5, 1.5);
+\node[labelnode, above, font=\small\itshape] at (-2.5, 1.8)
+    {moment map / normal fan};
+
+\end{tikzpicture}
+\end{document}

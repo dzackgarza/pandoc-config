@@ -1,0 +1,11 @@
+% TikZ Diagram: general
+% Source: diss/archive/old-notes/K3/K3Surfaces.md (diagram #2)
+% Duplicates: 45 total copies
+% Type: tikzpicture
+
+\begin{tikzpicture}
+
+\fontsize{45pt}{1em} 
+\node (node_one) at (0,0) { \import{/home/zack/SparkleShare/github.com/Notes/Class_Notes/2023/Spring/k3surfaces/sections/figures}{2023-01-10_10-42.pdf_tex} };
+
+\end{tikzpicture}

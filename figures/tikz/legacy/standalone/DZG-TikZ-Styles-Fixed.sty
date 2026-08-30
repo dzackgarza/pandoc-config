@@ -1,0 +1,218 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{DZG-TikZ-Styles-Fixed}[2025/01/06 Fixed DZG TikZ Styles]
+
+\RequirePackage{tikz}
+\RequirePackage{tikz-cd}
+\usetikzlibrary{positioning,shapes,arrows.meta,calc,patterns,decorations.markings}
+
+% ========================================
+% BASIC NODE STYLES
+% ========================================
+
+\tikzset{
+    % Basic hole styles (commonly used in diagrams)
+    wh/.style={
+        circle,
+        draw=black,
+        fill=white,
+        inner sep=1.5pt,
+        minimum size=4mm
+    },
+    dwh/.style={
+        circle,
+        draw=black,
+        fill=white,
+        double,
+        double distance=1pt,
+        inner sep=1pt,
+        minimum size=3mm
+    },
+    swh/.style={
+        circle,
+        draw=black,
+        fill=white,
+        inner sep=1pt,
+        minimum size=3mm
+    },
+    bh/.style={
+        circle,
+        draw=black,
+        fill=black,
+        inner sep=1.5pt,
+        minimum size=4mm
+    },
+    % Additional common styles
+    hlt/.style={
+        rectangle,
+        draw=red,
+        thick,
+        fill=yellow!20,
+        minimum width=8mm,
+        minimum height=4mm
+    },
+}
+
+% ========================================
+% MATHEMATICAL OBJECT STYLES
+% ========================================
+
+\tikzset{
+    % Vertices and Points
+    lattice point/.style={circle, fill=black, inner sep=1pt, draw=none},
+    special lattice point/.style={circle, fill=red, inner sep=1.5pt, draw=black, line width=0.5pt},
+    vertex/.style={circle, fill=black, inner sep=1.5pt, draw=black},
+    marked vertex/.style={circle, fill=blue, inner sep=2pt, draw=black, line width=0.5pt},
+    
+    % Cusp Diagram Nodes
+    zero cusp/.style={circle, draw=black, thick, minimum size=8mm, text centered},
+    one cusp/.style={rectangle, draw=black, minimum width=12mm, minimum height=6mm, text centered},
+    
+    % ADE Diagram Nodes
+    ade vertex/.style={circle, draw=black, inner sep=1pt, minimum size=4mm},
+    ade vertex small/.style={circle, draw=black, inner sep=0.5pt, minimum size=3mm},
+    exceptional vertex/.style={circle, draw=red, fill=red!20, inner sep=1pt, minimum size=4mm},
+    
+    % Root System Nodes
+    simple root/.style={circle, fill=white, draw=black, inner sep=1.5pt},
+    positive root/.style={circle, fill=blue!30, draw=black, inner sep=1.5pt},
+    negative root/.style={circle, fill=red!30, draw=black, inner sep=1.5pt},
+    
+    % Degeneration Component Nodes
+    surface component/.style={circle, fill=blue, inner sep=2pt, draw=black},
+    contracted component/.style={circle, fill=red, inner sep=2pt, draw=black},
+}
+
+% ========================================
+% LINE AND CONNECTION STYLES
+% ========================================
+
+\tikzset{
+    % Basic Connections
+    mathematical edge/.style={draw=black, line width=0.8pt},
+    emphasized edge/.style={draw=black, line width=1.5pt},
+    
+    % Cusp Diagram Connections
+    cusp inclusion/.style={->, draw=black, line width=0.8pt},
+    
+    % Geometric Structure Lines
+    polytope boundary/.style={draw=black, thick},
+    internal structure/.style={draw=black, line width=0.6pt},
+    
+    % Folding and Symmetry Lines
+    folding line/.style={dashed, draw=red, line width=1pt},
+    reflection axis/.style={dashed, draw=red, line width=1.2pt},
+    symmetry axis/.style={dotted, draw=blue, line width=1pt},
+    
+    % Ramification and Branch Lines
+    ramification curve/.style={draw=blue, thick},
+    branch curve/.style={draw=red, thick},
+    
+    % Degeneration Structure
+    gluing edge/.style={draw=black, thick},
+    collapsed edge/.style={draw=red, line width=2pt},
+    
+    % Quotient Maps
+    quotient arrow/.style={->, draw=red, line width=1.5pt},
+}
+
+% ========================================
+% FILL AND BACKGROUND STYLES
+% ========================================
+
+\tikzset{
+    % Polytope Fills
+    polytope fill/.style={fill=gray!20},
+    special polytope fill/.style={fill=blue!15},
+    
+    % Region Classifications
+    fundamental region/.style={fill=blue!20, opacity=0.7},
+    quotient region/.style={fill=green!20, opacity=0.7},
+    ramification region/.style={fill=red!15, opacity=0.8},
+    
+    % Diagram Backgrounds
+    ade background/.style={fill=yellow!10, opacity=0.5},
+    coxeter background/.style={fill=gray!10, opacity=0.6},
+    
+    % Degeneration Fills
+    pumpkin fill/.style={fill=blue!25, opacity=0.6},
+    smashed pumpkin fill/.style={fill=red!25, opacity=0.6},
+}
+
+% ========================================
+% ARROW AND MORPHISM STYLES
+% ========================================
+
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+    
+    % Mathematical Morphisms
+    inclusion morphism/.style={right hook->},
+    quotient morphism/.style={->>},
+    covering morphism/.style={->},
+    birational morphism/.style={dashed, ->},
+    
+    % Diagram Arrows
+    cusp arrow/.style={cusp inclusion},
+    folding arrow/.style={quotient arrow},
+}
+
+% ========================================
+% SPECIALIZED DIAGRAM ENVIRONMENTS
+% ========================================
+
+% Environment for Cusp Diagrams
+\tikzset{
+    cusp diagram/.style={
+        node distance=2cm,
+        every node/.style={font=\small}
+    }
+}
+
+% Environment for ADE Diagrams
+\tikzset{
+    ade diagram/.style={
+        node distance=1.2cm,
+        every path/.style={mathematical edge},
+        every node/.style={ade vertex}
+    }
+}
+
+% Environment for Coxeter Diagrams
+\tikzset{
+    coxeter diagram/.style={
+        node distance=1cm,
+        every path/.style={mathematical edge},
+        every node/.style={ade vertex small}
+    }
+}
+
+% Environment for Polytope Diagrams
+\tikzset{
+    polytope diagram/.style={
+        scale=0.8,
+        every path/.style={polytope boundary},
+        every node/.style={lattice point}
+    }
+}
+
+% Environment for Degeneration Diagrams
+\tikzset{
+    degeneration diagram/.style={
+        scale=0.7,
+        every path/.style={gluing edge},
+        every node/.style={surface component}
+    }
+}
+
+% ========================================
+% COLOR DEFINITIONS
+% ========================================
+
+% Color scheme for different mathematical concepts
+\definecolor{CuspColor}{RGB}{70, 130, 180}        % Steel blue for cusps
+\definecolor{ADEColor}{RGB}{139, 69, 19}          % Saddle brown for ADE
+\definecolor{RamificationColor}{RGB}{220, 20, 60} % Crimson for ramification
+\definecolor{QuotientColor}{RGB}{34, 139, 34}     % Forest green for quotients
+\definecolor{DegenerationColor}{RGB}{255, 140, 0} % Dark orange for degenerations
+
+\endinput

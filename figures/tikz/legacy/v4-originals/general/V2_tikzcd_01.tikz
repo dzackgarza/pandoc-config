@@ -1,0 +1,10 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V2.tex
+% Type: tikzcd
+% Category: general
+% Index: 1
+
+\begin{tikzcd}
+X \arrow["\iota", loop left] \arrow[d, "\pi" {left}] \arrow[r, "\widetilde{\sigma}"] & X \arrow["\iota", loop right] \arrow[d, "\pi"]\\
+\mathbb{P}^1\times\mathbb{P}^1 \arrow[r, "\sigma"] & \mathbb{P}^1\times\mathbb{P}^1
+\end{tikzcd}

@@ -1,0 +1,68 @@
+% TikZ diagram — Standard fan of P^2 (complex projective plane)
+% Generated from canonical.yaml — 3 rays at (1,0), (0,1), (-1,-1) with 3 cones
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzpicture}[scale=2.5]
+    % === Cone regions: light fills + dashed radial lines ===
+    % Cone sigma_0: between v_1 (0 deg) and v_2 (90 deg) — first quadrant
+    \fill[fill=blue!8] (0,0) -- (1.3,0) arc (0:90:1.3) -- cycle;
+    \foreach \a in {10,20,30,40,50,60,70,80} {
+        \draw[dashed, thin, opacity=0.4] (0,0) -- ({\a}:1.2);
+    }
+
+    % Cone sigma_1: between v_2 (90 deg) and v_3 (225 deg) — northwest
+    \fill[fill=green!8] (0,0) -- (90:1.3) arc (90:225:1.3) -- cycle;
+    \foreach \a in {100,115,130,145,160,175,190,205,220} {
+        \draw[dashed, thin, opacity=0.4] (0,0) -- ({\a}:1.2);
+    }
+
+    % Cone sigma_2: between v_3 (225 deg) and v_1 (0 deg, going through 360) — southeast
+    \fill[fill=orange!8] (0,0) -- (225:1.3) arc (225:360:1.3) -- cycle;
+    \foreach \a in {235,250,265,280,295,310,325,340,355} {
+        \draw[dashed, thin, opacity=0.4] (0,0) -- ({\a}:1.2);
+    }
+
+    % === Rays (arrows from origin) ===
+    \draw[->, thick] (0,0) -- (1.3,0) node[right] {$v_1$};
+    \draw[->, thick] (0,0) -- (0,1.3) node[above] {$v_2$};
+    \draw[->, thick] (0,0) -- (-1.3,-1.3) node[below left] {$v_3$};
+
+    % === Origin point ===
+    \fill[black] (0,0) circle (2.5pt) node[below left] {$0$};
+
+    % === Cone labels ===
+    \node at (0.55,0.55) [font=\small] {$\sigma_0$};
+    \node at (-0.55,0.50) [font=\small] {$\sigma_1$};
+    \node at (0.45,-0.45) [font=\small] {$\sigma_2$};
+\end{tikzpicture}
+\end{document}

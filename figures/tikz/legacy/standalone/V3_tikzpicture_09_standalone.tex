@@ -1,0 +1,115 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 9
+
+\begin{tikzpicture}
+[x={(1,0)}, y={(60:1)}]
+\draw (0,0)--(0,6)--(6,0)--(4,0) (2,0)--(0,0)
+(0,0)--(1,1) (6,0)--(4,1); % (0,6)--(1,4);
+\node[dwh, label={[label distance=0.00em]270:$\ell_1$}] at (2,0) {};
+\node[swh] at (2,0) {};
+\node[wh, label={[label distance=0.00em]270:$\ell_2$}] at (1,0) {};
+\node[dwh, label={[label distance=0.00em]270:$\ell_3$}] at (0,0) {};
+\node[swh] at (0, 0) {};
+\node[wh, label={[label distance=0.00em]170:$\ell_4$}] at (0,1) {};
+\node[dwh, label={[label distance=0.00em]170:$\ell_5$}] at (0,2) {};
+\node[swh] at (0,2) {};
+\node[wh, label={[label distance=0.00em]170:$\ell_6$}] at (0,3) {};
+\node[dwh, label={[label distance=0.00em]170:$\ell_7$}] at (0,4) {};
+\node[swh] at (0,4) {};
+\node[wh, label={[label distance=0.00em]170:$\ell_8$}] at (0,5) {};
+\node[dwh, label={[label distance=0.00em]100:$\ell_9$}] at (0,6) {};
+\node[swh] at (0,6) {};
+\node[wh, label={[label distance=0.00em]10:$\ell_{10}$}] at (1,5) {};
+\node[dwh, label={[label distance=0.00em]10:$\ell_{11}$}] at (2,4) {};
+\node[swh] at (2,4) {};
+\node[wh, label={[label distance=0.00em]10:$\ell_{12}$}] at (3,3) {};
+\node[dwh, label={[label distance=0.00em]10:$\ell_{13}$}] at (4,2) {};
+\node[swh] at (4,2) {};
+\node[wh, label={[label distance=0.00em]10:$\ell_{14}$}] at (5,1) {};
+\node[dwh, label={[label distance=0.00em]270:$\ell_{15}$}] at (6,0) {};
+\node[swh] at (6,0) {};
+\node[wh, label={[label distance=0.00em]270:$\ell_{16}$}] at (5,0) {};
+\node[dwh, label={[label distance=0.00em]270:$\ell_{17}$}] at (4,0) {};
+\node[swh] at (4,0) {};
+
+\node[wh, label={[label distance=0.00em]10:$\ell_{18}$}] at (1,1) {};
+\node[wh, label={[label distance=0.00em]170:$\ell_{19}$}] at (4,1) {};
+
+\draw [color=red, dotted, thick, opacity=0.5] (3.5,-1) -- (-0.5, 7);
+\draw [<->, color=red, opacity=0.3, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (1.25,2) -- (2.75, 2);
+
+\begin{scope}[shift={(7,0)}]
+\draw (0,0)--(0,6)--(6,0)--(4,0) (2,0)--(0,0)
+(0,0)--(1,1) (6,0)--(4,1); % (0,6)--(1,4);
+
+\node[dwh, label={[label distance=0.00em]270:$\ell_1'$}] at (2,0) {};
+\node[swh] at (2,0) {};
+\node[wh, label={[label distance=0.00em]270:$\ell_2'$}] at (1,0) {};
+\node[dwh, label={[label distance=0.00em]270:$\ell_3'$}] at (0,0) {};
+\node[swh] at (0, 0) {};
+\node[wh, label={[label distance=0.00em]170:$\ell_4'$}] at (0,1) {};
+\node[dwh, label={[label distance=0.00em]170:$\ell_5'$}] at (0,2) {};
+\node[swh] at (0,2) {};
+\node[wh, label={[label distance=0.00em]170:$\ell_6'$}] at (0,3) {};
+\node[dwh, label={[label distance=0.00em]170:$\ell_7'$}] at (0,4) {};
+\node[swh] at (0,4) {};
+\node[wh, label={[label distance=0.00em]170:$\ell_8'$}] at (0,5) {};
+\node[dwh, label={[label distance=0.00em]100:$\ell_8'$}] at (0,6) {};
+\node[swh] at (0,6) {};
+\node[wh, label={[label distance=0.00em]10:$\ell_{8}'$}] at (1,5) {};
+\node[dwh, label={[label distance=0.00em]10:$\ell_{7}'$}] at (2,4) {};
+\node[swh] at (2,4) {};
+\node[wh, label={[label distance=0.00em]10:$\ell_{6}'$}] at (3,3) {};
+\node[dwh, label={[label distance=0.00em]10:$\ell_{5}'$}] at (4,2) {};
+\node[swh] at (4,2) {};
+\node[wh, label={[label distance=0.00em]10:$\ell_{4}'$}] at (5,1) {};
+\node[dwh, label={[label distance=0.00em]270:$\ell_{3}'$}] at (6,0) {};
+\node[swh] at (6,0) {};
+\node[wh, label={[label distance=0.00em]270:$\ell_{2}'$}] at (5,0) {};
+\node[dwh, label={[label distance=0.00em]270:$\ell_{1}'$}] at (4,0) {};
+\node[swh] at (4,0) {};
+
+\node[wh, label={[label distance=0.00em]10:$\ell_{10}'$}] at (1,1) {};
+\node[wh, label={[label distance=0.00em]170:$\ell_{10}'$}] at (4,1) {};
+
+\draw [color=red, dotted, thick, opacity=0.5] (3.5,-1) -- (-0.5, 7);
+\draw [<->, color=red, opacity=0.3, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (1.25,2) -- (2.75, 2);
+
+\end{scope}
+\end{tikzpicture}
+
+
+\end{document}

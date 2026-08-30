@@ -1,0 +1,12 @@
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/main.tex
+% Type: tikzcd
+% Category: general
+% Index: 0
+
+\begin{tikzcd}
+& {\Mpol} \\
+	{\Munpol} && {\Mhe}
+	\arrow[from=1-2, to=2-1, "\text{Finite}"']
+	\arrow[from=1-2, to=2-3, "\text{Finite-to-one}"]
+\end{tikzcd}

@@ -1,0 +1,93 @@
+% Generated from canonical.yaml (Pasted image 20220621235637)
+% 2D singular cone: rays (0,1) and (2,-1), A1 singularity
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usepackage{amssymb}
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+    backgrounds,
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzpicture}[scale=1.2]
+
+% ---- Grid (lattice Z^2) ----
+\draw[gray!25, very thin] (-0.5,-2.5) grid (4.5,2.5);
+
+% ---- Axes ----
+\draw[->, thin, gray] (-0.5,0) -- (4.5,0) node[below] {$x$};
+\draw[->, thin, gray] (0,-2.5) -- (0,2.5) node[left] {$y$};
+
+% ---- Ray vectors ----
+\def\vx{0}  \def\vy{1}   % rho_1 = (0,1)
+\def\wx{2}  \def\wy{-1}  % rho_2 = (2,-1)
+
+% ---- Shaded cone ----
+\fill[blue!12] (0,0) -- (\wx,\wy) -- (\wx+3*\vx,\wy+3*\vy) -- (\vx,\vy) -- cycle;
+% More precise shading: cone = {a*(0,1) + b*(2,-1) | a,b >= 0}
+% We need a polygon that spans the cone region
+\fill[blue!12] (0,0) -- (0,3) -- (4,1) -- (\wx,\wy) -- cycle;
+
+% Highlight boundary of cone (the two rays)
+\draw[thick, blue!60!black] (0,0) -- (0,3);
+\draw[thick, blue!60!black] (0,0) -- (4,1);
+
+% ---- Rays with arrow tips ----
+\draw[->, thick, blue!60!black] (0,0) -- (0,2.3);
+\draw[->, thick, blue!60!black] (0,0) -- (3.8, -1.9);
+
+% ---- Lattice points ----
+\draw[fill=black] (0,0) circle(2.5pt);
+\draw[fill=black] (1,0) circle(2.5pt);
+\draw[fill=black] (2,0) circle(2.5pt);
+\draw[fill=black] (2,-1) circle(2.5pt);
+
+% Additional lattice points inside/on cone boundary for context
+\draw[fill=black] (0,1) circle(2.5pt);
+\draw[fill=black] (0,2) circle(2.5pt);
+\draw[fill=black] (1,1) circle(2.5pt);
+
+% ---- Labels: Ray names ----
+\node[blue!60!black, above] at (0,2.5) {$\rho_1$};
+\node[blue!60!black, right] at (3.8,-2.0) {$\rho_2$};
+
+% ---- Labels: Generator vectors ----
+\node[blue!60!black, left] at (0.15,0.5) {$v_1 = (0,1)$};
+\node[blue!60!black, below] at (1.0,-1.0) {$v_2 = (2,-1)$};
+
+% ---- Labels: Lattice point coordinates ----
+\node[below left] at (0,0) {$(0,0)$};
+\node[below] at (1,0) {$(1,0)$};
+\node[below] at (2,0) {$(2,0)$};
+\node[below] at (2,-1) {$(2,-1)$};
+
+% ---- Singularity annotation ----
+\node[red!70!black, draw=red!70!black, fill=red!5, rounded corners=2pt, thick] at (1.8,1.8) {
+    \begin{tabular}{l}
+        $\det(v_1, v_2) = -2$ \\
+        $\Rightarrow$ singular \\
+        $A_1$ singularity \\
+        $\mathbb{C}^2 / \mathbb{Z}_2$
+    \end{tabular}
+};
+
+% ---- Cone inequality annotation ----
+\node[blue!40!black, font=\small] at (3.5, -0.5) {$\sigma = \{(x,y)\mid x\ge0,\; y\ge -\frac{x}{2}\}$};
+
+% ---- Origin label ----
+\node[below left=2pt] at (0,0) {$O$};
+
+\end{tikzpicture}
+\end{document}

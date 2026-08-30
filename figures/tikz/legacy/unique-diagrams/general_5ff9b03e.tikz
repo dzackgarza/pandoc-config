@@ -1,0 +1,13 @@
+% TikZ Diagram: general
+% Source: diss/archive/unused_sections/9999_Appendix.md (diagram #0)
+% Duplicates: 2 total copies
+% Type: tikzcd
+
+\begin{tikzcd}
+
+& {\Mpol} \\
+{\Munpol} && {\Mhe}
+\arrow[from=1-2, to=2-1, "\text{Finite}"']
+\arrow[from=1-2, to=2-3, "\text{Finite-to-one}"]
+
+\end{tikzcd}

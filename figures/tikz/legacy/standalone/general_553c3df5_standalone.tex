@@ -1,0 +1,49 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram: general
+% Source: diss/archive/unused_sections/9999_Appendix.md (diagram #2)
+% Duplicates: 2 total copies
+% Type: tikzpicture
+
+\begin{tikzpicture}
+
+        \begin{pgfonlayer}{nodelayer}
+            \node [style=black node, label={$[\ZZ v]$}] (0) at (0, 0) {};
+            \node [style=black node, label={$[E]$}] (1) at (2, 0) {};
+        \end{pgfonlayer}
+        \begin{pgfonlayer}{edgelayer}
+            \draw[style=Arrow] (0) to (1);
+        \end{pgfonlayer}
+        
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,44 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/main.tex
+% Type: tikzpicture
+% Category: lattice-theory
+% Index: 2
+
+\begin{tikzpicture}
+[thick,scale=1.7, every node/.style={transform shape}]
+\tikzset{/Dynkin diagram/label directions={above,above, above, right}}
+\dynkin[labels={e_1, e_2, e_{\drlap{13} }, e_{\drlap{14} }, e_{\drlap{15} }, e_{\drlap{16}} }, edge length=0.6cm]D{}
+\end{tikzpicture}
+
+
+\end{document}

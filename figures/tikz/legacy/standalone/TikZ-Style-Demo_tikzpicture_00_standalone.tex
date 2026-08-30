@@ -1,0 +1,50 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: dev/tex/packages/TikZ-Style-Demo.tex
+% Type: tikzpicture
+% Category: algebraic-geometry
+% Index: 0
+
+\begin{tikzpicture}
+[polytope diagram]
+% Using semantic styles instead of raw TikZ
+\draw[polytope boundary, polytope fill] (0,0) rectangle (3,3);
+\foreach \x in {0,1,2,3}
+    \foreach \y in {0,1,2,3}
+        \node[lattice point] at (\x,\y) {};
+% Mark special vertices
+\node[special lattice point] at (0,0) {};
+\node[special lattice point] at (3,3) {};
+\end{tikzpicture}
+
+
+\end{document}

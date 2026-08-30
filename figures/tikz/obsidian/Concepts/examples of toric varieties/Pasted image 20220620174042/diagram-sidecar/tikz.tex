@@ -1,0 +1,105 @@
+% TikZ diagram: 3-cube polytope P (normal fan of P1xP1xP1)
+% Generated from canonical.yaml
+% Cabinet projection: x=(-0.5,-0.5), y=(1,0), z=(0,1)
+% Cube: vertices at (+-1, +-1, +-1), centered at origin
+% Visible faces: front (x=+1), right (y=+1), top (z=+1)
+% Hidden vertex (no dot): back-bottom-left (-1,-1,-1)
+\documentclass[tikz,border=2pt]{standalone}
+
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+\tikzset{>=Stealth}
+
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzpicture}[
+    x={(-0.5cm,-0.5cm)},
+    y={(1cm,0cm)},
+    z={(0cm,1cm)},
+    scale=1.8,
+    line join=round,
+]
+
+% === Hidden edges (dashed) — 3 edges meeting at V000 = (-1,-1,-1) ===
+\draw[dashed, gray!60!black, line width=0.6pt]
+    (-1,-1,-1) -- (1,-1,-1)   % x-direction, y=-1, z=-1 (back-bottom)
+    (-1,-1,-1) -- (-1,1,-1)   % y-direction, x=-1, z=-1 (back-bottom)
+    (-1,-1,-1) -- (-1,-1,1);  % z-direction, x=-1, y=-1 (back-left)
+
+% === Visible faces (shaded) — front, right, top ===
+% Front face (x=+1): V100-V110-V111-V101
+\fill[fill=gray!15, draw=none]
+    (1,-1,-1) -- (1,1,-1) -- (1,1,1) -- (1,-1,1) -- cycle;
+
+% Right face (y=+1): V010-V110-V111-V011
+\fill[fill=gray!25, draw=none]
+    (-1,1,-1) -- (1,1,-1) -- (1,1,1) -- (-1,1,1) -- cycle;
+
+% Top face (z=+1): V001-V101-V111-V011
+\fill[fill=gray!20, draw=none]
+    (-1,-1,1) -- (1,-1,1) -- (1,1,1) -- (-1,1,1) -- cycle;
+
+% === Visible edges (solid, thick) — 9 edges ===
+% x-direction (varying x)
+\draw[thick] (-1,-1,1) -- (1,-1,1);   % V001-V101
+\draw[thick] (-1,1,-1) -- (1,1,-1);   % V010-V110
+\draw[thick] (-1,1,1) -- (1,1,1);     % V011-V111
+
+% y-direction (varying y)
+\draw[thick] (1,-1,-1) -- (1,1,-1);   % V100-V110
+\draw[thick] (1,-1,1) -- (1,1,1);     % V101-V111
+\draw[thick] (-1,-1,1) -- (-1,1,1);   % V001-V011
+
+% z-direction (varying z)
+\draw[thick] (1,-1,-1) -- (1,-1,1);   % V100-V101
+\draw[thick] (1,1,-1) -- (1,1,1);     % V110-V111
+\draw[thick] (-1,1,-1) -- (-1,1,1);   % V010-V011
+
+% === Coordinate axes (with arrows on visible ends) ===
+\draw[->, thick] (-1,0,0) -- (1,0,0);   % x: back face -> front face (arrow at front)
+\draw[->, thick] (0,-1,0) -- (0,1,0);   % y: left face -> right face (arrow at right)
+\draw[->, thick] (0,0,-1) -- (0,0,1);   % z: bottom face -> top face (arrow at top)
+
+% === Axis piercing dots at visible face centers ===
+\filldraw[black] (1,0,0) circle (1.5pt);  % front face center
+\filldraw[black] (0,1,0) circle (1.5pt);  % right face center
+\filldraw[black] (0,0,1) circle (1.5pt);  % top face center
+
+% === Vertex dots — 7 of 8 vertices (hidden V000 = (-1,-1,-1) omitted) ===
+\foreach \x/\y/\z in {
+    1/-1/-1,    % V100 front-left-bottom
+    1/-1/1,     % V101 front-left-top
+    1/1/-1,     % V110 front-right-bottom
+    1/1/1,      % V111 front-right-top
+    -1/1/-1,    % V010 back-right-bottom
+    -1/1/1,     % V011 back-right-top
+    -1/-1/1     % V001 back-left-top
+} {
+    \filldraw[black] (\x,\y,\z) circle (2.5pt);
+}
+
+% === Labels ===
+% P: bottom-right of diagram
+\node[labelnode] at (0, 1.8, -1.5) {$P$};
+% x: near front face center (bottom-left in diagram)
+\node[labelnode, below left=-1pt] at (1,0,0) {$x$};
+% y: near right face center
+\node[labelnode, below right=-1pt] at (0,1,0) {$y$};
+% z: near top face center
+\node[labelnode, above=-1pt] at (0,0,1) {$z$};
+
+\end{tikzpicture}
+\end{document}

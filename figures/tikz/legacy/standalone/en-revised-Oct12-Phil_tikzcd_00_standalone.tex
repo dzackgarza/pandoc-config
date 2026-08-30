@@ -1,0 +1,48 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/en-revised-Oct12-Phil.tex
+% Type: tikzcd
+% Category: general
+% Index: 0
+
+\begin{tikzcd}
+X \arrow{d}[swap]{\pi} \arrow[swap]{r}{\psi}
+  \arrow[bend left=20]{rr}{\psi'}
+  & Z \arrow{d}[swap]{\rho}
+  & Z' \arrow{dl}{\rho'} 
+  \\
+  Y\arrow[swap]{r}{\varphi} 
+  & W
+\end{tikzcd}
+
+
+\end{document}

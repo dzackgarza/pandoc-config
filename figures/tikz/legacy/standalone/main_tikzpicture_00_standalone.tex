@@ -1,0 +1,51 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/main.tex
+% Type: tikzpicture
+% Category: general
+% Index: 0
+
+\begin{tikzpicture}
+[>=angle 90]
+\matrix(a)[matrix of math nodes,
+row sep=2em, column sep=2em,
+text height=1.5ex, text depth=0.25ex]
+{(\mathcal{T},\epsilon\mathcal{R})&\left(\mathcal{X},\frac{1+\epsilon}{2}\mathcal{B}\right)\\
+\left(\mathcal{S},\frac{\epsilon}{2}\overline{\mathcal{R}}\right)&\mathbf{U}\\};
+\path[->] (a-1-1) edge node[above]{}(a-1-2);
+\path[->] (a-1-1) edge node[left]{}(a-2-1);
+\path[->] (a-2-1) edge node[below]{}(a-2-2);
+\path[->] (a-1-2) edge node[right]{}(a-2-2);
+\end{tikzpicture}
+
+
+\end{document}

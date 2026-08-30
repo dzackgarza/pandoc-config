@@ -1,0 +1,51 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V2.tex
+% Type: tikzpicture
+% Category: general
+% Index: 0
+
+\begin{tikzpicture}
+[>=angle 90]
+\matrix(a)[matrix of math nodes,
+row sep=2em, column sep=2em,
+text height=1.5ex, text depth=0.25ex]
+{\mathbf{U}/\mathbb{G}_m^2\rtimes\mathbb{Z}_4&\widehat{M}_E\\
+\mathbf{U}/G&M_E.\\};
+\path[->] (a-1-1) edge node[above]{$\varphi$}(a-1-2);
+\path[->] (a-1-1) edge node[left]{}(a-2-1);
+\path[->] (a-2-1) edge node[below]{$\overline{\varphi}$}(a-2-2);
+\path[->] (a-1-2) edge node[right]{}(a-2-2);
+\end{tikzpicture}
+
+
+\end{document}

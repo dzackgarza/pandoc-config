@@ -1,0 +1,67 @@
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    cd,
+    calc,
+    shapes.geometric,
+    shapes.misc,
+    decorations.markings,
+    backgrounds,
+    fit,
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzcd}[row sep=3.5em, column sep=4.5em]
+  A\otimes A\otimes x
+    \arrow[r, "1\otimes\varrho"]
+    \arrow[d, "\mu\otimes1"] &
+  A\otimes x
+    \arrow[r, "1\otimes\delta"]
+    \arrow[d, "\varrho"] &
+  A\otimes A\otimes x
+    \arrow[d, "\mu\otimes1"] \\
+  A\otimes x
+    \arrow[r, "\varrho"] &
+  x
+    \arrow[r, "\delta"]
+    \arrow[d, "\delta"] &
+  A\otimes x
+    \arrow[d, "1\otimes\eta\otimes1"] \\
+  x
+    \arrow[ru, "=", double equal sign distance, no head]
+    \arrow[u, "\eta\otimes1"] &
+  A\otimes x
+    \arrow[l, "\varrho"']
+    \arrow[r, "1\otimes\delta"] &
+  A\otimes A\otimes x
+    % Region 1 — top-left 2x2 square (module associativity)
+    \arrow[from=1-1, to=2-2, phantom, "\mbox{\textcircled{1}}" description]
+    % Region 2 — bottom-left triangle (unit axiom)
+    \arrow[from=2-1, to=3-2, phantom, "\mbox{\textcircled{2}}" description, shift left=0.7em]
+    % Region 3 — top-right 2x2 square (action-coaction compatibility)
+    \arrow[from=1-2, to=2-3, phantom, "\mbox{\textcircled{3}}" description]
+    % Region 4 — bottom-right 2x2 square (coaction/unit coherence)
+    \arrow[from=2-2, to=3-3, phantom, "\mbox{\textcircled{4}}" description]
+    % Region 5 — bottom-centre triangle (effectiveness)
+    \arrow[from=2-2, to=3-1, phantom, "\mbox{\textcircled{5}}" description, shift left=0.7em]
+\end{tikzcd}
+\end{document}

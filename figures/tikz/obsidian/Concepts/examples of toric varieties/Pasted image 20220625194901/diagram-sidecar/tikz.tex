@@ -1,0 +1,99 @@
+% Generated from canonical.yaml (Pasted image 20220625194901)
+% 2D strongly convex rational polyhedral cone σ = Cone((0,1), (3,-1))
+% Source: Cox-Little-Schenck "Toric Varieties" Section 2.2, m=3 case
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+    shapes.geometric,
+    backgrounds,
+    patterns,
+}
+
+\tikzset{>=Stealth}
+
+\begin{document}
+\begin{tikzpicture}[
+    scale=0.85,
+    dot/.style={circle, fill=black, inner sep=1.8pt},
+    raystyle/.style={-, line width=1.5pt, color=black},
+    axisstyle/.style={->, line width=0.6pt, color=gray!50},
+    hatchstyle/.style={line width=0.4pt, color=black!60},
+]
+
+% ============================================================
+% 1. Grid and lattice points (6x6)
+% ============================================================
+\draw[axisstyle] (-0.5,0) -- (6.5,0) node[right,font=\small] {$x$};
+\draw[axisstyle] (0,-0.5) -- (0,6.5) node[above,font=\small] {$y$};
+
+% Lattice points: 6x6 grid from (0,0) to (5,5)
+\foreach \x in {0,...,5} {
+    \foreach \y in {0,...,5} {
+        \node[dot] at (\x,\y) {};
+    }
+}
+
+% ============================================================
+% 2. Cone shading (region between the two rays)
+% ============================================================
+% Fill the cone interior with a light background
+\fill[fill=blue!8] (0,0) -- (0,5.5) -- (5,5.5) -- (6,5) -- (6,4) -- (5.5,4.5) -- cycle;
+% More precise: cone is {(x,y) | x>=0, y >= -x/3}
+% At y=5.5, x = -3y = -16.5, so the boundary at x>=0 is just the y-axis up to y=5.5
+% The slanted ray: y = -x/3, so at x=6, y=-2; we shade the region between the two rays
+% Better approach: clip to a polygon that represents the cone up to the grid bounds
+
+% Draw hatch lines inside the cone
+\begin{scope}
+    \clip (0,0) -- (0,5.5) -- (5.5,5.5) -- (6,5) -- (6,-0.5) -- cycle;
+    % Cone boundary lines for clipping
+    \clip (0,0) -- (0,6) -- (6,6) -- (6,-2) -- cycle;
+    % Only keep points where y >= -x/3 (above the slanted ray) and x >= 0
+    \clip (0,0) -- (0,6) -- (6,6) -- (6,-2) -- cycle;
+    % The cone is: x >= 0 and y >= -x/3
+    % Using a filled path for the exact cone region
+    \fill[fill=blue!12] (0,0) -- (0,6) -- (18,6) -- cycle;
+    % Hatching lines (diagonal with negative slope)
+    \foreach \x in {-18,-17.5,...,18} {
+        \draw[hatchstyle] (\x,6) -- ++(1,-1);
+    }
+\end{scope}
+
+% ============================================================
+% 3. Cone boundary: the two rays
+% ============================================================
+% Ray v1 = (0,1) — vertical up from origin
+\draw[raystyle,->] (0,0) -- (0,5.5) node[above left, font=\small] {$v_1$};
+
+% Ray v2 = (3,-1) — slanted down-right
+% Extend it to x=6 (y = -6/3 = -2) but only to visible grid edge
+\draw[raystyle,->] (0,0) -- (6,-2);
+\node[font=\small] at (6.3,-2.1) {$v_2$};
+
+% ============================================================
+% 4. Origin label
+% ============================================================
+\node[below left, font=\small] at (0,0) {$0$};
+
+% ============================================================
+% 5. Cone label σ in upper-right
+% ============================================================
+\node[font=\small] at (5.5,5.5) {$\sigma$};
+
+% ============================================================
+% 6. Axis labels at grid edges
+% ============================================================
+\foreach \x in {1,...,5} {
+    \node[below, font=\tiny, color=gray!50] at (\x,0) {$\x$};
+}
+\foreach \y in {1,...,5} {
+    \node[left, font=\tiny, color=gray!50] at (0,\y) {$\y$};
+}
+
+\end{tikzpicture}
+\end{document}

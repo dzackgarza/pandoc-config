@@ -1,0 +1,93 @@
+% tikz.tex — P1 Construction Diagram (Fan, Rings, Geometry)
+% Generated from: canonical.yaml (2026-05-09)
+% Three-layer toric variety construction diagram for P^1
+% Uses tikz-cd with corrected arrow labels (↪ not ≅) and added fan layer.
+
+\documentclass[tikz,border=2pt]{standalone}
+
+% Math packages for \mathbb, \mathcal, etc.
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+    fanlabel/.style={font=\small\itshape},
+}
+
+\begin{document}
+
+% Toric construction of P^1
+% Three aligned layers:
+%   Top:    Fan Σ in N_R ≅ R  — cones {0}, R_{≥0}, R_{≤0}
+%   Middle: Coordinate rings   — C[X,X^{-1}], C[X], C[X^{-1}]
+%   Bottom: Geometric spaces   — C*, C (U₀), C (U₁/U_∞)
+%
+% Horizontal arrows within each layer:
+%   Fan:     rays emanate from origin
+%   Rings:   subring inclusions toward Laurent ring (↪)
+%   Geometry: open embeddings away from torus (↪)
+%
+% Vertical arrows (mapsfrom): functorial correspondence
+%   cone → monoid algebra → affine toric variety
+
+\begin{tikzcd}
+  % ── Row 1: Fan (Combinatorial/Topological Layer) ─────────
+  \mathbb{R}_{\leq 0}
+  \arrow[d, mapsfrom]
+  &
+  \{0\}
+  \arrow[l, "\rho_2"']
+  \arrow[r, "\rho_1"]
+  \arrow[d, mapsfrom]
+  &
+  \mathbb{R}_{\geq 0}
+  \arrow[d, mapsfrom]
+  \\[2em]
+  % ── Row 2: Rings (Algebraic Layer — Coordinate Rings) ───
+  \mathbb{C}[X^{-1}]
+  \arrow[r, hookrightarrow]
+  \arrow[d, mapsfrom]
+  &
+  \mathbb{C}[X, X^{-1}]
+  \arrow[d, mapsfrom]
+  &
+  \mathbb{C}[X]
+  \arrow[l, hookrightarrow]
+  \arrow[d, mapsfrom]
+  \\[2em]
+  % ── Row 3: Geometry (Geometric Layer — Affine Charts) ───
+  \mathbb{C} \; (U_1/U_\infty)
+  &
+  \mathbb{C}^*
+  \arrow[l, hookrightarrow]
+  \arrow[r, hookrightarrow]
+  &
+  \mathbb{C} \; (U_0)
+\end{tikzcd}
+
+\end{document}

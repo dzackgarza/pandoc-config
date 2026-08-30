@@ -1,0 +1,87 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V2.tex
+% Type: tikzpicture
+% Category: general
+% Index: 4
+
+\begin{tikzpicture}
+\node[circle, draw, label=above:{v}] (2) at (0,0) {2};
+    
+    \node[fill=green!50, rectangle, draw, label=above:{$E_8^2$ r}] (12) at (3,1.5) {12};
+    \node[rectangle, draw, label=below:{$D_{16}*$ h}] (245) at (3,-2) {245};
+
+    \node[circle, draw, fill=red!50, label=above:{r}] (1) at (6,3) {1};
+    \node[circle, draw, label=above:d] (3) at (6,1) {3};
+    \node[circle, draw, label=above:h] (4) at (6,-1) {4};
+    \node[circle, draw, label=above:$\mathrm{id}$] (5) at (6,-3) {5};
+
+    \node[rectangle, draw, fill=green!50, label=right:{$E_7^2A_1^2*$ dr}]
+    (13) at (10,4.5) {13};
+    \node[rectangle, draw, fill=green!50, label=right:{$D_8^2*$ hr}] (14) at (10,3) {14};
+    \node[rectangle, draw, fill=green!50, label=right:{$A_{15}A_1(2)*$ dhr}]
+    (15) at (10,1.5) {15};
+    \node[rectangle, draw, label=right:{$A_{15}A_1(2)*$ dhr}] (34) at (10,0) {34};
+    \node[rectangle, draw, label=right:{$D_{12}D_4*$ d}] (35) at (10,-1.5) {35};
+    \node[rectangle, draw, label=right:{$D_8^2*$ hr}] (45) at (10,-3) {45};
+    \node[rectangle, draw, label=right:{$E_7^2A_1^2*$ dr}] (55) at (10,-4.5) {5};
+
+    \draw[-latex, shorten >= 0.4em] (2)--(12);
+    \draw[-latex, shorten >= 0.4em] (1)--(12);
+
+    \draw[-latex, shorten >= 0.4em] (2)--(245);
+    \draw[-latex, shorten >= 0.4em] (4)--(245);
+    \draw[-latex, shorten >= 0.4em] (5)--(245);
+
+    \draw[-latex, shorten >= 0.4em] (1)--(13);
+    \draw[-latex, shorten >= 0.4em] (3)--(13);
+    
+    \draw[-latex, shorten >= 0.4em] (1)--(14);
+    \draw[-latex, shorten >= 0.4em] (4)--(14);
+    
+    \draw[-latex, shorten >= 0.4em] (1)--(15);
+    \draw[-latex, shorten >= 0.4em] (5)--(15);
+    
+    \draw[-latex, shorten >= 0.4em] (3)--(34);
+    \draw[-latex, shorten >= 0.4em] (4)--(34);
+    
+    \draw[-latex, shorten >= 0.4em] (3)--(35);
+    \draw[-latex, shorten >= 0.4em] (5)--(35);
+    
+    \draw[-latex, shorten >= 0.4em] (4)--(45);
+    \draw[-latex, shorten >= 0.4em] (5)--(45);   
+    
+    \draw[-latex, shorten >= 0.4em] (5)--(55);
+\end{tikzpicture}
+
+
+\end{document}

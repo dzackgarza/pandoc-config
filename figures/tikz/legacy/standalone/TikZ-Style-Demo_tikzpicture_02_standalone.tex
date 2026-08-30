@@ -1,0 +1,49 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: dev/tex/packages/TikZ-Style-Demo.tex
+% Type: tikzpicture
+% Category: algebraic-surfaces
+% Index: 2
+
+\begin{tikzpicture}
+[ade diagram]
+% A_4 chain
+\node[ade vertex] (a1) at (0,0) {};
+\node[ade vertex] (a2) at (1,0) {};
+\node[ade vertex] (a3) at (2,0) {};
+\node[ade vertex] (a4) at (3,0) {};
+\draw[mathematical edge] (a1) -- (a2) -- (a3) -- (a4);
+\node[below] at (1.5,-0.5) {\adetype{A_4} surface};
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,65 @@
+\documentclass[border=2pt]{standalone}
+
+% Required packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+% Load TikZ libraries
+\usetikzlibrary{
+    positioning,
+    shapes,
+    arrows.meta,
+    calc,
+    patterns,
+    decorations.markings,
+    cd
+}
+
+% Load custom styles
+\usepackage{DZG-TikZ-Styles}
+
+% Additional configurations
+\tikzset{
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\begin{document}
+
+% TikZ Diagram from V4 Thesis
+% Source: writing/sources/enriques_paper/V3.tex
+% Type: tikzpicture
+% Category: general
+% Index: 18
+
+\begin{tikzpicture}
+[scale=0.9]
+% diagonal symmetry
+\begin{scope}
+\eighteen
+\draw [color=red, dotted, thick] (-0.5,-0.5) -- (4.5, 4.5);
+\draw [<->, color=red, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (2,1) -- (1, 2);
+\node[] (lab1) at (2,-1) {d};
+\end{scope}
+% horizontal symmetry
+\begin{scope}[shift={(5,0)}]
+\eighteen
+\draw [color=red, dotted, thick] (-0.5,2) -- (4.5, 2);
+\draw [<->, color=red, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (1.5,1) -- (1.5, 3);
+\node[] (lab1) at (2,-1) {h};
+\end{scope}
+% Rotational symmetry
+\begin{scope}[shift={(10,0)}]
+\eighteen
+% \draw [color=red, dotted, thick] (-0.5,2) -- (4.5, 2);
+% \draw [-{Latex[length=2mm]}, red, thick] (3.5, 2) to [out=90,in=90] (0.5, 2);
+\draw [red,thick,domain=5:175, -{Latex[length=2mm]}] plot ({cos(\x) + 2}, {sin(\x) + 2} );
+\draw [red,thick,domain=185:355, -{Latex[length=2mm]}] plot ({cos(\x) + 2}, {sin(\x) + 2} );
+\node[] (lab1) at (2,-1) {r};
+\end{scope}
+\end{tikzpicture}
+
+
+\end{document}

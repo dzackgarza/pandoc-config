@@ -1,0 +1,68 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{DZG-TikZ-Styles}[2025/01/06 Fixed DZG TikZ Styles]
+
+\RequirePackage{tikz}
+\RequirePackage{tikz-cd}
+\usetikzlibrary{positioning,shapes,arrows.meta,calc,patterns,decorations.markings}
+
+% ========================================
+% BASIC NODE STYLES
+% ========================================
+
+\tikzset{
+    % Basic hole styles (commonly used in diagrams)
+    wh/.style={
+        circle,
+        draw=black,
+        fill=white,
+        inner sep=1.5pt,
+        minimum size=4mm
+    },
+    dwh/.style={
+        circle,
+        draw=black,
+        fill=white,
+        double,
+        double distance=1pt,
+        inner sep=1pt,
+        minimum size=3mm
+    },
+    swh/.style={
+        circle,
+        draw=black,
+        fill=white,
+        inner sep=1pt,
+        minimum size=3mm
+    },
+    bh/.style={
+        circle,
+        draw=black,
+        fill=black,
+        inner sep=1.5pt,
+        minimum size=4mm
+    },
+    % Additional common styles
+    hlt/.style={
+        rectangle,
+        draw=red,
+        thick,
+        fill=yellow!20,
+        minimum width=8mm,
+        minimum height=4mm
+    },
+    % Vertices and Points
+    lattice point/.style={circle, fill=black, inner sep=1pt, draw=none},
+    special lattice point/.style={circle, fill=red, inner sep=1.5pt, draw=black, line width=0.5pt},
+    vertex/.style={circle, fill=black, inner sep=1.5pt, draw=black},
+    marked vertex/.style={circle, fill=blue, inner sep=2pt, draw=black, line width=0.5pt},
+    
+    % Basic Connections
+    mathematical edge/.style={draw=black, line width=0.8pt},
+    emphasized edge/.style={draw=black, line width=1.5pt},
+    polytope boundary/.style={draw=black, thick},
+    
+    % Arrow styles
+    > = {Stealth[length=2mm, width=2mm]},
+}
+
+\endinput

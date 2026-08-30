@@ -1,0 +1,58 @@
+% Generated from canonical.yaml (Pasted image 20220531035609)
+% Hodge diamond for a smooth complex surface X subset P^3 of degree d
+\documentclass[tikz,border=2pt]{standalone}
+
+% Core libraries
+\usetikzlibrary{
+    arrows.meta,       % arrow styles
+    positioning,       % relative placement
+    cd,                % commutative diagrams (tikz-cd)
+    calc,              % coordinate calculations
+    shapes.geometric,  % ellipses, polygons, etc.
+    shapes.misc,       % rounded rectangles, etc.
+    decorations.markings,  % arrow on paths
+    backgrounds,       % background layer
+    fit,               % fitting nodes around others
+}
+
+% Standard arrow tip
+\tikzset{>=Stealth}
+
+% Commutative diagram style
+\tikzcdset{
+    arrows={>=Stealth},
+    row sep/normal=3em,
+    column sep/normal=4em,
+}
+
+% Common node styles
+\tikzset{
+    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
+    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
+}
+
+\begin{document}
+\begin{tikzpicture}
+  % Hodge diamond for a smooth complex surface X subset P^3 of degree d
+  % 5-row diamond in standard 1-2-3-2-1 arrangement
+  %
+  % Row 1 (top)
+  \node (r1c1) at (0, 0)  {$1$};
+  %
+  % Row 2
+  \node (r2c1) at (-1, -1) {$0$};
+  \node (r2c2) at ( 1, -1) {$0$};
+  %
+  % Row 3 (middle)
+  \node (r3c1) at (-2, -2) {$h^{0,2}$};
+  \node (r3c2) at ( 0, -2) {$h^{1,1}$};
+  \node (r3c3) at ( 2, -2) {$h^{0,2}$};
+  %
+  % Row 4
+  \node (r4c1) at (-1, -3) {$0$};
+  \node (r4c2) at ( 1, -3) {$0$};
+  %
+  % Row 5 (bottom)
+  \node (r5c1) at ( 0, -4) {$1$};
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,14 @@
+% TikZ Diagram: general
+% Source: diss/archive/unused_sections/160_IAS.md (diagram #15)
+% Duplicates: 3 total copies
+% Type: tikzpicture
+
+\begin{tikzpicture}
+[scale=0.4] \begin{pgfonlayer}{background} \tikzset{help lines/.style={color=blue!10}} \draw[ultra
+thin,step=1cm,help lines] (-1,-1) grid (11,11); \end{pgfonlayer} \begin{pgfonlayer}{nodelayer} \node [style=white node,
+label=left:$p_{13}$] (0) at (0, 0) {}; \node [style=black node, label=above:$p_{12}$] (1) at (0, 10) {}; \node
+[style=black node, label=right:$p_{23}$] (2) at (10, 0) {}; \node [style=starred node] (3) at (1, 1) {};
+\end{pgfonlayer} \begin{pgfonlayer}{edgelayer} \draw (0) edge["$e_1=e_3$"] node[right, near start] {2} (1); \draw (1)
+edge["$e_2$"] node[below] {1} (2); \draw (0) edge["$e_3=e_1$"'] node[above, near start] {2} (2); \draw [style=dashed
+edge] (0) to (3); \end{pgfonlayer} 
+\end{tikzpicture}
