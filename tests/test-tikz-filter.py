@@ -323,6 +323,17 @@ def test_tikzcode_html() -> None:
     assert_html("div.center > span.tikzcode > svg", path, check_dom)
 
 
+def test_tikz_snippet_html() -> None:
+    """A fenced TikZ snippet uses the shared standalone template."""
+    path = FIXTURES / "tikz-snippet" / "input.md"
+
+    def check_dom(soup):
+        span = soup.find("span", class_="tikzcode")
+        return span is not None and span.find("svg") is not None
+
+    assert_html("fenced TikZ snippet produces svg", path, check_dom)
+
+
 # --- tikz code block (standard examples from obsidian-tikzjax) ---
 
 TIKZJAX_EXAMPLES = [
@@ -463,6 +474,7 @@ def main() -> None:
             [
                 test_tikzcode_latex,
                 test_tikzcode_html,
+                test_tikz_snippet_html,
             ],
         ),
         (

@@ -269,6 +269,18 @@ local function compile_tikz_document(source)
   return run_pdflatex_and_convert(resolved_source, "tikzfull", hash, doc_dir, resolved_source, 0)
 end
 
+local function compile_tikz_code_block(source)
+  local is_document = source:match("\\documentclass") ~= nil
+    and source:match("\\begin%s*{document}") ~= nil
+  if is_document then
+    local svg_path, pdf_path = compile_tikz_document(source)
+    return svg_path, pdf_path, false
+  end
+
+  local svg_path, pdf_path = compile_tikz(source)
+  return svg_path, pdf_path, source:match("\\begin%s*{tikzcd}") ~= nil
+end
+
 -- Shared helpers for building output from a compiled SVG/PDF pair.
 local function make_latex_output(pdf_path, is_tikzcd)
   local base = pdf_path:gsub("%.pdf$", "")
@@ -335,10 +347,10 @@ if FORMAT:match 'latex' or FORMAT:match 'pdf' or FORMAT:match 'markdown' then
       return el
     end
 
-    local _, pdf_path = compile_tikz_document(el.text)
+    local _, pdf_path, is_tikzcd = compile_tikz_code_block(el.text)
     assert(pdf_path, "tikzcd.lua: compilation failed for tikz code block")
 
-    return pandoc.RawBlock('latex', make_latex_output(pdf_path, false))
+    return pandoc.RawBlock('latex', make_latex_output(pdf_path, is_tikzcd))
   end
 end
 
@@ -383,7 +395,7 @@ if FORMAT:match 'html' then
     end
 
     log("CodeBlock (html): processing tikz code block, length=" .. #el.text)
-    local svg_path, _ = compile_tikz_document(el.text)
+    local svg_path, _ = compile_tikz_code_block(el.text)
     if not svg_path then
       log("CodeBlock (html): compilation FAILED")
       assert(svg_path, "tikzcd.lua: compilation failed for tikz code block")
