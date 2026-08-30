@@ -1,0 +1,309 @@
+
+%{\small
+
+%\begin{table}[]
+%\centering
+%\begin{tabular}{@{}llllll@{}}
+%\toprule
+%Description     & Diagram                            & Notation              & $m_{ij}$ & $\angle(H_i, H_j)$ & $w_{ij}$                 \\ \midrule
+%No Edge         & \TableNoEdge        & $H_i \perp H_j$       & $2$      & ${\pi \over 2}$            & $0$                      \\
+%Simple Edge     & \TableSimpleEdge    & $H_i \transverse H_j$ & $3$      & $\pi\over 3$            & $1\over 2$               \\
+%Double Edge     & \TableDoubleEdge    & $H_i \transverse H_j$ & $4$      & $\pi\over 4$            & $\sqrt{2} \over 2$       \\
+%Triple Edge     & \TableTripleEdge    & $H_i \transverse H_j$ & $5$      & $\pi\over 5$            & ${1 + \sqrt{5} \over 4}$ \\
+%4-fold Edge     & \TableQuadrupleEdge & $H_i\transverse H_j$  & $6$      & $\pi\over 6$            & $\sqrt{3} \over 2$       \\
+%Labeled Simple Edge & \TableLabeledSimpleEdge & $H_i \transverse H_j$ & $\geq 7$ & $\pi\over m_{ij}$ & $\cos\qty{\pi \over m_{ij}}$ \\
+%Thick/Bold Edge & \TableBoldEdge      & $H_i \parallel H_j$   & $\infty$ & Undefined          & $1$                      \\
+%Dotted Edge     & \TableDottedEdge    & $H_i \diverge H_j$    & $0$      & $\infty$           & $\cosh(\rho(H_i, H_j))$  \\ \midrule
+%Black Vertex    & \TableBlackVertex   & $h_i^2 = -2$          &          &                    & $2$                      \\
+%White Vertex    & \TableSimpleVertex  & $h_i^2 = -4$          &          &                    & $4$                      \\ \bottomrule
+%\end{tabular}
+%\caption{A summary of conventions for Coxeter-Vinberg diagrams}
+%\label{tab:coxeter-vinberg-conventions}
+%\end{table}
+%}
+
+\newcommand{\TableLabeledSimpleEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) edge["$m_{ij}$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\TableNoEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\TableSimpleEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\TableDoubleEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=double edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\TableTripleEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=triple edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\TableQuadrupleEdge}[0]{
+\begin{tikzpicture}[
+    quadruple/.style={double distance=0.5em,thick,
+        postaction={draw,thick,double distance=0.1em}},
+    quadruple/.default=1em]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$,minimum size=0.8cm] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$, minimum size=0.8cm] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+    \draw[quadruple] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+
+\newcommand{\TableBoldEdge}[0]{
+\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=white node, label=$H_1$] (0) at (0, 0) {};
+        \node [style=white node, label=$H_2$] (1) at (3, 0) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw[style=thick edge] (0) to (1);
+    \end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\TableDottedEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=dashed edge] (0) edge["$w_{ij}$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\TableSimpleVertex}[0]{
+\tikz[baseline]{\node [style=white node] (0) at (0, 0) {};}
+}
+
+
+\newcommand{\TableBlackVertex}[0]{
+\tikz[baseline]{\node [style=black node] (0) at (0, 0) {};}
+}
+
+\newcommand{\TableDoubleVertex}[0]{
+\tikz[baseline]{\node [style=doubled node] (0) at (0, 0) {};}
+}
+
+\newcommand{\VinbergNoEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\VinbergSimpleEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) edge["$m$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\VinbergLabeledSimpleEdge}[1]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) edge["$\1$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+
+\newcommand{\VinbergSingleEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0)to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\VinbergDoubleEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=double edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\VinbergTripleEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=triple edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\VinbergThickEdge}[0]{
+\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=white node, label=$f_1$] (0) at (0, 0) {};
+        \node [style=white node, label=$f_2$] (1) at (3, 0) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw[style=thick edge] (0) to (1);
+    \end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\VinbergDashedEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=dashed edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\VinbergBrokenEdge}[0]{
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=dashed edge] (0) edge["$t$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+}
+
+\newcommand{\edgetto}[0]{
+\begin{tikzpicture} 
+\node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
+\node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
+\draw [style=plain edge] (0) to (1); 
+\end{tikzpicture} 
+}
+
+\newcommand{\edgettt}[0]{
+\begin{tikzpicture} 
+\node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
+\node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
+\draw [style=thick edge] (0) to (1); 
+\end{tikzpicture} 
+}
+
+\newcommand{\edgettgt}[0]{
+\begin{tikzpicture} 
+\node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
+\node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
+\draw [style=dashed edge] (0) -- (1) node[midway,above] () {$h_1h_2$};
+\end{tikzpicture} 
+}
+
+
+\newcommand{\edgetft}[0]{
+\begin{tikzpicture}
+\node [style=black node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=double edge] (0) to (1);
+\end{tikzpicture}
+}
+%\qquad\qquad\qquad & h_1^2 -2, h_2^2 = -4, && h_1 h_2 = 2 \\
+
+\newcommand{\edgetfgt}[0]{
+\begin{tikzpicture}
+\node [style=black node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=dashed edge] (0) -- (1) node[midway,above] () {$h_1h_2$};
+\end{tikzpicture}
+}
+%\qquad\qquad\qquad & h_1^2 -2, h_2^2 = -4, && h_1 h_2 > 2 \\
+
+\newcommand{\edgefft}[0]{
+\begin{tikzpicture}
+\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=plain edge] (0) to (1);
+\end{tikzpicture}
+}
+%\qquad\qquad\qquad & h_1^2 = h_2^2 = -4, && h_1 h_2 = 2 \\
+
+\newcommand{\edgefff}[0]{
+\begin{tikzpicture}
+\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=thick edge] (0) to (1);
+\end{tikzpicture}
+}
+%\qquad\qquad\qquad & h_1^2 = h_2^2 = -4, && h_1 h_2 = 4 \\
+
+\newcommand{\edgeffgf}[0]{
+\begin{tikzpicture}
+\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=dashed edge] (0) -- (1) node[midway,above] () {$h_1h_2$};
+\end{tikzpicture}
+}
+%\qquad\qquad\qquad & h_1^2 = h_2^2 = -4, && h_1 h_2 > 4 \\
