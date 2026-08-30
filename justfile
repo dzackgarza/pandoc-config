@@ -14,6 +14,18 @@ GLOBAL_FIGURES_DIR := env_var_or_default("FIGURES_DIR", home_dir() / "figures")
 BUILD_DIR_PANDOC := ".build_pandoc"
 BUILD_DIR_TEX := ".build_tex"
 
+# Default LaTeX template for the compile-pandoc family. Single source:
+# compile-pandoc's parameter default and compile-pandoc-project's
+# sentinel ('' or '-') both resolve here, so callers never have to
+# duplicate the template name.
+DEFAULT_TEMPLATE := "research_draft.tex"
+
+# compile-pandoc-project defaults: its variadic input list must be the
+# last parameter, so bib_source/build_dir are env-var overridable here
+# rather than positional. Defaults match compile-pandoc exactly.
+PROJECT_BIB_SOURCE := env_var_or_default("PANDOC_BIB_SOURCE", GLOBAL_BIB_SOURCE)
+PROJECT_BUILD_DIR := env_var_or_default("PANDOC_BUILD_DIR", BUILD_DIR_PANDOC)
+
 # --- Environment ---
 export PANDOC_DIR := home_dir() / ".pandoc"
 export TEXINPUTS := ".:" + home_dir() + "/.pandoc/styles//:" + home_dir() + "/.pandoc/macros//:" + home_dir() + "/.pandoc/config//:" + env_var_or_default("TEXINPUTS", "")
@@ -178,21 +190,79 @@ compile-tex main_file="main.tex" output_name="paper" bib_source=GLOBAL_BIB_SOURC
   cp "$ROOT/{{build_dir}}/${FILE%.tex}.pdf" "$ROOT/{{output_name}}-$(date +%d-%m-%y).pdf"
 
 # Compile Pandoc source to PDF via LaTeX
-compile-pandoc input_file="main.md" output_name="output" template="research_draft.tex" bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC:
+compile-pandoc input_file="main.md" output_name="output" template=DEFAULT_TEMPLATE bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex "no-crossref" template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
+
+# Compile multiple ordered Pandoc sources into one project PDF.
+# Inputs are passed to pandoc verbatim, in the given order, and
+# pandoc-crossref resolves {#fig:}/{#tbl:}/{#eq:}/{#sec:}/{#lst:}
+# targets across file boundaries. Since the variadic input list must be
+# the last parameter, bib_source/build_dir are overridden via the
+# PANDOC_BIB_SOURCE / PANDOC_BUILD_DIR environment variables instead of
+# positionally (defaults identical to compile-pandoc).
+# Usage: just pandoc::compile-pandoc-project <output_name> <template> <file1.md> [file2.md ...]
+# The template slot sits before the variadic, so it cannot be omitted
+# positionally; pass '' or '-' as a sentinel to use the recipe's own
+# default (DEFAULT_TEMPLATE, shared with compile-pandoc) without naming
+# it. Real template names keep working unchanged.
+# The variadic cannot be forwarded as a just dependency argument: just
+# joins it into a single string, which would word-split filenames
+# containing spaces. [positional-arguments] passes each recipe argument
+# through as a real shell positional, so "${@:3}" preserves per-file
+# quoting into the nested just invocation.
+[positional-arguments]
+compile-pandoc-project output_name template +input_files:
   #!/usr/bin/env bash
   set -euo pipefail
+  cd "{{invocation_directory()}}"
+  TEMPLATE="{{template}}"
+  if [ -z "$TEMPLATE" ] || [ "$TEMPLATE" = "-" ]; then
+    TEMPLATE="{{DEFAULT_TEMPLATE}}"
+  fi
+  just --justfile "{{justfile()}}" _compile-pandoc-tex crossref "$TEMPLATE" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
+  just --justfile "{{justfile()}}" _compile-pandoc-latexmk "{{output_name}}" "{{PROJECT_BUILD_DIR}}"
+
+# Shared pandoc stage: markdown -> build_dir/output.tex.
+# Filters resolve from this justfile's checkout (not $HOME/.pandoc), so
+# an explicit --justfile invocation runs THIS checkout's filters.
+# pandoc-crossref (crossref mode, used by compile-pandoc-project) must
+# run after include.lua so it sees the fully transcluded document, and
+# before convert_amsthm_envs.lua: crossref rewrites the
+# @fig:/@tbl:/@eq:/@sec:/@lst: families and passes theorem divs and
+# @thm:-family citations through untouched, so the theorem filter still
+# receives its divs intact. compile-pandoc stays crossref-free: crossref
+# injects a header-includes block into LaTeX output, which would break
+# the byte-stable single-file surface.
+# [positional-arguments] exposes the arguments as "$1".."$N" so the
+# variadic input list can be consumed as "${@:5}" with per-file quoting
+# (filenames with spaces stay single arguments).
+[private]
+[positional-arguments]
+_compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  CROSSREF_ARGS=()
+  case "{{crossref_mode}}" in
+    crossref) CROSSREF_ARGS=(-F pandoc-crossref -M cref=true) ;;
+    no-crossref) ;;
+    *)
+      echo "❌ _compile-pandoc-tex: unknown crossref_mode '{{crossref_mode}}' (expected 'crossref' or 'no-crossref')" >&2
+      exit 1
+      ;;
+  esac
+
   ROOT="{{invocation_directory()}}"
   mkdir -p "$ROOT/{{build_dir}}"
-  
+
   # Symlink global bib for easy resolution
   ln -sf "{{bib_source}}" "$ROOT/global.bib"
 
   # Run pandoc from ROOT to ensure relative include.lua paths work correctly
   cd "$ROOT"
-  pandoc "{{input_file}}" \
-      --lua-filter="$HOME/.pandoc/filters/include.lua" \
-      --lua-filter="$HOME/.pandoc/filters/convert_amsthm_envs.lua" \
-      --lua-filter="$HOME/.pandoc/filters/select_images.lua" \
+  pandoc "${@:5}" \
+      --lua-filter="{{justfile_directory()}}/filters/include.lua" \
+      "${CROSSREF_ARGS[@]}" \
+      --lua-filter="{{justfile_directory()}}/filters/convert_amsthm_envs.lua" \
+      --lua-filter="{{justfile_directory()}}/filters/select_images.lua" \
       --natbib \
       --bibliography="global.bib" \
       --template={{template}} \
@@ -200,7 +270,14 @@ compile-pandoc input_file="main.md" output_name="output" template="research_draf
       --number-sections \
       --toc --toc-depth=2 \
       -s -o "{{build_dir}}/output.tex"
-  
+
+# Shared latexmk stage: build_dir/output.tex -> PDF copied to ROOT.
+[private]
+_compile-pandoc-latexmk output_name build_dir:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  ROOT="{{invocation_directory()}}"
+  cd "$ROOT"
   cd "{{build_dir}}"
   # BIBINPUTS setup (Augment environment with project root so global.bib is found)
   export BIBINPUTS=".:$ROOT:${BIBINPUTS:-}"
@@ -348,6 +425,15 @@ test-commit: test
 
 # CI gate (run by the global pre-push hook): same full suite as `test`.
 test-ci: test
+
+# Test workspace-resolved theorem references (compile-pandoc-project
+# tex stage on ordered inputs), byte-stability of the compile-pandoc
+# attribute-style theorem path, and a plain-branch latexmk gate proving
+# every filter-emitted theorem environment is defined in this
+# checkout's environments.tex (issue #6). Runs in a throwaway scratch
+# dir.
+test-references:
+  bash "{{justfile_directory()}}/tests/test-project-references.sh"
 
 # Test tikzcd filter on multiple scenarios
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.

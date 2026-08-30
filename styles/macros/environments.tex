@@ -193,6 +193,19 @@
 }
 \newtheorem{goal}[theorem]{Goal}
 
+\tcolorboxenvironment{assumption}{
+  colback=defn_color,
+  boxrule=0pt,
+  boxsep=0pt,
+  opacityfill=0.15,
+  breakable,
+  enhanced jigsaw,
+  borderline west={4pt}{0pt}{defn_color},
+  fonttitle={\large\bfseries},
+  attach title to upper={},
+}
+\newtheorem{assumption}[theorem]{Assumption}
+
 % Problem Style
 \newtheoremstyle{problem} % name
   {0em}                   % Space above, empty = `usual value'
@@ -379,5 +392,6 @@
   }%
 \theoremstyle{warnenv}
 \newtheorem{warnings}[theorem]{Warning}
+\newtheorem{warning}[theorem]{Warning}
 %\numberwithin{warning}{subsection} % important bit
 
