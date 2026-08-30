@@ -18,10 +18,15 @@ Consolidated from `research/writing/Coble Paper Draft`, where they were the only
 copies.
 
 The repository also owns the imported TikZ source trees in
-`figures/tikz/dissertation/`, `figures/tikz/uga-dissertation-template/`, and
-`figures/tikz/visualizations/`. The original paths in the notes and dissertation
+`figures/tikz/dissertation/`, `figures/tikz/uga-dissertation-template/`,
+`figures/tikz/visualizations/`, `figures/tikz/obsidian/`, and
+`figures/tikz/legacy/`. The original paths in the notes, archive, and dissertation
 repositories are symlinks to these directories, so existing documents keep their
 relative `\input` paths while the editable sources have one canonical owner.
 
-Standalone TikZ documents imported from the Notes repository live in
-`figures/tikz/visualizations/standalone/`. Their original paths remain symlinks.
+Standalone TikZ documents imported from the Notes and dissertation repositories
+live in `figures/tikz/visualizations/standalone/` and
+`figures/tikz/legacy/standalone/`. Obsidian diagram sidecars live in
+`figures/tikz/obsidian/`; archived raw sources live in
+`figures/tikz/legacy/unique-diagrams/` and `figures/tikz/legacy/v4-originals/`.
+Their original paths remain symlinks.
