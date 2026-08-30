@@ -22,3 +22,6 @@ The repository also owns the imported TikZ source trees in
 `figures/tikz/visualizations/`. The original paths in the notes and dissertation
 repositories are symlinks to these directories, so existing documents keep their
 relative `\input` paths while the editable sources have one canonical owner.
+
+Standalone TikZ documents imported from the Notes repository live in
+`figures/tikz/visualizations/standalone/`. Their original paths remain symlinks.
