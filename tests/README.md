@@ -7,21 +7,20 @@ This directory contains test documents that exercise the unified LaTeX macro sys
 ### LaTeX Test
 
 - **test-latex-macros.tex** - Comprehensive LaTeX document testing all macro tiers
-- **test-latex-macros.pdf** - Compiled output (206KB, 4 pages)
-- **test-macros.sty** - Test-specific package with absolute paths to lib/
+- **test-macros.sty** - Test package using the installed style tree
+- **test-latex-macros.pdf** - Generated output from `just _test-macros` (ignored)
 
 ### Pandoc Test
 
 - **test-pandoc-macros.md** - Markdown document with same macro tests
-- **compile-pandoc-test.sh** - Compilation script (work in progress)
+- **just test** - Runs the complete repository test recipe
 
 ## Compiling the LaTeX Test
 
-The LaTeX test compiles successfully:
+Run the LaTeX test from the repository root:
 
 ```bash
-cd /home/dzack/dotfiles/pandoc/tests
-pdflatex -interaction=nonstopmode test-latex-macros.tex
+just _test-macros
 ```
 
 This produces `test-latex-macros.pdf` which exercises:
@@ -46,7 +45,7 @@ These are handled by the macro files but may generate warnings.
 
 For the macro system to work correctly in production, TEXINPUTS must include:
 ```bash
-export TEXINPUTS=".:$HOME/.pandoc/styles//:$HOME/.pandoc/lib//:$HOME/.pandoc/preambles//:$HOME/.pandoc/config//:"
+export TEXINPUTS=".:$HOME/.pandoc/styles//:$HOME/.pandoc/styles/macros//:$HOME/.pandoc/styles/preambles//:$HOME/.pandoc/config//:"
 ```
 
 This is already configured in `~/.zshrc`. Reload your shell or run `source ~/.zshrc` to
