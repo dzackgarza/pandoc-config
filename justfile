@@ -250,20 +250,58 @@ clean build_dir_pandoc=BUILD_DIR_PANDOC build_dir_tex=BUILD_DIR_TEX:
   #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
-  rm -rf "$ROOT/{{build_dir_pandoc}}" "$ROOT/{{build_dir_tex}}" "$ROOT/.build" "$ROOT/.build_test_templates"
-  rm -f "$ROOT"/*.pdf "$ROOT"/*.aux "$ROOT"/*.log "$ROOT"/*.fls "$ROOT"/*.fdb_latexmk "$ROOT"/*.bbl "$ROOT"/*.bcf "$ROOT"/*.blg "$ROOT"/*.run.xml "$ROOT"/*.out "$ROOT"/*.toc "$ROOT"/*SAVE-ERROR
-  rm -f "$ROOT/global.bib"
-  # Clean test artifacts from tests/ directory
-  find "$ROOT/tests" -type f \( -name "*.aux" -o -name "*.log" -o -name "*.fls" -o -name "*.fdb_latexmk" -o -name "*.synctex.gz" -o -name "*.out" -o -name "*.toc" \) -delete 2>/dev/null || true
-  # Clean any stray compilation artifacts from templates/ directory (should not exist with proper build workflow)
-  find "$ROOT/templates" -type f \( -name "*.pdf" -o -name "*.aux" -o -name "*.log" -o -name "*.bcf" -o -name "*.run.xml" -o -name "*.out" -o -name "*.toc" \) -delete 2>/dev/null || true
+  command -v trash >/dev/null 2>&1 || { echo "clean requires the trash command" >&2; exit 1; }
+
+  trash_if_present() {
+    local path="$1"
+    if [ -e "$path" ]; then
+      trash "$path"
+    fi
+  }
+
+  for path in \
+    "$ROOT/{{build_dir_pandoc}}" \
+    "$ROOT/{{build_dir_tex}}" \
+    "$ROOT/.build" \
+    "$ROOT/.build_test_templates" \
+    "$ROOT/global.bib"; do
+    trash_if_present "$path"
+  done
+
+  while IFS= read -r -d '' path; do
+    trash_if_present "$path"
+  done < <(find "$ROOT" -maxdepth 1 -type f \( \
+    -name "*.pdf" -o -name "*.aux" -o -name "*.log" -o -name "*.fls" \
+    -o -name "*.fdb_latexmk" -o -name "*.bbl" -o -name "*.bcf" \
+    -o -name "*.blg" -o -name "*.run.xml" -o -name "*.out" \
+    -o -name "*.toc" -o -name "*SAVE-ERROR" \) -print0)
+
+  for directory in "$ROOT/tests" "$ROOT/templates"; do
+    if [ -d "$directory" ]; then
+      while IFS= read -r -d '' path; do
+        trash_if_present "$path"
+      done < <(find "$directory" -type f \( \
+        -name "*.pdf" -o -name "*.aux" -o -name "*.log" \
+        -o -name "*.fls" -o -name "*.fdb_latexmk" \
+        -o -name "*.synctex.gz" -o -name "*.bcf" -o -name "*.run.xml" \
+        -o -name "*.out" -o -name "*.toc" \) -print0)
+    fi
+  done
 
 # Clean all build artifacts from reference directories
 clean-refs:
   #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
-  find "$ROOT/references" -type f ! \( -name "*.tex" -o -name "*.sty" -o -name "*.cls" -o -name "*.bib" -o -name "*.bbl" -o -name "*.png" -o -name "*.jpg" -o -name "tex4ht.cfg" \) -delete
+  command -v trash >/dev/null 2>&1 || { echo "clean-refs requires the trash command" >&2; exit 1; }
+  if [ -d "$ROOT/references" ]; then
+    while IFS= read -r -d '' path; do
+      trash "$path"
+    done < <(find "$ROOT/references" -type f ! \( \
+      -name "*.tex" -o -name "*.sty" -o -name "*.cls" -o -name "*.bib" \
+      -o -name "*.bbl" -o -name "*.png" -o -name "*.jpg" \
+      -o -name "tex4ht.cfg" \) -print0)
+  fi
 
 # Test macro compilation
 _test-macros:
