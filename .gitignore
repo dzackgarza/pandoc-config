@@ -3,8 +3,7 @@ venv/
 .venv/
 node_modules/
 .ruff_cache/
-.serena/cache/
-.serena/project.local.yml
+.serena/
 __pycache__/
 *.log
 *.aux
