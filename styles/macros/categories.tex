@@ -284,3 +284,8 @@
 \newcommand{\Torsor}[1]{{\mathsf{#1}\dash\mathsf{Torsor}}}
 \newcommand{\Torsorleft}[1]{{\mathsf{#1}\dash\mathsf{Torsor}}}
 \newcommand{\Torsorright}[1]{{\mathsf{Torsor}\dash\mathsf{#1}}}
+
+% Adjunctions
+% \adj{C}{D}{F}{G} displays the adjoint pair F : C <-> D : G, with the left
+% adjoint above the arrows and the right adjoint below.
+\newcommand{\adj}[4]{#1 \mathrel{\underset{#4}{\overset{#3}{\rightleftarrows}}} #2}

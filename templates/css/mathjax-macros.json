@@ -237,7 +237,6 @@
   "ab": "{\\operatorname{ab}}",
   "ad": "{ \\operatorname{ad}}",
   "Ad": "{ \\operatorname{Ad} }",
-  "adj": "\\operatorname{adj}",
   "adjoint": "\\dagger",
   "ae": "{ \\text{a.e.} }",
   "afp": "A_{/\\FF_p}",
@@ -804,7 +803,7 @@
   "projectivelim": "\\varprojlim",
   "projresolve": "\\rightrightarrows",
   "proportional": "\\propto",
-  "qed": "\\hfill\\blacksquare",
+  "qed": "\\hfill\\ensuremath{\\blacksquare}",
   "rational": "\\torational",
   "rationalmap": "\\dashrightarrow",
   "semidirect": "\\rtimes",
@@ -2201,6 +2200,10 @@
   "Torsorright": [
     "{\\mathsf{Torsor}\\dash\\mathsf{#1}}",
     1
+  ],
+  "adj": [
+    "#1 \\mathrel{\\underset{#4}{\\overset{#3}{\\rightleftarrows}}} #2",
+    4
   ],
   "tmf": "\\mathrm{tmf}",
   "taf": "\\mathrm{taf}",
