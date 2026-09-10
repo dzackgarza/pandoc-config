@@ -23,6 +23,19 @@ DEFAULT_TEMPLATE := "research_draft.tex"
 # compile-pandoc-project defaults: its variadic input list must be the
 # last parameter, so bib_source/build_dir are env-var overridable here
 # rather than positional. Defaults match compile-pandoc exactly.
+#
+# These env vars are read while this file is PARSED. A project that imports
+# this justfile as a module therefore cannot set them with `export FOO := ...`
+# at its own top level: that only populates the environment of its recipes,
+# which is too late. Put them in the environment of a nested just instead:
+#
+#   compile:
+#     #!/usr/bin/env bash
+#     PANDOC_BIB_SOURCE=... PANDOC_CROSSREF=no-crossref \
+#       just pandoc::compile-pandoc-project out template.tex main.md
+#
+# The failure is silent -- the default is used and the build still succeeds --
+# so check the generated global.bib symlink if a setting seems ignored.
 PROJECT_BIB_SOURCE := env_var_or_default("PANDOC_BIB_SOURCE", GLOBAL_BIB_SOURCE)
 PROJECT_BUILD_DIR := env_var_or_default("PANDOC_BUILD_DIR", BUILD_DIR_PANDOC)
 
