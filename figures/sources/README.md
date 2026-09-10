@@ -33,3 +33,17 @@ live in `figures/tikz/visualizations/standalone/` and
 `figures/tikz/legacy/unique-diagrams/` and `figures/tikz/legacy/v4-originals/`.
 The Algebra II standalone figures live in `figures/tikz/legacy/algebra-franke/`.
 Their original paths remain symlinks.
+
+## Dissertation figures
+
+Absorbed from the dissertation's LaTeX project in September 2026, when that
+project was dismantled and its markdown source moved to
+`research/writing/dissertation`:
+
+| location | contents | origin |
+| --- | --- | --- |
+| `figures/raster/dissertation/` | hyperbolic-geometry sketches, integral-affine-sphere drawings, toric pictures, Coxeter and Vinberg chamber plots | scans of hand drawings, and plots from the Sage notebooks in `research/archives/notebooks` (`Lattices and Coxeter Diagrams DZG`, `Sterk IAS Plotting`, `Visualizations`) |
+| `figures/vector/aegs-paper/` | cusp, Sterk, and folding diagrams `fig-*.pdf` | figures of Alexeev–Engel–Garza–Schaffler, *Compact moduli of Enriques surfaces of degree 2* (arXiv 2312.03638 source) |
+| `figures/screenshots/` | dated `2025-*.png` captures | screenshots taken while drafting |
+| `figures/vector/` | `sphere.svg`, `triangulated_sphere.svg`, `triangulated-sphere.svg`, `type-ii-kulikov-degeneration2.svg` | Inkscape drawings; the Blender source is `triangulated_sphere.blend` above |
+| `figures/ade-diagrams/` | `A_3`, `A_4_minus`, `D_5`, `E_8` surface pictures used in chapter 5 | `research/computations/notebooks/ade_surfaces.ipynb` |
