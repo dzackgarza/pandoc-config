@@ -26,9 +26,22 @@ DEFAULT_TEMPLATE := "research_draft.tex"
 PROJECT_BIB_SOURCE := env_var_or_default("PANDOC_BIB_SOURCE", GLOBAL_BIB_SOURCE)
 PROJECT_BUILD_DIR := env_var_or_default("PANDOC_BUILD_DIR", BUILD_DIR_PANDOC)
 
+# pandoc-crossref for compile-pandoc-project: "crossref" (default) or
+# "no-crossref". Crossref injects a preamble block that declares a
+# codelisting float and redefines \footnote inside subfigures; in a document
+# that authors its own \label/\Cref and uses no @fig:/@tbl:/@eq: references,
+# that block is dead weight and clashes with the caption/sidenotes stack.
+PROJECT_CROSSREF := env_var_or_default("PANDOC_CROSSREF", "crossref")
+
+# pandoc --top-level-division for the compile-pandoc family: "default"
+# (pandoc infers section/chapter from the document class), "section",
+# "chapter", or "part". Book-length projects whose "#" headings are parts
+# set PANDOC_TOP_LEVEL_DIVISION=part in their own justfile.
+TOP_LEVEL_DIVISION := env_var_or_default("PANDOC_TOP_LEVEL_DIVISION", "default")
+
 # --- Environment ---
 export PANDOC_DIR := home_dir() / ".pandoc"
-export TEXINPUTS := ".:" + home_dir() + "/.pandoc/styles//:" + home_dir() + "/.pandoc/macros//:" + home_dir() + "/.pandoc/config//:" + env_var_or_default("TEXINPUTS", "")
+export TEXINPUTS := ".:" + home_dir() + "/.pandoc/styles//:" + home_dir() + "/.pandoc/macros//:" + home_dir() + "/.pandoc/config//:" + home_dir() + "/.pandoc:" + home_dir() + "/.pandoc/figures:" + env_var_or_default("TEXINPUTS", "")
 
 # --- Recipes ---
 
@@ -218,8 +231,8 @@ compile-pandoc-project output_name template +input_files:
   if [ -z "$TEMPLATE" ] || [ "$TEMPLATE" = "-" ]; then
     TEMPLATE="{{DEFAULT_TEMPLATE}}"
   fi
-  just --justfile "{{justfile()}}" _compile-pandoc-tex crossref "$TEMPLATE" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
-  just --justfile "{{justfile()}}" _compile-pandoc-latexmk "{{output_name}}" "{{PROJECT_BUILD_DIR}}"
+  just --justfile "{{source_file()}}" _compile-pandoc-tex "{{PROJECT_CROSSREF}}" "$TEMPLATE" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
+  just --justfile "{{source_file()}}" _compile-pandoc-latexmk "{{output_name}}" "{{PROJECT_BUILD_DIR}}"
 
 # Shared pandoc stage: markdown -> build_dir/output.tex.
 # Filters resolve from this justfile's checkout (not $HOME/.pandoc), so
@@ -259,15 +272,16 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   # Run pandoc from ROOT to ensure relative include.lua paths work correctly
   cd "$ROOT"
   pandoc "${@:5}" \
-      --lua-filter="{{justfile_directory()}}/filters/include.lua" \
+      --lua-filter="{{source_directory()}}/filters/include.lua" \
       "${CROSSREF_ARGS[@]}" \
-      --lua-filter="{{justfile_directory()}}/filters/convert_amsthm_envs.lua" \
-      --lua-filter="{{justfile_directory()}}/filters/select_images.lua" \
+      --lua-filter="{{source_directory()}}/filters/convert_amsthm_envs.lua" \
+      --lua-filter="{{source_directory()}}/filters/select_images.lua" \
       --natbib \
       --bibliography="global.bib" \
       --template={{template}} \
       --biblatex \
       --number-sections \
+      --top-level-division={{TOP_LEVEL_DIVISION}} \
       --toc --toc-depth=2 \
       -s -o "{{build_dir}}/output.tex"
 
@@ -384,7 +398,7 @@ clean-refs:
 _test-macros:
   #!/usr/bin/env bash
   set -euo pipefail
-  PANDOC_DIR="{{justfile_directory()}}"
+  PANDOC_DIR="{{source_directory()}}"
   export TEXINPUTS=".:$HOME/.pandoc/styles//:$HOME/.pandoc/styles/macros//:$HOME/.pandoc/styles/preambles//:$HOME/.pandoc/config//:"
   cd "$PANDOC_DIR/tests"
   pdflatex -interaction=nonstopmode test-latex-macros.tex || true
@@ -399,7 +413,7 @@ _test-macros:
 _test-tikz:
   #!/usr/bin/env bash
   set -euo pipefail
-  PANDOC_DIR="{{justfile_directory()}}"
+  PANDOC_DIR="{{source_directory()}}"
   export TEXINPUTS=".:$HOME/.pandoc/styles//:$HOME/.pandoc/styles/macros//:$HOME/.pandoc/styles/preambles//:$HOME/.pandoc/config//:"
   cd "$PANDOC_DIR/tests"
   pdflatex -interaction=nonstopmode test-tikz-macros.tex 2>&1 | tee /tmp/tikz-test.log
@@ -437,16 +451,16 @@ test-push: test-ci
 # checkout's environments.tex (issue #6). Runs in a throwaway scratch
 # dir.
 test-references:
-  bash "{{justfile_directory()}}/tests/test-project-references.sh"
+  bash "{{source_directory()}}/tests/test-project-references.sh"
 
 # Test tikzcd filter on multiple scenarios
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.
 _test-tikz-filter:
-  python3 "{{justfile_directory()}}/tests/test-tikz-filter.py"
+  python3 "{{source_directory()}}/tests/test-tikz-filter.py"
 
 # Test Lamport-style proof parsing, numbering, references, and LaTeX output
 _test-lamport-proof:
-  python3 "{{justfile_directory()}}/tests/test-lamport-proof.py"
+  python3 "{{source_directory()}}/tests/test-lamport-proof.py"
 
 
 # Generate MathJax 3 macro configuration (JS/TS/JSON) from canonical tier .tex files.
@@ -456,14 +470,14 @@ _test-lamport-proof:
 #   templates/css/mathjax-macros.json  — JSON config
 #   templates/pandoc_preview_template.html — updated with inlined macros
 generate-math-macros:
-  python3 "{{justfile_directory()}}/bin/generate-mathjax-config.py"
+  python3 "{{source_directory()}}/bin/generate-mathjax-config.py"
 
 # Legacy: generate raw TeX math macro injection file (templates/css/math-macros.html).
 # Prefer `generate-math-macros` for MathJax 3 JS/TS/JSON output.
 generate-math-macros-legacy:
   #!/usr/bin/env bash
   set -euo pipefail
-  PANDOC_DIR="{{justfile_directory()}}"
+  PANDOC_DIR="{{source_directory()}}"
   OUTPUT="$PANDOC_DIR/templates/css/math-macros.html"
   TIER1="$PANDOC_DIR/styles/macros/tier1-mathjax-simple.tex"
   TIER2="$PANDOC_DIR/styles/macros/tier2-mathjax-args.tex"
@@ -480,7 +494,7 @@ generate-math-macros-legacy:
 _test-templates clean="true":
   #!/usr/bin/env bash
   set -euo pipefail
-  PANDOC_DIR="{{justfile_directory()}}"
+  PANDOC_DIR="{{source_directory()}}"
   BUILD_DIR="$PANDOC_DIR/.build_test_templates"
   export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$HOME/.pandoc/config//:"
 

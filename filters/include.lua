@@ -44,7 +44,11 @@ local function update_contents(blocks, shift_by, include_path)
     end,
     -- If image paths are relative then prepend include file path
     Image = function (image)
-      if path.is_relative(image.src) and not (image.src:match("^resources/") or image.src:match("^%.%.") or image.src:match("^rendered/")) then
+      -- "figures/" joins "resources/" and "rendered/" as a project-root
+      -- prefix: it is the conventional figures directory (often a symlink to
+      -- ~/.pandoc/figures), so it must not be re-anchored to the including
+      -- file's directory.
+      if path.is_relative(image.src) and not (image.src:match("^resources/") or image.src:match("^%.%.") or image.src:match("^rendered/") or image.src:match("^figures/")) then
         image.src = path.normalize(path.join({include_path, image.src}))
       end
       return image

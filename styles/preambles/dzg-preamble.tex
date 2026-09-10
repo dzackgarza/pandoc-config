@@ -45,8 +45,9 @@
 \RequirePackage[all]{xy}
 
 
-% Graphics path for \includegraphics in diagrams
-\graphicspath{{~/.pandoc/figures/}}
+% Graphics are found through TEXINPUTS, which the pandoc justfile points at
+% ~/.pandoc and ~/.pandoc/figures. A \graphicspath entry cannot be used for
+% this: TeX does not expand "~", so such an entry never matches anything.
 
 % Microtype: protrusion and expansion.
 % Pandoc's default template may load microtype before project styles.
