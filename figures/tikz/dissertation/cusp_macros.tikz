@@ -3,8 +3,12 @@
 % file draws on would drop the ones the document already set up -- notably
 % "Dynkin behind", which dynkin-diagrams needs, and the TikZiT edge/node
 % layers. Declare each layer only if it is new, then set the union.
+% \makeatletter is required: this file is \input from the document body, where
+% "@" is not a letter, so \pgfutil@ifundefined would parse as \pgfutil.
+\makeatletter
 \providecommand{\dzgdeclarelayer}[1]{%
   \pgfutil@ifundefined{pgf@layerbox@#1}{\pgfdeclarelayer{#1}}{}}
+\makeatother
 \dzgdeclarelayer{background}
 \dzgdeclarelayer{foreground}
 \dzgdeclarelayer{Dynkin behind}
