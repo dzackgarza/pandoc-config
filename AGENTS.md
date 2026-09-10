@@ -78,6 +78,13 @@ export BIBINPUTS=".:$HOME/.pandoc/bib//:${BIBINPUTS:-}"
 export PATH="$HOME/.pandoc/bin:$PATH"
 ```
 
+## Authoring Style
+
+`AUTHORING_STYLE.md` holds the markdown conventions for prose compiled through
+this configuration: fenced divs for theorem-like environments, `align`
+environments rather than `\[ \]` for display math, and list and heading
+spacing. `just format-md <dir>` enforces the mechanical parts.
+
 ## Macro Tier System
 
 Macros in `styles/macros/` organized by MathJax compatibility:
