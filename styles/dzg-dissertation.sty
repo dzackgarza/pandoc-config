@@ -1,0 +1,101 @@
+% DZG Dissertation Style
+% Macro set and theorem environments for the UGA dissertation
+% (Compact Moduli of Numerically Polarized Degree Two Enriques Surfaces).
+%
+% Layering: the shared preamble and macro tiers come first, then the
+% definitions the submitted dissertation was typeset with override the
+% shared tiers for this document only (macros/dissertation-overrides.tex).
+% Page layout and front matter live in templates/uga-dissertation.tex.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dzg-dissertation}[2026/09/10 DZG dissertation macros]
+
+% Shared package loading (amsmath family, tikz, hyperref, dynkin-diagrams, ...)
+\input{preambles/dzg-preamble}
+
+% Tables and floats
+\RequirePackage{longtable}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{float}
+\RequirePackage{caption}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+% Table captions above the table (UGA formatting check)
+\floatstyle{plaintop}
+\restylefloat{table}
+
+% Typography helpers
+\RequirePackage{csquotes}
+\RequirePackage{xspace}
+\RequirePackage[textsize=tiny]{todonotes}
+
+% Bibliography
+\RequirePackage[backend=biber,style=alphabetic,sorting=nyt]{biblatex}
+
+% Shared macro tiers, then the dissertation's own definitions on top
+\RequirePackage{dzg-macros}
+\input{dissertation-overrides}
+
+% Theorem environments: plain amsthm, numbered within subsection.
+% amsthm only, deliberately: thmtools' thm-restate pre-\let's the counter of
+% every environment that shares a counter (\newtheorem{lemma}[theorem]{...}),
+% so amsthm then rejects the declaration as already defined. The dissertation
+% restates no theorems, so thmtools is not loaded.
+\makeatletter
+\@ifundefined{thm@headfont}{\def\thm@headfont{\bfseries}}{}
+\makeatother
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[subsection]
+\renewcommand{\thetheorem}{\thesubsection.\arabic{theorem}}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{fact}[theorem]{Fact}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{convention}[theorem]{Convention}
+\newtheorem{terminology}[theorem]{Terminology}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{caution}[theorem]{Caution}
+\newtheorem{warning}[theorem]{Warning}
+\newtheorem{variant}[theorem]{Variant}
+
+\newtheorem{theoremx}{Theorem}
+\newenvironment{customthm}[1]
+  {\renewcommand\thetheoremx{#1}\theoremx}
+  {\endtheoremx}
+
+% Pandoc compatibility
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\textwidth\textwidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\def\fps@figure{H}
+\providecommand{\pandocbounded}[1]{#1}
+\makeatother
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+% Cleveref last: it hooks into the packages above
+\RequirePackage{cleveref}
+
+\endinput

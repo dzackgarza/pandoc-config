@@ -1,0 +1,111 @@
+% Dissertation-specific macro overrides.
+% Loaded by dzg-dissertation.sty after dzg-macros; these definitions are the
+% ones the submitted dissertation was typeset with and take precedence over
+% the shared tiers for that document only.
+
+\let\Aff\relax  % differs centrally
+\DeclareMathOperator{\Aff}{Aff}
+\let\Ag\relax  % differs centrally
+\newcommand{\Ag}{ \modulistack{A}_{g} }
+\let\BB\relax  % absent centrally
+\DeclareMathOperator{\BB}{BB}
+\let\BBfan\relax  % differs centrally
+\newcommand{\BBfan}{\Sigma^{\BB}}
+\let\ConvOp\relax  % absent centrally
+\DeclareMathOperator{\ConvOp}{Conv}
+\let\DD\relax  % differs centrally
+\newcommand{\DD}[0]{\mathbf{D}}
+\let\Disjoint\relax  % differs centrally
+\newcommand{\Disjoint}[0]{\bigsqcup}
+\let\FG\relax  % absent centrally
+\newcommand{\FG}{F_\Gamma}
+\let\GIT\relax  % helper of \gitcpt
+\DeclareMathOperator{\GIT}{GIT}
+\let\IA\relax  % absent centrally
+\newcommand{\IA}{\mathrm{IA}}
+\let\IAD\relax  % absent centrally
+\newcommand{\IAD}{\text{IAD}}
+\let\IARP\relax  % absent centrally
+\newcommand{\IARP}{\text{IARP}}
+\let\IV\relax  % differs centrally
+\newcommand{\IV}{{\textrm{IV}}}
+\let\Mg\relax  % differs centrally
+\newcommand{\Mg}{ \modulistack{M}_{g}}
+\let\OStab\relax  % absent centrally
+\newcommand{\OStab}{\Orth^*}
+\let\Sch\relax  % differs centrally
+\DeclareMathOperator{\Sch}{Sch}
+\let\Set\relax  % differs centrally
+\DeclareMathOperator{\Set}{\mathsf{Sets}}
+\let\Sp\relax  % differs centrally
+\DeclareMathOperator{\Sp}{Sp}
+\let\ZZtwoadic\relax  % absent centrally
+\newcommand{\ZZtwoadic}[0]{{ \ZZ_{\hat 2} }}
+\let\bbcpt\relax  % differs centrally
+\newcommand{\bbcpt}[1]{\cpt{#1}^{ \BB }}
+\let\bd\relax  % differs centrally
+\newcommand{\bd}{\partial}
+\let\cox\relax  % absent centrally
+\newcommand{\cox}{\Cox}
+\let\coxfan\relax  % differs centrally
+\newcommand{\coxfan}{\torfan^{\cox}}
+\let\decfiltration\relax  % absent centrally
+\newcommand{\decfiltration}[1]{ {#1}_{\bullet} }
+\let\genop\relax  % absent centrally
+\newcommand{\genop}{\mathrm{gen}}
+\let\gens\relax  % differs centrally
+\newcommand{\gens}[1]{\left\langle #1 \right\rangle}
+\let\gitcpt\relax  % differs centrally
+\newcommand{\gitcpt}[1]{\cpt{#1}^{ \GIT }}
+\let\incfiltration\relax  % absent centrally
+\newcommand{\incfiltration}[1]{ {#1}^{\bullet} }
+\let\irrelevant\relax  % absent centrally
+\newcommand{\irrelevant}{\mathrm{irr}}
+\let\ksbacpt\relax  % differs centrally
+\newcommand{\ksbacpt}[1]{ \cpt{#1} }
+\let\lEn\relax  % differs centrally
+\newcommand{\lEn}[0]{ {L_{\mathrm{En}}} }
+\let\liek\relax  % absent centrally
+\newcommand{\liek}[0]{{\mathfrak{k}}}
+\let\liev\relax  % absent centrally
+\newcommand{\liev}[0]{{\mathfrak{v}}}
+\let\mapsfrom\relax  % absent centrally
+\providecommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\let\matt\relax  % differs centrally
+\newcommand{\matt}[4]{\begin{pmatrix} #1 & #2 \\ #3 & #4 \end{pmatrix}}
+\let\modulistack\relax  % helper of \Mg
+\newcommand{\modulistack}[1]{ \mathcal{#1}}
+\let\opop\relax  % absent centrally
+\newcommand{\opop}{\mathrm{op}}
+\let\perfOp\relax  % absent centrally
+\DeclareMathOperator{\perfOp}{perf}
+\let\rcop\relax  % absent centrally
+\newcommand{\rcop}[0]{\mathrm{rc}}
+\let\relevant\relax  % absent centrally
+\newcommand{\relevant}{\mathrm{rel}}
+\let\st\relax  % differs centrally
+\DeclareMathOperator{\st}{st}
+\let\textand\relax  % absent centrally
+\newcommand{\textand}{ \text{ and } }
+\let\textelse\relax  % absent centrally
+\newcommand{\textelse}{ \text{ otherwise } }
+\let\textfor\relax  % absent centrally
+\newcommand{\textfor}{ \text{ for } }
+\let\textif\relax  % absent centrally
+\newcommand{\textif}{ \text{ if } }
+\let\textor\relax  % absent centrally
+\newcommand{\textor}{ \text{ or } }
+\let\thecone\relax  % absent centrally
+\newcommand{\thecone}[1]{ \mathfrak{#1} }
+\let\theposet\relax  % absent centrally
+\newcommand{\theposet}[1]{ \mathcal{#1} }
+\let\tiling\relax  % absent centrally
+\newcommand{\tiling}{\mathcal{T}}
+\let\ts\relax  % differs centrally
+\newcommand{\ts}[1]{\theset{#1}}
+\let\uksba\relax  % absent centrally
+\newcommand{\uksba}{^{\mathrm{KSBA}}}
+\let\uktriv\relax  % absent centrally
+\newcommand{\uktriv}{^{K-\mathrm{triv}}}
+\let\where\relax  % absent centrally
+\newcommand{\where}{ \text{ where } }

@@ -1,0 +1,161 @@
+% UGA dissertation template for pandoc.
+% Front matter follows the University of Georgia Graduate School format
+% (title page, abstract with index words, copyright, approval page).
+% Body divisions: use --top-level-division=part; "#" is a part, "##" a
+% chapter, "###" a section. An unnumbered "##" chapter before the first part
+% is used for acknowledgements and dedication.
+%
+% Metadata consumed: title, author, degrees-earned (list), degree-type,
+% degree-name, degree-year, advisor, committee (list), dean, approval-date,
+% abstract, index-words, sidenotes (true/false), bibliography.
+$passoptions.latex()$
+\documentclass[12pt, notitlepage, twoside]{report}
+
+\usepackage{dzg-dissertation}
+
+% UGA page geometry and typography (from the UGA LaTeX template)
+\usepackage{geometry}
+\geometry{width=8.5in, height=11in, left=1in, right=1in, top=1in, bottom=1.25in}
+\usepackage{setspace}
+\setstretch{1.1}
+\textfloatsep 0.75in
+\usepackage[osf]{ebgaramond}
+\usepackage[all]{nowidow}
+\raggedbottom
+\microtypecontext{spacing=nonfrench}
+\usepackage{sectsty}
+\chapterfont{\centering\normalfont\nohang\textsc}
+\usepackage[toc]{appendix}
+
+$if(sidenotes)$
+% Footnotes are typeset as sidenotes in the outer margin.
+\usepackage{marginfix}
+\usepackage{sidenotes}
+\usepackage{ragged2e}
+\newgeometry{
+  height = 11in, width = 8.5in, includemp = true,
+  top = 1in, bottom = 1.25in, bindingoffset = 0.25in,
+  inner = 1in, marginparsep = 0.125in, marginparwidth = 1.5in, outer = 0.75in
+}
+\renewcommand{\footnote}[1]{\sidenote{\RaggedRight\footnotesize #1}}
+\renewcommand{\footnotetext}[1]{\sidenotetext{\raggedright\footnotesize #1}}
+$endif$
+
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+\newcommand{\doctitle}{$title$}
+\newcommand{\docauthor}{$for(author)$$author$$sep$ and $endfor$}
+
+\begin{document}
+
+%--------------------------ABSTRACT---------------------------%
+\newpage
+\thispagestyle{empty}
+\vspace*{18pt}
+\begin{center}
+  \textsc{\Large{\doctitle}}\\[18pt]
+  by\\[18pt]
+  \textsc{\Large\docauthor}\\[12pt]
+  (Under the Direction of $advisor$)\\[12pt]
+  \textsc{Abstract}
+\end{center}
+
+$abstract$
+
+\thispagestyle{empty}
+$if(index-words)$
+\begin{list}{\textsc{Index words:\hfill}}{\labelwidth 1.2in\leftmargin 1.4in\labelsep 0.2in}
+  \item \begin{flushleft}
+    $index-words$
+  \end{flushleft}
+\end{list}
+$endif$
+
+%--------------------------TITLE PAGE---------------------------%
+\newpage
+\pagenumbering{roman}
+\thispagestyle{empty}
+\vspace*{18pt}
+\begin{center}
+  \textsc{\doctitle}\\[18pt]
+  by\\[12pt]
+  \textsc{\docauthor}\\[8pt]
+  $for(degrees-earned)$$degrees-earned$ \\
+  $endfor$
+
+  \vfill
+  A $degree-type$ Submitted to the Graduate Faculty of the\\
+  University of Georgia in Partial Fulfillment of the Requirements for the Degree.\\ [18pt]
+
+  \textsc{Doctor of $degree-name$}\\[24pt]
+  \textsc{Athens, Georgia}\\[18pt]
+  $degree-year$
+\end{center}
+
+%--------------------------COPYRIGHT---------------------------%
+\newpage
+\thispagestyle{empty}
+\vspace*{6.6in}
+\begin{center}
+  \copyright $degree-year$\\
+  \docauthor\\
+  All Rights Reserved
+\end{center}
+
+%--------------------------APPROVAL---------------------------%
+\newpage
+\thispagestyle{empty}
+\vspace*{18pt}
+\begin{center}
+  \textsc{\doctitle}\\[18pt]
+  by\\[18pt]
+  \textsc{\docauthor}
+\end{center}
+\vfill
+
+\begin{flushright}
+  \begin{tabular}{ll}
+    Major Professor: & $advisor$ \\ [8pt]
+    Committee:
+$for(committee)$
+    & $committee$ \\
+$endfor$
+  \end{tabular}
+\end{flushright}
+
+\vspace*{3cm}
+
+\begin{flushleft}
+  Electronic Version Approved:\\[12pt]
+  $dean$\\
+  Dean of the Graduate School\\
+  The University of Georgia\\
+  $approval-date$
+\end{flushleft}
+\vspace*{1.5cm}
+
+% Table of Contents ======================================================= %
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+\clearpage
+\pagenumbering{arabic}
+
+% Document Body =========================================================== %
+$body$
+
+%-----------------------BIBLIOGRAPHY---------------------------%
+\newpage
+\printbibliography[heading=bibintoc,title={Bibliography}]
+
+\end{document}
