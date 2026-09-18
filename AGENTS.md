@@ -85,6 +85,49 @@ this configuration: fenced divs for theorem-like environments, `align`
 environments rather than `\[ \]` for display math, and list and heading
 spacing. `just format-md <dir>` enforces the mechanical parts.
 
+## Macro Semantics: object-valued macros are atomic
+
+Macros in this repository are an authoring language, not merely abbreviations for
+individual glyphs. A macro that names a mathematical construction MUST take the data
+of that construction as arguments and expand to the complete mathematical object.
+Its arguments are the semantic boundary of the object.
+
+For example, the fibre product is written
+
+```latex
+\fiberprod{X}{S}{Y}
+```
+
+and means the complete object `X \times_S Y`. It must never be reduced to a one-argument
+shortcut for the decorated multiplication sign `\times_S` and then rely on adjacent
+source text to provide `X` and `Y`.
+
+This principle applies equally to products, powers, base changes, localizations,
+quotients, completions, derived constructions, and similar notation. If a construction
+has operands/base/index/object data, those belong in the macro's argument list. Do not
+rewrite a semantic macro into a postfix/prefix decoration or a bare operator symbol just
+because the rendered glyphs look similar.
+
+Low-level typography helpers are permitted only when they are genuinely implementation
+details. Do not substitute such a helper for a public semantic macro, change a public
+macro's arity, or discard operands during cleanup/migration without auditing authored
+call sites and preserving the mathematical object represented.
+
+When migrating or consolidating macros:
+
+1. Determine the mathematical object/function represented, not merely the current TeX
+   expansion.
+2. Search real authored call sites before changing arity or argument order.
+3. Treat an argument that is ignored, or a macro used as a detached infix/postfix
+   fragment, as a semantic-redesign warning requiring review.
+4. Regenerate all derivative MathJax artifacts from the canonical `styles/macros/`
+   sources; never hand-maintain a divergent consumer copy.
+5. Add a regression for repaired semantic signatures so future normalization cannot
+   collapse them again.
+
+Known inherited fragment-style APIs and their call-site migration status are tracked in
+`MACRO-SEMANTICS-AUDIT.md`. Read that ledger before changing an existing macro signature.
+
 ## Macro Tier System
 
 Macros in `styles/macros/` organized by MathJax compatibility:

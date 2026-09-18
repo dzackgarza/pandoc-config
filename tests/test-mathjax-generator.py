@@ -4,6 +4,7 @@
 from pathlib import Path
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -13,6 +14,8 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 GENERATOR = ROOT / "bin" / "generate-mathjax-config.py"
 LEGACY_MACROS = ROOT / "templates" / "css" / "math-macros.html"
+GENERATED_JSON = ROOT / "templates" / "css" / "mathjax-macros.json"
+PREVIEW_TEMPLATE = ROOT / "templates" / "pandoc_preview_template.html"
 
 passed = 0
 failed = 0
@@ -35,7 +38,7 @@ def generated_macros() -> dict:
         out_dir = Path(tmp)
         cp = subprocess.run(
             [
-                sys.executable,
+                os.environ.get("PYTHON", "python3"),
                 str(GENERATOR),
                 "--out-dir",
                 str(out_dir),
@@ -65,6 +68,34 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "modsleft", ["{}_{#1}\\Mod", 1])
     assert_macro(macros, "tmf", "\\mathrm{tmf}")
     assert_macro(macros, "Suspendpinf", "\\operatorname{{\\Sigma_+^\\infty}}")
+    # Semantic macro contract: the fibre product is one atomic object-valued
+    # construction, not a one-argument alias for the decorated multiplication glyph.
+    assert_macro(macros, "fiberprod", ["{#1} \\fiberproduct{#2} {#3}", 3])
+    assert_macro(macros, "fprod", ["\\fiberprod{#1}{#2}{#3}", 3])
+    assert_macro(macros, "lktt", ["{L_{\\mathrm{K3}, #1}}", 1])
+    assert_macro(macros, "GSpaces", "{G\\dash\\mathsf{Spaces}}")
+    assert_macro(macros, "disjointpower", ["{#1}^{\\scriptscriptstyle\\coprod^{#2}}", 2])
+    assert_macro(macros, "prodpower", ["{#1}^{\\scriptscriptstyle\\times^{#2}}", 2])
+    assert_macro(macros, "smashpower", ["{#1}^{\\scriptscriptstyle\\smashprod^{#2}}", 2])
+    assert_macro(macros, "wedgepower", ["{#1}^{\\scriptscriptstyle\\smashprod^{#2}}", 2])
+    assert_macro(macros, "tensorpowerk", ["{#1}^{\\scriptscriptstyle\\otimes_{k}^{#2}}", 2])
+    assert_macro(macros, "fiberpower", ["{#1}^{\\scriptscriptstyle\\fiberproduct{#2}^{#3}}", 3])
+    assert_macro(macros, "incfiltration", ["{#1}^{\\bullet}", 1])
+    assert_macro(macros, "decfiltration", ["{#1}_{\\bullet}", 1])
+
+
+def test_preview_template_matches_generated_projection() -> None:
+    expected = json.loads(GENERATED_JSON.read_text())
+    template = PREVIEW_TEMPLATE.read_text()
+    match = re.search(r"(?m)^\s*macros:\s*(\{.*\}),\s*$", template)
+    if match is None:
+        fail("preview macro projection", "generated macros line missing")
+        return
+    actual = json.loads(match.group(1))
+    if actual == expected:
+        check("preview macro projection matches canonical generated JSON")
+    else:
+        fail("preview macro projection", "embedded macro map is stale")
 
 
 def test_dzg_mathjax_style_compiles_domain_macros() -> None:
@@ -77,7 +108,7 @@ def test_dzg_mathjax_style_compiles_domain_macros() -> None:
                     r"\documentclass{article}",
                     r"\usepackage{dzg-mathjax}",
                     r"\begin{document}",
-                    r"$\Set\quad\tmf\quad\Suspendpinf\quad\modsleft{R}\quad x\coloneqq\qty{y}$",
+                    r"$\Set\quad\tmf\quad\Suspendpinf\quad\modsleft{R}\quad x\coloneqq\qty{y}\quad\fiberprod{X}{S}{Y}\quad\lktt{2d}\quad\GSpaces\quad\disjointpower{X}{n}\quad\prodpower{X}{n}\quad\smashpower{X}{n}\quad\wedgepower{X}{n}\quad\tensorpowerk{M}{n}\quad\fiberpower{X}{S}{n}\quad\incfiltration{F}\quad\decfiltration{F}$",
                     r"\end{document}",
                 ]
             )
@@ -116,10 +147,16 @@ def test_legacy_mathjax_injection_defines_required_shims() -> None:
         check("legacy qty shim generated")
     else:
         fail("legacy qty shim generated", "missing \\newcommand{\\qty}[1]")
+    expected_fiberprod = r"\newcommand{\fiberprod}[3]{{#1} \fiberproduct{#2} {#3}}"
+    if expected_fiberprod in content:
+        check("legacy fiberprod semantic signature generated")
+    else:
+        fail("legacy fiberprod semantic signature", f"missing {expected_fiberprod}")
 
 
 def main() -> None:
     test_domain_aux_files_are_generated()
+    test_preview_template_matches_generated_projection()
     test_dzg_mathjax_style_compiles_domain_macros()
     test_legacy_mathjax_injection_defines_required_shims()
     total = passed + failed

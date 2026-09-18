@@ -1,0 +1,344 @@
+{
+  "Footnote []]]]": {
+    "scope": "markdown",
+    "prefix": "]]]",
+    "body": "\n[^${1:refname}]\n\n[^$1]: \n${2:Footnote text}\n",
+    "description": "Footnote"
+  },
+  "Answer env [answer]": {
+    "scope": "markdown",
+    "prefix": "answer",
+    "body": "\n:::{.answer}\n${1}\n:::\n",
+    "description": "Answer env"
+  },
+  "Big Set [bigts]": {
+    "scope": "markdown",
+    "prefix": "bigts",
+    "body": "\\left\\\\{ \n\\begin{array}{l}\n\t${1}\n\\end{array}\n\\,\n\\middle\\vert \n\\,\n\\begin{array}{l}\n\t${2}\n\\end{array}\n\\right\\\\}",
+    "description": "Big Set"
+  },
+  "Cases [cases]": {
+    "scope": "markdown",
+    "prefix": "cases",
+    "body": "\n\\begin{cases}\n${1} & ${2} \n\\\\\\\\\n${3} & ${4}.\n\\end{cases}",
+    "description": "Cases"
+  },
+  "Center [center]": {
+    "scope": "markdown",
+    "prefix": "center",
+    "body": "\n\\begin{center}\n${1}\n\\end{center}",
+    "description": "Center"
+  },
+  "Claim env [claim]": {
+    "scope": "markdown",
+    "prefix": "claim",
+    "body": "\n:::{.claim}\n${1}\n:::\n",
+    "description": "Claim env"
+  },
+  "Concept Env [concept]": {
+    "scope": "markdown",
+    "prefix": "concept",
+    "body": "\n:::{.concept}\n\\envlist\n${1}\n:::\n",
+    "description": "Concept Env"
+  },
+  "Conjecture env [conj]": {
+    "scope": "markdown",
+    "prefix": "conj",
+    "body": "\n:::{.conjecture}\n${1}\n:::\n",
+    "description": "Conjecture env"
+  },
+  "Corollary [cor]": {
+    "scope": "markdown",
+    "prefix": "cor",
+    "body": "\n:::{.corollary title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Corollary"
+  },
+  "Bijective Correspondence [cort]": {
+    "scope": "markdown",
+    "prefix": "cort",
+    "body": "\\[\n\\correspond{\n\t\\text{${1}}\n}\n&\\mapstofrom\n\\correspond{\n\t\\text{${2}}\n}\n\\]",
+    "description": "Bijective Correspondence"
+  },
+  "Simplicial Resolution [cosimplicialres_equalizer_tikz]": {
+    "scope": "markdown",
+    "prefix": "cosimplicialres_equalizer_tikz",
+    "body": "\n\\begin{tikzcd}\n    ${1}\n    \\stackar{3}[r]\n    &\n    ${2}\n    \\stackar{5}[r]\n    &   \n    ${3}\n    \\stackar{7}[r]\n    &\n    ${4}\n    \\stackar{9}[r]\n\\end{tikzcd}\n",
+    "description": "Simplicial Resolution"
+  },
+  "Definition [def]": {
+    "scope": "markdown",
+    "prefix": "def",
+    "body": "\n:::{.definition title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Definition"
+  },
+  "Details Toggle [details]": {
+    "scope": "markdown",
+    "prefix": "details",
+    "body": "<details markdown=\"1\">\n\n<summary>\n${1}\n</summary>\n${2}\n</details>\n",
+    "description": "Details Toggle"
+  },
+  "Simplicial Resolution [equalizer_tikz]": {
+    "scope": "markdown",
+    "prefix": "equalizer_tikz",
+    "body": "\n\\begin{tikzcd}\n    \\cdots\n    \\stackar{9}[r]\n    &\n    ${4}\n    \\stackar{7}[r]\n    &\n    ${3}\n    \\stackar{5}[r]\n    &   \n    ${2}\n    \\stackar{3}[r]\n    &\n    ${1}\n\\end{tikzcd}\n",
+    "description": "Simplicial Resolution"
+  },
+  "Example [ex]": {
+    "scope": "markdown",
+    "prefix": "ex",
+    "body": "\n:::{.example title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Example"
+  },
+  "Exercise [exc]": {
+    "scope": "markdown",
+    "prefix": "exc",
+    "body": "\n:::{.exercise title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Exercise"
+  },
+  "Fact env [fact]": {
+    "scope": "markdown",
+    "prefix": "fact",
+    "body": "\n:::{.fact}\n${1}\n:::\n",
+    "description": "Fact env"
+  },
+  "Create Ankdown Flashcard [flashcard]": {
+    "scope": "markdown",
+    "prefix": "flashcard",
+    "body": "${1:Title}\n%\n${2:Content}\n%\n${3:unsorted}\n---",
+    "description": "Create Ankdown Flashcard"
+  },
+  "Footnote [footnote]": {
+    "scope": "markdown",
+    "prefix": "footnote",
+    "body": "\n[^${1:refname}]\n\n[^$1]: \n${2:Footnote text}\n",
+    "description": "Footnote"
+  },
+  "hint [hint]": {
+    "scope": "markdown",
+    "prefix": "hint",
+    "body": "*(Hint: ${1})*",
+    "description": "hint"
+  },
+  "Label/Cref pair for internal hyperlinks [hlab]": {
+    "scope": "markdown",
+    "prefix": "hlab",
+    "body": "\\label{${1:refname}}\n\\cref{$1}",
+    "description": "Label/Cref pair for internal hyperlinks"
+  },
+  "Internal hyperlink [href]": {
+    "scope": "markdown",
+    "prefix": "href",
+    "body": "\\hyperref[${1:refname}]{${2:displaytext}}${3}",
+    "description": "Internal hyperlink"
+  },
+  "Tikz: Including converted Inkscape [inkscape_tikz]": {
+    "scope": "markdown",
+    "prefix": "inkscape_tikz",
+    "body": "\n\\begin{tikzpicture}\n\\node (node_one) at (0,0) {\n\t\\includegraphics{figures/${1}} \n};\n\\end{tikzpicture}\n",
+    "description": "Tikz: Including converted Inkscape"
+  },
+  "Lemma [lem]": {
+    "scope": "markdown",
+    "prefix": "lem",
+    "body": "\n:::{.lemma title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Lemma"
+  },
+  "TikzCD LES [LES_tikz]": {
+    "scope": "markdown",
+    "prefix": "LES_tikz",
+    "body": "\n\\begin{tikzcd}\n${1:A}\n\t\\ar[r]\n&\n${2:A}\n\t\\ar[r]\n&\n${3:A}\n\t\\ar[dll]\n\\\\\\\\\n${4:A}\n\t\\ar[r]\n&\n${5:A}\n\t\\ar[r]\n&\n${6:A}\n\\end{tikzcd}",
+    "description": "TikzCD LES"
+  },
+  "2x2 Matrix [mat2]": {
+    "scope": "markdown",
+    "prefix": "mat2",
+    "body": "\n\\begin{bmatrix}\n${1} & ${2} \n\\\\\\\\\n${3} & ${4}\n\\end{bmatrix}",
+    "description": "2x2 Matrix"
+  },
+  "3x3 Matrix [mat3]": {
+    "scope": "markdown",
+    "prefix": "mat3",
+    "body": "\n\\begin{bmatrix}\n${1} & ${2} & ${3}\n\\\\\\\\\n${4} & ${5} & ${6}\n\\\\\\\\\n${7} & ${8} & ${9}\n\\end{bmatrix}",
+    "description": "3x3 Matrix"
+  },
+  "Markdown Table Entry [md_table_entry]": {
+    "scope": "markdown",
+    "prefix": "md_table_entry",
+    "body": "|  \\( ${1} \\)                          |  ${2}  \\ |\n|                                      |  \\( ${3} \\)  |\n+--------------------------------------+---------------------------------------------------------------------------------------+",
+    "description": "Markdown Table Entry"
+  },
+  "Math Mode (Display) [MM]": {
+    "scope": "markdown",
+    "prefix": "MM",
+    "body": "\\[\n\n.\\]",
+    "description": "Math Mode (Display)"
+  },
+  "Math Mode (Inline) [mm]": {
+    "scope": "markdown",
+    "prefix": "mm",
+    "body": "$${1}$",
+    "description": "Math Mode (Inline)"
+  },
+  "Vector, 1x3 Matrix [mvec]": {
+    "scope": "markdown",
+    "prefix": "mvec",
+    "body": "\n\\begin{bmatrix}\n${1} \n\\\\\\\\\n${2} \n\\\\\\\\\n${3} \n\\end{bmatrix}",
+    "description": "Vector, 1x3 Matrix"
+  },
+  "New Anki card [nn]": {
+    "scope": "markdown",
+    "prefix": "nn",
+    "body": "\n${1:?}\n%\n${2:?}\n%\n${3:definition}\n---",
+    "description": "New Anki card"
+  },
+  "Observation Env [obs]": {
+    "scope": "markdown",
+    "prefix": "obs",
+    "body": "\n:::{.observation}\n${1}\n:::\n",
+    "description": "Observation Env"
+  },
+  "Proof List [pfl]": {
+    "scope": "markdown",
+    "prefix": "pfl",
+    "body": "\n:::{.proof title=\"${1:?}\"}\n\\envlist\n\n${2}\n:::\n",
+    "description": "Proof List"
+  },
+  "Problem [prob]": {
+    "scope": "markdown",
+    "prefix": "prob",
+    "body": "\n:::{.problem title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Problem"
+  },
+  "Proof [proof]": {
+    "scope": "markdown",
+    "prefix": [
+      "proof",
+      "pf"
+    ],
+    "body": "\n:::{.proof title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Proof"
+  },
+  "Proposition [prop]": {
+    "scope": "markdown",
+    "prefix": "prop",
+    "body": "\n:::{.proposition title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Proposition"
+  },
+  "Question env [question]": {
+    "scope": "markdown",
+    "prefix": "question",
+    "body": "\n:::{.question}\n${1}\n:::\n",
+    "description": "Question env"
+  },
+  "Remark [rmk]": {
+    "scope": "markdown",
+    "prefix": "rmk",
+    "body": "\n:::{.remark}\n${1}\n:::\n",
+    "description": "Remark"
+  },
+  "Simplicial Resolution [simplicialrestikz]": {
+    "scope": "markdown",
+    "prefix": "simplicialrestikz",
+    "body": "\n\\begin{tikzcd}\n    \\cdots\n    \\stackar{9}[r]\n    &\n    ${4}\n    \\stackar{7}[r]\n    &\n    ${3}\n    \\stackar{5}[r]\n    &   \n    ${2}\n    \\stackar{3}[r]\n    &\n    ${1}\n\\end{tikzcd}\n",
+    "description": "Simplicial Resolution"
+  },
+  "Slogan env [slogan]": {
+    "scope": "markdown",
+    "prefix": "slogan",
+    "body": "\n:::{.slogan}\n${1}\n:::\n",
+    "description": "Slogan env"
+  },
+  "Solution [soln]": {
+    "scope": "markdown",
+    "prefix": "soln",
+    "body": "\n:::{.solution}\n${1}\n:::\n",
+    "description": "Solution"
+  },
+  "Strategy [strat]": {
+    "scope": "markdown",
+    "prefix": "strat",
+    "body": "\n:::{.strategy}\n${1}\n:::\n",
+    "description": "Strategy"
+  },
+  "Markdown Table [table]": {
+    "scope": "markdown",
+    "prefix": "table",
+    "body": "+---+---+---+\n|   |   |   | \n+===+===+===+\n|   |   |   |\n+---+---+---+\n|   |   |   |\n+---+---+---+",
+    "description": "Markdown Table"
+  },
+  "Theorem [theorem]": {
+    "scope": "markdown",
+    "prefix": [
+      "theorem",
+      "thm"
+    ],
+    "body": "\n:::{.theorem title=\"${1:?}\"}\n${2}\n:::\n",
+    "description": "Theorem"
+  },
+  "Tikz Fiber Bundle [tikz_bundle]": {
+    "scope": "markdown",
+    "prefix": "tikz_bundle",
+    "body": "\n\\begin{tikzcd}\n${1:F} \n\t\\ar[r] \n& \n${2:E}\n\t\\ar[d] \n\\\\\\\\\n& \n${4:B} \n\\end{tikzcd}",
+    "description": "Tikz Fiber Bundle"
+  },
+  "Tikz Product (Universal Property, NW Limit) [tikz_product]": {
+    "scope": "markdown",
+    "prefix": "tikz_product",
+    "body": "\n\\begin{tikzcd}\n${1:X} \n\t\\ar[drr, bend left , \"f_x\"] \n\t\\ar[rdd, bend right, \"f_y\"'] \n\t\\ar[rd, \"\\exists ! h\", dotted] \n&  \t\n& \n\\\\\\\\\n& \n${2:X\\cross Y}\n\t\\ar[r, \"\\pi_X\"]\\ar[d, \"\\pi_Y\"] \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n& \n${3:X} \n\\\\\\\\\n& \n${4:Y}\n&\n\\end{tikzcd}",
+    "description": "Tikz Product (Universal Property, NW Limit)"
+  },
+  "Tikz Pullback [tikz_pullback]": {
+    "scope": "markdown",
+    "prefix": "tikz_pullback",
+    "body": "\n\\begin{tikzcd}\n${1:X \\cross_Z Y} \n\t\\ar[r] \n\t\\ar[d]\n& \n${2:X}\n\t\\ar[d] \n\\\\\\\\\n${3:Z}\n\t\\ar[r]\n& \n${4:Y} \n\\end{tikzcd}",
+    "description": "Tikz Pullback"
+  },
+  "Tikz Triangle [tikz_triangle]": {
+    "scope": "markdown",
+    "prefix": "tikz_triangle",
+    "body": "\n\\begin{tikzcd}\n${1} \n\t\\ar[rd, \"\"]\n\t\\ar[rr, \"\"] \n& \n& \n${2}\n\t\\ar[ld, \"\"] \n\\\\\\\\\n& \n${3} \n& \n\\end{tikzcd}",
+    "description": "Tikz Triangle"
+  },
+  "Tikzcd (Basic) [tikzcd]": {
+    "scope": "markdown",
+    "prefix": "tikzcd",
+    "body": "\n\\begin{tikzcd}\n${1}\n\\end{tikzcd}",
+    "description": "Tikzcd (Basic)"
+  },
+  "Todo [todo]": {
+    "scope": "markdown",
+    "prefix": "todo",
+    "body": "\\todo[inline]{${1:todo}}\n",
+    "description": "Todo"
+  },
+  "Warning [warn]": {
+    "scope": "markdown",
+    "prefix": "warn",
+    "body": "\n:::{.warnings}\n${1}\n:::\n",
+    "description": "Warning"
+  },
+  "comment [cmt]": {
+    "scope": "markdown",
+    "prefix": "cmt",
+    "body": "<!--\nTODO: ${1}\n--->\n${0}",
+    "description": "comment"
+  },
+  "latex figure [fig]": {
+    "scope": "markdown",
+    "prefix": "fig",
+    "body": "\\begin{figure}[H]\n\\centering\n\\caption{${1}}\n\\label{fig:${2}}\n\\end{figure}\n${0}",
+    "description": "latex figure"
+  },
+  "align* [align]": {
+    "scope": "markdown",
+    "prefix": "align",
+    "body": "\\begin{align*}\n${1}\n\\end{align*}\n${0}",
+    "description": "align*"
+  },
+  "align* [begin]": {
+    "scope": "markdown",
+    "prefix": "begin",
+    "body": "\\begin{align*}\n${1}\n\\end{align*}\n${0}",
+    "description": "align*"
+  }
+}

@@ -41,6 +41,10 @@
 \newcommand{\cocomplex}[1]{ { {#1}^{\scriptscriptstyle \bullet}} }
 \newcommand{\complex}[1]{{ {#1}_{\scriptscriptstyle \bullet}} }
 
+% Filtrations
+\newcommand{\decfiltration}[1]{{#1}_{\bullet}}
+\newcommand{\incfiltration}[1]{{#1}^{\bullet}}
+
 % Conjugation
 \newcommand{\conj}[1]{{\overline{{#1}}}}
 
@@ -137,18 +141,18 @@
 % Transforms and powers
 \newcommand{\fourier}[1]{\widehat{#1}}
 \newcommand\cartpower[1]{{ {}^{ \scriptscriptstyle\times^{#1} }  }}
-\newcommand\disjointpower[1]{{ {}^{ \scriptscriptstyle\coprod^{#1} }  }}
+\newcommand\disjointpower[2]{{#1}^{\scriptscriptstyle\coprod^{#2}}}
 \newcommand\derivedtensorpower[3]{{ {}^{ \scriptstyle {}_{#1} {\otimes_{#2}^{#3}} }  }}
-\newcommand\fiberpower[2]{{ {}^{ \scriptscriptstyle\fiberprod{#1}^{#2} }  }}
+\newcommand\fiberpower[3]{{#1}^{\scriptscriptstyle\fiberproduct{#2}^{#3}}}
 \newcommand\powers[1]{{ {}^{\cdot #1} }}
-\newcommand\prodpower[1]{{ {}^{ \scriptscriptstyle\times^{#1} }  }}
+\newcommand\prodpower[2]{{#1}^{\scriptscriptstyle\times^{#2}}}
 \newcommand\skel[1]{{ {}^{ (#1) } }}
-\newcommand\smashpower[1]{{ {}^{ \scriptscriptstyle\smashprod^{#1} }  }}
+\newcommand\smashpower[2]{{#1}^{\scriptscriptstyle\smashprod^{#2}}}
 \newcommand\sumpower[1]{{ {}^{ \oplus{#1} }  }}
 \newcommand\tensorpower[2]{{ {}^{ \scriptstyle\otimes_{#1}^{#2} }  }}
-\newcommand\tensorpowerk[1]{{ {}^{ \scriptscriptstyle\otimes_{k}^{#1} }  }}
+\newcommand\tensorpowerk[2]{{#1}^{\scriptscriptstyle\otimes_{k}^{#2}}}
 \newcommand\transp[1]{{ \, {}^{t}{ \left( #1 \right) } }}
-\newcommand\wedgepower[1]{{ {}^{ \scriptscriptstyle\smashprod^{#1} }  }}
+\newcommand\wedgepower[2]{{#1}^{\scriptscriptstyle\smashprod^{#2}}}
 
 % Twisting
 \newcommand{\twistleft}[2]{{ {}^{#1} #2 }}
@@ -315,11 +319,13 @@
 \newcommand\tselts[2]{{ \theset{ {#1}_1, {#1}_2, \cdots, {#1}_{#2} } }}
 
 % Fiber products and mixed products
+% \fiberprod is the semantic object constructor: \fiberprod{X}{S}{Y} = X \times_S Y.
+% \fiberproduct remains a legacy low-level glyph helper while older authored sources are migrated.
 \newcommand\mix[1]{\overset{\scriptscriptstyle {#1} }{\times}}
 \newcommand\fiberproduct[1]{\underset{\scriptscriptstyle {#1} }{\times}}
-\newcommand\fiberprod[1]{ \fiberproduct{#1}}
+\newcommand\fiberprod[3]{{#1} \fiberproduct{#2} {#3}}
 \newcommand\basechange[1]{{ \fiberproduct{k} {#1} }}
-\newcommand\fprod[1]{{ \fiberproduct{#1} }}
+\newcommand\fprod[3]{\fiberprod{#1}{#2}{#3}}
 
 % Complex-valued functions
 \newcommand{\qsymb}[2]{{ \left( {#1} \over {#2} \right)  }}
@@ -328,7 +334,7 @@
 \newcommand{\kx}[1]{k[x_1, \cdots, x_{#1}]}
 
 % K-theory variants
-\newcommand{\lktt}[1]{ {L_{\mathrm{K3}, \1}} }
+\newcommand{\lktt}[1]{ {L_{\mathrm{K3}, #1}} }
 
 % Fractional ideals and parts
 \newcommand{\fractional}[1]{\theset{#1}}

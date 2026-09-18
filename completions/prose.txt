@@ -1,0 +1,1 @@
+# Zettlr prose completions: one word or phrase per line.

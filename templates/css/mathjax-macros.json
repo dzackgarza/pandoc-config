@@ -1188,6 +1188,14 @@
     "{ {#1}_{\\scriptscriptstyle \\bullet}}",
     1
   ],
+  "decfiltration": [
+    "{#1}_{\\bullet}",
+    1
+  ],
+  "incfiltration": [
+    "{#1}^{\\bullet}",
+    1
+  ],
   "conj": [
     "{\\overline{{#1}}}",
     1
@@ -1381,32 +1389,32 @@
     1
   ],
   "disjointpower": [
-    "{ {}^{ \\scriptscriptstyle\\coprod^{#1} }  }",
-    1
+    "{#1}^{\\scriptscriptstyle\\coprod^{#2}}",
+    2
   ],
   "derivedtensorpower": [
     "{ {}^{ \\scriptstyle {}_{#1} {\\otimes_{#2}^{#3}} }  }",
     3
   ],
   "fiberpower": [
-    "{ {}^{ \\scriptscriptstyle\\fiberprod{#1}^{#2} }  }",
-    2
+    "{#1}^{\\scriptscriptstyle\\fiberproduct{#2}^{#3}}",
+    3
   ],
   "powers": [
     "{ {}^{\\cdot #1} }",
     1
   ],
   "prodpower": [
-    "{ {}^{ \\scriptscriptstyle\\times^{#1} }  }",
-    1
+    "{#1}^{\\scriptscriptstyle\\times^{#2}}",
+    2
   ],
   "skel": [
     "{ {}^{ (#1) } }",
     1
   ],
   "smashpower": [
-    "{ {}^{ \\scriptscriptstyle\\smashprod^{#1} }  }",
-    1
+    "{#1}^{\\scriptscriptstyle\\smashprod^{#2}}",
+    2
   ],
   "sumpower": [
     "{ {}^{ \\oplus{#1} }  }",
@@ -1417,16 +1425,16 @@
     2
   ],
   "tensorpowerk": [
-    "{ {}^{ \\scriptscriptstyle\\otimes_{k}^{#1} }  }",
-    1
+    "{#1}^{\\scriptscriptstyle\\otimes_{k}^{#2}}",
+    2
   ],
   "transp": [
     "{ \\, {}^{t}{ \\left( #1 \\right) } }",
     1
   ],
   "wedgepower": [
-    "{ {}^{ \\scriptscriptstyle\\smashprod^{#1} }  }",
-    1
+    "{#1}^{\\scriptscriptstyle\\smashprod^{#2}}",
+    2
   ],
   "twistleft": [
     "{ {}^{#1} #2 }",
@@ -1749,16 +1757,16 @@
     1
   ],
   "fiberprod": [
-    "\\fiberproduct{#1}",
-    1
+    "{#1} \\fiberproduct{#2} {#3}",
+    3
   ],
   "basechange": [
     "{ \\fiberproduct{k} {#1} }",
     1
   ],
   "fprod": [
-    "{ \\fiberproduct{#1} }",
-    1
+    "\\fiberprod{#1}{#2}{#3}",
+    3
   ],
   "qsymb": [
     "{ \\left( {#1} \\over {#2} \\right)  }",
@@ -1769,7 +1777,7 @@
     1
   ],
   "lktt": [
-    "{L_{\\mathrm{K3}, \\1}}",
+    "{L_{\\mathrm{K3}, #1}}",
     1
   ],
   "fractional": [
@@ -2181,10 +2189,7 @@
     "{ \\underset{(\\infty, {#1})}{ \\Cat}  }",
     1
   ],
-  "GSpaces": [
-    "{G\\dash\\mathsf{Spaces}}",
-    1
-  ],
+  "GSpaces": "{G\\dash\\mathsf{Spaces}}",
   "gspaces": [
     "{#1}\\dash{\\mathsf{Spaces}}",
     1

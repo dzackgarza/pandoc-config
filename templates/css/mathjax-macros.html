@@ -1136,6 +1136,8 @@
 \newcommand{\cobicomplex}[1]{{ {#1}^{\scriptscriptstyle \bullet, \bullet}}}
 \newcommand{\cocomplex}[1]{{ {#1}^{\scriptscriptstyle \bullet}}}
 \newcommand{\complex}[1]{{ {#1}_{\scriptscriptstyle \bullet}}}
+\newcommand{\decfiltration}[1]{{#1}_{\bullet}}
+\newcommand{\incfiltration}[1]{{#1}^{\bullet}}
 \newcommand{\conj}[1]{{\overline{{#1}}}}
 \newcommand{\ctz}[1]{\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \,}
 \newcommand{\fps}[1]{{\llbracket #1 \rrbracket  }}
@@ -1187,18 +1189,18 @@
 \newcommand{\tsl}[3]{\ts{ {#1}_{#2}, \cdots, {#1}_{#3} }}
 \newcommand{\fourier}[1]{\widehat{#1}}
 \newcommand{\cartpower}[1]{{ {}^{ \scriptscriptstyle\times^{#1} }  }}
-\newcommand{\disjointpower}[1]{{ {}^{ \scriptscriptstyle\coprod^{#1} }  }}
+\newcommand{\disjointpower}[2]{{#1}^{\scriptscriptstyle\coprod^{#2}}}
 \newcommand{\derivedtensorpower}[3]{{ {}^{ \scriptstyle {}_{#1} {\otimes_{#2}^{#3}} }  }}
-\newcommand{\fiberpower}[2]{{ {}^{ \scriptscriptstyle\fiberprod{#1}^{#2} }  }}
+\newcommand{\fiberpower}[3]{{#1}^{\scriptscriptstyle\fiberproduct{#2}^{#3}}}
 \newcommand{\powers}[1]{{ {}^{\cdot #1} }}
-\newcommand{\prodpower}[1]{{ {}^{ \scriptscriptstyle\times^{#1} }  }}
+\newcommand{\prodpower}[2]{{#1}^{\scriptscriptstyle\times^{#2}}}
 \newcommand{\skel}[1]{{ {}^{ (#1) } }}
-\newcommand{\smashpower}[1]{{ {}^{ \scriptscriptstyle\smashprod^{#1} }  }}
+\newcommand{\smashpower}[2]{{#1}^{\scriptscriptstyle\smashprod^{#2}}}
 \newcommand{\sumpower}[1]{{ {}^{ \oplus{#1} }  }}
 \newcommand{\tensorpower}[2]{{ {}^{ \scriptstyle\otimes_{#1}^{#2} }  }}
-\newcommand{\tensorpowerk}[1]{{ {}^{ \scriptscriptstyle\otimes_{k}^{#1} }  }}
+\newcommand{\tensorpowerk}[2]{{#1}^{\scriptscriptstyle\otimes_{k}^{#2}}}
 \newcommand{\transp}[1]{{ \, {}^{t}{ \left( #1 \right) } }}
-\newcommand{\wedgepower}[1]{{ {}^{ \scriptscriptstyle\smashprod^{#1} }  }}
+\newcommand{\wedgepower}[2]{{#1}^{\scriptscriptstyle\smashprod^{#2}}}
 \newcommand{\twistleft}[2]{{ {}^{#1} #2 }}
 \newcommand{\twistright}[2]{{ #2 {}^{#1} }}
 \newcommand{\Globsec}[1]{{\Gamma\qty{#1} }}
@@ -1294,12 +1296,12 @@
 \newcommand{\tselts}[2]{{ \theset{ {#1}_1, {#1}_2, \cdots, {#1}_{#2} } }}
 \newcommand{\mix}[1]{\overset{\scriptscriptstyle {#1} }{\times}}
 \newcommand{\fiberproduct}[1]{\underset{\scriptscriptstyle {#1} }{\times}}
-\newcommand{\fiberprod}[1]{\fiberproduct{#1}}
+\newcommand{\fiberprod}[3]{{#1} \fiberproduct{#2} {#3}}
 \newcommand{\basechange}[1]{{ \fiberproduct{k} {#1} }}
-\newcommand{\fprod}[1]{{ \fiberproduct{#1} }}
+\newcommand{\fprod}[3]{\fiberprod{#1}{#2}{#3}}
 \newcommand{\qsymb}[2]{{ \left( {#1} \over {#2} \right)  }}
 \newcommand{\kx}[1]{k[x_1, \cdots, x_{#1}]}
-\newcommand{\lktt}[1]{{L_{\mathrm{K3}, \1}}}
+\newcommand{\lktt}[1]{{L_{\mathrm{K3}, #1}}}
 \newcommand{\fractional}[1]{\theset{#1}}
 \newcommand{\fractionalpart}[1]{\theset{#1}}
 \newcommand{\integerpart}[1]{\left[ {#1}\right]}
@@ -1573,7 +1575,7 @@
 \newcommand{\VectBunrk}[1]{{ \VectBundlerk{#1}}}
 \newcommand{\algs}[1]{{ {}_{#1} \Alg }}
 \newcommand{\inftycatn}[1]{{ \underset{(\infty, {#1})}{ \Cat}  }}
-\newcommand{\GSpaces}[1]{{G\dash\mathsf{Spaces}}}
+\newcommand{\GSpaces}{{G\dash\mathsf{Spaces}}}
 \newcommand{\gspaces}[1]{{#1}\dash{\mathsf{Spaces}}}
 \newcommand{\Torsor}[1]{{\mathsf{#1}\dash\mathsf{Torsor}}}
 \newcommand{\Torsorleft}[1]{{\mathsf{#1}\dash\mathsf{Torsor}}}

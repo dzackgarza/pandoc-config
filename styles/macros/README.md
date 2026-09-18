@@ -104,6 +104,28 @@ This directory contains the organized LaTeX macro library, consolidated from sca
 - Theorem environment styling with tcolorbox
 - Tier 4 content (document-level setup)
 
+## Semantic API rule
+
+The macro library encodes mathematical objects and constructions as an authoring API.
+Public construction macros are therefore atomic: they take all semantic operands as
+arguments and render the whole object. They are not aliases for a single symbol which
+expects neighboring TeX to complete the expression.
+
+Canonical example:
+
+```latex
+\fiberprod{X}{S}{Y} % X \times_S Y
+```
+
+A definition such as `\fiberprod{S} -> \times_S` is invalid even if it can be used
+infix, because it loses the operands from the macro's semantic boundary. The same review
+criterion applies to tensor/cartesian/direct-sum powers, base change, quotient,
+localization, completion, and related constructions. Existing fragment-style macros are
+to be audited from authored call sites before their signatures are changed.
+
+Generated MathJax JSON/JS/HTML files are projections of this canonical API. Never edit
+or independently override their macro semantics.
+
 ## Adding New Macros
 
 ### Decision Tree

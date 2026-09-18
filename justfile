@@ -476,32 +476,14 @@ _test-lamport-proof:
   python3 "{{source_directory()}}/tests/test-lamport-proof.py"
 
 
-# Generate MathJax 3 macro configuration (JS/TS/JSON) from canonical tier .tex files.
-# Parses tier1-mathjax-simple.tex and tier2-mathjax-args.tex and outputs:
-#   templates/css/mathjax-macros.mjs   — ESM module
-#   templates/css/mathjax-macros.ts    — TypeScript module
-#   templates/css/mathjax-macros.json  — JSON config
-#   templates/pandoc_preview_template.html — updated with inlined macros
+# Generate every MathJax projection from the canonical macro manifest.
+# This is the only regeneration path: JSON/JS/TS, both HTML consumers, and the
+# preview template all derive from the same parsed semantic macro API.
 generate-math-macros:
   python3 "{{source_directory()}}/bin/generate-mathjax-config.py"
 
-# Legacy: generate raw TeX math macro injection file (templates/css/math-macros.html).
-# Prefer `generate-math-macros` for MathJax 3 JS/TS/JSON output.
-generate-math-macros-legacy:
-  #!/usr/bin/env bash
-  set -euo pipefail
-  PANDOC_DIR="{{source_directory()}}"
-  OUTPUT="$PANDOC_DIR/templates/css/math-macros.html"
-  TIER1="$PANDOC_DIR/styles/macros/tier1-mathjax-simple.tex"
-  TIER2="$PANDOC_DIR/styles/macros/tier2-mathjax-args.tex"
-
-  cat /dev/null > "$OUTPUT"
-  cat "$TIER1" "$TIER2" >> "$OUTPUT"
-
-  sed -i 's/\\renewcommand/\\newcommand/g' "$OUTPUT"
-
-  count=$(grep -c '\\newcommand' "$OUTPUT")
-  echo "Generated $OUTPUT ($count \\newcommand entries)"
+# Compatibility alias. There is deliberately no separate legacy generator.
+generate-math-macros-legacy: generate-math-macros
 
 # Test standalone templates compile (not Pandoc templates - those need Pandoc processing)
 _test-templates clean="true":
