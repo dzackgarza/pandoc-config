@@ -294,3 +294,37 @@
 \draw[style=thick edge] (r22) to node[left]{$\infty$}(r21);
 \end{pgfonlayer}
 }
+
+% =============================================================================
+% Coxeter Diagrams (dynkin-diagrams helpers)
+% =============================================================================
+
+\newcommand{\coxeterA}{%
+\begin{dynkinDiagram}[label, arrows=false, edge length=.75cm]A{***}
+\dynkinTripleEdge 12
+\end{dynkinDiagram}%
+}
+
+\newcommand{\coxeterHthree}{%
+\begin{dynkinDiagram}[label, arrows=false, edge length=.75cm]A{***}
+\dynkinTripleEdge 12
+\end{dynkinDiagram}%
+}
+
+\newcommand{\coxeterHfour}{%
+\begin{dynkinDiagram}[label, arrows=false, edge length=.75cm]A{****}
+\dynkinTripleEdge 12
+\end{dynkinDiagram}%
+}
+
+\newcommand{\coxeterGtwo}{%
+\begin{dynkinDiagram}[label, arrows=false, edge length=1.75cm]A{**}
+\dynkinQuadrupleEdge 12
+\end{dynkinDiagram}%
+}
+
+\newcommand{\coxeterGtwoAffine}{%
+\begin{dynkinDiagram}[label, arrows=false, edge length=1.75cm, labels={0,1,2}]A{***}
+\dynkinQuadrupleEdge 23
+\end{dynkinDiagram}%
+}

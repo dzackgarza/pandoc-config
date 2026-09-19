@@ -22,7 +22,7 @@
 %\end{table}
 %}
 
-\newcommand{\TableLabeledSimpleEdge}[0]{
+\newcommand{\TableLabeledSimpleEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
@@ -34,7 +34,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\TableNoEdge}[0]{
+\newcommand{\TableNoEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
@@ -43,7 +43,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\TableSimpleEdge}[0]{
+\newcommand{\TableSimpleEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
@@ -55,7 +55,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\TableDoubleEdge}[0]{
+\newcommand{\TableDoubleEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
@@ -67,7 +67,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\TableTripleEdge}[0]{
+\newcommand{\TableTripleEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
@@ -79,7 +79,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\TableQuadrupleEdge}[0]{
+\newcommand{\TableQuadrupleEdge}{
 \begin{tikzpicture}[
     quadruple/.style={double distance=0.5em,thick,
         postaction={draw,thick,double distance=0.1em}},
@@ -95,7 +95,7 @@
 }
 
 
-\newcommand{\TableBoldEdge}[0]{
+\newcommand{\TableBoldEdge}{
 \begin{tikzpicture}
     \begin{pgfonlayer}{nodelayer}
         \node [style=white node, label=$H_1$] (0) at (0, 0) {};
@@ -107,7 +107,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\TableDottedEdge}[0]{
+\newcommand{\TableDottedEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
@@ -119,20 +119,20 @@
 \end{tikzpicture}
 }
 
-\newcommand{\TableSimpleVertex}[0]{
+\newcommand{\TableSimpleVertex}{
 \tikz[baseline]{\node [style=white node] (0) at (0, 0) {};}
 }
 
 
-\newcommand{\TableBlackVertex}[0]{
+\newcommand{\TableBlackVertex}{
 \tikz[baseline]{\node [style=black node] (0) at (0, 0) {};}
 }
 
-\newcommand{\TableDoubleVertex}[0]{
+\newcommand{\TableDoubleVertex}{
 \tikz[baseline]{\node [style=doubled node] (0) at (0, 0) {};}
 }
 
-\newcommand{\VinbergNoEdge}[0]{
+\newcommand{\VinbergNoEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
@@ -141,7 +141,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\VinbergSimpleEdge}[0]{
+\newcommand{\VinbergSimpleEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
@@ -166,7 +166,7 @@
 }
 
 
-\newcommand{\VinbergSingleEdge}[0]{
+\newcommand{\VinbergSingleEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
@@ -178,7 +178,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\VinbergDoubleEdge}[0]{
+\newcommand{\VinbergDoubleEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
@@ -190,7 +190,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\VinbergTripleEdge}[0]{
+\newcommand{\VinbergTripleEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
@@ -202,7 +202,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\VinbergThickEdge}[0]{
+\newcommand{\VinbergThickEdge}{
 \begin{tikzpicture}
     \begin{pgfonlayer}{nodelayer}
         \node [style=white node, label=$f_1$] (0) at (0, 0) {};
@@ -214,7 +214,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\VinbergDashedEdge}[0]{
+\newcommand{\VinbergDashedEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
@@ -226,7 +226,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\VinbergBrokenEdge}[0]{
+\newcommand{\VinbergBrokenEdge}{
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
@@ -238,7 +238,7 @@
 \end{tikzpicture}
 }
 
-\newcommand{\edgetto}[0]{
+\newcommand{\edgetto}{
 \begin{tikzpicture} 
 \node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
 \node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
@@ -246,7 +246,7 @@
 \end{tikzpicture} 
 }
 
-\newcommand{\edgettt}[0]{
+\newcommand{\edgettt}{
 \begin{tikzpicture} 
 \node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
 \node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
@@ -254,7 +254,7 @@
 \end{tikzpicture} 
 }
 
-\newcommand{\edgettgt}[0]{
+\newcommand{\edgettgt}{
 \begin{tikzpicture} 
 \node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
 \node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
@@ -263,7 +263,7 @@
 }
 
 
-\newcommand{\edgetft}[0]{
+\newcommand{\edgetft}{
 \begin{tikzpicture}
 \node [style=black node, label=$H_1$] (0) at (0, 0) {};
 \node [style=white node, label=$H_2$] (1) at (3, 0) {};
@@ -272,7 +272,7 @@
 }
 %\qquad\qquad\qquad & h_1^2 -2, h_2^2 = -4, && h_1 h_2 = 2 \\
 
-\newcommand{\edgetfgt}[0]{
+\newcommand{\edgetfgt}{
 \begin{tikzpicture}
 \node [style=black node, label=$H_1$] (0) at (0, 0) {};
 \node [style=white node, label=$H_2$] (1) at (3, 0) {};
@@ -281,7 +281,7 @@
 }
 %\qquad\qquad\qquad & h_1^2 -2, h_2^2 = -4, && h_1 h_2 > 2 \\
 
-\newcommand{\edgefft}[0]{
+\newcommand{\edgefft}{
 \begin{tikzpicture}
 \node [style=white node, label=$H_1$] (0) at (0, 0) {};
 \node [style=white node, label=$H_2$] (1) at (3, 0) {};
@@ -290,7 +290,7 @@
 }
 %\qquad\qquad\qquad & h_1^2 = h_2^2 = -4, && h_1 h_2 = 2 \\
 
-\newcommand{\edgefff}[0]{
+\newcommand{\edgefff}{
 \begin{tikzpicture}
 \node [style=white node, label=$H_1$] (0) at (0, 0) {};
 \node [style=white node, label=$H_2$] (1) at (3, 0) {};
@@ -299,7 +299,7 @@
 }
 %\qquad\qquad\qquad & h_1^2 = h_2^2 = -4, && h_1 h_2 = 4 \\
 
-\newcommand{\edgeffgf}[0]{
+\newcommand{\edgeffgf}{
 \begin{tikzpicture}
 \node [style=white node, label=$H_1$] (0) at (0, 0) {};
 \node [style=white node, label=$H_2$] (1) at (3, 0) {};

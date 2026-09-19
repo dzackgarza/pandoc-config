@@ -55,18 +55,18 @@
 \newcommand{\normalneq}{\mathrel{\reflectbox{$\trianglerightneq$}}}
 
 % Dirac operator (uses \mkern and spacing hacks)
-\newcommand{\dirac}[0]{\mkern-3mu \not{ \partial}}
+\newcommand{\dirac}{\mkern-3mu \not{ \partial}}
 
 % Hodge star differential (uses \mkern)
-\newcommand{\stardstar}[0]{\hodgestar \mathrm{d} \mkern-1mu \hodgestar}
+\newcommand{\stardstar}{\hodgestar \mathrm{d} \mkern-1mu \hodgestar}
 
 % Sheaf hom (uses \kern for tight spacing)
 \newcommand{\HHom}{\mathscr{H}\kern-2pt\operatorname{om}}
 \newcommand{\shom}{ {\mathcal{H}}\kern-0.5pt{\operatorname{om}}}
-\newcommand{\QHS}[0]{\mathbf{Q}\kern-0.5pt\operatorname{HS}}
+\newcommand{\QHS}{\mathbf{Q}\kern-0.5pt\operatorname{HS}}
 
 % Bold mathbb BGL with \mkern
-\newcommand{\BGL}[0]{ \mathbf{B}\mkern-3mu \operatorname{GL}}
+\newcommand{\BGL}{ \mathbf{B}\mkern-3mu \operatorname{GL}}
 
 % Git quotient with \mkern
 \newcommand{\gitquot}{{ \mathbin{/\mkern-6mu/}}}
@@ -109,8 +109,8 @@
 \newcommand{\aug}{\fboxsep=-\fboxrule\!\!\!\fbox{\strut}\!\!\!}
 
 % Large symbols using text sizing
-\newcommand{\bigast}[0]{{\mathop{\text{\Large $\ast$}}}}
-\newcommand{\connectsum}[0]{\mathop{ \Large\mypound }}
+\newcommand{\bigast}{{\mathop{\text{\Large $\ast$}}}}
+\newcommand{\connectsum}{\mathop{ \Large\mypound }}
 
 % Horizontal and vertical bars using \rule
 \newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
@@ -183,3 +183,6 @@ $E_0^+  \plE_3$  $E^+_0  \plE_0 E_0^+$
 
 % ----- Table Row Color Helper -----
 \newcommand{\ccy}{\rowcolor{black!8}}
+
+% Reverse assignment arrow
+\providecommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
