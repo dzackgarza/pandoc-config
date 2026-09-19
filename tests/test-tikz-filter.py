@@ -426,9 +426,25 @@ def test_tikzcd_complex_labels_latex() -> None:
 
 
 def test_bad_tikz_crashes() -> None:
-    """Invalid tikz must crash (pandoc exits 83 for Lua filter error)."""
+    """Invalid tikz must fail loudly and carry the actual pdflatex transcript."""
     path = FIXTURES / "bad-tikz" / "input.md"
-    assert_exit("crashes on invalid tikz", path, expected_rc=83)
+    cp = pandoc_transform(path, "latex")
+    if cp.returncode == 83:
+        check("crashes on invalid tikz")
+    else:
+        fail("crashes on invalid tikz", f"expected rc=83, got rc={cp.returncode}: {cp.stderr.strip() or '(none)'}")
+
+    if (
+        "[tikzcd-pdflatex-log-begin]" in cp.stderr
+        and "Undefined control sequence" in cp.stderr
+        and "[tikzcd-pdflatex-log-end]" in cp.stderr
+    ):
+        check("invalid tikz forwards the real pdflatex log")
+    else:
+        fail(
+            "invalid tikz forwards the real pdflatex log",
+            f"compiler transcript missing from stderr: {cp.stderr[-1200:]}",
+        )
 
 
 # ---------------------------------------------------------------
