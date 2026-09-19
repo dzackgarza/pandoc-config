@@ -122,6 +122,80 @@
 }
 
 % =============================================================================
+% \eighteenzero, \eighteenzerolab — Vinberg 18-cusp diagrams
+% =============================================================================
+
+\newcommand{\eighteenzero}{%
+\draw (0,0)--(0,6)--(6,0)--(4,0) (2,0)--(0,0)
+(0,0)--(1,1) (6,0)--(4,1);
+
+\node[dwh] at (2,0) {};
+\node[swh] at (2,0) {};
+\node[wh] at (1,0) {};
+\node[dwh] at (0,0) {};
+\node[swh] at (0,0) {};
+\node[wh] at (0,1) {};
+\node[dwh] at (0,2) {};
+\node[swh] at (0,2) {};
+\node[wh] at (0,3) {};
+\node[dwh] at (0,4) {};
+\node[swh] at (0,4) {};
+\node[wh] at (0,5) {};
+\node[dwh] at (0,6) {};
+\node[swh] at (0,6) {};
+\node[wh] at (1,5) {};
+\node[dwh] at (2,4) {};
+\node[swh] at (2,4) {};
+\node[wh] at (3,3) {};
+\node[dwh] at (4,2) {};
+\node[swh] at (4,2) {};
+\node[wh] at (5,1) {};
+\node[dwh] at (6,0) {};
+\node[swh] at (6,0) {};
+\node[wh] at (5,0) {};
+\node[dwh] at (4,0) {};
+\node[swh] at (4,0) {};
+
+\node[wh] at (1,1) {};
+\node[wh] at (4,1) {};
+}
+
+\newcommand{\eighteenzerolab}{%
+\draw (0,0)--(0,6)--(6,0)--(4,0) (2,0)--(0,0)
+(0,0)--(1,1) (6,0)--(4,1);
+
+\node[dwh, label={[label distance=0.00em]270:$1$}] at (2,0) {};
+\node[swh] at (2,0) {};
+\node[wh, label={[label distance=0.00em]270:$2$}] at (1,0) {};
+\node[dwh, label={[label distance=0.00em]270:$3$}] at (0,0) {};
+\node[swh] at (0,0) {};
+\node[wh, label={[label distance=0.00em]170:$4$}] at (0,1) {};
+\node[dwh, label={[label distance=0.00em]170:$5$}] at (0,2) {};
+\node[swh] at (0,2) {};
+\node[wh, label={[label distance=0.00em]170:$6$}] at (0,3) {};
+\node[dwh, label={[label distance=0.00em]170:$7$}] at (0,4) {};
+\node[swh] at (0,4) {};
+\node[wh, label={[label distance=0.00em]170:$8$}] at (0,5) {};
+\node[dwh, label={[label distance=0.00em]100:$9$}] at (0,6) {};
+\node[swh] at (0,6) {};
+\node[wh, label={[label distance=0.00em]10:$10$}] at (1,5) {};
+\node[dwh, label={[label distance=0.00em]10:$11$}] at (2,4) {};
+\node[swh] at (2,4) {};
+\node[wh, label={[label distance=0.00em]10:$12$}] at (3,3) {};
+\node[dwh, label={[label distance=0.00em]10:$13$}] at (4,2) {};
+\node[swh] at (4,2) {};
+\node[wh, label={[label distance=0.00em]10:$14$}] at (5,1) {};
+\node[dwh, label={[label distance=0.00em]270:$15$}] at (6,0) {};
+\node[swh] at (6,0) {};
+\node[wh, label={[label distance=0.00em]270:$16$}] at (5,0) {};
+\node[dwh, label={[label distance=0.00em]270:$17$}] at (4,0) {};
+\node[swh] at (4,0) {};
+
+\node[wh, label={[label distance=0.00em]10:$18$}] at (1,1) {};
+\node[wh, label={[label distance=0.00em]170:$19$}] at (4,1) {};
+}
+
+% =============================================================================
 % \sterkone — Sterk diagram I
 % =============================================================================
 
@@ -327,4 +401,598 @@
 \begin{dynkinDiagram}[label, arrows=false, edge length=1.75cm, labels={0,1,2}]A{***}
 \dynkinQuadrupleEdge 23
 \end{dynkinDiagram}%
+}
+
+% =============================================================================
+% Coxeter-Vinberg Table Conventions & Edge Macros
+% =============================================================================
+
+\newcommand{\TableLabeledSimpleEdge}[1]{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) edge["$#1$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\TableNoEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\TableSimpleEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\TableDoubleEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=double edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\TableTripleEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=triple edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\TableQuadrupleEdge}{%
+\begin{tikzpicture}[
+    quadruple/.style={double distance=0.5em,thick,
+        postaction={draw,thick,double distance=0.1em}},
+    quadruple/.default=1em]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$,minimum size=0.8cm] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$, minimum size=0.8cm] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+    \draw[quadruple] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\TableBoldEdge}{%
+\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=white node, label=$H_1$] (0) at (0, 0) {};
+        \node [style=white node, label=$H_2$] (1) at (3, 0) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw[style=thick edge] (0) to (1);
+    \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\TableDottedEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=dashed edge] (0) edge["$w_{ij}$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\TableSimpleVertex}{%
+\tikz[baseline]{\node [style=white node] (0) at (0, 0) {};}%
+}
+
+\newcommand{\TableBlackVertex}{%
+\tikz[baseline]{\node [style=black node] (0) at (0, 0) {};}%
+}
+
+\newcommand{\TableDoubleVertex}{%
+\tikz[baseline]{\node [style=doubled node] (0) at (0, 0) {};}%
+}
+
+\newcommand{\VinbergNoEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\VinbergSimpleEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) edge["$m$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\VinbergLabeledSimpleEdge}[1]{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) edge["$#1$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\VinbergSingleEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=plain edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\VinbergDoubleEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=double edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\VinbergTripleEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=triple edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\VinbergThickEdge}{%
+\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=white node, label=$f_1$] (0) at (0, 0) {};
+        \node [style=white node, label=$f_2$] (1) at (3, 0) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw[style=thick edge] (0) to (1);
+    \end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\VinbergDashedEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=dashed edge] (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\VinbergBrokenEdge}{%
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=white node, label=$f_1$] (0) at (0, 0) {};
+		\node [style=white node, label=$f_2$] (1) at (3, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+        \draw[style=dashed edge] (0) edge["$t$"] (1);
+	\end{pgfonlayer}
+\end{tikzpicture}%
+}
+
+\newcommand{\edgetto}{%
+\begin{tikzpicture} 
+\node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
+\node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
+\draw [style=plain edge] (0) to (1); 
+\end{tikzpicture}%
+}
+
+\newcommand{\edgettt}{%
+\begin{tikzpicture} 
+\node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
+\node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
+\draw [style=thick edge] (0) to (1); 
+\end{tikzpicture}%
+}
+
+\newcommand{\edgettgt}{%
+\begin{tikzpicture} 
+\node [style=black node, label=$H_1$] (0) at (0, 0) {}; 
+\node [style=black node, label=$H_2$] (1) at (3, 0) {}; 
+\draw [style=dashed edge] (0) -- (1) node[midway,above] () {$h_1h_2$}; 
+\end{tikzpicture}%
+}
+
+\newcommand{\edgetft}{%
+\begin{tikzpicture}
+\node [style=black node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=double edge] (0) to (1);
+\end{tikzpicture}%
+}
+
+\newcommand{\edgetfgt}{%
+\begin{tikzpicture}
+\node [style=black node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=dashed edge] (0) -- (1) node[midway,above] () {$h_1h_2$};
+\end{tikzpicture}%
+}
+
+\newcommand{\edgefft}{%
+\begin{tikzpicture}
+\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=plain edge] (0) to (1);
+\end{tikzpicture}%
+}
+
+\newcommand{\edgefff}{%
+\begin{tikzpicture}
+\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=thick edge] (0) to (1);
+\end{tikzpicture}%
+}
+
+\newcommand{\edgeffgf}{%
+\begin{tikzpicture}
+\node [style=white node, label=$H_1$] (0) at (0, 0) {};
+\node [style=white node, label=$H_2$] (1) at (3, 0) {};
+\draw [style=dashed edge] (0) -- (1) node[midway,above] () {$h_1h_2$};
+\end{tikzpicture}%
+}
+
+% =============================================================================
+% ADE Surface Diagram Constructors
+% =============================================================================
+
+\newcommand{\ADEAn}[1]{%
+\pgfmathsetmacro{\n}{#1}%
+\pgfmathsetmacro{\dmax}{int(\n-1)}%
+\pgfmathsetmacro{\npone}{int(\n+1)}%
+\node (A) at (0,0) {};%
+\node (Ap) at (0,1) {};%
+\node (B) at (0, 2) {};%
+\node (C) at (\npone, 0) {};%
+\begin{pgfonlayer}{nodelayer}
+\node[ADE blue node, label={below:$1$}] at (A) {};
+\node[ADE blue node, label={left:$y$}] at (Ap) {};
+\node[ADE blue node, label={below:$x^{\npone}$}] at (C) {};
+\node[ADE blue node, label={left:$y^2$}] at (B) {};
+\ifthenelse{\not\isodd{\npone}}{%
+	\pgfmathsetmacro{\halfn}{int(\n/2)}%
+	\node[ADE blue node, label={above right:$x^{\halfn}y$}] at ($(B)!1/2!(C)$) {};%
+}{}%
+\foreach[evaluate=\i as \zm using {iseven(\i)?"ADE black node":"ADE white node"}] \i in {1,2,...,\n}
+{
+	\node[style=\zm, label={below:$x^{\i}$}] (p\i) at (\i, 0) {};
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\foreach \i [evaluate=\i as \j using \i+1] in {1,2,...,\dmax} 
+{
+\draw[ADE plain edge] (p\i) to (p\j);
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (A) grid (\npone,2);
+\draw[blue, very thick] (A.center) -- (B.center) -- (C.center);
+\fill[blue!50, opacity=0.2] (A.center) -- (B.center) -- (C.center) -- cycle;
+\end{pgfonlayer}
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (p1.center) to (p\n.center);
+\end{scope}
+\end{pgfonlayer}
+}
+
+\newcommand{\ADEmAnm}[1]{%
+\pgfmathsetmacro{\n}{#1}%
+\pgfmathsetmacro{\npone}{int(\n+1)}%
+\pgfmathsetmacro{\nptwo}{int(\n+2)}%
+\node (A) at (1,0) {};%
+\node (Ap) at (0,1) {};%
+\node (B) at (0, 2) {};%
+\node (C) at (\nptwo, 0) {};%
+\begin{pgfonlayer}{nodelayer}
+\node[label={below:$1$}] at (0, 0) {};
+\node[label={left:$y$}] at (0,1) {};
+\node[ADE blue node, label={below:$x^1$}] at (1,0) {};
+\node[ADE blue node, label={below:$x^{\nptwo}$}] at (C) {};
+\node[ADE blue node, label={left:$y^2$}] at (B) {};
+\ifthenelse{\not\isodd{\nptwo}}{%
+	\pgfmathsetmacro{\halfn}{int(\nptwo/2)}%
+	\node[ADE blue node, label={above right:$x^{\halfn}y$}] at ($(B)!1/2!(C)$) {};%
+}{}%
+\foreach[evaluate=\i as \zm using {iseven(\i)?"ADE black node":"ADE white node"}] \i in {2,...,\npone}
+{
+	\node[style=\zm, label={below:$x^{\i}$}] (p\i) at (\i, 0) {};
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\foreach \i [evaluate=\i as \j using \i+1] in {2,...,\n} 
+{
+\draw[ADE plain edge] (p\i) to (p\j);
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0, 0) grid (\nptwo,2);
+\draw[blue, very thick] (A.center) -- (B.center) -- (C.center);
+\fill[blue!50, opacity=0.2] (A.center) -- (B.center) -- (C.center) -- cycle;
+\end{pgfonlayer}
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (p2.center) to (p\npone.center);
+\end{scope}
+\end{pgfonlayer}
+}
+
+\newcommand{\ADEDn}[1]{%
+\pgfmathsetmacro{\m}{#1}%
+\pgfmathsetmacro{\n}{int(\m-3)}%
+\pgfmathsetmacro{\dmax}{int(\n-1)}%
+\pgfmathsetmacro{\npone}{int(\n+1)}%
+\node[label={below:$1$}] (A) at (0,0) {};%
+\node[label={left:$y$}] (Ap) at (0,1) {};%
+\node (B) at (0, 2) {};%
+\node (C) at (\npone, 0) {};%
+\begin{pgfonlayer}{nodelayer}
+\node[ADE blue node, label={below:$x^{\npone}$}] at (C) {};
+\node[ADE blue node, label={above:$y^2$}] at (B) {};
+\node[ADE blue node, label={above:$xy^2$}] at (1,2) {};
+\node[ADE blue node, label={above:$x^2y^2$}] at (2,2) {};
+\ifthenelse{\not\isodd{\npone}}{%
+	\pgfmathsetmacro{\halfn}{int(\n/2 + 2)}%
+	\node[ADE blue node, label={above right:$x^{\halfn}y$}] at ($(2,2)!1/2!(C)$) {};%
+}{}%
+\node[style=ADE black node] (q00) at (0,0) {};
+\node[style=ADE white node] (q10) at (1,0) {};
+\node[style=ADE white node] (q01) at (0,1) {};
+\node[style=ADE white node, label={right:$xy$}] (q11) at (1,1) {};
+\foreach[evaluate=\i as \zm using {iseven(\i)?"ADE black node":"ADE white node"}] \i in {1,2,...,\n}
+{
+	\node[style=\zm, label={below:$x^{\i}$}] (p\i) at (\i, 0) {};
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw[ADE plain edge] (q01) -- (q00) -- (q11);
+\draw[ADE plain edge] (q00) -- (q10);
+\foreach \i [evaluate=\i as \j using \i+1] in {1,...,\dmax} 
+{
+\draw[ADE plain edge] (p\i) to (p\j);
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0,0) grid (\npone,2);
+\draw[blue, very thick] (B.center) -- (2,2) -- (C.center);
+\fill[blue!50, opacity=0.2]  (B.center) -- (2,2) -- (C.center) -- (A.center);
+\end{pgfonlayer}
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (q01.center) to (q00.center) to (q11.center);
+\draw[hlt] (q00.center) to (p\n.center);
+\end{scope}
+\end{pgfonlayer}
+}
+
+\newcommand{\ADEDntilde}[1]{%
+\pgfmathsetmacro{\m}{#1}%
+\pgfmathsetmacro{\n}{int(\m-3)}%
+\pgfmathsetmacro{\dmax}{int(\n-1)}%
+\pgfmathsetmacro{\npone}{int(\n+1)}%
+\node (B) at (0, 2) {};%
+\begin{pgfonlayer}{nodelayer}
+\node[ADE blue node] at (\npone, 2) {};
+\node[ADE blue node, label={above:$y^2$}] at (B) {};
+\node[style=ADE black node] (q00) at (0,0) {};
+\node[style=ADE white node] (q10) at (1,0) {};
+\node[style=ADE white node] (q01) at (0,1) {};
+\node[style=ADE white node, label={right:$xy$}] (q11) at (1,1) {};
+\node[style=ADE black node, label={below:$x^{\npone}$}] (r00) at (\npone,0) {};
+\node[style=ADE white node, label={right:$x^{\npone}y$}] (r01) at (\npone,1) {};
+\node[style=ADE white node, label={left:$x^{\n}y$}] (r11) at (\npone-1,1) {};
+\foreach[evaluate=\i as \zm using {iseven(\i)?"ADE black node":"ADE white node"}] \i in {1,2,...,\n}
+{
+	\node[style=\zm, label={below:$x^{\i}$}] (p\i) at (\i, 0) {};
+	\node[ADE blue node, label={above:$x^{\i}y^2$}] at (\i,2) {};
+}
+\node[ADE blue node, label={above:$x^{\npone}y^2$}] at (\npone,2) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw[ADE plain edge] (q01) -- (q00) -- (q11);
+\draw[ADE plain edge] (q00) -- (q10);
+\draw[ADE plain edge] (r01) -- (r00) -- (r11);
+\draw[ADE plain edge] (r00) -- (p\n);
+\foreach \i [evaluate=\i as \j using \i+1] in {1,...,\dmax} 
+{
+\draw[ADE plain edge] (p\i) to (p\j);
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0,0) grid (\npone,2);
+\draw[blue, very thick] (0,2) -- (\npone,2);
+\fill[blue!50, opacity=0.2]  (0,0) -- (0,2) -- (\npone,2) -- (\npone, 0) -- cycle;
+\end{pgfonlayer}
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (q01.center) to (q00.center) to (q11.center);
+\draw[hlt] (q00.center) to (r00.center);
+\draw[hlt] (r00.center) to (r01.center);
+\draw[hlt] (r00.center) to (r11.center);
+\end{scope}
+\end{pgfonlayer}
+}
+
+\newcommand{\ADEPrimeAn}[1]{%
+\pgfmathsetmacro{\n}{#1}%
+\pgfmathsetmacro{\dmax}{int(\n-1)}%
+\pgfmathsetmacro{\dmaxt}{int(\n-2)}%
+\pgfmathsetmacro{\dmaxtt}{int(\n-3)}%
+\begin{pgfonlayer}{nodelayer}
+\node[label={below:$1$}] at (0,0) {};
+\node[ADE blue node, label={left:$y$}] at (0,1) {};
+\node[ADE blue node, label={below:$x^{\dmax}$}] at (\dmax,0) {};
+\node[label={left:$y^2$}] at (0,2) {};
+\node[ADE blue node, label={above:$x^2y$}] at (2,2) {};
+\ifthenelse{\not\isodd{\dmax}}{%
+	\pgfmathsetmacro{\halfn}{int(\n/2+1)}%
+	\node[ADE blue node, label={above right:$x^{\halfn}y$}] at ($((0,2)!1/2!(\dmax, 0) + (1,0)$) {};%
+}{}%
+\foreach[evaluate=\i as \zm using {iseven(\i)?"ADE black node":"ADE white node"}] \i in {1,...,\dmaxt}
+{
+	\node[style=\zm, label={below:$x^{\i}$}] (p\i) at (\i, 0) {};
+}
+\node[style=ADE black node] (p0) at (0,0) {};
+\node[style=ADE white node, label={right:$xy$}] (pn1) at (1,1) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw[ADE plain edge] (pn1) to (p0);
+\foreach \i [evaluate=\i as \j using \i+1] in {0,...,\dmaxtt} 
+{
+\draw[ADE plain edge] (p\i) to (p\j);
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0,0) grid (\dmax,2);
+\draw[blue, very thick] (0, 1) -- (2,2) -- (\dmax, 0);
+\fill[blue!50, opacity=0.2] (0,0) -- (0,1) -- (2,2) -- (\dmax,0) -- cycle;
+\draw[black, very thick, opacity=0.3] (0,1) to (0,0) to (\dmax,0);
+\end{pgfonlayer}
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (p0.center) to (p\dmaxt.center);
+\draw[hlt] (pn1.center) to (p0.center);
+\end{scope}
+\end{pgfonlayer}
+}
+
+\newcommand{\ADEPrimePrimeAn}[1]{%
+\pgfmathsetmacro{\n}{#1}%
+\pgfmathsetmacro{\dmax}{int(\n-1)}%
+\pgfmathsetmacro{\dmaxtt}{int(\n-3)}%
+\pgfmathsetmacro{\dmaxttt}{int(\n-4)}%
+\begin{pgfonlayer}{nodelayer}
+\node[label={below:$1$}] at (0,0) {};
+\node[ADE blue node, label={left:$y$}] at (0,1) {};
+\node[ADE blue node, label={right:$x^{\dmaxtt}y$}] at (\dmaxtt,1) {};
+\node[label={left:$y^2$}] at (0,2) {};
+\node[ADE blue node, label={above:$x^2y^2$}] at (2,2) {};
+\foreach[evaluate=\i as \zm using {iseven(\i)?"ADE black node":"ADE white node"}] \i in {1,...,\dmaxtt}
+{
+	\node[style=\zm, label={below:$x^{\i}$}] (p\i) at (\i, 0) {};
+}
+\node[style=ADE black node] (p0) at (0,0) {};
+\node[style=ADE white node, label={left:$xy$}] (pn1) at (1,1) {};
+\node[ADE white node, label={left:$x^{\dmaxttt}y$}] (pm1) at (\dmax-3,1) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw[ADE plain edge] (pn1) to (p0);
+\draw[ADE plain edge] (pm1) to (p\dmaxtt);
+\foreach \i [evaluate=\i as \j using \i+1] in {0,...,\dmaxttt} 
+{
+\draw[ADE plain edge] (p\i) to (p\j);
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0,0) grid (\dmaxtt,2);
+\draw[blue, very thick] (0, 1) -- (2,2) -- (\dmaxtt, 1);
+\fill[blue!50, opacity=0.2] (0,0) -- (0,1) -- (2,2) -- (\dmaxtt,1) -- (\dmaxtt,0) -- cycle;
+\draw[black, very thick, opacity=0.3] (0,1) to (0,0) to (\dmaxtt,0);
+\end{pgfonlayer}
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (p0.center) to (p\dmaxtt.center);
+\draw[hlt] (pn1.center) to (p0.center);
+\draw[hlt] (pm1.center) to (p\dmaxtt.center);
+\end{scope}
+\node at (\dmaxtt-0.25, 3) {\Huge $'A_{\n}'$};
+\end{pgfonlayer}
+}
+
+\newcommand{\ADEPrimeDn}[1]{%
+\pgfmathsetmacro{\n}{#1}%
+\pgfmathsetmacro{\dmaxttt}{int(\n-4)}%
+\pgfmathsetmacro{\dmaxtttt}{int(\n-5)}%
+\begin{pgfonlayer}{nodelayer}
+\node[label={below:$1$}] at (0,0) {};
+\node[ label={left:$y$}] at (0,1) {};
+\node[ADE blue node, label={right:$x^{\dmaxttt}y$}] at (\dmaxttt,1) {};
+\node[ADE blue node, label={left:$y^2$}] at (0,2) {};
+\node[ADE blue node, label={above:$x^2y^2$}] at (2,2) {};
+\node[ADE blue node, label={above:$xy^2$}] at (1,2) {};
+\foreach[evaluate=\i as \zm using {iseven(\i)?"ADE black node":"ADE white node"}] \i in {1,...,\dmaxttt}
+{
+	\node[style=\zm, label={below:$x^{\i}$}] (p\i) at (\i, 0) {};
+}
+\node[style=ADE white node] (p01) at (0,1) {};
+\node[style=ADE black node] (p0) at (0,0) {};
+\node[style=ADE white node, label={left:$xy$}] (pn1) at (1,1) {};
+\node[ADE white node, label={left:$x^{\dmaxtttt}y$}] (pm1) at (\dmaxtttt,1) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw[ADE plain edge] (pn1) to (p0);
+\draw[ADE plain edge] (p0) to (p01);
+\draw[ADE plain edge] (pm1) to (p\dmaxttt);
+\foreach \i [evaluate=\i as \j using \i+1] in {0,...,\dmaxtttt} 
+{
+\draw[ADE plain edge] (p\i) to (p\j);
+}
+\end{pgfonlayer}
+\begin{pgfonlayer}{background}
+\draw[gray, very thin] (0,0) grid (\dmaxttt,2);
+\draw[blue, very thick] (0, 2) -- (2,2) -- (\dmaxttt, 1);
+\fill[blue!50, opacity=0.2] (0,0) -- (0,2) -- (2,2) -- (\dmaxttt,1) -- (\dmaxttt,0) -- cycle;
+\draw[black, very thick, opacity=0.3] (0,2) to (0,0) to (\dmaxttt,0) -- (\dmaxttt, 1);
+\end{pgfonlayer}
+\begin{pgfonlayer}{main}
+\begin{scope}[transparency group]
+\draw[hlt] (p0.center) to (p\dmaxttt.center);
+\draw[hlt] (pn1.center) to (p0.center);
+\draw[hlt] (pm1.center) to (p\dmaxttt.center);
+\draw[hlt] (p0.center) to (p01.center);
+\end{scope}
+\node at (\dmaxttt-0.25, 2.5) {\Large $D_{\n}'$};
+\end{pgfonlayer}
 }
