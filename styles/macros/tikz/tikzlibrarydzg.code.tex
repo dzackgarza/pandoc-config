@@ -14,7 +14,7 @@
 %   Coxeter ........ vertex=white|black|doubled, coxeter edge=3|4|5|6|infinity|
 %                    dotted, coxeter edge label, parabolic, vertex label,
 %                    inactive, marked vertex, subdiagram cell=elliptic|
-%                    parabolic|other
+%                    parabolic|other, fold, fold axis
 %   Baily-Borel .... cusp0, cusp1, incidence, cusp brace
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
 %                    fan ray, kulikov component, double curve
@@ -25,7 +25,8 @@
 %   posets, moduli . poset node, degeneration, morphism, poset group,
 %                    moduli blob, stratum, boundary stratum,
 %                    mirror move=complement|U|U(2)
-%   curves ......... curve component, curve node, dual vertex, genus
+%   curves ......... curve component, curve node, dual vertex, genus,
+%                    curve point, singular point, constructed point
 %   spaces, maps ... point, map arrow, distinguished curve, contour, over strand,
 %                    branch cut, glued edge=1|2, complex plane (pgfplots axis)
 % =============================================================================
@@ -138,6 +139,8 @@
   subdiagram cell/elliptic/.style={subdiagram cell/base, fill=dzg elliptic},
   subdiagram cell/parabolic/.style={subdiagram cell/base, fill=dzg parabolic},
   subdiagram cell/other/.style={subdiagram cell/base, fill=white},
+  % The fixed line of a reflection symmetry of a diagram.
+  fold axis/.style={draw=dzg singular, dotted, line width=0.8pt},
 }
 
 % -----------------------------------------------------------------------------
@@ -214,7 +217,7 @@
   % the origin of a fan; `lattice point` is the ambient lattice around it.
   distinguished point/.style={circle, fill=black, inner sep=0pt,
     minimum size=4.5pt},
-  % A coordinate axis of the ambient real vector space.
+  % A coordinate axis of the ambient real vector space or affine plane.
   coordinate axis/.style={->, draw=dzg muted, line width=0.4pt},
   % A cone or region marked by hatching, where filled regions would overlap.
   hatched region/.style={pattern=north east lines, pattern color=dzg muted},
@@ -256,6 +259,14 @@
   curve node/.style={circle, fill=black, inner sep=0pt, minimum size=3.5pt},
   dual vertex/.style={circle, fill=black, inner sep=0pt, minimum size=5pt},
   genus/.style={font=\scriptsize, inner sep=1pt},
+  % A given point on a curve.
+  curve point/.style={circle, fill=black, inner sep=0pt, minimum size=4pt},
+  % A singular point of a plane curve (cusp, node, tacnode, ...).
+  singular point/.style={circle, draw, fill=white, line width=0.8pt,
+    inner sep=0pt, minimum size=6pt},
+  % A point constructed from the given ones, e.g. an intersection of lines.
+  constructed point/.style={circle, draw, fill=white, line width=0.8pt,
+    inner sep=0pt, minimum size=4pt},
 }
 
 % -----------------------------------------------------------------------------

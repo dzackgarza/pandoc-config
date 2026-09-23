@@ -5,5 +5,5 @@
 % Index: 13
 
 \begin{tikzpicture}
-\sterkone
+  \pic[root labels=prime] {sterk=1};
 \end{tikzpicture}

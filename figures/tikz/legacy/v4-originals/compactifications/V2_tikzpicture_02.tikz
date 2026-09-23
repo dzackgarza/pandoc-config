@@ -4,20 +4,17 @@
 % Category: compactifications
 % Index: 2
 
-\begin{tikzpicture}
-\node[circle, draw, label={$U(2)\oplus E_8(2)$}, color=red] (evencusp) at (0,0) {$a'$};
-    \node [circle, draw, label={$U\oplus E_8(2)$}] (oddcusp) at (6,0) {$b'$};
-    
-    \node[rectangle, draw, color=green] (E82) at (3,0) {$E_8(2)$};
-
-    \node [rectangle, draw] (D82) at (9,0) {$D_8^\dagger$};
-    
-    \draw[-latex, shorten >= 0.4em] (evencusp) to (E82);
-    \draw[-latex, shorten >= 0.4em] (oddcusp) to (E82);
-    \draw[-latex, shorten >= 0.4em] (oddcusp) to (D82);
-
-    \node[color=red] at (0,-1) {$(10,10,0)_1$};
-    \node[color=green] at (3,-1) {$(8,8,0)_0$};
-    \node at (6,-1) {$(10,8,0)_1$};
-    \node at (9,-1) {$(8,6,0)_0$};
+% The even cusp a' and the 1-cusp E_8(2) are singled out (red and green in
+% the source) against the odd cusp b' and D_8^dagger.
+\begin{tikzpicture}[node distance=1.4cm]
+  \node[cusp0, draw=dzg singular, label={[cusp label]above:$a'$},
+    label={[cusp label, text=dzg singular]below:$(10,10,0)_1$}] (even) {$U(2)\oplus E_8(2)$};
+  \node[cusp1, draw=dzg accent, right=of even,
+    label={[cusp label, text=dzg accent]below:$(8,8,0)_0$}] (E82) {$E_8(2)$};
+  \node[cusp0, right=of E82, label={[cusp label]above:$b'$},
+    label={[cusp label]below:$(10,8,0)_1$}] (odd) {$U\oplus E_8(2)$};
+  \node[cusp1, right=of odd, label={[cusp label]below:$(8,6,0)_0$}] (D82) {$D_8^\dagger$};
+  \draw[incidence] (even) -- (E82);
+  \draw[incidence] (odd) -- (E82);
+  \draw[incidence] (odd) -- (D82);
 \end{tikzpicture}

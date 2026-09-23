@@ -4,29 +4,23 @@
 % Category: general
 % Index: 18
 
-\begin{tikzpicture}
-[scale=0.9]
-% diagonal symmetry
-\begin{scope}
-\eighteen
-\draw [color=red, dotted, thick] (-0.5,-0.5) -- (4.5, 4.5);
-\draw [<->, color=red, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (2,1) -- (1, 2);
-\node[] (lab1) at (2,-1) {d};
-\end{scope}
-% horizontal symmetry
-\begin{scope}[shift={(5,0)}]
-\eighteen
-\draw [color=red, dotted, thick] (-0.5,2) -- (4.5, 2);
-\draw [<->, color=red, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (1.5,1) -- (1.5, 3);
-\node[] (lab1) at (2,-1) {h};
-\end{scope}
-% Rotational symmetry
-\begin{scope}[shift={(10,0)}]
-\eighteen
-% \draw [color=red, dotted, thick] (-0.5,2) -- (4.5, 2);
-% \draw [-{Latex[length=2mm]}, red, thick] (3.5, 2) to [out=90,in=90] (0.5, 2);
-\draw [red,thick,domain=5:175, -{Latex[length=2mm]}] plot ({cos(\x) + 2}, {sin(\x) + 2} );
-\draw [red,thick,domain=185:355, -{Latex[length=2mm]}] plot ({cos(\x) + 2}, {sin(\x) + 2} );
-\node[] (lab1) at (2,-1) {r};
-\end{scope}
+% The symmetries d (diagonal reflection), h (horizontal reflection) and
+% r (rotation by pi) of the Vinberg diagram of (18,2,0).
+\begin{tikzpicture}[scale=0.9]
+  \pic (D) {vinberg 18 2 0};
+  \draw[fold axis] (-0.5,-0.5) -- (4.5,4.5);
+  \draw[fold] (2,1) -- (1,2);
+  \node at (2,-1) {d};
+  \begin{scope}[shift={(5,0)}]
+    \pic (H) {vinberg 18 2 0};
+    \draw[fold axis] (-0.5,2) -- (4.5,2);
+    \draw[fold] (1.5,1) -- (1.5,3);
+    \node at (2,-1) {h};
+  \end{scope}
+  \begin{scope}[shift={(10,0)}]
+    \pic (R) {vinberg 18 2 0};
+    \foreach \a in {5,185}
+      \draw[fold, ->] (2,2) ++(\a:1) arc[start angle=\a, delta angle=170, radius=1];
+    \node at (2,-1) {r};
+  \end{scope}
 \end{tikzpicture}

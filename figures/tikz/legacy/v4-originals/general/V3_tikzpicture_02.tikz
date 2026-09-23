@@ -4,37 +4,22 @@
 % Category: general
 % Index: 2
 
-\begin{tikzpicture}
-[scale=0.4]
-\begin{pgfonlayer}{nodelayer}
-    \node [circle, draw, label={[label distance=0.75em]90:$U\oplus E_8^2$}] (a) at (-10, 0) {$p_a$};
-    \node (alab) at  (-10, -6) {$(18, 0, 0)_1$};
-    \node (aplab) at (-4, -6) {$(16, 0, 0)_0$};
-    \node (blab) at  (2, -6) {$(18, 2, 0)_1$};
-    \node [rectangle, draw] (a1) at (-4, 3) {$E_8^{2}$};
-    \node [rectangle, draw] (a2) at (-4, -3) {$D_{16}*$};
-    \node [circle, draw, label={[label distance=0.75em]90:$U(2) \oplus E_8^2$}] (b) at (2, 0) {$p_b$};
-    \node [rectangle, draw, , anchor=west] (b1) at (11, 5) {$D_8^2*$};
-    \node [rectangle, draw, anchor=west] (b2) at (11, 3) {$E_7^{2} A_1^{2}*$};
-    \node [rectangle, draw, anchor=west] (b3) at (11, 1) {$E_8 D_8$};
-    \node [rectangle, draw, anchor=west] (b4) at (11, -1) {$D_{12} D_4*$};
-    \node [rectangle, draw, anchor=west] (b5) at (11, -3) {$D_{16}$};
-    \node [rectangle, draw, anchor=west] (b6) at (11, -5) {$A_{15} A_1(2)*$};
-    \node [style=none, label=above:{$\overline{F_{4, h.e.}} {}^{bb}$}] at (4, 4.5) {};
-    \draw [decorate,decoration={brace,amplitude=15pt}, thick]
-    (16, 6) -- (16, -6) node [black,midway,xshift=4em] 
-    {$(16, 2, 0)_0$};
-\end{pgfonlayer}
-\begin{pgfonlayer}{edgelayer}
-    \draw [-latex, shorten >= 0.4em]  (a) to (a1.west);
-    \draw [-latex, shorten >= 0.4em]  (a) to (a2.west);
-    \draw [-latex, shorten >= 0.4em]  (b) to (a1.east);
-    \draw [-latex, shorten >= 0.4em]  (b) to (a2.east);
-    \draw [-latex, shorten >= 0.4em]  (b) to (b1.west);
-    \draw [-latex, shorten >= 0.4em]  (b) to (b2.west);
-    \draw [-latex, shorten >= 0.4em]  (b) to (b3.west);
-    \draw [-latex, shorten >= 0.4em]  (b) to (b4.west);
-    \draw [-latex, shorten >= 0.4em]  (b) to (b5.west);
-    \draw [-latex, shorten >= 0.4em]  (b) to (b6.west);
-\end{pgfonlayer}
+\begin{tikzpicture}[scale=0.4]
+  \node[cusp0, label={[cusp label]above:$p_a$}] (a) at (-10,0) {$U\oplus E_8^2$};
+  \node[cusp1] (a1) at (-4,3) {$E_8^{2}$};
+  \node[cusp1] (a2) at (-4,-3) {$D_{16}*$};
+  \node[cusp0, label={[cusp label]above:$p_b$}] (b) at (2,0) {$U(2) \oplus E_8^2$};
+  \foreach \i/\y/\L in {1/5/D_8^2*, 2/3/E_7^{2} A_1^{2}*, 3/1/E_8 D_8,
+      4/-1/D_{12} D_4*, 5/-3/D_{16}, 6/-5/A_{15} A_1(2)*}
+    \node[cusp1, anchor=west] (b\i) at (11,\y) {$\L$};
+  \foreach \x/\L in {-10/{(18, 0, 0)_1}, -4/{(16, 0, 0)_0}, 2/{(18, 2, 0)_1}}
+    \node[cusp label] at (\x,-6) {$\L$};
+  \node[anchor=south] at (4,4.5) {$\overline{F_{4, h.e.}} {}^{bb}$};
+  \draw[decorate, decoration={brace, amplitude=15pt}] (16,6)
+    -- (16,-6) node[midway, right=2em, cusp label] {$(16, 2, 0)_0$};
+  \draw[incidence] (a) -- (a1.west);
+  \draw[incidence] (a) -- (a2.west);
+  \draw[incidence] (b) -- (a1.east);
+  \draw[incidence] (b) -- (a2.east);
+  \foreach \i in {1,...,6} \draw[incidence] (b) -- (b\i.west);
 \end{tikzpicture}

@@ -4,30 +4,13 @@
 % Category: general
 % Index: 1
 
+% E_8 in Bourbaki numbering: alpha_2 hangs below alpha_4.
 \begin{tikzpicture}
-\draw  (0,0)-- (1,0);
-\draw  (1,0)-- (2,0);
-\draw  (2,0)-- (3,0);
-\draw  (3,0)-- (4,0);
-\draw  (4,0)-- (5,0);
-\draw  (5,0)-- (6,0);
-\draw  (2,0)-- (2,-1);
-
-\fill [color=black] (0,0) circle (2.4pt);
-\fill [color=black] (1,0) circle (2.4pt);
-\fill [color=black] (2,0) circle (2.4pt);
-\fill [color=black] (3,0) circle (2.4pt);
-\fill [color=black] (4,0) circle (2.4pt);
-\fill [color=black] (5,0) circle (2.4pt);
-\fill [color=black] (6,0) circle (2.4pt);
-\fill [color=black] (2,-1) circle (2.4pt);
-
-\draw[color=black] (2.4,-1) node {$\alpha_2$};
-\draw[color=black] (0,0.4) node {$\alpha_1$};
-\draw[color=black] (1,0.4) node {$\alpha_3$};
-\draw[color=black] (2,0.4) node {$\alpha_4$};
-\draw[color=black] (3,0.4) node {$\alpha_5$};
-\draw[color=black] (4,0.4) node {$\alpha_6$};
-\draw[color=black] (5,0.4) node {$\alpha_7$};
-\draw[color=black] (6,0.4) node {$\alpha_8$};
+  \foreach \i/\x in {1/0, 3/1, 4/2, 5/3, 6/4, 7/5, 8/6}
+    \node[vertex=black, label=above:$\alpha_{\i}$] (a\i) at (\x,0) {};
+  \node[vertex=black, label=right:$\alpha_2$] (a2) at (2,-1) {};
+  \begin{scope}[on edge layer]
+    \draw[coxeter edge=3] (a1.center) -- (a3.center) -- (a4.center) -- (a5.center)
+      -- (a6.center) -- (a7.center) -- (a8.center) (a4.center) -- (a2.center);
+  \end{scope}
 \end{tikzpicture}

@@ -4,7 +4,6 @@
 % Category: general
 % Index: 14
 
-\begin{tikzpicture}
-[x={(1,0)}, y={(60:1)}]
-  \sterktwo
+\begin{tikzpicture}[x={(1,0)}, y={(60:1)}]
+  \pic[root labels=prime] {sterk=2};
 \end{tikzpicture}

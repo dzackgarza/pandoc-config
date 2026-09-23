@@ -3,23 +3,9 @@
 % Duplicates: 2 total copies
 % Type: tikzpicture
 
-\begin{tikzpicture}
-[scale=0.3, baseline=-0.5ex, thick, every node/.style={scale=0.6}]
-    \begin{pgfonlayer}{nodelayer}
-        \node [style=none] (0) at (-2, -1) {};
-        \node [style=none] (1) at (2, -1) {};
-        \node [style=none] (2) at (2, 1) {};
-        \node [style=none] (3) at (-2, 1) {};
-        \node [style=none] (4) at (-1, -2) {};
-        \node [style=none] (5) at (1, -2) {};
-        \node [style=none] (6) at (1, 2) {};
-        \node [style=none] (7) at (-1, 2) {};
-    \end{pgfonlayer}
-    \begin{pgfonlayer}{edgelayer}
-        \draw (0.center) edge["0" below] (1.center);
-        \draw (5.center) edge["0" right] (6.center);
-        \draw (2.center) edge["0" above] (3.center);
-        \draw (7.center) edge["0" left]  (4.center);
-    \end{pgfonlayer}
-
+\begin{tikzpicture}[scale=0.3, baseline=-0.5ex]
+  \draw[curve component] (-2,-1) -- node[below, genus] {$0$} (2,-1);
+  \draw[curve component] (1,-2) -- node[right, genus] {$0$} (1,2);
+  \draw[curve component] (2,1) -- node[above, genus] {$0$} (-2,1);
+  \draw[curve component] (-1,2) -- node[left, genus] {$0$} (-1,-2);
 \end{tikzpicture}

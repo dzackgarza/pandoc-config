@@ -4,13 +4,7 @@
 % Type: tikzpicture
 
 \begin{tikzpicture}
-
-        \begin{pgfonlayer}{nodelayer}
-            \node [style=black node, label={$[\ZZ v]$}] (0) at (0, 0) {};
-            \node [style=black node, label={$[E]$}] (1) at (2, 0) {};
-        \end{pgfonlayer}
-        \begin{pgfonlayer}{edgelayer}
-            \draw[style=Arrow] (0) to (1);
-        \end{pgfonlayer}
-        
+  \node[vertex=black, label={$[\ZZ v]$}] (v) at (0,0) {};
+  \node[vertex=black, label={$[E]$}] (E) at (2,0) {};
+  \draw[->] (v) -- (E);
 \end{tikzpicture}

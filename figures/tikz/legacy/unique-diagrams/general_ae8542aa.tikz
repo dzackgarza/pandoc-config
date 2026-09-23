@@ -4,7 +4,6 @@
 % Type: tikzcd
 
 \begin{tikzcd}
-
 	{\Open(X)} &&& \Ab\Grp \\
 	U && {F(U)} && {G(U)} \\
 	\\
@@ -15,5 +14,4 @@
 	\arrow["{\mathrm{Res}_G(U, V)}", from=2-5, to=4-5]
 	\arrow[""{name=1, anchor=center, inner sep=0}, hook, from=4-1, to=2-1]
 	\arrow["{F, G}", shorten <=15pt, shorten >=15pt, Rightarrow, from=1, to=0]
-
 \end{tikzcd}

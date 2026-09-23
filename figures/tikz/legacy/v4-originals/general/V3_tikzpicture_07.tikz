@@ -4,25 +4,20 @@
 % Category: general
 % Index: 7
 
-\begin{tikzpicture}
-[x={(1,0)}, y={(60:1)}]
-\eighteenzero
+% The symmetry v of the Vinberg diagram of (18,0,0) and the Sterk diagram of
+% its quotient, with matching parabolic subdiagrams highlighted.
+\begin{tikzpicture}[x={(1,0)}, y={(60:1)}]
+  \pic {vinberg 18 0 0};
+  \draw[fold axis, opacity=0.5] (3.5,-1) -- (-0.5,7);
+  \draw[fold, opacity=0.3] (1.25,2) -- (2.75,2);
+  \scoped[on background layer]
+    \draw[parabolic] (2,0) -- (0,0) -- (1,1)  (0,0) -- (0,5)  (1,5) -- (6,0)
+      (4,1) -- (6,0) -- (4,0);
 
-\draw [color=red, dotted, thick, opacity=0.5] (3.5,-1) -- (-0.5, 7);
-\draw [<->, color=red, opacity=0.3, thick, {Latex[length=2mm]}-{Latex[length=2mm]}] (1.25,2) -- (2.75, 2);
-
-\draw[hlt] (2, 0) -- (0, 0) -- (1, 1);
-\draw[hlt] (0, 0) -- (0, 5);
-\draw[hlt] (1, 5) -- (6, 0);
-\draw[hlt] (4, 1) -- (6, 0) -- (4, 0);
-
-
-\begin{scope}[shift={(8,0)}]
-\node at (-3, 4) {$\xlongrightarrow{v}$};
-\sterktwo
-
-\draw[hlt] (2, 0) -- (0, 0) -- (1, 1);
-\draw[hlt] (0,0) -- (0, 5);
-
-\end{scope}
+  \begin{scope}[shift={(8,0)}]
+    \node at (-3,4) {$\xlongrightarrow{v}$};
+    \pic[root labels=prime] {sterk=2};
+    \scoped[on background layer]
+      \draw[parabolic] (2,0) -- (0,0) -- (1,1)  (0,0) -- (0,5);
+  \end{scope}
 \end{tikzpicture}

@@ -4,14 +4,11 @@
 % Category: algebraic-geometry
 % Index: 0
 
-\begin{tikzpicture}
-[polytope diagram]
-% Using semantic styles instead of raw TikZ
-\draw[polytope boundary, polytope fill] (0,0) rectangle (3,3);
-\foreach \x in {0,1,2,3}
-    \foreach \y in {0,1,2,3}
-        \node[lattice point] at (\x,\y) {};
-% Mark special vertices
-\node[special lattice point] at (0,0) {};
-\node[special lattice point] at (3,3) {};
+\begin{tikzpicture}[scale=0.8]
+  \fill[polygon region] (0,0) rectangle (3,3);
+  \draw (0,0) rectangle (3,3);
+  \foreach \x in {0,...,3}
+    \foreach \y in {0,...,3}
+      \node[lattice point] at (\x,\y) {};
+  \foreach \p in {(0,0), (3,3)} \node[boundary point] at \p {};
 \end{tikzpicture}
