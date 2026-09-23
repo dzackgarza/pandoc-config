@@ -17,7 +17,8 @@
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
 %                    fan ray, kulikov component, double curve
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
-%                    short side, boundary point, marked point
+%                    short side, boundary point, marked point, polytope edge,
+%                    distinguished point, coordinate axis, hatched region
 %   posets, moduli . poset node, degeneration, moduli blob, stratum
 %   curves ......... curve component, curve node, dual vertex, genus
 % =============================================================================
@@ -163,6 +164,16 @@
     inner sep=0pt, minimum size=6pt},
   marked point/.style={ias singularity=#1},
   marked point/.default={},
+  % An edge of a lattice polytope (moment polytope, polytope of a fan).
+  polytope edge/.style={draw, line width=0.8pt},
+  % A lattice point the text singles out: a polytope vertex, a cone generator,
+  % the origin of a fan; `lattice point` is the ambient lattice around it.
+  distinguished point/.style={circle, fill=black, inner sep=0pt,
+    minimum size=4.5pt},
+  % A coordinate axis of the ambient real vector space.
+  coordinate axis/.style={->, draw=dzg muted, line width=0.4pt},
+  % A cone or region marked by hatching, where filled regions would overlap.
+  hatched region/.style={pattern=north east lines, pattern color=dzg muted},
 }
 
 % -----------------------------------------------------------------------------
