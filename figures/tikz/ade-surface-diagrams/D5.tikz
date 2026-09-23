@@ -1,58 +1,11 @@
-\begin{tikzpicture}[
-  scale=0.8,
-  latticept/.style={circle, fill=black!50, inner sep=0pt, minimum size=4.2pt},
-  blatticept/.style={fill=black},
-  openpt/.style={circle, draw=black, fill=white, line width=1.1pt,
-    inner sep=0pt, minimum size=8pt},
-  edge/.style={line width=2pt, line cap=round},
-  gridline/.style={gray!45, dashed, line width=0.35pt},
-  region/.style={fill=cyan!8, draw=none},
-  every node/.style={font=\small}
-]
-  % Type D^-_5 polygon: (2,2), (0,2), (0,0), (3,0).
-  \foreach \x in {-2,-1,...,5} {
-    \draw[gridline] (\x,-2.5) -- (\x,4.5);
-  }
-  \foreach \y in {-2,-1,...,4} {
-    \draw[gridline] (-2.5,\y) -- (5.5,\y);
-  }
-  \foreach \x in {-2,-1,...,5} {
-    \foreach \y in {-2,-1,...,4} {
-      \node[latticept] at (\x,\y) {};
-    }
-  }
-
-  \coordinate (pstar) at (2,2);
-  \coordinate (q) at (0,2);
-  \coordinate (r) at (0,0);
-  \coordinate (s) at (3,0);
-
-  \fill[region] (pstar) -- (q) -- (r) -- (s) -- cycle;
-  \draw[edge] (pstar) -- (q);
-  \draw[edge] (pstar) -- (s);
-  \draw[gray!70, line width=0.8pt] (q) -- (r) -- (s);
-
-  \node[openpt] at (q) {};
-  \node[openpt] at (s) {};
-  \node[
-    star,
-    star points=5,
-    star point ratio=2.2,
-    draw=red,
-    fill=white,
-    line width=1.2pt,
-    minimum size=12pt,
-    inner sep=0pt
-  ] at (pstar) {};
-
-  \node[red, font=\Large] at (2.55,2.55) {$p_\ast$};
-  \node[font=\bfseries\small] at (1,2.45) {long};
-  \node[font=\bfseries\small] at (2.85,1.1) {short};
-  \node[font=\Large] at (1.25,0.65) {$D_5$};
-
-  \node[latticept, blatticept] at (0,1) {};
-  \node[latticept, blatticept] at (1,0) {};
-  \node[latticept, blatticept] at (2,0) {};
-  \node[latticept, blatticept] at (1,1) {};
-  \node[latticept, blatticept] at (2,1) {};
+\begin{tikzpicture}
+\pic {lattice polygon={3}{2}{(0,0) -- (3,0) -- (2,2) -- (0,2)}};
+\scoped[on edge layer] {
+  \draw[axis side] (0,2) -- (0,0) -- (3,0);
+  \draw[short side, side label=short] (3,0) -- (2,2);
+  \draw[long side, side label=long] (2,2) -- (0,2);
+}
+\foreach \p in {(0,2), (3,0)} \node[boundary point] at \p {};
+\node[marked point=$p_\ast$] at (2,2) {};
+\node[polygon title, below=5mm of lp.south] {$D_5$};
 \end{tikzpicture}

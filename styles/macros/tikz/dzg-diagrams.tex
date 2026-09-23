@@ -1,1 +1,183 @@
 % Named diagrams drawn with the dzg TikZ library vocabulary.
+
+% =============================================================================
+% ADE lattice polygons
+% =============================================================================
+% An ADE surface is a lattice polygon in the (x,y) plane; the lattice point
+% (i,j) is the monomial x^i y^j. A figure draws one polygon with
+%   \pic {lattice polygon={w}{h}{(0,0) -- (4,0) -- (0,2)}};
+% (grid and lattice points over [0,w]x[0,h], the polygon filled; the node `lp`
+% is that rectangle, for placing a title below it), then its sides with
+% `long side`, `short side`, `axis side`, the lattice points of the boundary
+% divisor with `boundary point`, the ADE chain with \dzgbottomchain,
+% \dzgleftchain and \dzgbranch, and monomials with
+%   \pic {monomials={0/0, 0/1, 4/0}};
+% Chain vertex marks: black at even distance from the corner (0,0), white at
+% odd distance.
+
+% x^i y^j, written 1, x, x^2, y, xy, ...
+\newcommand{\dzgmonomial}[2]{%
+  \ifnum#1=0 \ifnum#2=0 1\fi\else x\ifnum#1>1 ^{#1}\fi\fi
+  \ifnum#2>0 y\ifnum#2>1 ^{#2}\fi\fi}
+
+\tikzset{
+  pics/lattice polygon/.style n args={3}{code={
+    \path[local bounding box=lp] (0,0) rectangle (#1,#2);
+    \begin{scope}[on background layer]
+      \fill[polygon region] #3 -- cycle;
+      \draw[lattice grid] (0,0) grid (#1,#2);
+    \end{scope}
+    \foreach \x in {0,...,#1} \foreach \y in {0,...,#2}
+      \node[lattice point] at (\x,\y) {};}},
+  % Label each listed lattice point i/j with its monomial: below on the x-axis,
+  % left on the y-axis, below right elsewhere.
+  pics/monomials/.style={code={
+    \foreach \dzgi/\dzgj in {#1} {
+      \pgfmathsetmacro\dzgwhere{\dzgj==0 ? "below"
+        : (\dzgi==0 ? "left" : "below right")}
+      \path (\dzgi,\dzgj) coordinate[label={[monomial]\dzgwhere:$\dzgmonomial{\dzgi}{\dzgj}$}];
+    }}},
+}
+
+% A side of the boundary divisor from (#1,#2) to (#3,#4), counterclockwise:
+% `short side` if its lattice length is 1, `long side` otherwise, labelled
+% with its lattice length.
+\newcommand{\dzgboundaryside}[4]{%
+  \pgfmathtruncatemacro\dzglength{gcd(abs(#3-#1),abs(#4-#2))}%
+  \pgfmathsetmacro\dzgside{\dzglength==1 ? "short side" : "long side"}%
+  \scoped[on edge layer]
+    \draw[\dzgside, side label=\dzglength] (#1,#2) -- (#3,#4);}
+
+% The ADE chain along the x-axis from (#1,0) to (#2,0), or along the y-axis
+% from (0,#1) to (0,#2), highlighted; and one chain vertex (#1,#2) with mark
+% #3 joined to (#4,0).
+\newcommand{\dzgbottomchain}[2]{%
+  \foreach \i in {#1,...,#2} {
+    \pgfmathsetmacro\dzgmark{iseven(\i) ? "black" : "white"}
+    \node[vertex/.expanded=\dzgmark] at (\i,0) {};}
+  \scoped[on edge layer] \draw[coxeter edge=3] (#1,0) -- (#2,0);
+  \scoped[on background layer] \draw[parabolic] (#1,0) -- (#2,0);}
+\newcommand{\dzgleftchain}[2]{%
+  \foreach \i in {#1,...,#2} {
+    \pgfmathsetmacro\dzgmark{iseven(\i) ? "black" : "white"}
+    \node[vertex/.expanded=\dzgmark] at (0,\i) {};}
+  \scoped[on edge layer] \draw[coxeter edge=3] (0,#1) -- (0,#2);
+  \scoped[on background layer] \draw[parabolic] (0,#1) -- (0,#2);}
+\newcommand{\dzgbranch}[4]{%
+  \node[vertex=#3] at (#1,#2) {};
+  \scoped[on edge layer] \draw[coxeter edge=3] (#1,#2) -- (#4,0);
+  \scoped[on background layer] \draw[parabolic] (#1,#2) -- (#4,0);}
+
+% The infinite families. Each takes the index n of its ADE type, sets \n,
+% and draws the polygon, its sides, boundary points, chain and monomials;
+% the figure adds the title.
+
+% A_n: the triangle (0,0), (n+1,0), (0,2).
+\newcommand{\ADEAn}[1]{%
+  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n+1}%
+  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (0,2)}};
+  \scoped[on edge layer] \draw[axis side] (0,0) -- (\dzgw,0);
+  \dzgboundaryside{\dzgw}{0}{0}{2}\dzgboundaryside{0}{2}{0}{0}%
+  \dzgbottomchain{1}{\n}%
+  \foreach \p in {(0,0), (0,1), (0,2), (\dzgw,0)} \node[boundary point] at \p {};
+  \pic {monomials={0/0, 0/1, 0/2, \dzgw/0}};
+  \foreach \i in {1,...,\n} \pic {monomials={\i/0}};
+  \ifodd\n
+    \pgfmathtruncatemacro\dzgh{\dzgw/2}%
+    \node[boundary point] at (\dzgh,1) {};
+    \pic {monomials={\dzgh/1}};
+  \fi}
+
+% -A_n: the triangle (1,0), (n+2,0), (0,2).
+\newcommand{\ADEmAnm}[1]{%
+  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n+2}%
+  \pgfmathtruncatemacro\dzge{\n+1}%
+  \pic {lattice polygon={\dzgw}{2}{(1,0) -- (\dzgw,0) -- (0,2)}};
+  \scoped[on edge layer] \draw[axis side] (1,0) -- (\dzgw,0);
+  \dzgboundaryside{\dzgw}{0}{0}{2}\dzgboundaryside{0}{2}{1}{0}%
+  \dzgbottomchain{2}{\dzge}%
+  \foreach \p in {(1,0), (0,2), (\dzgw,0)} \node[boundary point] at \p {};
+  \pic {monomials={0/0, 0/1, 1/0, 0/2, \dzgw/0}};
+  \foreach \i in {2,...,\dzge} \pic {monomials={\i/0}};
+  \ifodd\dzgw\else
+    \pgfmathtruncatemacro\dzgh{\dzgw/2}%
+    \node[boundary point] at (\dzgh,1) {};
+    \pic {monomials={\dzgh/1}};
+  \fi}
+
+% D_n: the quadrilateral (0,0), (n-2,0), (2,2), (0,2).
+\newcommand{\ADEDn}[1]{%
+  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-2}%
+  \pgfmathtruncatemacro\dzge{\n-3}%
+  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (2,2) -- (0,2)}};
+  \scoped[on edge layer] \draw[axis side] (0,2) -- (0,0) -- (\dzgw,0);
+  \dzgboundaryside{\dzgw}{0}{2}{2}\dzgboundaryside{2}{2}{0}{2}%
+  \dzgbottomchain{0}{\dzge}\dzgbranch{0}{1}{white}{0}\dzgbranch{1}{1}{white}{0}%
+  \foreach \p in {(\dzgw,0), (0,2), (1,2), (2,2)} \node[boundary point] at \p {};
+  \pic {monomials={0/0, 0/1, 1/1, 0/2, 1/2, 2/2, \dzgw/0}};
+  \foreach \i in {1,...,\dzge} \pic {monomials={\i/0}};
+  \ifodd\dzge
+    \pgfmathtruncatemacro\dzgh{(\dzgw+2)/2}%
+    \node[boundary point] at (\dzgh,1) {};
+    \pic {monomials={\dzgh/1}};
+  \fi}
+
+% D~_n: the rectangle (0,0), (n-2,0), (n-2,2), (0,2).
+\newcommand{\ADEDntilde}[1]{%
+  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-2}%
+  \pgfmathtruncatemacro\dzge{\n-3}%
+  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (\dzgw,2) -- (0,2)}};
+  \scoped[on edge layer]
+    \draw[axis side] (0,2) -- (0,0) -- (\dzgw,0) -- (\dzgw,2);
+  \dzgboundaryside{\dzgw}{2}{0}{2}%
+  \dzgbottomchain{0}{\dzge}\dzgbranch{0}{1}{white}{0}\dzgbranch{1}{1}{white}{0}%
+  \dzgbranch{\dzgw}{0}{black}{\dzge}%
+  \dzgbranch{\dzgw}{1}{white}{\dzgw}\dzgbranch{\dzge}{1}{white}{\dzgw}%
+  \foreach \i in {0,...,\dzgw} \node[boundary point] at (\i,2) {};
+  \pic {monomials={1/1, \dzgw/0, \dzgw/1, \dzge/1}};
+  \foreach \i in {1,...,\dzge} \pic {monomials={\i/0}};
+  \foreach \i in {0,...,\dzgw} \pic {monomials={\i/2}};}
+
+% 'A_n: the quadrilateral (0,0), (n-1,0), (2,2), (0,1).
+\newcommand{\ADEPrimeAn}[1]{%
+  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-1}%
+  \pgfmathtruncatemacro\dzge{\n-2}%
+  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (2,2) -- (0,1)}};
+  \scoped[on edge layer] \draw[axis side] (0,1) -- (0,0) -- (\dzgw,0);
+  \dzgboundaryside{\dzgw}{0}{2}{2}\dzgboundaryside{2}{2}{0}{1}%
+  \dzgbottomchain{0}{\dzge}\dzgbranch{1}{1}{white}{0}%
+  \foreach \p in {(0,1), (\dzgw,0), (2,2)} \node[boundary point] at \p {};
+  \pic {monomials={0/0, 0/1, 0/2, 1/1, 2/2, \dzgw/0}};
+  \foreach \i in {1,...,\dzge} \pic {monomials={\i/0}};
+  \ifodd\n
+    \pgfmathtruncatemacro\dzgh{(\dzgw+2)/2}%
+    \node[boundary point] at (\dzgh,1) {};
+    \pic {monomials={\dzgh/1}};
+  \fi}
+
+% ''A_n: the pentagon (0,0), (n-3,0), (n-3,1), (2,2), (0,1).
+\newcommand{\ADEPrimePrimeAn}[1]{%
+  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-3}%
+  \pgfmathtruncatemacro\dzge{\n-4}%
+  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (\dzgw,1) -- (2,2) -- (0,1)}};
+  \scoped[on edge layer] \draw[axis side] (0,1) -- (0,0) -- (\dzgw,0);
+  \dzgboundaryside{\dzgw}{1}{2}{2}\dzgboundaryside{2}{2}{0}{1}%
+  \dzgbottomchain{0}{\dzgw}\dzgbranch{1}{1}{white}{0}%
+  \dzgbranch{\dzge}{1}{white}{\dzgw}%
+  \foreach \p in {(0,1), (\dzgw,1), (2,2)} \node[boundary point] at \p {};
+  \pic {monomials={0/0, 0/1, 0/2, 1/1, 2/2, \dzgw/1, \dzge/1}};
+  \foreach \i in {1,...,\dzgw} \pic {monomials={\i/0}};}
+
+% D'_n: the pentagon (0,0), (n-4,0), (n-4,1), (2,2), (0,2).
+\newcommand{\ADEPrimeDn}[1]{%
+  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-4}%
+  \pgfmathtruncatemacro\dzge{\n-5}%
+  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (\dzgw,1) -- (2,2) -- (0,2)}};
+  \scoped[on edge layer]
+    \draw[axis side] (0,2) -- (0,0) -- (\dzgw,0) -- (\dzgw,1);
+  \dzgboundaryside{\dzgw}{1}{2}{2}\dzgboundaryside{2}{2}{0}{2}%
+  \dzgbottomchain{0}{\dzgw}\dzgbranch{0}{1}{white}{0}\dzgbranch{1}{1}{white}{0}%
+  \dzgbranch{\dzge}{1}{white}{\dzgw}%
+  \foreach \p in {(\dzgw,1), (0,2), (1,2), (2,2)} \node[boundary point] at \p {};
+  \pic {monomials={0/0, 0/1, 0/2, 1/1, 1/2, 2/2, \dzgw/1, \dzge/1}};
+  \foreach \i in {1,...,\dzgw} \pic {monomials={\i/0}};}

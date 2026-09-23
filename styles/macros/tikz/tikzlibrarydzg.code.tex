@@ -17,7 +17,8 @@
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
 %                    fan ray, kulikov component, double curve
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
-%                    short side, boundary point, marked point
+%                    short side, axis side, boundary point, marked point,
+%                    side label, monomial, polygon title
 %   posets, moduli . poset node, degeneration, moduli blob, stratum
 %   curves ......... curve component, curve node, dual vertex, genus
 % =============================================================================
@@ -153,16 +154,33 @@
 % -----------------------------------------------------------------------------
 % Lattice polygons (toric and ADE surfaces)
 % -----------------------------------------------------------------------------
+% Sides of an ADE polygon: `long side` and `short side` are sides of the
+% boundary divisor of lattice length >= 2 and 1; `axis side` is a side on a
+% coordinate axis, off the boundary divisor, along which the ADE chain lies.
+% `side label` sets a brace and its text outside a side traversed with the
+% polygon on its left (counterclockwise):
+%   \path[side label=2] (4,0) -- (0,2);
 \tikzset{
   lattice grid/.style={draw=dzg grid, line width=0.3pt},
   lattice point/.style={circle, fill=dzg muted, inner sep=0pt, minimum size=3pt},
   polygon region/.style={fill=dzg region},
   long side/.style={draw, line width=2pt},
-  short side/.style={draw=dzg muted, line width=0.8pt},
-  boundary point/.style={circle, draw, fill=white, line width=0.8pt,
+  short side/.style={draw, line width=1pt},
+  axis side/.style={draw=dzg muted, line width=0.8pt},
+  % A lattice point on the boundary divisor; the value is its fill.
+  boundary point/.style={circle, draw, fill=#1, line width=0.8pt,
     inner sep=0pt, minimum size=6pt},
+  boundary point/.default=white,
   marked point/.style={ias singularity=#1},
   marked point/.default={},
+  side label/.style={
+    postaction={draw=dzg accent, line width=0.5pt, decorate,
+      decoration={brace, amplitude=4pt, mirror, raise=6mm}},
+    postaction={decorate, decoration={markings, mark=at position 0.5 with
+      {\node[text=dzg accent, font=\small, inner sep=1pt] at (0,-10mm) {#1};}}}},
+  % The monomial x^i y^j written at the lattice point (i,j).
+  monomial/.style={font=\scriptsize, inner sep=4.5pt},
+  polygon title/.style={font=\large, inner sep=2pt},
 }
 
 % -----------------------------------------------------------------------------
