@@ -1,3 +1,365 @@
 % =============================================================================
 % Spaces, maps and contours: recurring topology and analysis pictures
 % =============================================================================
+% Every space is a pic whose points are named coordinates. With a pic name,
+%   \pic (C) {cylinder};
+% names them C-top, C-bottom, ...; without one they are -top, -bottom, ....
+% Each space carries its canonical label below it (node <name>-label);
+% `space labels=none` hides it.
+%
+% Published names:
+%   sphere=0|1|2          S^0 = {-1,1}, the unit circle S^1, the 2-sphere S^2
+%   ball=1|2|3            the closed ball B^n with its boundary sphere S^{n-1}
+%   cylinder              S^1 x I
+%   torus                 T^2
+%   coffee cup            a coffee cup (no label: figures say what it stands for)
+%   \mobiusband           the Moebius band, a pgfplots axis (inside a tikzpicture)
+%   quarter disc contour  boundary of {|z| <= R, 0 <= arg z <= pi/2}
+%   strip rectangle contour
+%                         boundary of [-R,R] x i[-b,0]
+%   ss page               a page E_r of a spectral sequence: axes and cells
+%   \ssentry, \ssdifferential   entries and differentials of an ss page
+%   \kleinquotients[surfaces|pairs]
+%   \enriquescorrespondence[F|E][names|properties]
+%   \cowedgesquare[cd|AB], \monaddescentaxioms[monad|tensor]
+%                         commutative diagrams (tikz-cd)
+
+\newif\ifdzg@spacelabels
+\dzg@spacelabelstrue
+\tikzset{
+  space labels/.is choice,
+  space labels/canonical/.code={\dzg@spacelabelstrue},
+  space labels/none/.code={\dzg@spacelabelsfalse},
+}
+% The canonical label of a space, centred at #1 below it.
+\def\dzg@spacelabel#1#2{\ifdzg@spacelabels\node (-label) at (#1) {#2};\fi}
+
+% -----------------------------------------------------------------------------
+% Spheres and balls, radius 1 about the pic origin. S^2 is drawn with its
+% equator and a meridian, back halves dashed. Coordinates: -center; for S^0
+% and B^1 the two points -left and -right.
+% -----------------------------------------------------------------------------
+\tikzset{pics/sphere/.style={code={\csname dzg@sphere@#1\endcsname
+  \dzg@spacelabel{0,-1.4}{$S^{#1}$}}}}
+\tikzset{pics/ball/.style={code={\csname dzg@ball@#1\endcsname
+  \dzg@spacelabel{0,-1.4}{$B^{#1}$}}}}
+
+\@namedef{dzg@sphere@0}{%
+  \coordinate (-center) at (0,0);
+  \node[point, dzg singular] (-left) at (-1,0) {};
+  \node[point, dzg singular] (-right) at (1,0) {};}
+\@namedef{dzg@sphere@1}{%
+  \coordinate (-center) at (0,0);
+  \draw[dzg singular] (0,0) circle (1);}
+\def\dzg@sphere@equator@front{%
+  \draw[dzg singular] (-1,0) arc (180:360:1 and 0.5);
+  \draw[dzg singular] (0,1) arc (90:270:0.5 and 1);}
+\@namedef{dzg@sphere@2}{%
+  \coordinate (-center) at (0,0);
+  \shade[ball color=dzg region, opacity=0.2] (0,0) circle (1);
+  \dzg@sphere@equator@front
+  \draw[dzg singular, dashed] (-1,0) arc (180:0:1 and 0.5);
+  \draw[dzg singular, dashed] (0,1) arc (90:-90:0.5 and 1);
+  \draw[dzg singular] (0,0) circle (1);}
+
+\@namedef{dzg@ball@1}{%
+  \draw[distinguished curve] (-1,0) -- (1,0);
+  \csname dzg@sphere@0\endcsname}
+\@namedef{dzg@ball@2}{%
+  \draw[pattern=horizontal lines, pattern color=dzg accent] (0,0) circle (1);
+  \csname dzg@sphere@1\endcsname}
+\@namedef{dzg@ball@3}{%
+  \coordinate (-center) at (0,0);
+  \shade[ball color=dzg accent, opacity=0.9] (0,0) circle (1);
+  \draw[dzg singular] (0,0) circle (1);
+  \dzg@sphere@equator@front}
+
+% -----------------------------------------------------------------------------
+% The cylinder S^1 x I: radius 3, height 4, centred at the pic origin.
+% Coordinates: -ll, -lr, -ul, -ur (ends of the two boundary circles' long
+% axes), -bottom and -top (centres of the boundary circles).
+% -----------------------------------------------------------------------------
+\tikzset{pics/cylinder/.style={code={%
+  \coordinate (-ll) at (-3,-2); \coordinate (-lr) at (3,-2);
+  \coordinate (-ul) at (-3,2);  \coordinate (-ur) at (3,2);
+  \coordinate (-bottom) at (0,-2); \coordinate (-top) at (0,2);
+  \shade[shading angle=90, opacity=0.2]
+    (-3,-2) arc (-180:-60:3 and 0.75) -- +(0,4) arc (-60:-180:3 and 0.75) -- cycle;
+  \shade[shading angle=270, opacity=0.2]
+    (3,-2) arc (0:-60:3 and 0.75) -- +(0,4) arc (-60:0:3 and 0.75) -- cycle;
+  \draw (-3,-2) arc (-180:0:3 and 0.75) -- (3,2) arc (0:-180:3 and 0.75) -- cycle;
+  \draw[shade, shading angle=30, opacity=0.9] (-3,2) arc (-180:180:3 and 0.75);
+  \draw[dashed] (-3,-2) arc (180:0:3 and 0.75);
+  \dzg@spacelabel{0,-3.5}{$S^1 \times I$}}}}
+
+% -----------------------------------------------------------------------------
+% The torus T^2: outer radii 4 and 2, centred at the pic origin.
+% Coordinates: -longitude (centre of the core circle, radii 3 and 1) and
+% -meridian (top of a meridian circle, radii 0.5 and 0.85, through the front).
+% -----------------------------------------------------------------------------
+\tikzset{pics/torus/.style={code={%
+  \coordinate (-longitude) at (0,0.5);
+  \coordinate (-meridian) at (-1,-0.25);
+  \draw (4,0) arc (0:360:4 and 2);
+  \draw (2,0.5) arc (0:-180:2 and 0.8);
+  \draw (0,0.5) arc (90:150:2 and 0.8);
+  \draw (0,0.5) arc (90:30:2 and 0.8);
+  \dzg@spacelabel{0,-3}{$T^2$}}}}
+
+% -----------------------------------------------------------------------------
+% A coffee cup, rim centred at the pic origin (rim radii 1 and 1/2).
+% Coordinates: -rim, -handle.
+% -----------------------------------------------------------------------------
+\tikzset{pics/coffee cup/.style={code={%
+  \coordinate (-rim) at (0,0);
+  \coordinate (-handle) at (10:1.25);
+  \begin{scope}[shift=(10:7/8), rotate=-30, yslant=1/2, xslant=-1/8]
+    \shade[top color=dzg muted, bottom color=dzg grid]
+      (0,0) arc (130:-100:3/8 and 1/2) -- ++(0,1/4) arc (-100:130:1/8 and 1/4) -- cycle;
+    \shade[top color=dzg blob, bottom color=dzg muted]
+      (0,0) arc (130:-100:3/8 and 1/2) -- ++(0,1/32) arc (-100:130:1/4 and 1/3) -- cycle;
+  \end{scope}
+  \fill[dzg muted, path fading=fade out] (0,-1) ellipse [x radius=3/4, y radius=1/2];
+  \shade[left color=dzg muted, right color=dzg grid] (-1,0) arc (180:360:1 and 5/4);
+  \shade[bottom color=dzg muted, top color=dzg grid, opacity=1/2]
+    (-1,0) arc (180:360:1 and 5/4);
+  \shade[left color=dzg blob, right color=dzg grid]
+    (0,0) ellipse [x radius=1, y radius=1/2];
+  \shade[left color=dzg grid, right color=dzg blob]
+    (0,0) ellipse [x radius=1-1/16, y radius=1/2-1/16];
+  \shade[bottom color=dzg muted, top color=dzg blob, opacity=1/2]
+    (0,0) ellipse [x radius=1-1/16, y radius=1/2-1/16];}}}
+
+% -----------------------------------------------------------------------------
+% The Moebius band [0,2pi] x [-1/2,1/2] / (0,t) ~ (2pi,-t), embedded as
+% ((1 + t/2 cos(s/2)) cos s, (1 + t/2 cos(s/2)) sin s, t/2 sin(s/2)), with its
+% core circle t = 0. A pgfplots axis, so it is a command used inside a
+% tikzpicture rather than a pic; #1 is appended to the axis options.
+% -----------------------------------------------------------------------------
+\newcommand{\mobiusband}[1][]{%
+  \begin{axis}[hide axis, view={40}{40}, #1]
+    \addplot3[surf, colormap/cool, shader=faceted interp, point meta=x,
+        samples=40, samples y=5, z buffer=sort, domain=0:360, y domain=-0.5:0.5]
+      ({(1+0.5*y*cos(x/2))*cos(x)},
+       {(1+0.5*y*cos(x/2))*sin(x)},
+       {0.5*y*sin(x/2)});
+    \addplot3[distinguished curve, samples=50, domain=-145:180, samples y=0]
+      ({cos(x)}, {sin(x)}, {0});
+  \end{axis}}
+
+% -----------------------------------------------------------------------------
+% Integration contours in C, with coordinate axes and the label C.
+% quarter disc contour: the boundary of the sector {|z| <= R, 0 <= arg z <= pi/2},
+% counterclockwise: [0,R], the arc, [iR,0]; R = 3. Coordinates -0, -R, -iR.
+% Labels R, iR, Gamma.
+% strip rectangle contour: the boundary of [-R,R] x i[-b,0], counterclockwise;
+% R = 2.5, b = 1.5. Coordinates -R, -mR, -Rb (R - ib), -mRb (-R - ib).
+% -----------------------------------------------------------------------------
+\def\dzg@complexaxes#1#2#3#4{%
+  \draw[coordinate axis] (#1,0) -- (#2,0);
+  \draw[coordinate axis] (0,#3) -- (0,#4);
+  \ifdzg@spacelabels\node[font=\small] at (#2-0.3,#4-0.3) {$\mathbb{C}$};\fi}
+
+\tikzset{pics/quarter disc contour/.style={code={%
+  \coordinate (-0) at (0,0); \coordinate (-R) at (3,0); \coordinate (-iR) at (0,3);
+  \dzg@complexaxes{-2}{3.8}{-1.2}{3.8}
+  \draw[contour={0.17,0.5,0.84}] (0,0) -- (3,0) arc (0:90:3) -- cycle;
+  \ifdzg@spacelabels
+    \node[font=\small, below] at (3,0) {$R$};
+    \node[font=\small, left] at (0,3) {$iR$};
+    \node[font=\small] at (45:3.35) {$\Gamma$};
+  \fi}}}
+
+\tikzset{pics/strip rectangle contour/.style={code={%
+  \coordinate (-R) at (2.5,0); \coordinate (-mR) at (-2.5,0);
+  \coordinate (-Rb) at (2.5,-1.5); \coordinate (-mRb) at (-2.5,-1.5);
+  \dzg@complexaxes{-3.5}{3.5}{-2.5}{1.5}
+  \draw[contour={0.19,0.44,0.69,0.94}] (2.5,0) -- (-2.5,0) -- (-2.5,-1.5)
+    -- (2.5,-1.5) -- cycle;
+  \ifdzg@spacelabels
+    \node[font=\small, above right] at (2.5,0) {$R$};
+    \node[font=\small, above left] at (-2.5,0) {$-R$};
+    \node[font=\small, below right] at (2.5,-1.5) {$R - ib$};
+    \node[font=\small, below left] at (-2.5,-1.5) {$-R - ib$};
+  \fi}}}
+
+% -----------------------------------------------------------------------------
+% A page of a spectral sequence. The cell (p,q) is the coordinate <name>-p-q at
+% (p * ss column sep, q * ss row sep); cells exist for p, q up to three beyond
+% the page, so differentials can leave it. The coordinate axes run between
+% p = -1 and p = 0 and between q = -1 and q = 0; a page that starts at 0 gets an
+% L-shaped frame. Keys (on the pic):
+%   ss p={0,...,5}, ss q={0,...,5}   the columns and rows of the page
+%   ss p labels={0,n}, ss q labels=  tick labels in place of the indices
+%   ss p name=$p$, ss q name=$q$     axis names; ss ticks=false hides ticks
+%   ss column sep=2cm, ss row sep=1cm
+%   ss homological                   d^r has bidegree (-r, r-1); the default is
+%                                    cohomological, d_r of bidegree (r, 1-r)
+% Figures place entries and differentials:
+%   \ssentry{E}{p}{q}{$E_2^{p,q}$}   the node E-p-q, replacing the coordinate
+%   \ssdifferential[<draw options>]{E}{r}{p}{q}
+%                                    d_r from (p,q), labelled d_r^{p,q} (or
+%                                    d^r_{p,q}); `ss unlabelled` omits the label
+% -----------------------------------------------------------------------------
+\def\dzg@ssP{0,...,5}\def\dzg@ssQ{0,...,5}
+\def\dzg@ssPlabels{}\def\dzg@ssQlabels{}
+\def\dzg@ssPname{$p$}\def\dzg@ssQname{$q$}
+\def\dzg@ssconv{coh}
+\newif\ifdzg@ssticks \dzg@sstickstrue
+\newif\ifdzg@sslabel \dzg@sslabeltrue
+\tikzset{
+  ss p/.store in=\dzg@ssP, ss q/.store in=\dzg@ssQ,
+  ss p labels/.store in=\dzg@ssPlabels, ss q labels/.store in=\dzg@ssQlabels,
+  ss p name/.store in=\dzg@ssPname, ss q name/.store in=\dzg@ssQname,
+  ss column sep/.initial=2cm, ss row sep/.initial=1cm,
+  ss ticks/.is if=dzg@ssticks,
+  ss homological/.code={\def\dzg@ssconv{hom}},
+  ss unlabelled/.code={\dzg@sslabelfalse},
+}
+% The first and last entries of a foreach list.
+\def\dzg@ssends#1#2#3{%
+  \def#2{}\foreach \dzg@i in #1 {\ifx#2\empty\xdef#2{\dzg@i}\fi\xdef#3{\dzg@i}}}
+
+\tikzset{pics/ss page/.style={code={%
+  \pgfmathsetlengthmacro\dzg@sx{\pgfkeysvalueof{/tikz/ss column sep}}%
+  \pgfmathsetlengthmacro\dzg@sy{\pgfkeysvalueof{/tikz/ss row sep}}%
+  \global\let\dzg@ssx\dzg@sx \global\let\dzg@ssy\dzg@sy
+  \dzg@ssends{\dzg@ssP}\dzg@pmin\dzg@pmax
+  \dzg@ssends{\dzg@ssQ}\dzg@qmin\dzg@qmax
+  \pgfmathtruncatemacro\dzg@pa{\dzg@pmin-3}\pgfmathtruncatemacro\dzg@pb{\dzg@pmax+3}%
+  \pgfmathtruncatemacro\dzg@qa{\dzg@qmin-3}\pgfmathtruncatemacro\dzg@qb{\dzg@qmax+3}%
+  \foreach \p in {\dzg@pa,...,\dzg@pb} \foreach \q in {\dzg@qa,...,\dzg@qb}
+    \coordinate (-\p-\q) at (\p*\dzg@sx, \q*\dzg@sy);
+  \expandafter\xdef\csname dzg@ssconv@\pgfkeysvalueof{/tikz/name prefix}\endcsname{\dzg@ssconv}%
+  % axes
+  \pgfmathsetmacro\dzg@xl{min(\dzg@pmin,0)-0.5}\pgfmathsetmacro\dzg@xr{\dzg@pmax+0.6}%
+  \pgfmathsetmacro\dzg@yb{min(\dzg@qmin,0)-0.5}\pgfmathsetmacro\dzg@yt{\dzg@qmax+0.6}%
+  \draw (\dzg@xl*\dzg@sx, -0.5*\dzg@sy) -- (\dzg@xr*\dzg@sx, -0.5*\dzg@sy)
+    node[right] {\dzg@ssPname};
+  \draw (-0.5*\dzg@sx, \dzg@yb*\dzg@sy) -- (-0.5*\dzg@sx, \dzg@yt*\dzg@sy)
+    node[above] {\dzg@ssQname};
+  \ifdzg@ssticks
+    \foreach \p [count=\k] in \dzg@ssP {%
+      \ifx\dzg@ssPlabels\empty\def\dzg@t{$\p$}\else
+        \foreach \l [count=\j] in \dzg@ssPlabels {\ifnum\j=\k\xdef\dzg@t{$\l$}\fi}\fi
+      \node[font=\small, below] at (\p*\dzg@sx, \dzg@yb*\dzg@sy) {\dzg@t};}
+    \foreach \q [count=\k] in \dzg@ssQ {%
+      \ifx\dzg@ssQlabels\empty\def\dzg@t{$\q$}\else
+        \foreach \l [count=\j] in \dzg@ssQlabels {\ifnum\j=\k\xdef\dzg@t{$\l$}\fi}\fi
+      \node[font=\small, left] at (\dzg@xl*\dzg@sx, \q*\dzg@sy) {\dzg@t};}
+  \fi}}}
+
+\newcommand{\ssentry}[4]{\node (#1-#2-#3) at (#1-#2-#3) {#4};}
+\newcommand{\ssdifferential}[5][]{%
+  \begingroup
+  \dzg@sslabeltrue
+  \tikzset{#1}%
+  \edef\dzg@c{\csname dzg@ssconv@#2\endcsname}\def\dzg@hom{hom}%
+  \ifx\dzg@c\dzg@hom
+    \pgfmathtruncatemacro\dzg@tp{#4-#3}\pgfmathtruncatemacro\dzg@tq{#5+#3-1}%
+    \def\dzg@lab{$d^{#3}_{#4,#5}$}%
+  \else
+    \pgfmathtruncatemacro\dzg@tp{#4+#3}\pgfmathtruncatemacro\dzg@tq{#5-#3+1}%
+    \def\dzg@lab{$d_{#3}^{#4,#5}$}%
+  \fi
+  \ifdzg@sslabel
+    \draw[map arrow, shorten <=1pt, shorten >=1pt, #1] (#2-#4-#5) -- (#2-\dzg@tp-\dzg@tq)
+      node[midway, fill=white, inner sep=1pt, font=\small] {\dzg@lab};
+  \else
+    \draw[map arrow, shorten <=1pt, shorten >=1pt, #1] (#2-#4-#5) -- (#2-\dzg@tp-\dzg@tq);
+  \fi
+  \endgroup}
+
+% -----------------------------------------------------------------------------
+% Commutative diagrams (tikz-cd). The optional argument selects the notation of
+% the consuming text; the diagram is the same.
+% -----------------------------------------------------------------------------
+
+% The quotients of a K3 surface X by the Klein four-group generated by the
+% del Pezzo involution (X -> Y), the Enriques involution (X -> Z) and the
+% Nikulin involution (X -> Z'), all over W = X/G.
+% Source: the Enriques paper, equation (basic) and its version for pairs
+% (writing/sources/enriques_paper/en.tex and en-revised-*.tex).
+% [surfaces] the surfaces; [pairs] the stable pairs with their divisors.
+\@namedef{dzg@klein@surfaces}{%
+  \def\dzg@X{X}\def\dzg@Z{Z}\def\dzg@Zp{Z'}\def\dzg@Y{Y}\def\dzg@W{W}}
+\@namedef{dzg@klein@pairs}{%
+  \def\dzg@X{(X,D+\epsilon R)}\def\dzg@Z{(Z,D_Z + \epsilon R_Z)}%
+  \def\dzg@Zp{(Z',D_{Z'} + \epsilon R_{Z'})}%
+  \def\dzg@Y{(Y,C +\tfrac{1+\epsilon}{2}B)}\def\dzg@W{(W,C_W + \tfrac{1+\epsilon}{2}B_W)}}
+\newcommand{\kleinquotients}[1][surfaces]{%
+  \csname dzg@klein@#1\endcsname
+  \begin{tikzcd}[ampersand replacement=\&]
+    \dzg@X \arrow{d}[swap]{\pi} \arrow[swap]{r}{\psi} \arrow[bend left=20]{rr}{\psi'}
+      \& \dzg@Z \arrow{d}[swap]{\rho} \& \dzg@Zp \arrow{dl}{\rho'} \\
+    \dzg@Y \arrow[swap]{r}{\varphi} \& \dzg@W
+  \end{tikzcd}}
+
+% The correspondence between the moduli of degree 2 polarized Enriques
+% surfaces F_{En,2}, unpolarized Enriques surfaces F_{En}, and degree 4
+% hyperelliptic K3 surfaces F_{(2,2,0)} (lattice U(2)): phi_1 forgets the
+% polarization and is finite, phi_2 is finite-to-one.
+% Source: writing/sources/enriques_paper/main.tex and V2.tex, introduction.
+% Vertices [F] \fent, \fen, \fttz; [E] E_2, E_\emptyset, F_{4,h.e.} (V2, V3).
+% Maps [names] phi_1, phi_2; [properties] Finite, Finite-to-one.
+\@namedef{dzg@encorr@F}{\def\dzg@a{\fent}\def\dzg@b{\fen}\def\dzg@c{\fttz}}
+\@namedef{dzg@encorr@E}{\def\dzg@a{E_2}\def\dzg@b{E_\emptyset}\def\dzg@c{F_{4, h.e.}}}
+\@namedef{dzg@encorr@names}{\def\dzg@f{\phi_1}\def\dzg@g{\phi_2}}
+\@namedef{dzg@encorr@properties}{%
+  \def\dzg@f{\text{Finite}}\def\dzg@g{\text{Finite-to-one}}}
+\NewDocumentCommand{\enriquescorrespondence}{O{F} O{names}}{%
+  \csname dzg@encorr@#1\endcsname\csname dzg@encorr@#2\endcsname
+  \begin{tikzcd}[ampersand replacement=\&]
+    \& \dzg@a \arrow[dl, swap, "\dzg@f"] \arrow[dr, "\dzg@g"] \\
+    \dzg@b \&\& \dzg@c
+  \end{tikzcd}}
+
+% The cowedge condition for a bifunctor F: C^op x C -> D, a morphism
+% g: c -> d and a cowedge zeta: F => X (dinaturality square).
+% [cd] objects c, d, morphism g, cowedge zeta, identities 1_c, 1_d;
+% [AB] objects A, B, morphism f, cowedge h, identities written as objects.
+\@namedef{dzg@cowedge@cd}{%
+  \def\dzg@tl{F(d,c)}\def\dzg@tr{F(d,d)}\def\dzg@bl{F(c,c)}%
+  \def\dzg@top{F(1_d,g)}\def\dzg@left{F(g,1_c)}\def\dzg@right{\zeta_d}\def\dzg@bot{\zeta_c}}
+\@namedef{dzg@cowedge@AB}{%
+  \def\dzg@tl{F(B,A)}\def\dzg@tr{F(B,B)}\def\dzg@bl{F(A,A)}%
+  \def\dzg@top{F(B,f)}\def\dzg@left{F(f,A)}\def\dzg@right{h_B}\def\dzg@bot{h_A}}
+\newcommand{\cowedgesquare}[1][cd]{%
+  \csname dzg@cowedge@#1\endcsname
+  \begin{tikzcd}[ampersand replacement=\&]
+    \dzg@tl \arrow[r, "\dzg@top"] \arrow[d, swap, "\dzg@left"]
+      \& \dzg@tr \arrow[d, "\dzg@right"] \\
+    \dzg@bl \arrow[r, swap, "\dzg@bot"] \& X
+  \end{tikzcd}}
+
+% The axioms of a descent datum (x, rho, delta) for a monad (M, mu, eta):
+% (1) rho is an M-module action (associativity), (2) its unit law,
+% (3) delta is a morphism of M-modules, (4) coassociativity of delta,
+% (5) the counit law rho . delta = id.
+% [monad] a monad M; [tensor] the monad A (x) - of an algebra A.
+\@namedef{dzg@descent@monad}{%
+  \def\dzg@MM{M^2(x)}\def\dzg@M{M(x)}\def\dzg@mu{\mu_x}\def\dzg@eta{\eta_x}%
+  \def\dzg@Mrho{M(\varrho)}\def\dzg@Mdelta{M(\delta)}\def\dzg@Meta{M(\eta_x)}}
+\@namedef{dzg@descent@tensor}{%
+  \def\dzg@MM{A\otimes A\otimes x}\def\dzg@M{A\otimes x}\def\dzg@mu{\mu\otimes 1}%
+  \def\dzg@eta{\eta\otimes 1}\def\dzg@Mrho{1\otimes\varrho}%
+  \def\dzg@Mdelta{1\otimes\delta}\def\dzg@Meta{1\otimes\eta\otimes 1}}
+\def\dzg@region#1{\mbox{\textcircled{\scriptsize #1}}}
+\newcommand{\monaddescentaxioms}[1][monad]{%
+  \csname dzg@descent@#1\endcsname
+  \begin{tikzcd}[ampersand replacement=\&, row sep=3.5em, column sep=4.5em]
+    \dzg@MM \arrow[r, "\dzg@Mrho"] \arrow[d, swap, "\dzg@mu"]
+      \& \dzg@M \arrow[r, "\dzg@Mdelta"] \arrow[d, "\varrho"]
+      \& \dzg@MM \arrow[d, "\dzg@mu"] \\
+    \dzg@M \arrow[r, "\varrho"]
+      \& x \arrow[r, "\delta"] \arrow[d, "\delta"]
+      \& \dzg@M \arrow[d, "\dzg@Meta"] \\
+    x \arrow[u, "\dzg@eta"] \arrow[ru, Rightarrow, no head]
+      \& \dzg@M \arrow[l, "\varrho"] \arrow[r, swap, "\dzg@Mdelta"]
+      \& \dzg@MM
+    \arrow[from=1-1, to=2-2, phantom, "\dzg@region{1}"]
+    \arrow[from=2-1, to=2-2, phantom, "\dzg@region{2}", pos=0.3, shift right=1.2em]
+    \arrow[from=1-2, to=2-3, phantom, "\dzg@region{3}"]
+    \arrow[from=2-2, to=3-3, phantom, "\dzg@region{4}"]
+    \arrow[from=3-1, to=3-2, phantom, "\dzg@region{5}", pos=0.7, shift left=1.2em]
+  \end{tikzcd}}

@@ -107,4 +107,35 @@ Every ADE constructor in dzg-diagrams.tex, for an odd and an even index.
   \node[dual vertex, label={[genus]above:$1$}] at (3,0) {};
 \end{tikzpicture}
 
+\section*{Spaces, contours and spectral sequences}
+Every pic and command in diagrams/dzg-spaces.tex, with each label scheme.
+
+\begin{tikzpicture}[scale=0.5]
+  \foreach \n in {0,1,2} \pic at (3*\n,0) {sphere=\n};
+  \foreach \n in {1,2,3} \pic[space labels=none] at (3*\n+7,0) {ball=\n};
+  \pic (C) at (4,-6) {cylinder};
+  \pic (T) at (14,-6) {torus};
+  \pic at (22,-6) {coffee cup};
+  \pic at (0,-14) {quarter disc contour};
+  \pic at (9,-13) {strip rectangle contour};
+  \pic (E) at (16,-16) [ss homological, ss p={0,...,3}, ss q={0,1},
+    ss q labels={0,n-1}] {ss page};
+  \ssentry{E}{2}{0}{$H_2(B)$}
+  \ssdifferential{E}{2}{2}{0}
+  \pic (F) at (0,-24) [ss p={-1,...,1}, ss q={-1,...,1}, ss ticks=false] {ss page};
+  \ssdifferential[ss unlabelled]{F}{2}{-1}{1}
+\end{tikzpicture}
+
+\begin{tikzpicture}[scale=0.5]
+  \mobiusband[width=4cm]
+\end{tikzpicture}
+
+\kleinquotients\quad \kleinquotients[pairs]
+
+\enriquescorrespondence\quad \enriquescorrespondence[E][properties]
+
+\cowedgesquare\quad \cowedgesquare[AB]
+
+\monaddescentaxioms\quad \monaddescentaxioms[tensor]
+
 \end{document}
