@@ -17,22 +17,8 @@
   \node[font=\small] at (1.55,0.45) {$P = P_{2,4}$};
 \end{scope}
 
-% Normal fan Σ_P: inward normals of the four edges.
-\begin{scope}[xshift=7.5cm]
-  \path[polygon region] (0,0) -- (2.5,0) -- (0,2.5) -- cycle;
-  \path[polygon region] (0,0) -- (2.5,0) -- (0,-2.5) -- cycle;
-  \path[polygon region] (0,0) -- (0,-2.5) -- (-1.5,3) -- cycle;
-  \path[polygon region] (0,0) -- (-1.5,3) -- (0,2.5) -- cycle;
-
-  \draw[fan ray] (0,0) -- (0,2.5)  node[above, font=\small] {$\rho_1 = (0,1)$};
-  \draw[fan ray] (0,0) -- (2.5,0)  node[right, font=\small] {$\rho_2 = (1,0)$};
-  \draw[fan ray] (0,0) -- (0,-2.5) node[below, font=\small] {$\rho_3 = (0,-1)$};
-  \draw[fan ray] (0,0) -- (-1.5,3) node[above left, font=\small] {$\rho_4 = (-1,2)$};
-  \node[distinguished point] at (0,0) {};
-
-  \foreach \p/\lbl in {(1.4,1.4)/\sigma_1, (1.4,-1.4)/\sigma_2, (-0.7,-0.7)/\sigma_3,
-      (-0.6,1.0)/\sigma_4, (-1.0,2.0)/\Sigma_P}
-    \node[font=\small] at \p {$\lbl$};
-\end{scope}
+% Normal fan Σ_P, the fan of F_2: inward normals of the four edges.
+\pic (S) at (8.5,0) {toric fan=F2};
+\node[font=\small] at ($(S-0)+(-2,-1.8)$) {$\Sigma_P$};
 \end{tikzpicture}
 \end{document}

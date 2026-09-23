@@ -260,3 +260,61 @@
     \node[polygon title, below=7mm of lp.south]
       {$\dzg@pre\dzg@body_{\dzg@r}\dzg@post$};
   \fi}
+
+% =============================================================================
+% Complete fans of toric varieties
+% =============================================================================
+%   \pic (S) {toric fan=<name>};
+% draws the fan's rays from the origin S-0 to S-rho<i> (the primitive
+% generator times `fan length`, default 2), labels each ray rho_i = (a,b),
+% and names the maximal cone sigma_i, which is labelled at S-sigma<i>.
+% `fan labels=none` hides the labels. Figures add lattice points, polytopes
+% and shading around the named points.
+%   P1   the fan of P^1 in N_R = R: sigma_0 = R_{>=0} = Cone(rho_0),
+%        sigma_1 = R_{<=0} = Cone(rho_1), the normal fan of an interval
+%        [CLS Example 2.4.10]
+%   F2   the fan of the Hirzebruch surface F_2, the normal fan of the lattice
+%        quadrilateral P_{2,4} = conv{(0,0), (2,0), (4,1), (0,1)}
+%        [CLS Example 2.3.16]: rays rho_1..rho_4 = (1,0), (0,1),
+%        (-1,2), (0,-1) counterclockwise, sigma_i = Cone(rho_i, rho_{i+1})
+\newif\ifdzg@fanlabels \dzg@fanlabelstrue
+\def\dzg@fanlength{2}
+\tikzset{
+  fan labels/.is choice,
+  fan labels/canonical/.code={\dzg@fanlabelstrue},
+  fan labels/none/.code={\dzg@fanlabelsfalse},
+  fan length/.store in=\dzg@fanlength,
+  pics/toric fan/.style={code={%
+    \ifcsname dzg@fan@#1\endcsname\else
+      \PackageError{dzg}{toric fan=#1 is not defined}{The fans are P1, F2.}\fi
+    \node[distinguished point] (-0) at (0,0) {};
+    \csname dzg@fan@#1\endcsname}},
+}
+% \dzg@fanrays{<index>/<a>/<b>/<label anchor>, ...}
+\def\dzg@fanrays#1{%
+  \foreach \dzg@i/\dzg@a/\dzg@b/\dzg@p in {#1}{%
+    \coordinate (-rho\dzg@i) at (\dzg@fanlength*\dzg@a, \dzg@fanlength*\dzg@b);
+    \ifdzg@fanlabels
+      \draw[fan ray] (-0) -- (-rho\dzg@i)
+        node[\dzg@p, font=\small] {$\rho_{\dzg@i} = (\dzg@a,\dzg@b)$};
+    \else
+      \draw[fan ray] (-0) -- (-rho\dzg@i);
+    \fi}}
+% \dzg@fancones{<index>/<coordinate>, ...}
+\def\dzg@fancones#1{%
+  \foreach \dzg@i/\dzg@c in {#1}{%
+    \coordinate (-sigma\dzg@i) at (\dzg@c);
+    \ifdzg@fanlabels \node[font=\small] at (-sigma\dzg@i) {$\sigma_{\dzg@i}$};\fi}}
+\@namedef{dzg@fan@P1}{%
+  \foreach \dzg@i/\dzg@s/\dzg@p in {0/1/right, 1/-1/left}{%
+    \coordinate (-rho\dzg@i) at (\dzg@s*\dzg@fanlength, 0);
+    \draw[fan ray] (-0) -- (-rho\dzg@i);
+    \coordinate (-sigma\dzg@i) at (\dzg@s*0.6*\dzg@fanlength, 0);
+    \ifdzg@fanlabels
+      \node[below, font=\small] at (-sigma\dzg@i) {$\sigma_{\dzg@i}$};\fi}}
+\@namedef{dzg@fan@F2}{%
+  \dzg@fanrays{1/1/0/right, 2/0/1/above right, 3/-1/2/above left, 4/0/-1/below}%
+  \dzg@fancones{1/{0.35*\dzg@fanlength,0.35*\dzg@fanlength},
+    2/{-0.25*\dzg@fanlength,0.7*\dzg@fanlength},
+    3/{-0.4*\dzg@fanlength,-0.3*\dzg@fanlength},
+    4/{0.35*\dzg@fanlength,-0.3*\dzg@fanlength}}}

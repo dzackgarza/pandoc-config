@@ -7,9 +7,7 @@
 \begin{document}
 \begin{tikzpicture}
   % The fan of P^1 in N_R = R: the cones sigma_1 = R_{<=0}, {0}, sigma_0 = R_{>=0}.
-  \draw[fan ray, -] (-3,0) -- (3,0);
-  \node[distinguished point, label={below:$0$}] at (0,0) {};
-  \node[below, font=\small] at (-2.2,0) {$\sigma_1$};
-  \node[below, font=\small] at (2.2,0) {$\sigma_0$};
+  \pic (S) [fan length=3] {toric fan=P1};
+  \node[below] at (S-0) {$0$};
 \end{tikzpicture}
 \end{document}

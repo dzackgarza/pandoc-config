@@ -1,6 +1,6 @@
-% Fan of the Hirzebruch surface F2: rays (1,0), (0,1), (-1,2), (0,-1), drawn at
-% twice their length, the four cones σ1..σ4, and the dashed quadrilateral
-% through the ray endpoints.
+% Fan of the Hirzebruch surface F2 (the canonical fan `toric fan=F2`), over the
+% lattice points of [-2,2]^2, with the dashed quadrilateral through the ray
+% endpoints.
 \documentclass[tikz,border=2pt]{standalone}
 \usepackage{dzg-tikz}
 
@@ -9,25 +9,8 @@
   \foreach \x in {-2,...,2}
     \foreach \y in {-2,...,2}
       \node[lattice point] at (\x,\y) {};
-
-  \coordinate (v1) at (2,0);
-  \coordinate (v2) at (0,2);
-  \coordinate (v3) at (-2,4);
-  \coordinate (v4) at (0,-2);
-
-  \foreach \v in {v1, v2, v3, v4}
-    \draw[fan ray] (0,0) -- (\v);
-  \draw[polytope edge, dashed] (v1) -- (v2) -- (v3) -- (v4) -- cycle;
-
-  \node[anchor=north east] at (v1) {$(1,0)$};
-  \node[anchor=south east] at (v2) {$(0,1)$};
-  \node[anchor=south] at (v3) {$(-1,2)$};
-  \node[anchor=north west] at (v4) {$(0,-1)$};
-
-  \foreach \p/\lbl in {(0.7,0.7)/\sigma_1, (-0.5,1.4)/\sigma_2,
-      (-0.8,-0.6)/\sigma_3, (0.7,-0.6)/\sigma_4}
-    \node at \p {$\lbl$};
-
-  \node[distinguished point, label={[inner sep=1pt]below left:$0$}] at (0,0) {};
+  \pic (S) {toric fan=F2};
+  \draw[polytope edge, dashed] (S-rho1) -- (S-rho2) -- (S-rho3) -- (S-rho4) -- cycle;
+  \node[below left] at (S-0) {$0$};
 \end{tikzpicture}
 \end{document}
