@@ -1,39 +1,12 @@
-﻿\begin{pgfonlayer}{nodelayer}
-    \node[style=four node, label={below left:$r_{1}$}] (r1) at (0,0) {};
-    \node[style=four node, label={below:$r_{2}$}] (r2) at (2,0) {};
-    \node[style=four node, label={below right:$r_{3}$}] (r3) at (4,0) {};
-    \node[style=four node, label={right:$r_{4}$}] (r4) at (4,2) {};
-    \node[style=four node, label={above right:$r_{5}$}] (r5) at (4,4) {};
-    \node[style=four node, label={above:$r_{6}$}] (r6) at (2,4) {};
-    \node[style=four node, label={above left:$r_{7}$}] (r7) at (0,4) {};
-    \node[style=four node, label={left:$r_{8}$}] (r8) at (0,2) {};
-
-    \node[style=white node, label={above left:$r_{9}$}] (r9) at (1,1) {};
-    \node[style=white node, label={below:$r_{10}$}] (r10) at (3,3) {};
-    \node[style=white node, label={below left:$r_{11}$}] (r11) at (1,3) {};
-    \node[style=white node, label={above:$r_{12}$}] (r12) at (3,1) {};
-
-    \node[style=four node, label={above:$r_{13}$}] (r13) at (2,2.5) {};
-    \node[style=four node, label={below:$r_{14}$}] (r14) at (2,1.5) {};
-		\end{pgfonlayer}
-\begin{pgfonlayer}{edgelayer}
-\foreach \i in {1,...,7} {
-	\pgfmathsetmacro\ip{int(\i+1 )}
-	\draw[style=plain edge] (r\i) to (r\ip);
-}
-\draw[style=plain edge] (r8) to (r1);
-\draw[style=double edge] (r1) to (r9);
-\draw[style=double edge] (r3) to (r12);
-\draw[style=double edge] (r5) to (r10);
-\draw[style=double edge] (r7) to (r11);
-
-\draw[style=double edge] (r10) to (r13);
-\draw[style=double edge] (r13) to (r9);
-
-\draw[style=double edge] (r11) to (r14);
-\draw[style=double edge] (r14) to (r12);
-
-\draw[style=thick edge] (r13) to (r14);
-
-\end{pgfonlayer}
-  
+\foreach \n/\m/\p/\a in {1/black/{0,0}/below left, 2/black/{2,0}/below,
+    3/black/{4,0}/below right, 4/black/{4,2}/right, 5/black/{4,4}/above right,
+    6/black/{2,4}/above, 7/black/{0,4}/above left, 8/black/{0,2}/left,
+    9/white/{1,1}/above left, 10/white/{3,3}/below, 11/white/{1,3}/below left,
+    12/white/{3,1}/above, 13/black/{2,2.5}/above, 14/black/{2,1.5}/below}
+  \node[vertex=\m, label={[vertex label]\a:$r_{\n}$}] (r\n) at (\p) {};
+\begin{scope}[on edge layer]
+  \draw[coxeter edge=3] (r1) -- (r2) -- (r3) -- (r4) -- (r5) -- (r6) -- (r7) -- (r8) -- (r1);
+  \draw[coxeter edge=4] (r1) -- (r9) (r3) -- (r12) (r5) -- (r10) (r7) -- (r11)
+    (r10) -- (r13) -- (r9) (r11) -- (r14) -- (r12);
+  \draw[coxeter edge=infinity] (r13) -- (r14);
+\end{scope}

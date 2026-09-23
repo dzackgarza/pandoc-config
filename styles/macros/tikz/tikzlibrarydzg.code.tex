@@ -14,7 +14,8 @@
 %   Coxeter ........ vertex=white|black|doubled, coxeter edge=3|4|5|6|infinity|
 %                    dotted, coxeter edge label, parabolic, vertex label,
 %                    inactive, marked vertex, subdiagram cell=elliptic|
-%                    parabolic|other, fold, fold axis
+%                    parabolic|other, fold, fold axis, reflected root,
+%                    quotient map
 %   Baily-Borel .... cusp0, cusp1, incidence, cusp brace
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
 %                    fan ray, kulikov component, double curve
@@ -139,8 +140,17 @@
   subdiagram cell/elliptic/.style={subdiagram cell/base, fill=dzg elliptic},
   subdiagram cell/parabolic/.style={subdiagram cell/base, fill=dzg parabolic},
   subdiagram cell/other/.style={subdiagram cell/base, fill=white},
-  % The fixed line of a reflection symmetry of a diagram.
-  fold axis/.style={draw=dzg singular, dotted, line width=0.8pt},
+  % The mirror line of a reflection symmetry of a diagram.
+  fold axis/.style={draw=dzg singular, dashed, line width=0.8pt},
+  % A root whose reflection is a factor of the folding involution:
+  %   \node[reflected root] at (r4) {};
+  reflected root/.style={cross out, draw=dzg singular, line width=1.2pt,
+    inner sep=0pt, minimum size=9pt},
+  % The map from a diagram to its folded quotient.
+  quotient map/.style={->, draw=dzg singular, line width=1.2pt},
+  % Diagram symmetries drawn by dynkin-diagrams (`ply`, `involutions`).
+  /Dynkin diagram/fold style/.style={/tikz/fold, shorten <=3mm, shorten >=3mm},
+  /Dynkin diagram/involution/.style={/tikz/fold, shorten <=8pt, shorten >=8pt},
 }
 
 % -----------------------------------------------------------------------------

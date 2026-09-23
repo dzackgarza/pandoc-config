@@ -1,13 +1,6 @@
-﻿\begin{tikzpicture}[y={(60:1)}]
-
+\begin{tikzpicture}[y={(60:1)}]
 \input{raw_10_8_0}
-
-\begin{pgfonlayer}{main}
-\begin{scope}[transparency group]
-\draw[hlt] (3) to (4) to (10);
-\draw[hlt] (2) to (4);
-\end{scope}
-\node at (2, -1) {$\tilde B_8(2) \subset (10, 8, 0)_1$};
-\end{pgfonlayer}
-
+\scoped[on background layer]
+  \draw[parabolic] (3.center) -- (4.center) -- (10.center) (2.center) -- (4.center);
+\node at (2,-1) {$\tilde B_8(2) \subset (10, 8, 0)_1$};
 \end{tikzpicture}
