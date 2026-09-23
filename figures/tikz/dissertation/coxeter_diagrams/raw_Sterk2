@@ -1,25 +1,11 @@
-﻿
-\begin{scope}[scale=0.75]
-\tikzset{y={(60:1)}}
-\begin{pgfonlayer}{nodelayer}
-\node[style=four node, label={below:$r_1$}] (r1) at (2,0) {};
-\node[style=four node, label={below:$r_2$}] (r2) at (1,0) {};
-\node[style=four node, label={below:$r_3$}] (r3) at (0,0) {};
-\node[style=four node, label={left:$r_4$}] (r4) at (0,1) {};
-\node[style=four node, label={left:$r_5$}] (r5) at (0,2) {};
-\node[style=four node, label={left:$r_6$}] (r6) at (0,3) {};
-\node[style=four node, label={left:$r_{7}$}] (r7) at (0,4) {};
-\node[style=four node, label={left:$r_{8}$}] (r8) at (0,5) {};
-\node[style=two node, label={left:$r_{9}$}] (r9) at (0,6) {};
-\node[style=four node, label={right:$r_{10}$}] (r10) at (1,1) {};
-\end{pgfonlayer}
-
-\begin{pgfonlayer}{edgelayer}
-\foreach \i in {1,...,7} {
-	\pgfmathsetmacro\ip{int(\i+1)}
-	\draw[style=plain edge] (r\i) to (r\ip);
-}
-\draw[style=double edge] (r8) to (r9);
-\draw[style=plain edge] (r3) to (r10);
-\end{pgfonlayer}
-\end{scope} 
+\begin{scope}[scale=0.75, y={(60:1)}]
+\foreach \n/\m/\p/\a in {1/black/{2,0}/below, 2/black/{1,0}/below, 3/black/{0,0}/below,
+    4/black/{0,1}/left, 5/black/{0,2}/left, 6/black/{0,3}/left, 7/black/{0,4}/left,
+    8/black/{0,5}/left, 9/white/{0,6}/left, 10/black/{1,1}/right}
+  \node[vertex=\m, label={[vertex label]\a:$r_{\n}$}] (r\n) at (\p) {};
+\begin{scope}[on edge layer]
+  \draw[coxeter edge=3] (r1) -- (r2) -- (r3) -- (r4) -- (r5) -- (r6) -- (r7) -- (r8)
+    (r3) -- (r10);
+  \draw[coxeter edge=4] (r8) -- (r9);
+\end{scope}
+\end{scope}

@@ -1,11 +1,7 @@
-﻿    \begin{tikzpicture}
-    \input{eighteenzero.tikz}
-    \begin{pgfonlayer}{main}
-    \begin{scope}[transparency group]
-    \draw[hlt] (r2) -- (r3) -- (r9) -- (r15) -- (r16);
-    \draw[hlt] (r3) -- (r18);
-    \draw[hlt] (r15) -- (r19);
-    \end{scope}
-    \end{pgfonlayer}
-    \node[right = of r9] (label) {\Large $D_{16}*$};
-    \end{tikzpicture}
+\begin{tikzpicture}
+\pic (r) {vinberg 18 0 0};
+\scoped[on background layer]
+  \draw[parabolic] (r2.center) -- (r3.center) -- (r9.center) -- (r15.center) -- (r16.center)
+    (r3.center) -- (r18.center) (r15.center) -- (r19.center);
+\node[right = of r9] {\Large $D_{16}*$};
+\end{tikzpicture}

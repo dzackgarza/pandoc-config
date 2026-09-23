@@ -1,12 +1,8 @@
-﻿\begin{tikzpicture}
+\begin{tikzpicture}
 \input{18_2_0.tikz}
-\node[above of = r11] (label) {\Large $A_{15}A_1(2)$};
-
-\begin{pgfonlayer}{main}
-    \begin{scope}[transparency group]
-    \draw[hlt] (r1) -- (r13) -- (r9) -- (r5) -- (r1);
-		\draw[hlt] (r21) -- (r22);
-    \end{scope}
-	\end{pgfonlayer}
-
+\node[above=of r11] {\Large $A_{15}A_1(2)$};
+\scoped[on background layer]
+  \draw[parabolic]
+    (r1.center) -- (r13.center) -- (r9.center) -- (r5.center) -- (r1.center)
+    (r21.center) -- (r22.center);
 \end{tikzpicture}

@@ -1,16 +1,11 @@
-﻿\begin{tikzpicture}
+\begin{tikzpicture}
 \input{18_2_0.tikz}
-\node[above of = r11] (label) {\Large $E_8D_8$};
-
-\begin{pgfonlayer}{main}
-    \begin{scope}[transparency group]
-    \draw[hlt] (r3) -- (r1) -- (r13) -- (r12);
-		\draw[hlt] (r1) -- (r17);
-		\draw[hlt] (r10) -- (r9) -- (r5) -- (r4);
-		\draw[hlt] (r18) -- (r9);
-		\draw[hlt] (r20) -- (r5);
-    \end{scope}
-	\end{pgfonlayer}
-
-
+\node[above=of r11] {\Large $E_8D_8$};
+\scoped[on background layer]
+  \draw[parabolic]
+    (r3.center) -- (r1.center) -- (r13.center) -- (r12.center)
+    (r1.center) -- (r17.center)
+    (r10.center) -- (r9.center) -- (r5.center) -- (r4.center)
+    (r18.center) -- (r9.center)
+    (r20.center) -- (r5.center);
 \end{tikzpicture}
