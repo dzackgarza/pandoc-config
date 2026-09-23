@@ -1,14 +1,7 @@
-\begin{tikzpicture}[node distance=1.4cm]
-  \node[cusp0, label={[cusp label]above:$\RP^2, \mathrm{div} = 1, e$},
-    label={[cusp label]below:$(10,10,0)_1$}] (w0) {$E_{10}(2)$};
-  \node[cusp1, right=of w0, label={[cusp label]above:$\mathrm{div} = (1, 2), e, e'$},
-    label={[cusp label]below:$(8,8,0)_0$}] (C12) {$E_8(2)$};
-  \node[cusp0, right=of C12, label={[cusp label]above:$\bD^2, \mathrm{div} = 2$},
-    label={[cusp label]below:$(10,8,0)_1$}] (w1) {$U \oplus E_8(2)$};
-  \node[cusp1, right=of w1,
-    label={[cusp label]above:$\mathrm{div} = (2, 2), e', 2e+2f+ 2\bar\alpha_1$},
-    label={[cusp label]below:$(8,6,0)_0$}] (C2) {$A_1^{\oplus 8}*$};
-  \draw[incidence] (w0) -- (C12);
-  \draw[incidence] (w1) -- (C12);
-  \draw[incidence] (w1) -- (C2);
+% Baily-Borel boundary of F_En, with the isotropic vectors spanning each cusp.
+\begin{tikzpicture}
+  \pic (En) {bb fen};
+  \foreach \c/\v in {E10/{e}, E8/{\mathrm{div} = (1, 2),\ e, e'}, UE8/{e'},
+      D8/{\mathrm{div} = (2, 2),\ e', 2e + 2f + \alpha_1 + \alpha_2}}
+    {\node[cusp label, above=6mm] at (En\c) {$\v$};}
 \end{tikzpicture}

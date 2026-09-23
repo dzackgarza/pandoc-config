@@ -1,3 +1,9 @@
+% Sterk's F_{En,2} over F_{(2,2,0)}: the dashed columns group the 0-cusps over
+% the two 0-cusps of F_{(2,2,0)}; doubled incidences are even (the second
+% isotropic vector has divisibility 2).
 \begin{tikzpicture}
-  \input{tikz/pieces/sterk_f_en_2_cusp_diagram_body.tex}
+  \pic[incidence divisibility] (S) {bb fen2};
+  \node (U2E82) at (5,-3.4) {$U(2) \oplus E_8^2$};
+  \node (UE82) at (0,-3.4) {$U \oplus E_8^2$};
+  \draw[dashed] (S2) -- (UE82) (S1) -- (S3) -- (S4) -- (S5) -- (U2E82);
 \end{tikzpicture}

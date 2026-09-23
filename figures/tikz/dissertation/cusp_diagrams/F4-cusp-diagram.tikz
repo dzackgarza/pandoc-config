@@ -1,15 +1,8 @@
 \begin{tikzpicture}
-  \matrix (C) [matrix of math nodes, nodes={cusp1}, row sep=4mm] {
-    A_1(2)E_8^2 \\ A_1(2)D_{16} \\ D_9E_8 \\ A_3E_7^2 \\ D_{17} \\
-    D_5 D_{12} \\ A_1(2)D_8^2 \\ A_1^2A_{15} \\ A_{11}E_6 \\
-  };
-  \node[cusp0, right=1.5cm of C] (P0) {$e$};
-  \foreach \i in {1,...,9}
-    \draw[incidence] (P0) -- (C-\i-1.east);
-  \node at (P0 |- C-1-1) {\underline{$F_4$}};
-
-  \node[below=2mm of C] (H) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+  \pic {bb f4};
+  \node at (3.6,4) {\underline{$F_4$}};
+  \node (H) at (0,-4.8) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
   \draw[cusp brace] (H.west) -- (H.east) node[midway, below=5.5ex] {$(0, 17)$};
-  \draw[cusp brace] (P0.west |- H) -- (P0.east |- H)
+  \draw[cusp brace] (2.6,-4.8) -- (4.6,-4.8)
     node[midway, below=5.5ex] {$A_1(2) \oplus U \oplus E_8^2$};
 \end{tikzpicture}

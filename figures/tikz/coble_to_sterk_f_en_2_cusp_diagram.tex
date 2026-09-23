@@ -1,10 +1,11 @@
+% Conjectured image of the Coble boundary in Sterk's F_{En,2}: the 0-cusps
+% 2, 3, 4, 5 (orthogonal to delta = e - f) and the 1-cusps whose closures
+% avoid 0-cusp 1 (writing/Talks/2026-07 PCRM, pcrm_pres.tex).
 \begin{tikzpicture}
-  \input{tikz/pieces/sterk_f_en_2_cusp_diagram_body.tex}
-  \node[above=1cm of c2] {$\bd \bbcpt{\fent}$};
-
-  % The image of the Coble boundary.
-  \scoped[on background layer]
-    \foreach \p/\c in {c2/c245, c3/c34, c3/c35, c4/c34, c4/c45, c4/c245,
-        c5/c35, c5/c45, c5/c55, c5/c245}
-      \draw[cusp image] (\p.center) -- (\c.center);
+  \pic (S) {bb fen2};
+  \node at (4.4,3.9) {$\bd \bbcpt{\fent}$};
+  \begin{scope}[on background layer]
+    \foreach \p/\c in {2/245, 3/34, 3/35, 4/34, 4/45, 4/245, 5/35, 5/45, 5/55, 5/245}
+      {\draw[cusp image] (S\p.center) -- (S\c.center);}
+  \end{scope}
 \end{tikzpicture}

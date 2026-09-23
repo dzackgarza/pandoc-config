@@ -4,17 +4,9 @@
 % Category: compactifications
 % Index: 4
 
-% The even cusp q_a and the 1-cusp E_8(2) are singled out (red and green in
-% the source) against the odd cusp q_b and D_8^dagger.
-\begin{tikzpicture}[node distance=1.4cm]
-  \node[cusp0, draw=dzg singular, label={[cusp label]above:$q_a$},
-    label={[cusp label, text=dzg singular]below:$(10,10,0)_1$}] (even) {$U(2)\oplus E_8(2)$};
-  \node[cusp1, draw=dzg accent, right=of even,
-    label={[cusp label, text=dzg accent]below:$(8,8,0)_0$}] (E82) {$E_8(2)$};
-  \node[cusp0, right=of E82, label={[cusp label]above:$q_b$},
-    label={[cusp label]below:$(10,8,0)_1$}] (odd) {$U\oplus E_8(2)$};
-  \node[cusp1, right=of odd, label={[cusp label]below:$(8,6,0)_0$}] (D82) {$D_8^\dagger$};
-  \draw[incidence] (even) -- (E82);
-  \draw[incidence] (odd) -- (E82);
-  \draw[incidence] (odd) -- (D82);
+% The RP^2-type 0-cusp E_10(2) and its 1-cusp E_8(2) are singled out (red and
+% green in the source) against the D^2-type 0-cusp and D_8^*(2).
+\begin{tikzpicture}
+  \pic (En) {bb fen};
+  \scoped[on background layer] \draw[cusp image] (EnE10.center) -- (EnE8.center);
 \end{tikzpicture}

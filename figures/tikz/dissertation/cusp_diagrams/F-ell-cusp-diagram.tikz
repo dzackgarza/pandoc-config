@@ -1,14 +1,6 @@
 \begin{tikzpicture}
-  \matrix (C) [matrix of math nodes, nodes={cusp1}, row sep=1cm] {
-    D_{16} \\ E_8^2 \\
-  };
-  \node[cusp0, right=1.5cm of C] (P0) {$e$};
-  \foreach \i in {1,2}
-    \draw[incidence] (P0) -- (C-\i-1.east);
-  \node[above=1cm of P0] {\underline{$F_{\mathrm{ell}}$}};
-
-  \node[below=2mm of C] (H) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+  \pic {bb fell};
+  \node at (3.6,1.2) {\underline{$F_{\mathrm{ell}}$}};
+  \node (H) at (0,-1.6) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
   \draw[cusp brace] (H.west) -- (H.east) node[midway, below=5.5ex] {$(0, 16)$};
-  \draw[cusp brace] (P0.west |- H) -- (P0.east |- H)
-    node[midway, below=5.5ex] {$U \oplus E_8^2$};
 \end{tikzpicture}

@@ -1,12 +1,4 @@
 \begin{tikzpicture}
-  \matrix [matrix of math nodes, row sep=2mm, column sep=1.5cm] {
-    |[cusp1] (C1)| C_1         & \\
-    |[cusp1] (C2)| C_2         & \\
-    \vdots                     & |[cusp0] (P0)| p_0 \\
-    |[cusp1] (C3)| C_{n-1}     & \\
-    |[cusp1] (C4)| C_n         & \\
-    \mathbb{H}/\operatorname{SL}_2(\mathbb{Z}) & \underline{N=1} \\
-  };
-  \foreach \c in {C1, C2, C3, C4}
-    \draw[incidence] (P0) -- (\c.east);
+  \pic {bb f2d=1};
+  \node at (2.5,3) {\underline{$N=1$}};
 \end{tikzpicture}
