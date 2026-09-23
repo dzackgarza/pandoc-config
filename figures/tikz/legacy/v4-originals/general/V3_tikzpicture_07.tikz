@@ -15,7 +15,7 @@
       (4,1) -- (6,0) -- (4,0);
 
   \begin{scope}[shift={(8,0)}]
-    \node at (-3,4) {$\xlongrightarrow{v}$};
+    \draw[quotient map] (-3.7,4) -- node[above] {$v$} (-2.3,4);
     \pic[root labels=prime] {sterk=2};
     \scoped[on background layer]
       \draw[parabolic] (2,0) -- (0,0) -- (1,1)  (0,0) -- (0,5);
