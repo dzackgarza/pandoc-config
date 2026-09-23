@@ -19,8 +19,8 @@
 %   Baily-Borel .... cusp0, cusp1, cusp label, incidence, cusp brace, cusp map,
 %                    cusp image, doubled mark
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
-%                    fan ray, kulikov component, double curve, ias chart,
-%                    nontoric blowup, exceptional curve
+%                    fan ray, kulikov component, double curve, triple point,
+%                    self intersection, nontoric blowup, exceptional curve
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
 %                    short side, axis side, boundary point, marked point,
 %                    side label, monomial, polygon title, polytope edge,
@@ -208,13 +208,12 @@
     minimum size=4pt},
   % The exceptional curve of a blowup.
   exceptional curve/.style={draw=dzg singular, line width=0.8pt},
-  % The charts of an integral-affine structure, told apart by hatching:
-  %   \fill[ias chart=1] ...;   (1 to 4)
-  ias chart/.style={ias chart/#1},
-  ias chart/1/.style={pattern=north east lines, pattern color=green!60!black},
-  ias chart/2/.style={pattern=vertical lines, pattern color=dzg accent},
-  ias chart/3/.style={pattern=north west lines, pattern color=dzg singular},
-  ias chart/4/.style={pattern=horizontal lines, pattern color=orange!60!black},
+  % A triple point of a Type III Kulikov central fibre, where three
+  % components meet (a triangle of the dual complex).
+  triple point/.style={circle, draw, fill=dzg parabolic, line width=0.6pt,
+    inner sep=0pt, minimum size=5pt},
+  % The self-intersection of a double curve in the component on one side.
+  self intersection/.style={font=\scriptsize, text=dzg singular, inner sep=1pt},
 }
 
 % -----------------------------------------------------------------------------
