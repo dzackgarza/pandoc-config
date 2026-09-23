@@ -5,5 +5,5 @@
 % Index: 16
 
 \begin{tikzpicture}
-\sterkfour
+  \pic[root labels=prime] {sterk=4};
 \end{tikzpicture}

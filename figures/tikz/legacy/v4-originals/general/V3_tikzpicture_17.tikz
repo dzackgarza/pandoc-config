@@ -5,7 +5,7 @@
 % Index: 17
 
 \begin{tikzpicture}
-\sterkfive
-  \node[above = 0.1cm of 21] (N) {$N$};
-  \node[below = 0.1cm of 22] (S) {$S$};
+  \pic[root labels=prime] {sterk=5};
+  \node[above=0.1cm of 13] {$N$};
+  \node[below=0.1cm of 14] {$S$};
 \end{tikzpicture}
