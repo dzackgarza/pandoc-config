@@ -399,7 +399,7 @@
   \ifnum#2>0 y\ifnum#2>1 ^{#2}\fi\fi}
 
 \tikzset{
-  pics/lattice polygon/.style n args={3}{code={
+  pics/lattice polygon/.style n args={3}{/tikz/transform shape, code={\tikzset{transform shape=false}%
     \path[local bounding box=lp] (0,0) rectangle (#1,#2);
     \begin{scope}[on background layer]
       \fill[polygon region] #3 -- cycle;
@@ -409,7 +409,7 @@
       \node[lattice point] at (\x,\y) {};}},
   % Label each listed lattice point i/j with its monomial: below on the x-axis,
   % left on the y-axis, below right elsewhere.
-  pics/monomials/.style={code={
+  pics/monomials/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
     \foreach \dzgi/\dzgj in {#1} {
       \pgfmathsetmacro\dzgwhere{\dzgj==0 ? "below"
         : (\dzgi==0 ? "left" : "below right")}
