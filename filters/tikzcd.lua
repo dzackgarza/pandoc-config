@@ -45,13 +45,13 @@ local function figure_template()
 end
 
 -- Surface a figure-compile FAILURE to the app (Phase D / D-6 / P95). On a
--- pdflatex failure the standard LaTeX log carries a bang-error block: a `! …`
+-- lualatex failure the standard LaTeX log carries a bang-error block: a `! …`
 -- message line followed by an `l.NN  <source-prefix>` marker citing the line —
 -- in the GENERATED `.tex` — that aborted the compile. This recovers that
 -- diagnostic and writes ONE machine-parseable marker line per error to stderr so
 -- it flows into the renderer subprocess stderr the app captures as
 -- RenderResult.log (the figure-compile analog of the P11 pandoc log). The marker
--- carries the line WITHIN the figure body (the pdflatex `.tex` line minus the
+-- carries the line WITHIN the figure body (the lualatex `.tex` line minus the
 -- preamble lines the template prepended before the figure source) and the EXACT
 -- verbatim figure-body source line at that position, so the app can map it back
 -- to the editor buffer's tikz SOURCE line. `figure_body` is the figure source the
@@ -100,16 +100,16 @@ local function emit_figure_compile_error(log_path, figure_body, preamble_lines)
 
   -- The mapped marker above is a convenience for editor line highlighting, not
   -- a substitute for the compiler's own diagnostics. Always forward the real
-  -- pdflatex log on failure so callers can present the actual TeX error even
+  -- lualatex log on failure so callers can present the actual TeX error even
   -- when the narrow `! ...` / `l.NN` mapper cannot associate it with a figure
   -- body line. stderr is Pandoc's diagnostic channel; unlike stdout, writing
   -- the log here cannot corrupt the filter's document output.
-  io.stderr:write("[tikzcd-pdflatex-log-begin]\n")
+  io.stderr:write("[tikzcd-latex-log-begin]\n")
   io.stderr:write(log_text)
   if not log_text:match("\n$") then
     io.stderr:write("\n")
   end
-  io.stderr:write("[tikzcd-pdflatex-log-end]\n")
+  io.stderr:write("[tikzcd-latex-log-end]\n")
   return emitted
 end
 
@@ -117,7 +117,7 @@ end
 -- `figure_body` + `preamble_lines` let a FAILURE be surfaced to the app as a
 -- mapped figure-compile diagnostic (Phase D / D-6 / P95). Returns
 -- (svg_path, pdf_path) or (nil, nil) on failure.
-local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir, figure_body, preamble_lines)
+local function run_latex_and_convert(tex_source, tmp_prefix, hash, doc_dir, figure_body, preamble_lines)
   local svg_path = svg_dir .. "/dzgtikz-" .. hash .. ".svg"
   local pdf_path = svg_dir .. "/dzgtikz-" .. hash .. ".pdf"
 
@@ -157,12 +157,12 @@ local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir, f
     inputs_env = 'TEXINPUTS="' .. styles_dir .. ':' .. figures_inputs .. '::" '
   end
 
-  -- Discard pdflatex's stdout+stderr: a pandoc filter's stdout is its output
+  -- Discard lualatex's stdout+stderr: a pandoc filter's stdout is its output
   -- channel and must stay clean. The compile log would otherwise prepend to the
   -- rendered document, breaking a downstream `pandoc -f latex` re-parse of the
   -- output (the figure renders, but the log corrupts the stream). Diagnostics on
   -- failure come from the .log file via emit_figure_compile_error, not this stream.
-  local cmd1 = inputs_env .. "pdflatex -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " >/dev/null 2>&1"
+  local cmd1 = inputs_env .. "lualatex -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " >/dev/null 2>&1"
   local ok1 = os.execute(cmd1)
   if not ok1 then
     -- Surface the figure-compile diagnostic (mapped to the figure source line)
@@ -175,7 +175,7 @@ local function run_pdflatex_and_convert(tex_source, tmp_prefix, hash, doc_dir, f
 
   local tmp_pdf = tmp .. "/tikz.pdf"
   local tmp_svg = tmp .. "/tikz.svg"
-  -- The PDF is already a successful pdflatex product and remains useful to
+  -- The PDF is already a successful lualatex product and remains useful to
   -- LaTeX-output callers even when SVG conversion later fails.
   os.execute("cp " .. tmp_pdf .. " " .. pdf_path)
   local ok2 = os.execute("pdf2svg " .. tmp_pdf .. " " .. tmp_svg .. " >/dev/null 2>&1")
@@ -345,7 +345,7 @@ local function compile_tikz(source)
   end
   -- The figure body begins on the SAME `.tex` line the `<>` marker sat on, so the
   -- preamble line count (lines strictly BEFORE the body) is the number of
-  -- newlines in `rendered` before the marker (Phase D / D-6 / P95). A pdflatex
+  -- newlines in `rendered` before the marker (Phase D / D-6 / P95). A lualatex
   -- `l.NN` cite minus this yields the 1-based line WITHIN the figure body.
   local preamble_lines = select(2, rendered:sub(1, marker_at - 1):gsub("\n", "\n"))
   local tex_source = rendered:gsub("<>", function() return resolved_source end)
@@ -355,7 +355,7 @@ local function compile_tikz(source)
     local preview = resolved_source:sub(1, 200):gsub("\n", "\\n")
     log("compile_tikz: source_preview: " .. preview)
   end
-  return run_pdflatex_and_convert(tex_source, "tikzcd", hash, doc_dir, resolved_source, preamble_lines)
+  return run_latex_and_convert(tex_source, "tikzcd", hash, doc_dir, resolved_source, preamble_lines)
 end
 
 -- Compile a full tikz document (from ```tikz code block) directly, no template.
@@ -375,8 +375,8 @@ local function compile_tikz_document(source)
   local render_context_hash = os.getenv("TIKZ_RENDER_CONTEXT_HASH") or ""
   local hash = pandoc.sha1(resolved_source .. "\0" .. render_context_hash .. "\0" .. doc_dir)
   -- A full-document tikz code block IS its own `.tex`: no template preamble is
-  -- prepended, so a pdflatex `l.NN` cite is already the figure-body line.
-  return run_pdflatex_and_convert(resolved_source, "tikzfull", hash, doc_dir, resolved_source, 0)
+  -- prepended, so a lualatex `l.NN` cite is already the figure-body line.
+  return run_latex_and_convert(resolved_source, "tikzfull", hash, doc_dir, resolved_source, 0)
 end
 
 local function compile_tikz_code_block(source)

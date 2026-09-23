@@ -190,16 +190,16 @@ through listed points, had been loaded by the preamble the entire time.
    package on CTAN can be added to the shared preamble in one line; see
    *Adding a library* below. Hand-rolling because a library is not yet loaded
    is the same failure as not surveying.
-7. **Both renderers run pdflatex.** `bin/render_figures.py` and
-   `filters/tikzcd.lua` compile with pdflatex. Some packages do their
-   arithmetic in Lua through the `\directlua` primitive, which only the
-   LuaTeX engine provides: PGF's `graphdrawing` implements its layout
-   algorithms in Lua and its loader errors with "You need to run LuaTeX to
-   use the graph drawing library"; `luahyperbolic` is a LuaLaTeX package.
-   Such packages need a lualatex render path before they can be used. That
-   is a pipeline change to make, not a reason to hand-roll the layout.
-   (`hobby` does the same kind of numerics in expl3 floating point, which is
-   why it runs under both engines.)
+7. **Both figure renderers run lualatex.** `bin/render_figures.py` and
+   `filters/tikzcd.lua` compile with lualatex, so packages that do their
+   arithmetic in Lua through the `\directlua` primitive are available:
+   PGF's `graphdrawing` implements its layout algorithms in Lua, and
+   `luahyperbolic` is a LuaLaTeX package. The whole-document recipes
+   (`compile-tex`, `compile-pandoc`) still run latexmk in pdflatex mode, so
+   a figure that needs a Lua package must be rendered as a standalone figure
+   and included, not inlined in a pdflatex document. The preamble guards the
+   pdfTeX-only lines (`inputenc`, microtype `kerning`/`spacing`, the `xypdf`
+   driver behind `luatex85`) by engine, so both engines compile it.
 
 ### Procedure: finding the library before starting
 
@@ -270,8 +270,8 @@ inside a figure file; the figure body is inserted after `\begin{document}`.
 Every row was checked against the local TeX Live with `kpsewhich` on
 2026-09-23. *preamble* means `dzg-preamble.tex` already loads it. *add to
 preamble* means it is installed and one line in the preamble enables it.
-*install* means it is on CTAN but not in the local TeX Live. *LuaTeX* means
-the package computes in Lua via `\directlua`, so rule 7 applies.
+*install* means it is on CTAN but not in the local TeX Live. *Lua-based* means
+the package computes in Lua via `\directlua`, so it works in rendered figures but not in the pdflatex document recipes (rule 7).
 
 Go to these first, in this order, for the figure kinds this repository draws:
 
@@ -284,12 +284,12 @@ Go to these first, in this order, for the figure kinds this repository draws:
 | Coxeter and Dynkin diagrams: finite, affine, folded, marked, with edge labels | `dynkin-diagrams` package | add to preamble; `styles/macros/tikz/diagrams.tex` still hand-rolls these and should migrate | `texdoc dynkin-diagrams` |
 | Commutative diagrams | `tikz-cd`, `quiver` | preamble; `styles/quiver.sty` | `texdoc tikz-cd` |
 | Dual graphs, stable-graph posets, stratification Hasse diagrams drawn by hand placement | `graphs` library (node/edge syntax, `graphs.standard`) | add to preamble | `texdoc pgf`, Part V |
-| The same, with automatic layered or force-directed layout | `graphdrawing` library with `layered` / `force` | LuaTeX | `texdoc pgf`, Part IV |
-| Hasse diagrams of finite posets under pdflatex | `causets` package | add to preamble | `texdoc causets` |
+| The same, with automatic layered or force-directed layout | `graphdrawing` library with `layered` / `force` | add to preamble; Lua-based, figures only (rule 7) | `texdoc pgf`, Part IV |
+| Hasse diagrams of finite posets without graph drawing | `causets` package | add to preamble | `texdoc causets` |
 | Two-dimensional Euclidean lattices and their sublattices | `euclidean-lattice` package | add to preamble | `texdoc euclidean-lattice` |
 | Polytopes, fans, integral affine spheres, 3D projections | `tikz-3dplot` package, `perspective` library, `pgfplots` for surfaces | add to preamble (`perspective` is a PGF library); no toric-fan library found on CTAN | `texdoc tikz-3dplot`, `texdoc pgfplots` |
 | Regular complex polytopes | `pst-cox` | install; PSTricks, not TikZ; last resort | `texdoc pst-cox` |
-| Hyperbolic plane, Poincaré disk, fundamental domains | `luahyperbolic` package | LuaTeX; no pdflatex hyperbolic library found on CTAN | `texdoc luahyperbolic` |
+| Hyperbolic plane, Poincaré disk, fundamental domains | `luahyperbolic` package | add to preamble; Lua-based, figures only (rule 7); no pdfTeX alternative found on CTAN | `texdoc luahyperbolic` |
 | Euclidean constructions, circles through points, tangents | `tkz-euclide` package | add to preamble | `texdoc tkz-euclide` |
 | Snakes, zigzags, coils, random steps along a path | `decorations.pathmorphing` | preamble | `texdoc pgf` |
 | Arrow tips and marks placed along a path | `decorations.markings`, `arrows.meta`, `bending` | preamble (`bending`: add) | `texdoc pgf` |

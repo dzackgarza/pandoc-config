@@ -64,7 +64,7 @@ def render_tikz(filepath: str, output_dir: str, cache: dict, force: bool = False
         try:
             # Use -interaction=nonstopmode for speed
             subprocess.run(
-                ["pdflatex", "-interaction=nonstopmode", f"-output-directory={tmpdir}", tex_file],
+                ["lualatex", "-interaction=nonstopmode", f"-output-directory={tmpdir}", tex_file],
                 cwd=tmpdir, check=True, capture_output=True, text=True
             )
         except subprocess.CalledProcessError as e:
