@@ -1,4 +1,4 @@
+% -A_1^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\ADEmAnm{1}
-\node[polygon title, below=7mm of lp.south] {${}^{-}A_1^{-}$};
+\pic {ade polygon={A}{1}{left-short}};
 \end{tikzpicture}

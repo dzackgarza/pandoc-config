@@ -1,45 +1,7 @@
+% D_4, -E_6^-, -E_7, -E_8^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\begin{scope}
-  \ADEDn{4}
-  \node[polygon title, below=7mm of lp.south] {$D_4$};
-\end{scope}
-
-\begin{scope}[shift={(5,0)}]
-  \pic {lattice polygon={3}{3}{(0,0) -- (3,0) -- (2,2) -- (0,3)}};
-  \scoped[on edge layer] \draw[axis side] (0,3) -- (0,0) -- (3,0);
-  \dzgboundaryside{3}{0}{2}{2}
-  \dzgboundaryside{2}{2}{0}{3}
-  \dzgleftchain{0}{2}
-  \dzgbottomchain{0}{2}
-  \dzgbranch{1}{1}{white}{0}
-  \foreach \p in {(0,3), (2,2), (3,0)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 1/0, 2/0, 3/0, 0/1, 0/2, 0/3, 1/1, 2/2}};
-  \node[polygon title, below=7mm of lp.south] {${}^{-}E_6^{-}$};
-\end{scope}
-
-\begin{scope}[shift={(11,0)}]
-  \pic {lattice polygon={4}{3}{(0,0) -- (4,0) -- (2,2) -- (0,3)}};
-  \scoped[on edge layer] \draw[axis side] (0,3) -- (0,0) -- (4,0);
-  \dzgboundaryside{4}{0}{2}{2}
-  \dzgboundaryside{2}{2}{0}{3}
-  \dzgleftchain{0}{2}
-  \dzgbottomchain{0}{3}
-  \dzgbranch{1}{1}{white}{0}
-  \foreach \p in {(0,3), (2,2), (3,1), (4,0)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 1/0, 2/0, 3/0, 4/0, 0/1, 0/2, 0/3, 1/1, 2/2, 3/1}};
-  \node[polygon title, below=7mm of lp.south] {${}^{-}E_7$};
-\end{scope}
-
-\begin{scope}[shift={(18,0)}]
-  \pic {lattice polygon={5}{3}{(0,0) -- (5,0) -- (2,2) -- (0,3)}};
-  \scoped[on edge layer] \draw[axis side] (0,3) -- (0,0) -- (5,0);
-  \dzgboundaryside{5}{0}{2}{2}
-  \dzgboundaryside{2}{2}{0}{3}
-  \dzgleftchain{0}{2}
-  \dzgbottomchain{0}{4}
-  \dzgbranch{1}{1}{white}{0}
-  \foreach \p in {(0,3), (2,2), (5,0)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 1/0, 2/0, 3/0, 4/0, 5/0, 0/1, 0/2, 0/3, 1/1, 2/2}};
-  \node[polygon title, below=7mm of lp.south] {${}^{-}E_8^{-}$};
-\end{scope}
+\pic at (0,0) {ade polygon={D}{4}{pure}};
+\pic at (5,0) {ade polygon={E}{6}{pure}};
+\pic at (11,0) {ade polygon={E}{7}{pure}};
+\pic at (18,0) {ade polygon={E}{8}{pure}};
 \end{tikzpicture}

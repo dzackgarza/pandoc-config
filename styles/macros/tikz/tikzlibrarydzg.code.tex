@@ -221,8 +221,9 @@
 % Lattice polygons (toric and ADE surfaces)
 % -----------------------------------------------------------------------------
 % Sides of an ADE polygon: `long side` and `short side` are sides of the
-% boundary divisor of lattice length >= 2 and 1; `axis side` is a side on a
-% coordinate axis, off the boundary divisor, along which the ADE chain lies.
+% boundary divisor C of even and odd lattice length (2 and 1, or 4 and 3 for
+% the affine shapes); `axis side` is a side of C', off the boundary divisor,
+% along which the Dynkin diagram lies.
 % `side label` sets a brace and its text outside a side traversed with the
 % polygon on its left (counterclockwise):
 %   \path[side label=2] (4,0) -- (0,2);
@@ -241,9 +242,9 @@
   marked point/.default={},
   side label/.style={
     postaction={draw=dzg accent, line width=0.5pt, decorate,
-      decoration={brace, amplitude=4pt, mirror, raise=6mm}},
+      decoration={brace, amplitude=4pt, mirror, raise=10.5mm}},
     postaction={decorate, decoration={markings, mark=at position 0.5 with
-      {\node[text=dzg accent, font=\small, inner sep=1pt] at (0,-10mm) {#1};}}}},
+      {\node[text=dzg accent, font=\small, inner sep=1pt] at (0,-14.5mm) {#1};}}}},
   % The monomial x^i y^j written at the lattice point (i,j).
   monomial/.style={font=\scriptsize, inner sep=4.5pt},
   polygon title/.style={font=\large, inner sep=2pt},

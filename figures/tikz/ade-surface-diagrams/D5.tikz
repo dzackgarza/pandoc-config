@@ -1,11 +1,4 @@
+% D_5^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\pic {lattice polygon={3}{2}{(0,0) -- (3,0) -- (2,2) -- (0,2)}};
-\scoped[on edge layer] {
-  \draw[axis side] (0,2) -- (0,0) -- (3,0);
-  \draw[short side, side label=short] (3,0) -- (2,2);
-  \draw[long side, side label=long] (2,2) -- (0,2);
-}
-\foreach \p in {(0,2), (3,0)} \node[boundary point] at \p {};
-\node[marked point=$p_\ast$] at (2,2) {};
-\node[polygon title, below=5mm of lp.south] {$D_5$};
+\pic {ade polygon={D}{5}{pure}};
 \end{tikzpicture}

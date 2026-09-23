@@ -1,9 +1,4 @@
+% A_0^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\pic {lattice polygon={1}{2}{(0,0) -- (1,0) -- (0,2)}};
-\scoped[on edge layer] \draw[axis side] (0,0) -- (1,0);
-\dzgboundaryside{1}{0}{0}{2}
-\dzgboundaryside{0}{2}{0}{0}
-\foreach \p in {(0,0), (0,1), (0,2), (1,0)} \node[boundary point] at \p {};
-\pic {monomials={0/0, 0/1, 0/2, 1/0}};
-\node[polygon title, below=7mm of lp.south] {$A_0^{-}$};
+\pic {ade polygon={A}{0}{pure}};
 \end{tikzpicture}

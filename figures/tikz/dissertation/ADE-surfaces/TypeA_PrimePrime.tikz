@@ -1,9 +1,7 @@
+% 'A'_5, 'A'_7, 'A'_9, 'A'_11 (AT Table 4: odd rank only): `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\foreach \m [remember=\xnext as \xoff (initially 0),
-    evaluate=\m as \xnext using \xoff+\m] in {6,...,9} {
-  \begin{scope}[shift={(\xoff,0)}]
-    \ADEPrimePrimeAn{\m}
-    \node[polygon title, below=7mm of lp.south] {${}'A_{\m}'$};
-  \end{scope}
-}
+\pic at (0,0) {ade polygon={A}{5}{both-prime}};
+\pic at (6,0) {ade polygon={A}{7}{both-prime}};
+\pic at (13,0) {ade polygon={A}{9}{both-prime}};
+\pic at (22,0) {ade polygon={A}{11}{both-prime}};
 \end{tikzpicture}

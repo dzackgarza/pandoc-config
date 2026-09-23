@@ -71,14 +71,14 @@ Every pic and command in dzg-diagrams.tex, with each label scheme.
 \end{tikzpicture}
 
 \section*{ADE lattice polygons}
-Every ADE constructor in dzg-diagrams.tex, for an odd and an even index.
+Every variant of \texttt{ade polygon}, and both keys.
 
 \begin{tikzpicture}[scale=0.5]
-  \foreach \cmd/\a/\b [count=\k] in {\ADEAn/3/4, \ADEmAnm/3/4, \ADEDn/5/6,
-      \ADEDntilde/5/6, \ADEPrimeAn/4/5, \ADEPrimePrimeAn/6/7, \ADEPrimeDn/6/7} {
-    \begin{scope}[yshift=-4*\k cm] \cmd{\a} \end{scope}
-    \begin{scope}[xshift=10cm, yshift=-4*\k cm] \cmd{\b} \end{scope}
+  \foreach \l/\r/\v [count=\k] in {A/0/pure, A/3/left-short, A/4/prime,
+      A/7/both-prime, D/5/pure, D/8/prime, E/8/pure, D/6/affine, E/7/affine} {
+    \pic at ({mod(\k-1,3)*10}, {-6*div(\k-1,3)}) {ade polygon={\l}{\r}{\v}};
   }
+  \pic[ade labels=none, ade title=false] at (30,0) {ade polygon={E}{6}{pure}};
 \end{tikzpicture}
 
 \section*{Lattice polygons}

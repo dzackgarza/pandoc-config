@@ -1,10 +1,7 @@
+% 'A_3, 'A_4^-, 'A_5, 'A_6^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\foreach \m [remember=\xnext as \xoff (initially 0),
-    evaluate=\m as \xnext using \xoff+\m+3] in {3,...,6} {
-  \begin{scope}[shift={(\xoff,0)}]
-    \ADEPrimeAn{\m}
-    \node[polygon title, below=7mm of lp.south]
-      {\ifodd\m ${}'A_{\m}$\else ${}'A_{\m}^{-}$\fi};
-  \end{scope}
-}
+\pic at (0,0) {ade polygon={A}{3}{prime}};
+\pic at (5,0) {ade polygon={A}{4}{prime}};
+\pic at (11,0) {ade polygon={A}{5}{prime}};
+\pic at (18,0) {ade polygon={A}{6}{prime}};
 \end{tikzpicture}

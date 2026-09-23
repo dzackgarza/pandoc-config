@@ -1,9 +1,6 @@
+% tilde D_6, tilde D_8, tilde D_10: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\foreach \m [remember=\xnext as \xoff (initially 0),
-    evaluate=\m as \xnext using \xoff+\m+1] in {6,8,10} {
-  \begin{scope}[shift={(\xoff,0)}]
-    \ADEDntilde{\m}
-    \node[polygon title, below=7mm of lp.south] {$\tilde D_{\m}$};
-  \end{scope}
-}
+\pic at (0,0) {ade polygon={D}{6}{affine}};
+\pic at (7,0) {ade polygon={D}{8}{affine}};
+\pic at (14,0) {ade polygon={D}{10}{affine}};
 \end{tikzpicture}

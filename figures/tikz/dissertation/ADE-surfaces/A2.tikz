@@ -1,4 +1,4 @@
+% A_2^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\ADEAn{2}
-\node[polygon title, below=7mm of lp.south] {$A_2^{-}$};
+\pic {ade polygon={A}{2}{pure}};
 \end{tikzpicture}

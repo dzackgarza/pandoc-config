@@ -1,10 +1,4 @@
+% tilde E_8^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\pic {lattice polygon={5}{4}{(0,0) -- (5,0) -- (0,4)}};
-\scoped[on edge layer] {
-  \draw[axis side] (0,4) -- (0,0) -- (5,0);
-  \draw[short side] (5,0) -- (0,4);
-}
-\foreach \p in {(0,4), (0,0), (5,0)} \node[boundary point] at \p {};
-\node[marked point=$p_\ast$] at (2.5,2) {};
-\node[polygon title, below=5mm of lp.south] {$\widetilde E_8$};
+\pic {ade polygon={E}{8}{affine}};
 \end{tikzpicture}

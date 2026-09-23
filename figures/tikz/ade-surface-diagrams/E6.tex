@@ -1,11 +1,4 @@
+% -E_6^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\pic {lattice polygon={3}{2}{(0,0) -- (3,0) -- (1,2) -- (0,2)}};
-\scoped[on edge layer] {
-  \draw[axis side] (0,2) -- (0,0) -- (3,0);
-  \draw[long side] (3,0) -- (1,2);
-  \draw[short side] (1,2) -- (0,2);
-}
-\foreach \p in {(0,2), (0,0), (3,0)} \node[boundary point] at \p {};
-\node[marked point=$p_\ast$] at (1,2) {};
-\node[polygon title, below=5mm of lp.south] {$E_6$};
+\pic {ade polygon={E}{6}{pure}};
 \end{tikzpicture}
