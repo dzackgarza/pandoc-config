@@ -19,7 +19,9 @@
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
 %                    short side, boundary point, marked point
 %   posets, moduli . poset node, degeneration, moduli blob, stratum
-%   curves ......... curve component, curve node, dual vertex, genus
+%   curves ......... curve component, curve node, dual vertex, genus,
+%                    coordinate axis, curve point, singular point,
+%                    constructed point
 % =============================================================================
 
 \usetikzlibrary{arrows.meta, backgrounds, calc, decorations.pathreplacing,
@@ -187,6 +189,16 @@
   curve node/.style={circle, fill=black, inner sep=0pt, minimum size=3.5pt},
   dual vertex/.style={circle, fill=black, inner sep=0pt, minimum size=5pt},
   genus/.style={font=\scriptsize, inner sep=1pt},
+  % Plane curves drawn in affine coordinates.
+  coordinate axis/.style={->, line width=0.6pt},
+  % A given point on a curve.
+  curve point/.style={circle, fill=black, inner sep=0pt, minimum size=4pt},
+  % A singular point of a plane curve (cusp, node, tacnode, ...).
+  singular point/.style={circle, draw, fill=white, line width=0.8pt,
+    inner sep=0pt, minimum size=6pt},
+  % A point constructed from the given ones, e.g. an intersection of lines.
+  constructed point/.style={circle, draw, fill=white, line width=0.8pt,
+    inner sep=0pt, minimum size=4pt},
 }
 
 % -----------------------------------------------------------------------------
