@@ -1,37 +1,39 @@
-\begin{tikzpicture}[>=Latex, line cap=round, line join=round, scale=0.9]
-  \fill[blue!5] (-4.5,-0.2) .. controls (-4,2.6) and (2.8,3.1) .. (4.3,1.4)
-    .. controls (4.7,0.2) and (4.2,-1.0) .. (3.3,-1.5)
-    .. controls (0.5,-2.2) and (-3.4,-1.7) .. cycle;
-  \draw[thick] (-4.5,-0.2) .. controls (-4,2.6) and (2.8,3.1) .. (4.3,1.4)
-    .. controls (4.7,0.2) and (4.2,-1.0) .. (3.3,-1.5)
-    .. controls (0.5,-2.2) and (-3.4,-1.7) .. cycle;
-  \draw[very thick, red!70!black] (3.95,-1.25) -- (4.3,1.4);
-  \node[red!70!black, right] at (4.15,0.5) {$\partial\mathcal M$};
+% A one-parameter degeneration: a curve C in the moduli space M runs from 0
+% through t to a point at infinity on the boundary, and the fibres X_0, X_t
+% degenerate to the singular fibre X_infinity.
+\begin{tikzpicture}[scale=0.9]
+  \coordinate (bdtop) at (4.3,1.4);
+  \coordinate (bdbot) at (3.95,-1.25);
+  \draw[moduli blob] (-4.5,-0.2) to[closed, curve through={
+    (-0.5,2.3) (bdtop) (bdbot) (-1.2,-1.7)}] (-4.5,-0.2);
+  \draw[boundary stratum] (bdbot) -- (bdtop)
+    node[pos=0.65, right, text=dzg singular] {$\partial\mathcal M$};
   \node at (-2.9,1.95) {$\mathcal M$};
 
-  \draw[very thick, ->] (-3.4,0.85) .. controls (-1.4,1.55) and (1.4,0.3) .. (4.05,0.55);
-  \node[above] at (-0.3,1.05) {$C$};
   \coordinate (p0) at (-2.7,1.05);
   \coordinate (pt) at (0.25,0.82);
   \coordinate (pinf) at (4.02,0.55);
-  \fill (p0) circle (2pt) node[above left] {$0$};
-  \fill (pt) circle (2pt) node[above] {$t$};
-  \fill[red!70!black] (pinf) circle (2.2pt) node[above right] {$\infty$};
+  \draw[degeneration] (-3.4,0.85)
+    to[curve through={(p0) (pt)}] (pinf);
+  \node[above] at (-0.3,1.05) {$C$};
+  \node[stratum, label=above left:$0$] at (p0) {};
+  \node[stratum, label=above:$t$] at (pt) {};
+  \node[stratum, fill=dzg singular, label={[text=dzg singular]above right:$\infty$}]
+    at (pinf) {};
 
-  \foreach \x/\lab in {-2.7/{\mathcal X_0},0.25/{\mathcal X_t}} {
-    \draw[->] (\x,0.7) -- (\x,-0.25);
-    \draw[thick, fill=yellow!12] (\x-0.8,-1.25)
-      .. controls (\x-0.45,-0.55) and (\x+0.45,-0.55) .. (\x+0.8,-1.25)
-      .. controls (\x+0.4,-1.85) and (\x-0.45,-1.85) .. cycle;
-    \draw[thin] (\x-0.55,-1.25) .. controls (\x,-0.95) and (\x+0.35,-1.55) .. (\x+0.6,-1.3);
-    \node[below] at (\x,-1.9) {$\lab$};
+  % Fibres: a smooth surface over 0 and t, two crossing components over infinity.
+  \foreach \x/\fibre/\tint in {-2.7/{\mathcal X_0}/dzg region,
+                               0.25/{\mathcal X_t}/dzg region,
+                               3.12/{\mathcal X_\infty}/dzg singular!15} {
+    \draw[curve component, fill=\tint] (\x-0.8,-1.25) to[bend left=60] (\x+0.8,-1.25)
+      to[bend left=60] (\x-0.8,-1.25) -- cycle;
+    \node[below] at (\x,-1.9) {$\fibre$};
   }
-
-  \draw[->, red!70!black] (4.02,0.38) -- (3.15,-0.35);
-  \draw[thick, fill=red!8] (2.3,-1.25)
-    .. controls (2.75,-0.55) and (3.55,-0.55) .. (3.95,-1.25)
-    .. controls (3.55,-1.85) and (2.75,-1.85) .. cycle;
-  \draw[thick] (2.62,-1.63) -- (3.63,-0.83);
-  \draw[thick] (2.62,-0.83) -- (3.63,-1.63);
-  \node[below] at (3.12,-1.9) {$\mathcal X_\infty$};
+  \foreach \x in {-2.7, 0.25} {
+    \draw[->] (\x,0.7) -- (\x,-0.25);
+    \draw (\x-0.55,-1.25) to[curve through={(\x-0.06,-1.19) (\x+0.31,-1.33)}]
+      (\x+0.6,-1.3);
+  }
+  \draw[curve component] (2.62,-1.63) -- (3.63,-0.83) (2.62,-0.83) -- (3.63,-1.63);
+  \draw[->, dzg singular] (4.02,0.38) -- (3.15,-0.35);
 \end{tikzpicture}

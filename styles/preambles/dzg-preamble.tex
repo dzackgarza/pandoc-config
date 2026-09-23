@@ -32,7 +32,10 @@
 % TikZ and diagrams
 \RequirePackage{tikz}
 \RequirePackage{tikz-cd}
-\usetikzlibrary{arrows.meta, cd, fadings, patterns, calc, matrix, positioning, decorations, decorations.pathreplacing, decorations.markings, shapes, backgrounds, fit, shapes.geometric, intersections, hobby, matrix,arrows,decorations.pathmorphing}
+\usetikzlibrary{arrows.meta, cd, fadings, patterns, calc, matrix, positioning, decorations, decorations.pathreplacing, decorations.markings, shapes, backgrounds, fit, shapes.geometric, intersections, hobby, matrix,arrows,decorations.pathmorphing, graphs}
+% Automatic graph layout computes in Lua, so it exists only under LuaTeX; the
+% figures that use it are rendered standalone with lualatex (AGENTS.md rule 7).
+\ifluatex\usetikzlibrary{graphdrawing}\usegdlibrary{layered}\fi
 \tikzfading[name=fade out, inner color=transparent!0, outer color=transparent!100]
 
 % Utilities

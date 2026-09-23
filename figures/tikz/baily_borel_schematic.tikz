@@ -1,19 +1,20 @@
-\begin{tikzpicture}[line cap=round,line join=round,scale=0.85]
-  % Two schematic arithmetic quotients with boundary cusps.
-  \foreach \x in {0,7.2} {
-    \fill[black!12] (\x,0)
-      .. controls (\x+1.6,1.9) and (\x+4.2,2.0) .. (\x+6.0,0.6)
-      .. controls (\x+5.0,-1.5) and (\x+1.6,-1.7) .. cycle;
-    \draw[densely dashed] (\x,0)
-      .. controls (\x+1.6,1.9) and (\x+4.2,2.0) .. (\x+6.0,0.6)
-      .. controls (\x+5.0,-1.5) and (\x+1.6,-1.7) .. cycle;
-    \draw[thick] (\x+2.9,0.95) .. controls (\x+2.25,0.2) and (\x+2.3,-0.55) .. (\x+2.8,-1.0);
-    \draw[thick] (\x+2.45,0.45) .. controls (\x+3.15,0.05) and (\x+3.0,-0.5) .. (\x+2.65,-0.8);
-    \draw[densely dotted] (\x-0.2,0) circle (0.18);
-    \draw[densely dotted] (\x+6.2,0.6) circle (0.18);
+% An arithmetic quotient F and its Baily-Borel compactification F^BB, drawn as
+% the same blob with its two cusps marked.
+\begin{tikzpicture}[scale=0.85]
+  \foreach \x/\name in {0/F, 9.5/{F^{\mathrm{BB}}}} {
+    \begin{scope}[xshift=\x cm]
+      \coordinate (w) at (0,0);
+      \coordinate (e) at (6,0.6);
+      \draw[moduli blob, densely dashed] (w) to[bend left=35] (e)
+        to[bend left=35] (w) -- cycle;
+      \draw[curve component] (2.9,0.95)
+        to[curve through={(2.42,-0.14)}] (2.8,-1.0);
+      \draw[curve component] (2.45,0.45)
+        to[curve through={(2.94,-0.21)}] (2.65,-0.8);
+      \draw[densely dotted] ([xshift=-0.2cm]w) circle (0.18);
+      \draw[densely dotted] ([xshift=0.2cm]e) circle (0.18);
+      \node at (3,-1.9) {$\name$};
+    \end{scope}
   }
-  \node[below] at (3.0,-1.9) {$F$};
-  \node[below] at (10.2,-1.9) {$F^{\mathrm{BB}}$};
-  \draw[->,thick] (6.35,0.15) -- (7.0,0.15);
-  \node[above] at (6.68,0.2) {adjoin cusps};
+  \draw[morphism] (6.7,0.3) -- node[above, font=\small] {adjoin cusps} (8.7,0.3);
 \end{tikzpicture}

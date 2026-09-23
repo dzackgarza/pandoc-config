@@ -1,30 +1,15 @@
-\begin{tikzpicture}[node distance=1.5cm, auto]
-    \node (2) at (0,0) [circle, draw] {(2)};
-    \node (12A) at (2, 0.7) [draw, rounded corners] {12A};
-    \node (12B) at (2, -0.7) [draw, rounded corners] {12B};
-    \node (1) at (4, 0) [circle, draw] {(1)};
-    
-    \node (1A) at (6, 1.5) [draw] {1A};
-    \node (1B) at (6, 0.9) [draw] {1B};
-    \node (1C) at (6, 0.3) [draw] {1C};
-    \node (1D) at (6, -0.3) [draw] {1D};
-    \node (1E) at (6, -0.9) [draw] {1E};
-    \node (1F) at (6, -1.5) [draw] {1F};
-    
-    \draw[->] (2) -- (12A);
-    \draw[->] (2) -- (12B);
-    \draw[->] (12A) -- (1);
-    \draw[->] (12B) -- (1);
-    
-    \draw[->] (1) -- (1A);
-    \draw[->] (1) -- (1B);
-    \draw[->] (1) -- (1C);
-    \draw[->] (1) -- (1D);
-    \draw[->] (1) -- (1E);
-    \draw[->] (1) -- (1F);
-    
-    \node[blue, font=\small] at (1, 1.2) {$U \oplus E_8^2$};
-    \node[blue, font=\small] at (4, 1.2) {$U(2) \oplus E_8^2$};
-    
-    \node[anchor=west] at (7, 0) {$\partial \overline{\mathcal{F}_{2,2,0}}^{BB}$};
+% Incidence graph of the boundary strata of F_{2,2,0}^{BB}.
+\begin{tikzpicture}[nodes={poset node}]
+  \node[circle, label={[dzg accent, label distance=0.5cm]above:$U \oplus E_8^2$}]
+    (2) at (0,0) {(2)};
+  \node (12A) at (2,0.7) {12A};
+  \node (12B) at (2,-0.7) {12B};
+  \node[circle, label={[dzg accent, label distance=0.5cm]above:$U(2) \oplus E_8^2$}] (1) at (4,0) {(1)};
+  \foreach \s [count=\i] in {A, B, C, D, E, F}
+    \node[sharp corners] (1\s) at (6, 2.1-0.6*\i) {1\s};
+  \graph[use existing nodes, edges={degeneration}] {
+    2 -> {12A, 12B} -> 1 -> {1A, 1B, 1C, 1D, 1E, 1F};
+  };
+  \node[draw=none, font=\normalsize, anchor=west] at (7,0)
+    {$\partial \overline{\mathcal{F}_{2,2,0}}^{BB}$};
 \end{tikzpicture}
