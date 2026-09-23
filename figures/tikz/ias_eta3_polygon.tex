@@ -1,0 +1,12 @@
+% P(lambda) for the cusp eta_3 of F_{En,2} after the Symington surgeries: the
+% (18,2,0)_1 polygon at l = (2, 0^15, 2, 4, 6, 4), with the unit lattice and
+% the fixed line of i_En.
+\begin{tikzpicture}[scale=1.2]
+  \pic[ias labels=multiplicities] (P)
+    {symington 18 2 0={2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,4,6,4}};
+  \begin{scope}[on background layer]
+    \clip (P-p0) -- (P-p4) -- (P-p8) -- (P-p12) -- cycle;
+    \draw[lattice grid] (-1, -4) grid (6, 3);
+  \end{scope}
+  \draw[fold axis] (0, -3) -- (5, 2);
+\end{tikzpicture}

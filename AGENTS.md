@@ -163,7 +163,8 @@ Every figure draws with the style vocabulary in
    `parabolic`. Baily–Borel diagrams use `cusp0`, `cusp1`, `incidence`,
    `cusp label`, `cusp brace`. IAS and Kulikov pictures use `ias region`,
    `ias boundary`, `ias edge`, `ias singularity=<multiplicity>`, `ias surgery`,
-   `fan ray`, `kulikov component`, `double curve`. Lattice polygons use
+   `fan ray`, `kulikov component`, `double curve`, `triple point`,
+   `self intersection`. Lattice polygons use
    `lattice grid`, `lattice point`, `polygon region`, `long side`, `short side`,
    `boundary point`, `marked point`. Posets and schematics use `poset node`,
    `degeneration`, `moduli blob`, `stratum`, `boundary stratum`. Stable curves

@@ -1,9 +1,13 @@
+% P(lambda) for the cusp eta_3 of F_{En,2} before the Symington surgeries: the
+% (18,2,0)_1 polygon at l = (3,0,0,0, 2,0,0,0, 3,0,0,0, 2,0,0,0, 0^4), the
+% rectangle with sides (3,-3) and (2,2), its unit triangulation and the
+% charges at its corners.
 \begin{tikzpicture}[scale=1.2]
-  \input{tikz/pieces/ias_diamond_charts.tex}
-  \draw[ias edge] (A) -- (C) (B) -- (D) (P1) -- (P4) (P2) -- (P3);
-  \foreach \p in {A, B, C, D, M, P1, P2, P3, P4}
-    \node[lattice point] at (\p) {};
-
-  \draw[->] (-2, -2) -- +(-0.5, -0.5) node[below left] {$(3, -3)$};
-  \draw[->] (2, -2) -- +(0.5, 0.5) node[above right] {$(2, 2)$};
+  \pic[ias labels=multiplicities] (P)
+    {symington 18 2 0={3,0,0,0,2,0,0,0,3,0,0,0,2,0,0,0,0,0,0,0}};
+  \begin{scope}[on background layer]
+    \clip (P-p0) -- (P-p4) -- (P-p8) -- (P-p12) -- cycle;
+    \draw[lattice grid] (-1, -4) grid (6, 3);
+    \foreach \c in {-6,...,6} \draw[lattice grid] (\c - 4, 4) -- ++(8, -8);
+  \end{scope}
 \end{tikzpicture}

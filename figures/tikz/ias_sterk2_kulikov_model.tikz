@@ -1,34 +1,6 @@
-\begin{tikzpicture}[scale=0.72]
-  % Four octagonal components in the Sterk--2 combinatorial Kulikov model.
-
-  % Background gluing square.
-  \draw[lattice grid] (-4, -4) rectangle (4, 4) (-4, 0) -- (4, 0) (0, -4) -- (0, 4)
-    (-4, -4) -- (4, 4) (-4, 4) -- (4, -4);
-
-  % Each octagon is the top edge (-0.85,1.45)--(0.85,1.45) and its rotations
-  % by multiples of 90 degrees.
-  \foreach \cx/\cy/\lab in {-2/2/{V_1}, 2/2/{V_2}, -2/-2/{V_3}, 2/-2/{V_4}} {
-    \begin{scope}[shift={(\cx, \cy)}]
-      \draw[kulikov component] (-0.85, 1.45) -- (0.85, 1.45)
-        \foreach \a in {-90, -180, -270} {
-          -- ([rotate=\a] -0.85, 1.45) -- ([rotate=\a] 0.85, 1.45) } -- cycle;
-      \foreach \a in {0, -90, -180, -270}
-        \foreach \x in {-0.85, 0.85}
-          \node[boundary point] at ([rotate=\a] \x, 1.45) {};
-      \node at (0, 0) {$\lab$};
-    \end{scope}
-  }
-
-  % Double curves between neighbouring components.
-  \foreach \a in {0, 90}
-    \foreach \y in {2.85, 1.15, -1.15, -2.85}
-      \draw[double curve] ([rotate=\a] -0.55, \y) -- ([rotate=\a] 0.55, \y);
-
-  % Outer gluing arcs indicate the spherical closure of the dual complex.
-  \foreach \a in {0, -90, -180, -270}
-    \draw[ias boundary] ([rotate=\a] -2.85, 3.45)
-      to[curve through={([rotate=\a] -1.97, 4.32) ([rotate=\a] 0, 4.61)
-        ([rotate=\a] 1.97, 4.32)}] ([rotate=\a] 2.85, 3.45);
-
-  \node[below] at (0, -5.15) {dual-complex model for Sterk $2$};
+% The Kulikov central fibre X_0 of the F_{En,2} example: the dual complex of
+% the triangulation of Gamma(X_0), with its self-intersection numbers.
+\begin{tikzpicture}[scale=1.4]
+  \pic {sterk2 kulikov};
+  \node[font=\huge] at (-2.2, 3.2) {$\mathcal{X}_0$};
 \end{tikzpicture}

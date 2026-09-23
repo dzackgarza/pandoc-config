@@ -1,3 +1,378 @@
 % =============================================================================
 % Integral-affine spheres, fans and Kulikov models
 % =============================================================================
+% Canonical mathematical objects drawn with the dzg TikZ library vocabulary.
+% Each object is defined once, in the file of its family, with canonical vertex
+% names and labels; figures under figures/ import an object and decorate it.
+% \input by tikzlibrarydzg.code.tex, so "@" is a letter here.
+%
+% Objects (pics). Point names carry a leading "-", so a named pic
+%   \pic (P) {symington 18 2 0};
+% names its points P-p0, P-p1, ...; decorate through them:
+%   \node[ias singularity=2] at (P-p16) {};
+%
+%   symington 18 2 0={l_0,...,l_19}   Symington polygon P(lambda) of (18,2,0)_1
+%   symington 18 0 0={l_1,...,l_19}   Symington polygon P(lambda) of (18,0,0)_1
+%   sterk2 ias                        IAS^2 Gamma(X_0) of the F_{En,2} example
+%   sterk2 kulikov                    its Kulikov central fibre X_0
+%
+% Keys:
+%   ias labels=canonical|multiplicities|none
+%                               canonical: point names, edge vectors,
+%                               multiplicities (a star without a number has
+%                               multiplicity 1) and self-intersection numbers;
+%                               multiplicities: those alone
+%                               (default canonical)
+%   ias involutions             sterk2 ias: the fixed lines of i_En and i_dP
+%                               and the two involution arrows
+
+\newif\ifdzg@ias@labels
+\dzg@ias@labelstrue
+\newif\ifdzg@ias@mult
+\dzg@ias@multtrue
+\newif\ifdzg@ias@involutions
+\tikzset{
+  ias labels/.is choice,
+  ias labels/canonical/.code={\dzg@ias@labelstrue\dzg@ias@multtrue},
+  ias labels/none/.code={\dzg@ias@labelsfalse\dzg@ias@multfalse},
+  ias labels/multiplicities/.code={\dzg@ias@labelsfalse\dzg@ias@multtrue},
+  ias involutions/.is if=dzg@ias@involutions,
+  % text of an edge vector or point name of an IAS
+  ias label/.style={font=\footnotesize, inner sep=2pt},
+}
+
+% \dzg@ias@star{<point>}{<multiplicity>}: a singular point, with its
+% multiplicity when labels are on and it is not 1.
+\def\dzg@ias@star#1#2{%
+  \ifdzg@ias@mult\ifnum#2>1
+    \node[ias singularity=#2] at (#1) {};%
+  \else\node[ias singularity] at (#1) {};\fi
+  \else\node[ias singularity] at (#1) {};\fi}
+
+% -----------------------------------------------------------------------------
+% Symington polygons P(lambda)
+% -----------------------------------------------------------------------------
+% Source: the (18,2,0)_1 and (18,0,0)_1 templates of the dissertation,
+% research/writing/dissertation/sections/2-part-moduli/5-chapter-ias-dlt/
+% 500-ias.md (definition of B(lambda) = P(lambda) u P(lambda)^op), after
+% Symington 2003 and Alexeev-Engel-Garza-Schaffler 2023. The barycentric
+% coordinates l_i = lambda . alpha_i of the Vinberg roots alpha_i (the pics
+% `vinberg 18 2 0` and `vinberg 18 0 0`) fix the sides: side i is
+%   v_i = l_i d_i            (kind w),
+%   v_i = (l_i / 2) d_i      (kind h),
+%   v_i = (l_i + l_j / 2) d_i  (kind s: a Symington surgery with root j),
+% with d_i the primitive direction of the side, counterclockwise. The surgery
+% cuts the segment of lattice length l_j / 2 starting at distance l_i / 2 along
+% the side and folds it to the singular point
+%   apex = (cut start or cut end) + (l_j / 2) u_j,
+% so the cut triangle is unimodular up to scale.
+%
+% Engine data:
+%   sides      <i>/<dx>/<dy>/<kind>/<j>   (j = 0 when the side has no surgery)
+%   surgeries  <i>/<j>/<ux>/<uy>/<anchor: a = cut start, b = cut end>/<apex>
+% Points: -p<i> the vertices, -p<apex> the singular points, -c<j>a and -c<j>b
+% the ends of the cut of surgery j.
+
+% \dzg@ias@ell{<i>}: the value l_i given to the pic.
+\def\dzg@ias@ell#1{\csname dzg@ias@l@#1\endcsname}
+% \dzg@ias@setell{<first index>}{<l list>}
+\def\dzg@ias@setell#1#2{%
+  \foreach \dzg@v [count=\dzg@c from #1] in {#2}
+    {\expandafter\xdef\csname dzg@ias@l@\dzg@c\endcsname{\dzg@v}}}
+
+% \dzg@ias@sidelen{<i>}{<kind>}{<j>}: sets \dzg@len, the lattice length.
+\def\dzg@ias@sidelen#1#2#3{%
+  \if#2w\pgfmathsetmacro\dzg@len{\dzg@ias@ell{#1}}\fi
+  \if#2h\pgfmathsetmacro\dzg@len{\dzg@ias@ell{#1}/2}\fi
+  \if#2s\pgfmathsetmacro\dzg@len{\dzg@ias@ell{#1}+\dzg@ias@ell{#3}/2}\fi}
+
+% \dzg@ias@vector{<i>}{<kind>}{<j>}{<dx>}{<dy>}: the edge vector v_i.
+\def\dzg@ias@vector#1#2#3#4#5{%
+  \if#2w$v_{#1}=\ell_{#1}\cdot(#4,#5)$\fi
+  \if#2h$v_{#1}=\tfrac12\ell_{#1}\cdot(#4,#5)$\fi
+  \if#2s$v_{#1}=(\ell_{#1}+\tfrac12\ell_{#3})\cdot(#4,#5)$\fi}
+
+% \dzg@ias@symington{<first>}{<last vertex>}{<closed: 1|0>}{<sides>}{<surgeries>}
+%   {<extra multiplicities i/m>}
+\def\dzg@ias@symington#1#2#3#4#5#6{%
+  % Vertices, as numbers \dzg@ias@x@<i>, \dzg@ias@y@<i> and coordinates -p<i>.
+  \expandafter\xdef\csname dzg@ias@x@#1\endcsname{0}%
+  \expandafter\xdef\csname dzg@ias@y@#1\endcsname{0}%
+  \foreach \i/\dx/\dy/\kind/\j in #4 {%
+    \dzg@ias@sidelen{\i}{\kind}{\j}%
+    \expandafter\xdef\csname dzg@ias@len@\i\endcsname{\dzg@len}%
+    \pgfmathtruncatemacro\dzg@next{\i+1}%
+    \pgfmathsetmacro\dzg@x{\csname dzg@ias@x@\i\endcsname+\dzg@len*\dx}%
+    \pgfmathsetmacro\dzg@y{\csname dzg@ias@y@\i\endcsname+\dzg@len*\dy}%
+    \expandafter\xdef\csname dzg@ias@x@\dzg@next\endcsname{\dzg@x}%
+    \expandafter\xdef\csname dzg@ias@y@\dzg@next\endcsname{\dzg@y}}%
+  \pgfmathtruncatemacro\dzg@ias@n{#2-#1+1}%
+  \xdef\dzg@ias@cx{0}\xdef\dzg@ias@cy{0}%
+  \foreach \i in {#1,...,#2} {%
+    \coordinate (-p\i) at (\csname dzg@ias@x@\i\endcsname,\csname dzg@ias@y@\i\endcsname);
+    \pgfmathsetmacro\dzg@x{\dzg@ias@cx+\csname dzg@ias@x@\i\endcsname/\dzg@ias@n}%
+    \pgfmathsetmacro\dzg@y{\dzg@ias@cy+\csname dzg@ias@y@\i\endcsname/\dzg@ias@n}%
+    \xdef\dzg@ias@cx{\dzg@x}\xdef\dzg@ias@cy{\dzg@y}}%
+  % Surgeries: cut ends -c<j>a, -c<j>b and the singular point -p<apex>.
+  \foreach \i/\j/\ux/\uy/\anchor/\apex in #5 {%
+    \pgfmathtruncatemacro\dzg@next{\i+1}%
+    \ifnum\dzg@next>#2 \def\dzg@next{#1}\fi
+    \edef\dzg@px{\csname dzg@ias@x@\i\endcsname}\edef\dzg@py{\csname dzg@ias@y@\i\endcsname}%
+    \edef\dzg@qx{\csname dzg@ias@x@\dzg@next\endcsname}%
+    \edef\dzg@qy{\csname dzg@ias@y@\dzg@next\endcsname}%
+    \pgfmathsetmacro\dzg@s{\dzg@ias@ell{\i}/2/max(\csname dzg@ias@len@\i\endcsname,0.001)}%
+    \pgfmathsetmacro\dzg@t{(\dzg@ias@ell{\i}+\dzg@ias@ell{\j})/2/max(\csname dzg@ias@len@\i\endcsname,0.001)}%
+    % Direction of the side, the cut ends and the apex, as numbers.
+    \pgfmathsetmacro\dzg@dx{(\dzg@qx-\dzg@px)}\pgfmathsetmacro\dzg@dy{(\dzg@qy-\dzg@py)}%
+    \pgfmathsetmacro\dzg@ax{\dzg@px+\dzg@s*\dzg@dx}\pgfmathsetmacro\dzg@ay{\dzg@py+\dzg@s*\dzg@dy}%
+    \pgfmathsetmacro\dzg@bx{\dzg@px+\dzg@t*\dzg@dx}\pgfmathsetmacro\dzg@by{\dzg@py+\dzg@t*\dzg@dy}%
+    \if\anchor b\let\dzg@ox\dzg@bx\let\dzg@oy\dzg@by
+    \else\let\dzg@ox\dzg@ax\let\dzg@oy\dzg@ay\fi
+    \pgfmathsetmacro\dzg@x{\dzg@ox+\dzg@ias@ell{\j}/2*\ux}%
+    \pgfmathsetmacro\dzg@y{\dzg@oy+\dzg@ias@ell{\j}/2*\uy}%
+    \expandafter\xdef\csname dzg@ias@ax@\apex\endcsname{\dzg@x}%
+    \expandafter\xdef\csname dzg@ias@ay@\apex\endcsname{\dzg@y}%
+    \coordinate (-c\j a) at (\dzg@ax,\dzg@ay);
+    \coordinate (-c\j b) at (\dzg@bx,\dzg@by);
+    \coordinate (-p\apex) at (\dzg@x,\dzg@y);}%
+  \begin{scope}[on background layer]
+    \fill[ias region] (-p#1) \foreach \i in {#1,...,#2} { -- (-p\i) } -- cycle;
+    \foreach \i/\j/\ux/\uy/\anchor/\apex in #5 {%
+      \ifdim\dzg@ias@ell{\j}pt>0pt
+        \path[ias surgery] (-c\j a) -- (-p\apex) -- (-c\j b) -- cycle;\fi}
+  \end{scope}
+  % Sides, oriented counterclockwise; a surgery side is cut in three.
+  \foreach \i/\dx/\dy/\kind/\j in #4 {%
+    \pgfmathtruncatemacro\dzg@next{\i+1}%
+    \ifnum\dzg@next>#2 \def\dzg@next{#1}\fi
+    \ifdim\csname dzg@ias@len@\i\endcsname pt>0pt
+      \ifnum\j=0
+        \draw[fan ray] (-p\i) -- (-p\dzg@next);
+      \else
+        \ifdim\dzg@ias@ell{\i}pt>0pt \draw[fan ray, -] (-p\i) -- (-c\j a);\fi
+        \ifdim\dzg@ias@ell{\j}pt>0pt
+          \draw[fan ray, -, dashed, draw opacity=0.4] (-c\j a) -- (-c\j b);\fi
+        \ifdim\dzg@ias@ell{\i}pt>0pt \draw[fan ray] (-c\j b) -- (-p\dzg@next);\fi
+      \fi
+      \ifdzg@ias@labels
+        \pgfmathsetmacro\dzg@a{atan2(-\dx,\dy)+180}%
+        \path ($(-p\i)!0.5!(-p\dzg@next)$)
+          node[ias label, anchor=\dzg@a] {\dzg@ias@vector{\i}{\kind}{\j}{\dx}{\dy}};
+      \fi
+    \fi}%
+  % Surgery vectors v_j and their singular points.
+  \foreach \i/\j/\ux/\uy/\anchor/\apex in #5 {%
+    \ifdim\dzg@ias@ell{\j}pt>0pt
+      \draw[fan ray, draw=dzg singular] (-c\j\anchor) -- (-p\apex);
+      \ifdzg@ias@labels
+        % Past the singular point, in the direction of the vector.
+        \pgfmathsetmacro\dzg@a{atan2(-\uy,-\ux)}%
+        \path (-p\apex) node[ias label, text=dzg singular, anchor=\dzg@a,
+          inner sep=6pt] {$v_{\j}=\tfrac12\ell_{\j}\cdot(\ux,\uy)$};
+      \fi
+    \fi}%
+  % Singular points: each apex with the number of apexes at the same point,
+  % each vertex with the number of vertices at the same point (sides of length
+  % 0 collapse vertices) plus its extra multiplicity.
+  \foreach \i/\j/\ux/\uy/\anchor/\apex in #5 {%
+    \ifdim\dzg@ias@ell{\j}pt>0pt
+      \gdef\dzg@mult{0}\gdef\dzg@first{1}%
+      \foreach \k/\l/\vx/\vy/\b/\bapex in #5 {%
+        \ifdim\dzg@ias@ell{\l}pt>0pt
+          \pgfmathparse{abs(\csname dzg@ias@ax@\apex\endcsname
+              -\csname dzg@ias@ax@\bapex\endcsname)
+            +abs(\csname dzg@ias@ay@\apex\endcsname
+              -\csname dzg@ias@ay@\bapex\endcsname)<0.01 ? 1 : 0}%
+          \ifdim\pgfmathresult pt>0pt
+            \pgfmathtruncatemacro\dzg@m{\dzg@mult+1}\xdef\dzg@mult{\dzg@m}%
+            \ifnum\bapex<\apex \gdef\dzg@first{0}\fi
+          \fi
+        \fi}%
+      \ifnum\dzg@first=1 \dzg@ias@star{-p\apex}{\dzg@mult}\fi
+    \fi}%
+  % Walk the vertices cyclically from one whose preceding side has positive
+  % length, so that a group of collapsed vertices is never split.
+  \gdef\dzg@start{#1}%
+  \ifnum#3=1
+    \gdef\dzg@found{0}%
+    \foreach \i in {#1,...,#2} {%
+      \pgfmathtruncatemacro\dzg@prev{\i==#1 ? #2 : \i-1}%
+      \ifnum\dzg@found=0 \ifdim\csname dzg@ias@len@\dzg@prev\endcsname pt>0pt
+        \xdef\dzg@start{\i}\gdef\dzg@found{1}\fi\fi}%
+  \fi
+  \gdef\dzg@mult{0}%
+  \pgfmathtruncatemacro\dzg@last{\dzg@ias@n-1}%
+  \foreach \k in {0,...,\dzg@last} {%
+    \pgfmathtruncatemacro\i{#1+mod(\dzg@start-#1+\k,\dzg@ias@n)}%
+    \pgfmathtruncatemacro\dzg@m{\dzg@mult+1}\xdef\dzg@mult{\dzg@m}%
+    \foreach \e/\m in {#6} {\ifnum\e=\i
+      \pgfmathtruncatemacro\dzg@m{\dzg@mult+\m}\xdef\dzg@mult{\dzg@m}\fi}%
+    \gdef\dzg@emit{0}%
+    \ifnum#3=0 \ifnum\i=#2 \gdef\dzg@emit{1}\fi\fi
+    \ifnum\dzg@emit=0 \ifnum\i<#2
+      \ifdim\csname dzg@ias@len@\i\endcsname pt>0pt \gdef\dzg@emit{1}\fi\fi\fi
+    \ifnum#3=1 \ifnum\i=#2
+      \ifdim\csname dzg@ias@len@\i\endcsname pt>0pt \gdef\dzg@emit{1}\fi\fi\fi
+    \ifnum\dzg@emit=1
+      \dzg@ias@star{-p\i}{\dzg@mult}%
+      \ifdzg@ias@labels
+        \pgfmathsetmacro\dzg@a{atan2(\csname dzg@ias@y@\i\endcsname-\dzg@ias@cy,
+          \csname dzg@ias@x@\i\endcsname-\dzg@ias@cx)}%
+        % Inside the polygon, so that point names and edge vectors do not meet.
+        \path (-p\i) node[ias label, anchor=\dzg@a, inner sep=6pt] {$p_{\i}$};
+      \fi
+      \gdef\dzg@mult{0}%
+    \fi}}
+
+% (18,2,0)_1: sixteen sides, surgeries 16..19 on the sides 0, 4, 8, 12.
+% Default: the template instance of the dissertation, l = (2,2,1,2)^4, (2)^4.
+\def\dzg@ias@sides@a{0/1/-1/s/16, 1/2/-1/h/0, 2/1/0/w/0, 3/2/1/h/0,
+  4/1/1/s/17, 5/1/2/h/0, 6/0/1/w/0, 7/-1/2/h/0, 8/-1/1/s/18, 9/-2/1/h/0,
+  10/-1/0/w/0, 11/-2/-1/h/0, 12/-1/-1/s/19, 13/-1/-2/h/0, 14/0/-1/w/0,
+  15/1/-2/h/0}
+\def\dzg@ias@surg@a{0/16/1/0/a/16, 4/17/0/1/a/17, 8/18/-1/0/a/18,
+  12/19/0/-1/a/19}
+\tikzset{pics/symington 18 2 0/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}%
+  \dzg@ias@setell{0}{#1}%
+  \dzg@ias@symington{0}{15}{1}{\dzg@ias@sides@a}{\dzg@ias@surg@a}{-1/0}%
+  % The lines l_20, l_21 through opposite singular points.
+  % Drawn when both surgeries are present.
+  \pgfmathparse{min(\dzg@ias@ell{16},\dzg@ias@ell{18})}%
+  \ifdim\pgfmathresult pt>0pt
+    \draw[ias edge, dotted, draw=dzg singular] (-p16) -- (-p18);
+    \ifdzg@ias@labels
+      \path ($(-p16)!0.3!(-p18)$) node[ias label, text=dzg singular, right] {$\ell_{20}$};
+    \fi
+  \fi
+  \pgfmathparse{min(\dzg@ias@ell{17},\dzg@ias@ell{19})}%
+  \ifdim\pgfmathresult pt>0pt
+    \draw[ias edge, dotted, draw=dzg singular] (-p17) -- (-p19);
+    \ifdzg@ias@labels
+      \path ($(-p17)!0.3!(-p19)$) node[ias label, text=dzg singular, above] {$\ell_{21}$};
+    \fi
+  \fi}},
+  pics/symington 18 2 0/.default={2,2,1,2,2,2,1,2,2,2,1,2,2,2,1,2,2,2,2,2}}
+
+% (18,0,0)_1: the polygon cut open along p_19 p_2, sides 2..18, surgeries with
+% the roots 1 and 19 on the sides 4 and 16, singular points p_1 and p_20.
+% The cut ends p_2 and p_19 carry multiplicity 4.
+% Default: the instance of the dissertation figure, l_1..l_19 =
+% (2,2,2,2,2,1,2,1,2,1,2,1,2,1,2,2,2,2,2).
+\def\dzg@ias@sides@b{2/0/1/w/0, 3/-1/4/h/0, 4/-1/3/s/1, 5/-2/5/h/0,
+  6/-1/2/w/0, 7/-2/3/h/0, 8/-1/1/w/0, 9/-2/1/h/0, 10/-1/0/w/0, 11/-2/-1/h/0,
+  12/-1/-1/w/0, 13/-2/-3/h/0, 14/-1/-2/w/0, 15/-2/-5/h/0, 16/-1/-3/s/19,
+  17/-1/-4/h/0, 18/0/-1/w/0}
+\def\dzg@ias@surg@b{4/1/-1/2/a/1, 16/19/1/2/b/20}
+\tikzset{pics/symington 18 0 0/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}%
+  \dzg@ias@setell{1}{#1}%
+  \dzg@ias@symington{2}{19}{0}{\dzg@ias@sides@b}{\dzg@ias@surg@b}{2/3, 19/3}%
+  \draw[ias boundary, dashed, draw=dzg muted] (-p2) -- (-p19);}},
+  pics/symington 18 0 0/.default={2,2,2,2,2,1,2,1,2,1,2,1,2,1,2,2,2,2,2}}
+
+% -----------------------------------------------------------------------------
+% The IAS^2 Gamma(X_0) of the F_{En,2} example and its Kulikov model X_0
+% -----------------------------------------------------------------------------
+% Source: the Gamma(X_0) and X_0 panels of the F_{En,2} stable-model figure
+% (figures/screenshots/f-en-2-stable-models.png, IAS.png).
+% Coordinates in the integral lattice of the unit squares:
+%   R    the triangulated region: the six unit squares of
+%        [-1,2] x [-1,2] other than [0,1]^2 and the two off-diagonal corners;
+%        each square is cut along its diagonal of direction (1,-1);
+%   R/~  Gamma(X_0): R with its boundary glued to itself by the reflection
+%        (x,y) -> (y,x) in the line l_En (ab ~ db, ac ~ dc, fb ~ jb, ic ~ lc,
+%        ef ~ kj, ge ~ nk, hi ~ ml, gh ~ nm); 8 vertices, 18 edges, 12
+%        triangles, Euler characteristic 2;
+%   q o p r  the diamond B(lambda) = P u P^op cut open, P the half above
+%        l_dP: x + y = 1, with sides (3,-3), (2,2) -- the polygon of the
+%        example cusp eta_3 of 600-dlt-models.md, `symington 18 2 0` at
+%        l = (2,0^15,2,4,6,4).
+% Singular points: b, c, j, l of multiplicity 2 and n of multiplicity 16.
+\def\dzg@ias@sterkpoints{a/0/1, b/1/1, c/0/0, d/1/0, e/0/2, f/1/2, g/-1/2,
+  h/-1/1, i/-1/0, j/2/1, k/2/0, l/0/-1, m/1/-1, n/2/-1, o/1/4, p/4/1,
+  q/-3/0, r/0/-3}
+% Lower-left corners of the six unit squares of R.
+\def\dzg@ias@sterksquares{-1/1, 0/1, -1/0, 1/0, 0/-1, 1/-1}
+
+\tikzset{pics/sterk2 ias/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}%
+  \foreach \n/\x/\y in \dzg@ias@sterkpoints \coordinate (-\n) at (\x,\y);
+  \coordinate (-En1) at (-1.5,-1.5);
+  \coordinate (-En2) at (2.5,2.5);
+  \scoped[on background layer]
+    \foreach \x/\y in \dzg@ias@sterksquares \fill[ias region] (\x,\y) rectangle ++(1,1);
+  % The diamond and the lattice lines through R.
+  \draw[ias edge, dashed] (-q) -- (-o) -- (-p) -- (-r) -- cycle
+    (-g) -- (-f)  (-o) -- (-d)  (-a) -- (-p)  (-q) -- (-d)  (-l) -- (-n)
+    (-g) -- (-i)  (-a) -- (-r)  (-j) -- (-n);
+  % The triangulation of R.
+  \draw[ias edge] (-e) -- (-a) -- (-h)  (-e) -- (-k)  (-h) -- (-m)
+    (-m) -- (-d) -- (-k)  (-g) -- (-a)  (-d) -- (-n);
+  \foreach \p/\m in {b/2, c/2, j/2, l/2, n/16} {\dzg@ias@star{-\p}{\m}}
+  \ifdzg@ias@involutions
+    \draw[fold axis] (-En1) -- (-En2);
+    \draw[fold axis, draw=dzg accent, solid, line width=1.4pt] (-g) -- (-a)  (-d) -- (-n);
+    \draw[fold axis, draw=dzg accent, line width=1.4pt] (-a) -- (-d);
+    \draw[<->, line width=1.2pt, draw=dzg singular] (2.95,3.05) -- (3.95,2.05)
+      node[right, text=dzg singular] {$\ien$};
+    \draw[<->, line width=1.2pt, draw=dzg accent] (2.55,-2.15) -- (3.65,-1.05)
+      node[right, text=dzg accent] {$\idp$};
+  \fi}}}
+
+% X_0: one triple point -t<k> per triangle of R, one double curve per edge of
+% R/~. Double curves of the glued edges cross the hole [0,1]^2, the corners
+% at b and c, or run around R. Canonical labels: the self-intersection of a
+% double curve in the component on each side, as in the source panel; the
+% unlabelled curves are (-1,-1).
+\def\dzg@ias@triangles{1/g/e/a, 2/g/h/a, 3/a/e/b, 4/e/f/b, 5/b/j/k, 6/b/d/k,
+  7/h/a/c, 8/h/i/c, 9/c/d/m, 10/c/l/m, 11/d/m/n, 12/d/k/n}
+% \dzg@ias@selfint{<t>}{<t'>}{<side of the first component: 90 left of t->t',
+%   -90 right>}{<first>}{<second>}: the two numbers either side of the
+% midpoint of the curve from -t<t> to -t<t'>.
+\def\dzg@ias@selfint#1#2#3#4#5#6{%
+  \ifdzg@ias@labels
+    \coordinate (-mid) at ($(-t#1)!#6!(-t#2)$);
+    \path ($(-mid)!0.22cm!#3:(-t#2)$) node[self intersection] {$#4$}
+      ($(-mid)!-0.22cm!#3:(-t#2)$) node[self intersection] {$#5$};
+  \fi}
+\tikzset{pics/sterk2 kulikov/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}%
+  \foreach \n/\x/\y in \dzg@ias@sterkpoints \coordinate (-\n) at (\x,\y);
+  \begin{scope}[on background layer]
+    \foreach \x/\y in \dzg@ias@sterksquares {
+      \fill[ias region] (\x,\y) rectangle ++(1,1);
+      \draw[lattice grid] (\x,\y) rectangle ++(1,1) (\x,\y+1) -- ++(1,-1);}
+  \end{scope}
+  \foreach \t/\u/\v/\w in \dzg@ias@triangles
+    \coordinate (-t\t) at (barycentric cs:-\u=1,-\v=1,-\w=1);
+  % Double curves of the interior edges and of the glued edges.
+  \draw[double curve] (-t1) -- (-t2)  (-t1) -- (-t3) -- (-t4)  (-t2) -- (-t7)
+    -- (-t8)  (-t5) -- (-t6) -- (-t12) -- (-t11) -- (-t9) -- (-t10)
+    (-t3) -- (-t6)  (-t7) -- (-t9)  (-t4) -- (-t5)  (-t8) -- (-t10);
+  % Double curves of ef ~ kj, ge ~ nk and of their images hi ~ ml, gh ~ nm
+  % under the reflection (x,y) -> (1-y,1-x) in l_dP.
+  \draw[double curve] (-t4) to[curve through={(0.55,2.45) (1.4,3.0) (2.5,2.6)
+      (3.0,1.4) (2.45,0.55)}] (-t5);
+  \draw[double curve] (-t1) to[curve through={(-0.4,2.7) (0.8,3.8) (2.6,3.6)
+      (3.6,2.6) (3.8,0.8) (2.7,-0.4)}] (-t12);
+  \draw[double curve] (-t8) to[curve through={(-1.45,0.45) (-2.0,-0.4) (-1.6,-1.5)
+      (-0.4,-2.0) (0.45,-1.45)}] (-t10);
+  \draw[double curve] (-t2) to[curve through={(-1.7,1.4) (-2.8,0.2) (-2.6,-1.6)
+      (-1.6,-2.6) (0.2,-2.8) (1.4,-1.7)}] (-t11);
+  \foreach \t/\u/\v/\w in \dzg@ias@triangles \node[triple point] at (-t\t) {};
+  % Components: g on ge, n on nd, b on ab ~ db and fb ~ jb, c on ac ~ dc and
+  % ic ~ lc carry 0; the component across carries -2.
+  \dzg@ias@selfint{1}{2}{-90}{0}{-2}{0.5}%
+  \dzg@ias@selfint{12}{11}{90}{0}{-2}{0.5}%
+  \dzg@ias@selfint{3}{6}{90}{0}{-2}{0.35}%
+  \dzg@ias@selfint{4}{5}{-90}{0}{-2}{0.65}%
+  \dzg@ias@selfint{7}{9}{-90}{0}{-2}{0.65}%
+  \dzg@ias@selfint{8}{10}{90}{0}{-2}{0.35}%
+  % Around R: 6 in the component inside the loop, -8 outside.
+  \ifdzg@ias@labels
+    \path (2.4,2.3) node[self intersection] {$6$} (2.75,2.7) node[self intersection] {$-8$}
+      (3.05,2.9) node[self intersection] {$6$} (3.55,3.35) node[self intersection] {$-8$}
+      (-1.3,-1.4) node[self intersection] {$6$} (-1.7,-1.75) node[self intersection] {$-8$}
+      (-1.9,-2.05) node[self intersection] {$6$} (-2.35,-2.55) node[self intersection] {$-8$};
+  \fi}}}
