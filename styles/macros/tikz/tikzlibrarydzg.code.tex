@@ -16,15 +16,16 @@
 %   Baily-Borel .... cusp0, cusp1, cusp label, incidence, cusp brace, cusp map,
 %                    cusp image, doubled mark
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
-%                    fan ray, kulikov component, double curve
+%                    fan ray, kulikov component, double curve, ias chart
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
 %                    short side, boundary point, marked point
-%   posets, moduli . poset node, degeneration, moduli blob, stratum
+%   posets, moduli . poset node, degeneration, moduli blob, stratum, hyperplane
 %   curves ......... curve component, curve node, dual vertex, genus
 % =============================================================================
 
 \usetikzlibrary{arrows.meta, backgrounds, calc, decorations.pathreplacing,
-  decorations.markings, fit, hobby, positioning, shapes.geometric, shapes.misc}
+  decorations.markings, fit, hobby, patterns, positioning, shapes.geometric,
+  shapes.misc}
 
 % -----------------------------------------------------------------------------
 % Layers
@@ -159,6 +160,13 @@
   double curve/.style={draw, line width=1.4pt},
   nontoric blowup/.style={circle, fill=dzg singular, inner sep=0pt,
     minimum size=4pt},
+  % The charts of an integral-affine structure, told apart by hatching:
+  %   \fill[ias chart=1] ...;   (1 to 4)
+  ias chart/.style={ias chart/#1},
+  ias chart/1/.style={pattern=north east lines, pattern color=green!60!black},
+  ias chart/2/.style={pattern=vertical lines, pattern color=dzg accent},
+  ias chart/3/.style={pattern=north west lines, pattern color=dzg singular},
+  ias chart/4/.style={pattern=horizontal lines, pattern color=orange!60!black},
 }
 
 % -----------------------------------------------------------------------------
@@ -187,6 +195,8 @@
   moduli blob/.style={fill=dzg blob, draw, line width=0.8pt},
   stratum/.style={circle, fill=black, inner sep=0pt, minimum size=4pt},
   boundary stratum/.style={draw=dzg singular, line width=1.4pt},
+  % A hyperplane v^perp in a period domain.
+  hyperplane/.style={draw=dzg singular, line width=0.8pt},
 }
 
 % -----------------------------------------------------------------------------
