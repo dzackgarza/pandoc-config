@@ -5,15 +5,7 @@
 % Arrows point from a stratum to a stratum in its closure, one node added per step.
 % Curves are Hobby splines (tikzlibrary hobby, loaded by dzg-preamble): each is
 % specified only by the points it passes through, in order.
-\begin{tikzpicture}[
-  >=Latex,
-  line cap=round,
-  line join=round,
-  every node/.style={font=\small},
-  curve/.style={thick},
-  vertex/.style={circle, fill=black, inner sep=0pt, minimum size=5pt},
-  deg/.style={->, shorten >=5pt, shorten <=5pt},
-]
+\begin{tikzpicture}
 
 \def\colA{0}
 \def\colB{4.6}
@@ -30,37 +22,37 @@
 
 % smooth genus 2
 \begin{scope}[shift={(\colA,0)}, local bounding box=C0]
-  \draw[curve] (-1,0) to[curve through={(-0.5,0.3) .. (0,0) .. (0.5,-0.3)}] (1,0);
-  \node[left] at (-1.05,0.15) {$2$};
+  \draw[curve component] (-1,0) to[curve through={(-0.5,0.3) .. (0,0) .. (0.5,-0.3)}] (1,0);
+  \node[genus, left] at (-1.05,0.15) {$2$};
 \end{scope}
 
 % two genus-1 components meeting in one node
 \begin{scope}[shift={(\colB,\rowUp)}, local bounding box=C1a]
-  \draw[curve] (-1,0.5) to[curve through={(-0.4,0.12) .. (0,0) .. (0.4,-0.12)}] (1,-0.5);
-  \draw[curve, yscale=-1] (-1,0.5) to[curve through={(-0.4,0.12) .. (0,0) .. (0.4,-0.12)}] (1,-0.5);
-  \node[left] at (-0.95,0.55) {$1$};
-  \node[right] at (0.95,0.55) {$1$};
+  \draw[curve component] (-1,0.5) to[curve through={(-0.4,0.12) .. (0,0) .. (0.4,-0.12)}] (1,-0.5);
+  \draw[curve component, yscale=-1] (-1,0.5) to[curve through={(-0.4,0.12) .. (0,0) .. (0.4,-0.12)}] (1,-0.5);
+  \node[genus, left] at (-0.95,0.55) {$1$};
+  \node[genus, right] at (0.95,0.55) {$1$};
 \end{scope}
 
 % irreducible genus 1 with one node
 \begin{scope}[shift={(\colB,\rowDn)}, local bounding box=C1b]
-  \draw[curve] (-1,-0.45)
+  \draw[curve component] (-1,-0.45)
     to[curve through={(0,0) .. (0.75,0.4) .. (1.1,0) .. (0.75,-0.4) .. (0,0)}] (-1,0.45);
-  \node[above right] at (0.35,0.4) {$1$};
+  \node[genus, above right] at (0.35,0.4) {$1$};
 \end{scope}
 
 % genus 1 meeting a nodal rational curve
 \begin{scope}[shift={(\colC,\rowUp)}, local bounding box=C2a]
-  \draw[curve] (-0.7,0.6) to[curve through={(-0.5,0)}] (-0.1,-0.65);
-  \draw[curve] (-1,-0.4)
+  \draw[curve component] (-0.7,0.6) to[curve through={(-0.5,0)}] (-0.1,-0.65);
+  \draw[curve component] (-1,-0.4)
     to[curve through={(-0.5,-0.15) .. (0.1,0) .. (0.4,0.35) .. (0.2,0.55) .. (0,0.35)
                       .. (0.3,0.02) .. (0.7,-0.1)}] (1.1,-0.4);
-  \node[left] at (-0.75,0.6) {$1$};
+  \node[genus, left] at (-0.75,0.6) {$1$};
 \end{scope}
 
 % irreducible rational with two nodes
 \begin{scope}[shift={(\colC,\rowDn)}, local bounding box=C2b]
-  \draw[curve] (-1.3,-0.2)
+  \draw[curve component] (-1.3,-0.2)
     to[curve through={(-0.9,0) .. (-0.6,0.35) .. (-0.8,0.55) .. (-1,0.35) .. (-0.7,0.02)
                       .. (0,-0.25)
                       .. (0.6,0) .. (0.9,0.35) .. (0.7,0.55) .. (0.5,0.35) .. (0.8,0.02)}] (1.3,-0.2);
@@ -68,34 +60,34 @@
 
 % two nodal rational curves meeting in one node
 \begin{scope}[shift={(\colD,\rowUp)}, local bounding box=C3a]
-  \draw[curve] (-1.4,-0.2)
+  \draw[curve component] (-1.4,-0.2)
     to[curve through={(-0.9,0) .. (-0.6,0.35) .. (-0.8,0.55) .. (-1,0.35) .. (-0.7,0.02)
                       .. (0,-0.25)}] (0.8,-0.55);
-  \draw[curve, xscale=-1] (-1.4,-0.2)
+  \draw[curve component, xscale=-1] (-1.4,-0.2)
     to[curve through={(-0.9,0) .. (-0.6,0.35) .. (-0.8,0.55) .. (-1,0.35) .. (-0.7,0.02)
                       .. (0,-0.25)}] (0.8,-0.55);
 \end{scope}
 
 % two rational curves meeting in three nodes
 \begin{scope}[shift={(\colD,\rowDn)}, local bounding box=C3b]
-  \draw[curve] (-1.2,0.3)
+  \draw[curve component] (-1.2,0.3)
     to[curve through={(-0.8,0) .. (-0.4,-0.3) .. (0,0) .. (0.4,0.3) .. (0.8,0)}] (1.2,-0.3);
-  \draw[curve, yscale=-1] (-1.2,0.3)
+  \draw[curve component, yscale=-1] (-1.2,0.3)
     to[curve through={(-0.8,0) .. (-0.4,-0.3) .. (0,0) .. (0.4,0.3) .. (0.8,0)}] (1.2,-0.3);
 \end{scope}
 
-\draw[deg] (C0) -- (C1a);
-\draw[deg] (C0) -- (C1b);
-\draw[deg] (C1a) -- (C2a);
-\draw[deg] (C1b) -- (C2a);
-\draw[deg] (C1b) -- (C2b);
-\draw[deg] (C2a) -- (C3a);
-\draw[deg] (C2b) -- (C3a);
-\draw[deg] (C2b) -- (C3b);
+\draw[degeneration] (C0) -- (C1a);
+\draw[degeneration] (C0) -- (C1b);
+\draw[degeneration] (C1a) -- (C2a);
+\draw[degeneration] (C1b) -- (C2a);
+\draw[degeneration] (C1b) -- (C2b);
+\draw[degeneration] (C2a) -- (C3a);
+\draw[degeneration] (C2b) -- (C3a);
+\draw[degeneration] (C2b) -- (C3b);
 
 \end{scope}
 
-\draw[dashed, thick] (\colA-1.5,1.6) -- (\colD+1.5,1.6);
+\draw[dashed] (\colA-1.5,1.6) -- (\colD+1.5,1.6);
 
 % ===========================================================================
 % Bottom half: dual graphs
@@ -104,46 +96,46 @@
 
 % one genus-2 vertex
 \begin{scope}[shift={(\colA,0)}, local bounding box=G0]
-  \node[vertex] (v) at (0,0) {};
-  \node[left=3pt] at (v) {$2$};
+  \node[dual vertex] (v) at (0,0) {};
+  \node[genus, left=3pt] at (v) {$2$};
 \end{scope}
 
 % two genus-1 vertices joined by an edge
 \begin{scope}[shift={(\colB,\rowUp)}, local bounding box=G1a]
-  \node[vertex] (l) at (-0.45,0) {};
-  \node[vertex] (r) at (0.45,0) {};
+  \node[dual vertex] (l) at (-0.45,0) {};
+  \node[dual vertex] (r) at (0.45,0) {};
   \draw (l) -- (r);
-  \node[left=3pt] at (l) {$1$};
-  \node[right=3pt] at (r) {$1$};
+  \node[genus, left=3pt] at (l) {$1$};
+  \node[genus, right=3pt] at (r) {$1$};
 \end{scope}
 
 % one genus-1 vertex with a loop
 \begin{scope}[shift={(\colB,\rowDn)}, local bounding box=G1b]
   \draw (\loopr,0) circle (\loopr);
-  \node[vertex] (v) at (0,0) {};
-  \node[left=3pt] at (v) {$1$};
+  \node[dual vertex] (v) at (0,0) {};
+  \node[genus, left=3pt] at (v) {$1$};
 \end{scope}
 
 % genus-1 vertex joined to a genus-0 vertex with a loop
 \begin{scope}[shift={(\colC,\rowUp)}, local bounding box=G2a]
-  \node[vertex] (l) at (-0.45,0) {};
-  \node[vertex] (r) at (0.45,0) {};
+  \node[dual vertex] (l) at (-0.45,0) {};
+  \node[dual vertex] (r) at (0.45,0) {};
   \draw (l) -- (r);
   \draw (r) ++(\loopr,0) circle (\loopr);
-  \node[left=3pt] at (l) {$1$};
+  \node[genus, left=3pt] at (l) {$1$};
 \end{scope}
 
 % one genus-0 vertex with two loops
 \begin{scope}[shift={(\colC,\rowDn)}, local bounding box=G2b]
   \draw (-\loopr,0) circle (\loopr);
   \draw (\loopr,0) circle (\loopr);
-  \node[vertex] at (0,0) {};
+  \node[dual vertex] at (0,0) {};
 \end{scope}
 
 % two genus-0 vertices joined by an edge, each with a loop
 \begin{scope}[shift={(\colD,\rowUp)}, local bounding box=G3a]
-  \node[vertex] (l) at (-0.45,0) {};
-  \node[vertex] (r) at (0.45,0) {};
+  \node[dual vertex] (l) at (-0.45,0) {};
+  \node[dual vertex] (r) at (0.45,0) {};
   \draw (l) -- (r);
   \draw (l) ++(-\loopr,0) circle (\loopr);
   \draw (r) ++(\loopr,0) circle (\loopr);
@@ -151,21 +143,21 @@
 
 % theta graph: two genus-0 vertices joined by three edges
 \begin{scope}[shift={(\colD,\rowDn)}, local bounding box=G3b]
-  \node[vertex] (l) at (-0.55,0) {};
-  \node[vertex] (r) at (0.55,0) {};
+  \node[dual vertex] (l) at (-0.55,0) {};
+  \node[dual vertex] (r) at (0.55,0) {};
   \draw (l) -- (r);
   \draw (l) to[bend left=50] (r);
   \draw (l) to[bend right=50] (r);
 \end{scope}
 
-\draw[deg] (G0) -- (G1a);
-\draw[deg] (G0) -- (G1b);
-\draw[deg] (G1a) -- (G2a);
-\draw[deg] (G1b) -- (G2a);
-\draw[deg] (G1b) -- (G2b);
-\draw[deg] (G2a) -- (G3a);
-\draw[deg] (G2b) -- (G3a);
-\draw[deg] (G2b) -- (G3b);
+\draw[degeneration] (G0) -- (G1a);
+\draw[degeneration] (G0) -- (G1b);
+\draw[degeneration] (G1a) -- (G2a);
+\draw[degeneration] (G1b) -- (G2a);
+\draw[degeneration] (G1b) -- (G2b);
+\draw[degeneration] (G2a) -- (G3a);
+\draw[degeneration] (G2b) -- (G3a);
+\draw[degeneration] (G2b) -- (G3b);
 
 \end{scope}
 

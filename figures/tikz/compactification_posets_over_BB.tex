@@ -1,204 +1,64 @@
-﻿\usetikzlibrary{arrows.meta,calc,fit,backgrounds}
+% Compactifications of F_T over the Baily-Borel compactification. Inside each
+% sub-poset the arrows point from the generic member to the more degenerate
+% one; thick arrows are morphisms of compactifications.
+\begin{tikzpicture}[font=\small]
+  % Strictly non-toroidal semitoroidal compactifications.
+  \begin{scope}[nodes={poset node, dashed, minimum width=2.7cm, minimum height=0.9cm}]
+    \node (SemiTop) at (0,10)    {$\semitorcpt{F_T}$};
+    \node (SemiL2)  at (-4.5,8.3) {$\semifancpt{F_T}{\mcf_\bullet^{1,2}}$};
+    \node (SemiR3)  at (0,8.3)   {$\semifancpt{F_T}{\mcf_\bullet^{2,3}}$};
+    \node (SemiR4)  at (4,8.3)   {$\semifancpt{F_T}{\mcf_\bullet^{3,4}}$};
+    \node (SemiL1)  at (-6,6.7)  {$\semifancpt{F_T}{\mcf_\bullet^1}$};
+    \node (SemiM1)  at (-2,6.7)  {$\semifancpt{F_T}{\mcf_\bullet^2}$};
+    \node (SemiR1)  at (2,6.7)   {$\semifancpt{F_T}{\mcf_\bullet^3}$};
+    \node (SemiR2)  at (6,6.7)   {$\semifancpt{F_T}{\mcf_\bullet^4}$};
+  \end{scope}
+  % Toroidal compactifications; the Coxeter fan is highlighted.
+  \begin{scope}[nodes={poset node, minimum width=2.7cm, minimum height=0.9cm}]
+    \node (TorTop) at (0,5)     {$\torcpt{F_T}$};
+    \node (Tor12)  at (-2,3.5)  {$\semifancpt{F_T}{\Sigma_\bullet^{1,2}}$};
+    \node (Tor23)  at (2,3.5)   {$\semifancpt{F_T}{\Sigma_\bullet^{2,3}}$};
+    \node (Tor1)   at (-4.5,2)  {$\semifancpt{F_T}{\Sigma_\bullet^1}$};
+    \node[fill=dzg highlight] (Tor2) at (0,2) {$\semifancpt{F_T}{\Sigma_\Cox}$};
+    \node (Tor3)   at (4.5,2)   {$\semifancpt{F_T}{\Sigma_\bullet^3}$};
+    \node[minimum width=1.6cm] (GIT)  at (-5,0) {$\gitcpt{\mcm}$};
+    \node[minimum width=1.6cm] (KSBA) at (5,0)  {$\ksbacpt{\mcm}$};
+    \node[minimum width=3.8cm] (BB)   at (0,-2) {$\bbcpt{F_T}$};
+  \end{scope}
 
-\pgfdeclarelayer{bgouter}
-\pgfdeclarelayer{bginner}
-\pgfsetlayers{bgouter,bginner,main}
+  \graph[use existing nodes, edges={degeneration}] {
+    {SemiL1, SemiM1} -> SemiL2;
+    {SemiM1, SemiR1} -> SemiR3;
+    {SemiR1, SemiR2} -> SemiR4;
+    {SemiL2, SemiR3, SemiR4} -> SemiTop;
+    {Tor1, Tor2} -> Tor12;
+    {Tor2, Tor3} -> Tor23;
+    {Tor12, Tor23} -> TorTop;
+  };
+  \graph[use existing nodes, edges={morphism}] {
+    SemiL1 -> Tor1;
+    SemiM1 -> Tor12;
+    SemiR1 -> Tor23;
+    SemiR2 -> Tor3;
+    SemiL2 -> [bend right=15] Tor12;
+    SemiR3 -> TorTop;
+    SemiR4 -> [bend left=15] Tor23;
+    {Tor1, Tor2, Tor3} -> BB;
+    GIT -> [bend right=15] BB;
+    KSBA -> [bend left=15] BB;
+  };
 
-\begin{tikzpicture}[
-  every node/.style={font=\small},
-  cpt/.style={
-    draw,
-    rounded corners,
-    inner xsep=6pt,
-    inner ysep=4pt,
-    align=center
-  },
-  tor/.style={
-    cpt,
-    minimum width=2.7cm
-  },
-  torcox/.style={
-   fill=red!15
-  },
-  semi/.style={
-    cpt,
-    dashed,
-    minimum width=2.7cm
-  },
-  map/.style={->, >=Stealth, thick},
-  poset/.style={->, >=Stealth, thin},
-  torbox/.style={
-    draw,
-    rounded corners,
-    inner sep=8pt,
-    fill=blue!8
-  },
-  nonTorbox/.style={
-    draw,
-    rounded corners,
-    inner sep=8pt,
-    fill=orange!10
-  },
-  allbox/.style={
-    draw,
-    rounded corners,
-    inner sep=12pt,
-    fill=gray!20
-  },
-  boxlabel/.style={
-    font=\scriptsize,
-    inner sep=2pt
-  }
-]
-
-
-\def\xa{4.5}
-\def\xb{2}
-\def\xc{6}
-
-%------------------------------------------------
-% Bottom: Baily--Borel
-%------------------------------------------------
-\node[cpt, minimum width=3.8cm] (BB) at (0,-2)
-  {$\bbcpt{F_T}$};
-
-%------------------------------------------------
-% Toroidal sub-poset
-%------------------------------------------------
-\node[tor] (Tor1) at (-\xa,2.0)
-  {$\semifancpt{F_T}{\Sigma_\bullet^1}$};
-
-\node[tor, torcox] (Tor2) at (0.0,2.0)
-  {$\semifancpt{F_T}{\Sigma_\Cox}$};
-
-\node[tor] (Tor3) at (\xa,2.0)
-  {$\semifancpt{F_T}{\Sigma_\bullet^3}$};
-
-\node[tor] (Tor12) at (-\xb,3.5)
-  {$\semifancpt{F_T}{\Sigma_\bullet^{1,2}}$};
-
-\node[tor] (Tor23) at (2,3.5)
-  {$\semifancpt{F_T}{\Sigma_\bullet^{2,3}}$};
-
-\node[tor] (TorTop) at (0,5.0)
-  {$\torcpt{F_T}$};
-
-% Poset arrows inside toroidal sub-poset
-\draw[poset] (TorTop) -- (Tor12);
-\draw[poset] (TorTop) -- (Tor23);
-
-\draw[poset] (Tor12) -- (Tor1);
-\draw[poset] (Tor12) -- (Tor2);
-
-\draw[poset] (Tor23) -- (Tor2);
-\draw[poset] (Tor23) -- (Tor3);
-
-% Toroidal maps to Baily--Borel
-\draw[map] (Tor1) -- (BB);
-\draw[map] (Tor2) -- (BB);
-\draw[map] (Tor3) -- (BB);
-
-%------------------------------------------------
-% Strictly non-toroidal semitoroidal sub-poset
-%------------------------------------------------
-\node[semi] (SemiL1) at (-\xc,6.7)
-  {$\semifancpt{F_T}{\mcf_\bullet^1}$};
-
-\node[semi] (SemiM1) at (-2,6.7)
-  {$\semifancpt{F_T}{\mcf_\bullet^2}$};
-
-\node[semi] (SemiR1) at (\xb,6.7)
-  {$\semifancpt{F_T}{\mcf_\bullet^3}$};
-
-\node[semi] (SemiR2) at (\xc,6.7)
-  {$\semifancpt{F_T}{\mcf_\bullet^4}$};
-
-\node[semi] (SemiL2) at (-\xa,8.3)
-  {$\semifancpt{F_T}{\mcf_\bullet^{1,2}}$};
-
-\node[semi] (SemiR3) at (0,8.3)
-  {$\semifancpt{F_T}{\mcf_\bullet^{2,3}}$};
-
-\node[semi] (SemiR4) at (\xa-0.5,8.3)
-  {$\semifancpt{F_T}{\mcf_\bullet^{3,4}}$};
-
-\node[semi] (SemiTop) at (0,10.0)
-  {$\semitorcpt{F_T}$};
-
-% Poset arrows inside strictly non-toroidal semitoroidal sub-poset
-\draw[poset] (SemiTop) -- (SemiL2);
-\draw[poset] (SemiTop) -- (SemiR3);
-\draw[poset] (SemiTop) -- (SemiR4);
-
-\draw[poset] (SemiL2) -- (SemiL1);
-\draw[poset] (SemiL2) -- (SemiM1);
-
-\draw[poset] (SemiR3) -- (SemiM1);
-\draw[poset] (SemiR3) -- (SemiR1);
-
-\draw[poset] (SemiR4) -- (SemiR1);
-\draw[poset] (SemiR4) -- (SemiR2);
-
-%------------------------------------------------
-% Maps from non-toroidal semitoroidals to some toroidals
-%------------------------------------------------
-\draw[map] (SemiL1) -- (Tor1);
-
-\draw[map] (SemiM1) -- (Tor12);
-\draw[map] (SemiR1) -- (Tor23);
-\draw[map] (SemiR2) -- (Tor3);
-
-\draw[map] (SemiL2) to[out=-80, in=90] (Tor12);
-\draw[map] (SemiR3) -- (TorTop);
-\draw[map] (SemiR4) to[out=-80, in=90] (Tor23);
-
-%------------------------------------------------
-% GIT and KSBA compactifications
-%------------------------------------------------
-\node[cpt] (GIT) at (-5,0)
-  {$\gitcpt{\mcm}$};
-
-\node[cpt] (KSBA) at (5,0)
-  {$\ksbacpt{\mcm}$};
-
-\draw[map] (GIT) to[out=-20,in=160] (BB);
-\draw[map] (KSBA) to[out=200,in=20] (BB);
-
-%------------------------------------------------
-% Background boxes
-%------------------------------------------------
-
-% Inner background layer: the two visible sub-posets.
-\begin{pgfonlayer}{bginner}
-  \node[
-    torbox,
-    fit=(Tor1)(Tor2)(Tor3)(Tor12)(Tor23)(TorTop)
-  ] (TorBox) {};
-
-  \node[
-    nonTorbox,
-    fit=(SemiL1)(SemiM1)(SemiR1)(SemiR2)
-        (SemiL2)(SemiR3)(SemiR4)(SemiTop)
-  ] (NonTorBox) {};
-\end{pgfonlayer}
-
-% Outer background layer: the ambient semitoroidal poset.
-% This is drawn underneath TorBox and NonTorBox even though it is defined later.
-\begin{pgfonlayer}{bgouter}
-  \node[
-    allbox,
-    fit=(TorBox)(NonTorBox)
-  ] (SemiAllBox) {};
-\end{pgfonlayer}
-
-% Labels on the main layer, so no fill can cover them.
-\node[boxlabel, anchor=east] at ([xshift=55pt, yshift=-6pt]TorBox.north west)
-  {Toroidal};
-
-\node[boxlabel, anchor=south] at ([xshift=45pt, yshift=-12pt]NonTorBox.north west)
-  {Strictly Non-Toroidal};
-
-\node[boxlabel, anchor=south] at ([xshift=65pt, yshift=-12pt]SemiAllBox.north west)
-  {Semitoroidal Compactifications};
-
+  \begin{scope}[on background layer]
+    \node[poset group, fill=dzg blob, inner sep=24pt,
+          fit=(SemiTop)(SemiL1)(SemiR2)(Tor1)(Tor3)] (SemiBox) {};
+    \node[poset group, fit=(Tor1)(Tor2)(Tor3)(Tor12)(Tor23)(TorTop)] (TorBox) {};
+    \node[poset group, fill=dzg highlight!40,
+          fit=(SemiL1)(SemiM1)(SemiR1)(SemiR2)(SemiL2)(SemiR3)(SemiR4)(SemiTop)]
+      (NonTorBox) {};
+  \end{scope}
+  \begin{scope}[nodes={font=\scriptsize, inner sep=4pt}]
+    \node[anchor=north west] at (SemiBox.north west) {Semitoroidal Compactifications};
+    \node[anchor=north west] at (NonTorBox.north west) {Strictly Non-Toroidal};
+    \node[anchor=south west] at (TorBox.south west) {Toroidal};
+  \end{scope}
 \end{tikzpicture}

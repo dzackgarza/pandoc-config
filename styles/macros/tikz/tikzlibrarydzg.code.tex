@@ -18,7 +18,8 @@
 %                    fan ray, kulikov component, double curve
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
 %                    short side, boundary point, marked point
-%   posets, moduli . poset node, degeneration, moduli blob, stratum
+%   posets, moduli . poset node, degeneration, morphism, poset group,
+%                    moduli blob, stratum, boundary stratum
 %   curves ......... curve component, curve node, dual vertex, genus
 % =============================================================================
 
@@ -176,6 +177,13 @@
   moduli blob/.style={fill=dzg blob, draw, line width=0.8pt},
   stratum/.style={circle, fill=black, inner sep=0pt, minimum size=4pt},
   boundary stratum/.style={draw=dzg singular, line width=1.4pt},
+  % A morphism of spaces, e.g. the contraction of one compactification onto
+  % another.
+  morphism/.style={->, line width=0.9pt, shorten >=2pt, shorten <=2pt},
+  % A box around a sub-poset: \node[poset group, fit=(a)(b)(c)] {};
+  % draw it on the background layer.
+  poset group/.style={draw, rounded corners=4pt, line width=0.5pt,
+    fill=dzg region, inner sep=8pt},
 }
 
 % -----------------------------------------------------------------------------
