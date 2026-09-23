@@ -10,7 +10,6 @@ files an author opens to change a picture.
 | `triangulated_sphere.blend` | Blender | the triangulated-sphere figures (`triangulated_sphere_fan`) |
 | `Sterk2-ias-bigger.ggb` | GeoGebra | the Sterk-2 integral affine structure |
 | `sterk_ias_export.svg`, `sterk_ias_export_v2.svg` | Inkscape/GeoGebra export | intermediate exports of the same IAS |
-| `nikulin_diagram_axes_scaffold.tikz` | pgfplots | the empty 22x11 axis grid the Nikulin 2-elementary diagram is drawn on |
 
 Consolidated from `research/writing/Coble Paper Draft`, where they were the only
 copies.

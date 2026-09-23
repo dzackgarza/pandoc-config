@@ -1,39 +1,7 @@
-\begin{tikzpicture}[y=-1cm]
-  % The dual complex Gamma(X_0); y points downward. The northwest corner of the
-  % northwesternmost square is (0,0).
-  \draw[lattice grid] (-2.5, -2.5) grid (5.5, 5.5);
-
-  % Unit squares of the dual complex, by top-left corner.
-  \foreach \x/\y in {0/0, 1/0, 0/1, 2/1, 1/2, 2/2}
-    \fill[polygon region] (\x, \y) rectangle ++(1, 1);
-
-  % Ambient diamond and lattice lines.
-  \draw[short side, dashed] (-2, 2) -- (2, -2) -- (5, 1) -- (1, 5) -- cycle
-    (0, 0) -- (2, 0)  (2, -2) -- (2, 2)  (1, 1) -- (5, 1)  (-2, 2) -- (2, 2)
-    (1, 3) -- (3, 3)  (0, 0) -- (0, 2)  (1, 1) -- (1, 5)  (3, 1) -- (3, 3);
-
-  % Internal square edges and diagonals.
-  \draw[ias edge] (1, 0) -- (1, 1) -- (0, 1)  (1, 0) -- (2, 1) -- (3, 2)
-    (0, 1) -- (1, 2) -- (2, 3)  (2, 3) -- (2, 2) -- (3, 2);
-
-  % The line ell_En through (1,2) and (2,1).
-  \draw[long side, dashed] (-1, 4) -- (4, -1);
-  % The line ell_dP: solid, dashed across the middle square, solid.
-  \draw[long side, draw=dzg accent] (0, 0) -- (1, 1)  (2, 2) -- (3, 3);
-  \draw[long side, draw=dzg accent, dashed] (1, 1) -- (2, 2);
-
-  \foreach \p in {(2, 2), (2, 3), (3, 2)}
-    \node[stratum] at \p {};
-
-  % Singular points with their multiplicities.
-  \foreach \p/\m in {(1, 2)/2, (1, 3)/2, (2, 1)/2, (3, 1)/2, (3, 3)/16}
-    \node[ias singularity=\m] at \p {};
-
-  \node[font=\huge] at (-1.0, -0.7) {$\Gamma(\mathcal{X}_0)$};
-
-  % Directions of the two lines.
-  \draw[long side, <->] (3.95, -1.05) -- (4.95, -0.05)
-    node[right, font=\LARGE] {$\ell_{\mathrm{En}}$};
-  \draw[long side, <->, draw=dzg accent, text=dzg accent] (3.55, 4.15) -- (4.65, 3.05)
-    node[right, font=\LARGE] {$\ell_{\mathrm{dP}}$};
+% Gamma(X_0) of the F_{En,2} example with the fixed lines of i_En and i_dP,
+% as in the Gamma(X_0) panel of the stable-model figure.
+\begin{tikzpicture}
+  \pic[ias involutions] (G) {sterk2 ias};
+  \foreach \p in {d, k, m} \node[stratum] at (G-\p) {};
+  \node[font=\huge] at (-2.3, 3.2) {$\Gamma(\mathcal{X}_0)$};
 \end{tikzpicture}
