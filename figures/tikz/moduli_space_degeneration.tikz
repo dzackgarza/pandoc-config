@@ -7,18 +7,18 @@
   \draw[moduli blob] (-4.5,-0.2) to[closed, curve through={
     (-0.5,2.3) (bdtop) (bdbot) (-1.2,-1.7)}] (-4.5,-0.2);
   \draw[boundary stratum] (bdbot) -- (bdtop)
-    node[pos=0.65, right, text=dzg singular] {$\partial\mathcal M$};
-  \node at (-2.9,1.95) {$\mathcal M$};
+    node[pos=0.95, right, text=dzg singular] {$\partial\mathcal M$};
+  \node at (-3.9,1.6) {$\mathcal M$};
 
   \coordinate (p0) at (-2.7,1.05);
   \coordinate (pt) at (0.25,0.82);
-  \coordinate (pinf) at (4.02,0.55);
+  \coordinate (pinf) at ($(bdbot)!0.68!(bdtop)$);
   \draw[degeneration] (-3.4,0.85)
     to[curve through={(p0) (pt)}] (pinf);
   \node[above] at (-0.3,1.05) {$C$};
   \node[stratum, label=above left:$0$] at (p0) {};
   \node[stratum, label=above:$t$] at (pt) {};
-  \node[stratum, fill=dzg singular, label={[text=dzg singular]above right:$\infty$}]
+  \node[stratum, fill=dzg singular, label={[text=dzg singular]right:$\infty$}]
     at (pinf) {};
 
   % Fibres: a smooth surface over 0 and t, two crossing components over infinity.
@@ -35,5 +35,5 @@
       (\x+0.6,-1.3);
   }
   \draw[curve component] (2.62,-1.63) -- (3.63,-0.83) (2.62,-0.83) -- (3.63,-1.63);
-  \draw[->, dzg singular] (4.02,0.38) -- (3.15,-0.35);
+  \draw[->, dzg singular] ([yshift=-5pt]pinf) -- (3.15,-0.35);
 \end{tikzpicture}

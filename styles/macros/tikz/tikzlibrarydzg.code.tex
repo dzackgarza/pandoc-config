@@ -191,11 +191,15 @@
   ias edge/.style={draw, line width=0.5pt},
   % Singular point; the optional value is its multiplicity, set as a label:
   %   \node[ias singularity=16] at (p) {};
-  ias singularity/.style={star, star points=5, star point ratio=2.4,
-    draw=dzg singular, fill=white, line width=0.8pt, inner sep=0pt,
-    minimum size=9pt,
-    label={[font=\footnotesize, text=dzg singular, inner sep=1pt]above right:#1}},
+  ias singularity/.code={\tikzset{ias singularity/mark}%
+    \ifx\relax#1\relax\else\tikzset{ias singularity/multiplicity={#1}}\fi},
   ias singularity/.default={},
+  ias singularity/mark/.style={star, star points=5, star point ratio=2.4,
+    draw=dzg singular, fill=white, line width=0.8pt, inner sep=0pt,
+    minimum size=9pt},
+  ias singularity/multiplicity/.style={label={[font=\footnotesize,
+    text=dzg singular, fill=white, inner sep=1pt, label distance=1pt]
+    above right:#1}},
   ias surgery/.style={fill=dzg singular!35, draw=dzg singular, line width=0.6pt},
   fan ray/.style={->, draw=dzg accent, line width=1pt},
   kulikov component/.style={draw, line width=0.6pt, fill=dzg region},
