@@ -20,7 +20,8 @@
 %                    fan ray, kulikov component, double curve
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
 %                    short side, axis side, boundary point, marked point,
-%                    side label, monomial, polygon title
+%                    side label, monomial, polygon title, polytope edge,
+%                    distinguished point, coordinate axis, hatched region
 %   posets, moduli . poset node, degeneration, morphism, poset group,
 %                    moduli blob, stratum, boundary stratum,
 %                    mirror move=complement|U|U(2)
@@ -203,6 +204,16 @@
   % The monomial x^i y^j written at the lattice point (i,j).
   monomial/.style={font=\scriptsize, inner sep=4.5pt},
   polygon title/.style={font=\large, inner sep=2pt},
+  % An edge of a lattice polytope (moment polytope, polytope of a fan).
+  polytope edge/.style={draw, line width=0.8pt},
+  % A lattice point the text singles out: a polytope vertex, a cone generator,
+  % the origin of a fan; `lattice point` is the ambient lattice around it.
+  distinguished point/.style={circle, fill=black, inner sep=0pt,
+    minimum size=4.5pt},
+  % A coordinate axis of the ambient real vector space.
+  coordinate axis/.style={->, draw=dzg muted, line width=0.4pt},
+  % A cone or region marked by hatching, where filled regions would overlap.
+  hatched region/.style={pattern=north east lines, pattern color=dzg muted},
 }
 
 % -----------------------------------------------------------------------------
