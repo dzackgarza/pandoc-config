@@ -6,26 +6,13 @@
 
 \begin{document}
 \begin{tikzpicture}
-  \node (E2) {
-    $\begin{tikzcd}[row sep=4em, column sep=3.5em]
-      % q = 1
-        \mathbb{Z} & H_1(B) & H_2(B) & H_3(B) & H_4(B) & H_5(B) & H_6(B) & \cdots
-      \\
-      % q = 0
-        \mathbb{Z}
-      & H_1(B)
-      & H_2(B) \arrow[to=1-1]
-      & H_3(B) \arrow[to=1-2]
-      & H_4(B) \arrow[to=1-3]
-      & H_5(B) \arrow[to=1-4]
-      & H_6(B) \arrow[to=1-5]
-      & \cdots
-    \end{tikzcd}$
-  };
-  % L-shaped axes around the page.
-  \node[fit=(E2), inner xsep=0.8em, inner ysep=1.2em] (page) {};
-  \draw (page.north west) -- (page.south west) -- (page.south east);
-  \node[below, font=\small] at (page.south east) {$p$ (base degree)};
-  \node[left, font=\small] at (page.north west) {$q$ (fiber degree)};
+  \pic (E) [ss homological, ss p={0,...,7}, ss q={0,1}, ss ticks=false,
+    ss p name={$p$ (base degree)}, ss q name={$q$ (fiber degree)},
+    ss column sep=1.8cm, ss row sep=1.5cm] {ss page};
+  \foreach \q in {0,1} {
+    \ssentry{E}{0}{\q}{$\mathbb{Z}$}
+    \foreach \p in {1,...,6} {\ssentry{E}{\p}{\q}{$H_{\p}(B)$}}
+    \ssentry{E}{7}{\q}{$\cdots$}}
+  \foreach \p in {2,...,6} {\ssdifferential[ss unlabelled]{E}{2}{\p}{0}}
 \end{tikzpicture}
 \end{document}

@@ -1,12 +1,9 @@
+% The torus with its two factor circles, a longitude and a meridian; the back
+% half of the meridian dashed.
 \begin{tikzpicture}[scale=\textwidth/10cm]
-  % the torus
-  \draw (0,0) arc (0:360:4cm and 2cm);
-  \draw (-2,.5) arc (0:-180:2cm and .8cm);
-  \draw (-4,.5) arc (90:150:2cm and .8cm);
-  \draw (-4,.5) arc (90:30:2cm and .8cm);
-  % the two factor circles; the back half of the meridian dashed
-  \draw[distinguished curve] (-4,.5) ellipse (3cm and 1cm);
-  \draw[distinguished curve] (-5,-.25) arc (90:270:.5cm and .85cm);
-  \draw[distinguished curve, dashed] (-5,-.25) arc (90:-90:.5cm and .85cm);
-  \node at (-4,-3) {$T^2 = S^1 \times S^1$};
+  \pic[space labels=none] (T) {torus};
+  \draw[distinguished curve] (T-longitude) ellipse (3 and 1);
+  \draw[distinguished curve] (T-meridian) arc (90:270:0.5 and 0.85);
+  \draw[distinguished curve, dashed] (T-meridian) arc (90:-90:0.5 and 0.85);
+  \node at (0,-3) {$T^2 = S^1 \times S^1$};
 \end{tikzpicture}

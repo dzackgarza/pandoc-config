@@ -10,14 +10,8 @@
 \large
 \resizebox{\linewidth}{!}{
 
-% Sphere with equator and meridian
 \begin{tikzpicture}[scale=\textwidth/14cm]
-  \draw (-1,0) arc (180:360:1cm and 0.5cm);
-  \draw[dashed] (-1,0) arc (180:0:1cm and 0.5cm);
-  \draw (0,1) arc (90:270:0.5cm and 1cm);
-  \draw[dashed] (0,1) arc (90:-90:0.5cm and 1cm);
-  \draw (0,0) circle (1cm);
-  \shade[ball color=dzg region, opacity=0.2] (0,0) circle (1cm);
+  \pic[space labels=none] {sphere=2};
 \end{tikzpicture}
 \hspace{0.5cm}
 
@@ -28,18 +22,7 @@
   \end{axis}
 \end{tikzpicture}
 
-% Mobius band with its core circle (same drawing as MobiusBand.tikz)
-\begin{tikzpicture}[scale=\textwidth/40cm]
-  \begin{axis}[hide axis, view={40}{40}]
-    \addplot3[surf, colormap/cool, shader=faceted interp, point meta=x,
-        samples=40, samples y=5, z buffer=sort, domain=0:360, y domain=-0.5:0.5]
-      ({(1+0.5*y*cos(x/2))*cos(x)},
-       {(1+0.5*y*cos(x/2))*sin(x)},
-       {0.5*y*sin(x/2)});
-    \addplot3[distinguished curve, samples=50, domain=-145:180, samples y=0]
-      ({cos(x)}, {sin(x)}, {0});
-  \end{axis}
-\end{tikzpicture}
+\input{MobiusBand.tikz}
 }
 
 \end{document}

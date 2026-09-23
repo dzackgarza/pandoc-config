@@ -1,21 +1,19 @@
+% E^n page of the homological Serre spectral sequence of the path-loop
+% fibration ΩS^n → PS^n → S^n (n ≥ 2): E^2_{p,q} = H_p(S^n; H_q(ΩS^n)) is
+% nonzero only in the columns p = 0, n and the rows q = k(n-1), and the
+% differentials d_n have bidegree (-n, n-1). The same object as the n = 4
+% page (Pasted image 20220403184709) with the zero rows omitted.
 \documentclass[tikz,border=2pt]{standalone}
 \usepackage{dzg-tikz}
 
 \begin{document}
-% E^n page of the Serre spectral sequence for the path-loop fibration
-% ΩS^n → PS^n → S^n (n ≥ 2).
-%
-% Two nonzero columns: p = 0 and p = n.
-% Rows at q = 0, n-1, 2n-2, 3n-3.
-% Three d_n differentials of bidegree (-n, n-1).
-\begin{tikzcd}
-  & 0 & n \\
-  3n-3 & \mathbb{Z} & \mathbb{Z} \\
-  2n-2 & \mathbb{Z} & \mathbb{Z} \\
-  n-1  & \mathbb{Z} & \mathbb{Z} \\
-  0    & \mathbb{Z} & \mathbb{Z}
-  \arrow[from=5-3, to=4-2, "d_n"]
-  \arrow[from=4-3, to=3-2, "d_n"]
-  \arrow[from=3-3, to=2-2, "d_n"]
-\end{tikzcd}
+\begin{tikzpicture}
+  \pic (E) [ss homological, ss p={0,1}, ss p labels={0,n}, ss q={0,...,3},
+    ss q labels={0,n-1,2n-2,3n-3}, ss column sep=2.4cm] {ss page};
+  \foreach \p in {0,1} {\ssentry{E}{\p}{0}{$\mathbb{Z}$}}
+  \foreach \q/\d in {1/n-1, 2/2n-2, 3/3n-3} \foreach \p in {0,1}
+    {\ssentry{E}{\p}{\q}{$H_{\d}(\Omega S^n)$}}
+  \foreach \q [evaluate=\q as \t using int(\q+1)] in {0,1,2}
+    \draw[map arrow] (E-1-\q) -- (E-0-\t) node[midway, above, font=\small] {$d_n$};
+\end{tikzpicture}
 \end{document}

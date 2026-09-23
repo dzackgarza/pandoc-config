@@ -3,19 +3,26 @@
 \usepackage{mathdots}
 \begin{document}
 
+% The E_2 page of a cohomological spectral sequence, with the differentials
+% d_2^{p,q}: E_2^{p,q} -> E_2^{p+2,q-1}. The columns p = -2, 3 and the rows
+% q = -2, 3 hold the ellipses continuing the page.
 \begin{tikzpicture}
-\draw[dashed] (-4,-5) -- (-4,5);
-\draw[dashed] (-8,-2.3) -- (8,-2.3);
-\node[scale=1.5] (a) at (0,0) {
-\begin{tikzcd}
-\ddots  & \vdots                                  & \vdots                                 & \vdots                                & \vdots                                & \iddots \\
-\cdots  \ar[dzg singular, rrd, "d_2^{-1,2}" near start, swap]& E_2^{-1,2}  \ar[dzg singular, rrd, "d_2^{-1,2}" description]  & E_2^{0,2}  \ar[dzg singular, rrd, "d_2^{0,2}" description]  & E_2^{1,2}  \ar[dzg singular, rrd, "d_2^{1,2}" near end]  & E_2^{2,2} 	& \cdots     & \\
-\cdots  \ar[dzg singular, rrd, "d_2^{-1,2}" near start, swap]& E_2^{-1,1}  \ar[dzg singular, rrd, "d_2^{-1,1}" description]  & E_2^{0,1}  \ar[dzg singular, rrd, "d_2^{0,1}" description]  & E_2^{1,1}  \ar[dzg singular, rrd, "d_2^{1,1}" near end]  & E_2^{2,1}	 & \cdots     & \\
-\cdots  \ar[dzg singular, rrd, "d_2^{-1,2}" near start, swap]& E_2^{-1,0}  \ar[dzg singular, rrd, "d_2^{-1,0}" description]  & E_2^{0,0}  \ar[dzg singular, rrd, "d_2^{0,0}" description]  & E_2^{1,0}  \ar[dzg singular, rrd, "d_2^{1,0}" near end]  & E_2^{2,0}	& \cdots     & \\
-\cdots  \ar[dzg singular, rrd, "d_2^{-1,2}" near start, swap]& E_2^{-1,-1} \ar[dzg singular, rrd, "d_2^{-1,-1}" description] & E_2^{0,-1} \ar[dzg singular, rrd, "d_1^{0,-1}" description] & E_2^{1,-1} \ar[dzg singular, rrd, "d_1^{1,-1}" near end] & E_2^{2,-1}	 & \cdots     & \\
-\iddots & \vdots     & \vdots     & \vdots     & \vdots	    & \ddots     &
-\end{tikzcd}
-};
+  \pic (E) [ss p={-2,...,3}, ss q={-2,...,3}, ss ticks=false,
+    ss column sep=2.4cm, ss row sep=1.5cm] {ss page};
+  \foreach \p in {-1,...,2} \foreach \q in {-1,...,2}
+    {\ssentry{E}{\p}{\q}{$E_2^{\p,\q}$}}
+  \foreach \q in {-1,...,2} {
+    \ssentry{E}{-2}{\q}{$\cdots$}
+    \ssentry{E}{3}{\q}{$\cdots$}}
+  \foreach \p in {-1,...,2} {
+    \ssentry{E}{\p}{3}{$\vdots$}
+    \ssentry{E}{\p}{-2}{$\vdots$}}
+  \ssentry{E}{-2}{3}{$\ddots$}
+  \ssentry{E}{3}{3}{$\iddots$}
+  \ssentry{E}{-2}{-2}{$\iddots$}
+  \ssentry{E}{3}{-2}{$\ddots$}
+  \foreach \p in {-2,...,1} \foreach \q in {-1,...,2}
+    {\ssdifferential[dzg singular]{E}{2}{\p}{\q}}
 \end{tikzpicture}
 
 \end{document}

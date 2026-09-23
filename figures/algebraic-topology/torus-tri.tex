@@ -2,18 +2,14 @@
 \usepackage{dzg-tikz}
 \begin{document}
 \begin{tikzpicture}[scale=1.15]
-  \def\S{6}
-  % the fundamental square, triangulated: 3 x 3 cells, each cut by its diagonal
-  \fill[polygon region] (0,0) rectangle (\S,\S);
-  \draw[lattice grid, step=2] (0,0) grid (\S,\S);
-  \foreach \i in {0,2,4} \foreach \j in {0,2,4}
-    \draw[lattice grid] (\i,\j) -- (\i+2,\j+2);
+  \pic {torus fundamental square};
+  % the triangulation: 3 x 3 cells, each cut by its diagonal
+  \begin{scope}[on background layer]
+    \draw[lattice grid, step=2] (0,0) grid (6,6);
+    \foreach \i in {0,2,4} \foreach \j in {0,2,4}
+      \draw[lattice grid] (\i,\j) -- (\i+2,\j+2);
+  \end{scope}
   \foreach \i in {0,2,4,6} \foreach \j in {0,2,4,6}
     \node[lattice point] at (\i,\j) {};
-  % edge identifications: a (one arrow tip), b (two arrow tips)
-  \draw[glued edge=1, dzg singular] (0,0) -- (\S,0) node[midway, below=4pt] {$a$};
-  \draw[glued edge=1, dzg singular] (0,\S) -- (\S,\S) node[midway, above=4pt] {$a$};
-  \draw[glued edge=2, dzg accent] (0,0) -- (0,\S) node[midway, left=6pt] {$b$};
-  \draw[glued edge=2, dzg accent] (\S,0) -- (\S,\S) node[midway, right=6pt] {$b$};
 \end{tikzpicture}
 \end{document}

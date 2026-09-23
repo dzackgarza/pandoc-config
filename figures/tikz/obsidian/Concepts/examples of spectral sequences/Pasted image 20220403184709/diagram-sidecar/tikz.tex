@@ -1,39 +1,18 @@
 % Serre spectral sequence of the path-loop fibration ΩS⁴ → PS⁴ → S⁴:
-% homological E² = E⁴ page with d₄ differentials of bidegree (−4, +3).
+% homological E² = E⁴ page with d⁴ differentials of bidegree (−4, +3).
 % Only columns p = 0 and p = 4 are populated (H_*(S⁴) ≅ ℤ in degrees 0, 4).
+% For q = 3, 4, 5 the target of d⁴ lies above the page.
 \documentclass[tikz,border=2pt]{standalone}
 \usepackage{dzg-tikz}
 
 \begin{document}
 \begin{tikzpicture}
-  % Grid: rows q = 5..0 (top to bottom), columns p = 0..5.
-  \matrix (m) [
-    matrix of math nodes,
-    nodes in empty cells,
-    row sep=2.5em,
-    column sep=3em,
-    nodes={font=\small, inner sep=2pt}
-  ] {
-    H_{5}(\Omega S^{4}) & & & & H_{5}(\Omega S^{4}) & \\
-    H_{4}(\Omega S^{4}) & & & & H_{4}(\Omega S^{4}) & \\
-    H_{3}(\Omega S^{4}) & & & & H_{3}(\Omega S^{4}) & \\
-    H_{2}(\Omega S^{4}) & & & & H_{2}(\Omega S^{4}) & \\
-    H_{1}(\Omega S^{4}) & & & & H_{1}(\Omega S^{4}) & \\
-    H_{0}(\Omega S^{4}) & & & & H_{0}(\Omega S^{4}) & \\
-  };
-
-  % Axis labels: q to the left of each row, p below each column.
-  \foreach \q [evaluate={\row=int(6-\q)}] in {0,...,5}
-    \node[font=\small, left=0.6em of m-\row-1] {$\q$};
-  \foreach \p [evaluate={\col=int(\p+1)}] in {0,...,5}
-    \node[font=\small, below=0.6em] at (m-6-\col |- m-6-1.south) {$\p$};
-
-  % d₄ : (4,q) → (0,q+3). For q = 0, 1, 2 the target is on the page; for
-  % q = 3, 4, 5 it lies above it, and the arrow leaves the page along the same
-  % bidegree.
-  \foreach \q [evaluate={\src=int(6-\q); \tgt=int(3-\q)}] in {0,1,2}
-    \draw[->] (m-\src-5) -- (m-\tgt-1);
-  \foreach \q [evaluate={\src=int(6-\q)}] in {3,4,5}
-    \draw[->, shorten >=1.5em] (m-\src-5) -- ($(m-\src-5) + (m-3-1) - (m-6-5)$);
+  \pic (E) [ss homological, ss column sep=1.6cm] {ss page};
+  \foreach \q in {0,...,5} \foreach \p in {0,4}
+    {\ssentry{E}{\p}{\q}{$H_{\q}(\Omega S^{4})$}}
+  \begin{scope}
+    \clip (E--1--1) rectangle (E-6-6);
+    \foreach \q in {0,...,5} {\ssdifferential[ss unlabelled]{E}{4}{4}{\q}}
+  \end{scope}
 \end{tikzpicture}
 \end{document}

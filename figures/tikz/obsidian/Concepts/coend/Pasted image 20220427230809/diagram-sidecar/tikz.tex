@@ -2,14 +2,7 @@
 \usepackage{dzg-tikz}
 
 \begin{document}
-% Cowedge/Coend dinaturality commutative square
-% Canonical: F(B,A) -> F(A,A) via F(f,A) (top), F(B,A) -> F(B,B) via F(B,f) (left)
-%            h_A: F(A,A) -> X (right), h_B: F(B,B) -> X (bottom)
-% Commutativity: h_A ∘ F(f,A) = h_B ∘ F(B,f)
-\begin{tikzcd}
-F(B, A) \arrow[r, "{F(f, A)}"] \arrow[d, "{F(B, f)}"']
-  & F(A, A) \arrow[d, "{h_A}"] \\
-F(B, B) \arrow[r, "{h_B}"']
-  & X
-\end{tikzcd}
+% Cowedge (dinaturality to a constant) square for a bifunctor
+% F: C^op x C -> D and f: A -> B.
+\cowedgesquare[AB]
 \end{document}
