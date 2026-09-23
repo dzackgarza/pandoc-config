@@ -1,6 +1,10 @@
+% The two maximal parabolic subdiagrams \tilde E_8(2) and \tilde B_8(2) of
+% G_{(10,8,0)_1}.
 \begin{tikzpicture}
-  \input{tikz/coxeter-diagrams/fragments/en-10-8-0-E8-2.tex}
-  \begin{scope}[shift={(0, -2.5)}]
-    \input{tikz/coxeter-diagrams/fragments/en-10-8-0-B8-2.tex}
-  \end{scope}
+  \pic (A) {vinberg 10 8 0};
+  \coxeterparabolic[A]{vinberg 10 8 0/E8}
+  \node at (6, 1) {$\tilde E_8(2) \subset (10, 8, 0)_1$};
+  \pic (B) at (0, -2.5) {vinberg 10 8 0};
+  \coxeterparabolic[B]{vinberg 10 8 0/B8}
+  \node at (6, -1.5) {$\tilde B_8(2) \subset (10, 8, 0)_1$};
 \end{tikzpicture}

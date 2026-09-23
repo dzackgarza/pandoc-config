@@ -1,9 +1,4 @@
-% Unlabelled Coxeter diagram of (10,10,0)_1 = E_10.
+% The Coxeter diagram of (10,10,0)_1 = E_10(2), unlabelled.
 \begin{tikzpicture}
-  \foreach \v/\x in {2/-4, 1/-2, 0/0, 4/2, 5/4, 6/6, 7/8, 8/10, 9/12}
-    \node[vertex=black] (\v) at (\x, 0) {};
-  \node[vertex=black] (3) at (0, 2) {};
-  \begin{scope}[on edge layer]
-    \draw[coxeter edge=3] (2.center) -- (9.center) (3.center) -- (0.center);
-  \end{scope}
+  \pic[root labels=none] {vinberg 10 10 0};
 \end{tikzpicture}

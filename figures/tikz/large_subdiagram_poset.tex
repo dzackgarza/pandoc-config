@@ -30,12 +30,17 @@
     }
 
   % Cells, by bitmask: the type of the subdiagram and the diagram, with the
-  % vertices and edges outside the subdiagram inactive.
+  % vertices and edges outside the subdiagram inactive. Types computed from
+  % G_L: elliptic when -G_L on the subset is positive definite; parabolic
+  % when it is positive semidefinite with one kernel direction per connected
+  % component (every component affine), which holds for {1,2,3} = A~_2 and
+  % {4,5} = A~_1 only, and these two are maximal; other otherwise, including
+  % A~_2 + A_1 and A~_1 + A_1, whose elliptic component is not affine.
   \foreach \type [count=\c from 0] in {elliptic, elliptic, elliptic, elliptic,
       elliptic, elliptic, elliptic, parabolic, elliptic, elliptic, elliptic,
       elliptic, elliptic, elliptic, elliptic, other, elliptic, elliptic,
-      elliptic, elliptic, elliptic, elliptic, elliptic, parabolic, parabolic,
-      parabolic, parabolic, parabolic, other, other, other, other} {
+      elliptic, elliptic, elliptic, elliptic, elliptic, other, parabolic,
+      other, other, other, other, other, other, other} {
     \scoped[on background layer]
       \node[subdiagram cell=\type, minimum width=1.57cm, minimum height=1.07cm]
         at (S\c) {};
