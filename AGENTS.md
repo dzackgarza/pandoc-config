@@ -150,6 +150,39 @@ Plus domain files: categories, spectral, tikz, environments.
 
 See subdirectory READMEs for detailed documentation.
 
+## Figures: the dzg TikZ library
+
+Every figure draws with the style vocabulary in
+`styles/macros/tikz/tikzlibrarydzg.code.tex`, which the preamble loads with
+`\usetikzlibrary{dzg}`. Named diagrams built from it live in
+`styles/macros/tikz/dzg-diagrams.tex`. Read the library file before drawing.
+
+1. **One style per mathematical element.** Coxeter vertices are
+   `vertex=white|black|doubled`, edges `coxeter edge=<m>` (3, 4, 5, 6,
+   `infinity`, `dotted`) or `coxeter edge label=<m>`, parabolic subdiagrams
+   `parabolic`. Baily–Borel diagrams use `cusp0`, `cusp1`, `incidence`,
+   `cusp label`, `cusp brace`. IAS and Kulikov pictures use `ias region`,
+   `ias boundary`, `ias edge`, `ias singularity=<multiplicity>`, `ias surgery`,
+   `fan ray`, `kulikov component`, `double curve`. Lattice polygons use
+   `lattice grid`, `lattice point`, `polygon region`, `long side`, `short side`,
+   `boundary point`, `marked point`. Posets and schematics use `poset node`,
+   `degeneration`, `moduli blob`, `stratum`, `boundary stratum`. Stable curves
+   use `curve component`, `curve node`, `dual vertex`, `genus`.
+2. **Figures define no styles.** No `\tikzset`, `\tikzstyle`, `\colorlet`,
+   `\pgfsetlayers`, `\usetikzlibrary`, or drawing macros in a figure file, and
+   no raw colours or line widths. A missing element is added to the library,
+   in its family section, with its meaning in a comment.
+3. **Conventions.** Degeneration arrows and poset cover edges point from the
+   generic stratum to the more degenerate one. A 0-cusp is a rounded box and a
+   1-cusp a box, with the lattice inside the node. The vertex mark is the
+   datum; the document states what it encodes (root norm, or δ).
+4. **Layers.** The library sets `background, Dynkin behind, edges, main,
+   foreground`. Diagram edges go in `[on edge layer]` scopes between node
+   centres so vertices cover the edge ends; highlights go
+   `[on background layer]`.
+5. **Sizes are absolute.** A picture's `scale` spaces coordinates and does
+   not change glyph sizes, so the same element looks the same in every figure.
+
 ## Figures: survey the library landscape before drawing
 
 Read this section before writing any TikZ under `figures/`. It records what
