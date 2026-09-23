@@ -191,10 +191,15 @@ through listed points, had been loaded by the preamble the entire time.
    *Adding a library* below. Hand-rolling because a library is not yet loaded
    is the same failure as not surveying.
 7. **Both renderers run pdflatex.** `bin/render_figures.py` and
-   `filters/tikzcd.lua` compile with pdflatex, so LuaTeX-only tools
-   (`graphdrawing`, `luahyperbolic`) need a LuaTeX render path before they
-   can be used. That is a pipeline change to make, not a reason to hand-roll
-   the layout.
+   `filters/tikzcd.lua` compile with pdflatex. Some packages do their
+   arithmetic in Lua through the `\directlua` primitive, which only the
+   LuaTeX engine provides: PGF's `graphdrawing` implements its layout
+   algorithms in Lua and its loader errors with "You need to run LuaTeX to
+   use the graph drawing library"; `luahyperbolic` is a LuaLaTeX package.
+   Such packages need a lualatex render path before they can be used. That
+   is a pipeline change to make, not a reason to hand-roll the layout.
+   (`hobby` does the same kind of numerics in expl3 floating point, which is
+   why it runs under both engines.)
 
 ### Procedure: finding the library before starting
 
@@ -266,7 +271,7 @@ Every row was checked against the local TeX Live with `kpsewhich` on
 2026-09-23. *preamble* means `dzg-preamble.tex` already loads it. *add to
 preamble* means it is installed and one line in the preamble enables it.
 *install* means it is on CTAN but not in the local TeX Live. *LuaTeX* means
-rule 7 applies.
+the package computes in Lua via `\directlua`, so rule 7 applies.
 
 Go to these first, in this order, for the figure kinds this repository draws:
 
