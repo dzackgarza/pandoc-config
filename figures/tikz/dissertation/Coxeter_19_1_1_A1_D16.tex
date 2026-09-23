@@ -1,8 +1,5 @@
-% The maximal parabolic subdiagram \tilde A_1 + \tilde D_16 of the (19,1,1)
-% diagram.
+% The maximal parabolic subdiagram \tilde A_1 + \tilde D_{16} of the (19,1,1) diagram.
 \begin{tikzpicture}[scale=0.4]
-  \input{tikz/coxeter-diagrams/fragments/19-1-1.tex}
-  \scoped[on background layer]
-    \draw[parabolic] (18.center) -- (1.center) -- (7.center) -- (13.center) -- (14.center)
-      (1.center) -- (19.center) (13.center) -- (21.center) (24.center) -- (16.center);
+  \pic {vinberg 19 1 1};
+  \coxeterparabolic{vinberg 19 1 1/A1+D16}
 \end{tikzpicture}

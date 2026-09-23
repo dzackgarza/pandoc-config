@@ -22,7 +22,7 @@
 %   mirror moves enriques, mirror moves coble
 %                        the mirror-move posets of S_En and S_Co
 %
-% Computed data. Every diagram below is the output of Vinberg's algorithm on
+% Computed data. Each E-type diagram below is the output of Vinberg's algorithm on
 % the lattice of the 2-elementary table in the research preamble
 % (dzack_research.preamble.catalogue._TWO_ELEMENTARY_RECIPES), run with the
 % engine the preamble registers for "vinberg_root_enumeration" (vinal,
@@ -184,3 +184,42 @@
     \fi}},
   mirror targets=valid,
 }
+
+% -----------------------------------------------------------------------------
+% (19,1,1)_1 = U + E_8^2 + A_1
+% -----------------------------------------------------------------------------
+% The 18-cycle 1..18 of roots alternating double circled (odd) and single
+% circled (even), as in Alexeev-Engel-Kasprzyk-Shepherd-Barron-Zhang (AKSZ23,
+% coble/papers/AKSZ23/2el.tex, Fig. coxeter2: the double circled roots are
+% (-2)-curves fixed by the involution); leaves 19, 20, 21 at 1, 7, 13; the
+% triangle 22, 23, 24 of dotted edges; bold edges 4-22, 10-23, 16-24, 19-23,
+% 20-24, 21-22. All 24 roots have square -2.
+% Checked: with pairings 1 (simple) and 2 (bold), the Gram matrix of roots
+% 1..21 has rank 19 and signature (1,18); roots 22, 23, 24 are determined by
+% their pairings with 1..21, have square -2 and pairwise pairing 6
+% (ultraparallel, dotted), and the 24 roots span an even lattice of rank 19
+% and determinant -2, which is (19,1,1) by Nikulin's uniqueness. The maximal
+% parabolic subdiagrams (rank 17) are ten, in four types: A~_17 (the cycle),
+% A~_1 + D~_16, A~_1 + 2E~_8 and E~_7 + D~_10; the pic's parabolics are one
+% of each. (vinal's Vinberg search on this lattice did not finish in 25 min.)
+\tikzset{pics/vinberg 19 1 1/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\dzg@canonicallabels
+  \dzg@vertices{1/doubled/{-3,0}/below left, 2/white/{-1.75,2.25}/left,
+    3/doubled/{-0.75,4.25}/left, 4/white/{0.25,6}/left,
+    5/doubled/{1,7.5}/left, 6/white/{2,9.5}/left, 7/doubled/{3,11.25}/above,
+    8/white/{4,9.5}/right, 9/doubled/{5,7.5}/right, 10/white/{5.75,6}/right,
+    11/doubled/{6.75,4.25}/right, 12/white/{7.75,2.25}/right,
+    13/doubled/{9,0}/below right, 14/white/{7,0}/below, 15/doubled/{5,0}/below,
+    16/white/{3,0}/below, 17/doubled/{1,0}/below, 18/white/{-1,0}/below,
+    19/white/{0,2}/above, 20/white/{3,8}/right, 21/white/{6,2}/above,
+    22/white/{1.75,5}/left, 23/white/{4.25,5}/right, 24/white/{3,2.5}/below right}%
+  \dzg@chain{3}{1}{18}%
+  \dzg@edges{3}{(18) -- (1) (1) -- (19) (7) -- (20) (13) -- (21)}%
+  \dzg@edges{dotted}{(22) -- (23) -- (24) -- (22)}%
+  \dzg@edges{infinity}{(4) -- (22) (10) -- (23) (16) -- (24) (19) -- (23)
+    (20) -- (24) (21) -- (22)}}}}
+
+\@namedef{dzg@parabolic@vinberg 19 1 1/A17}{{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,1}}
+\@namedef{dzg@parabolic@vinberg 19 1 1/A1+D16}{{18,1,2,3,4,5,6,7,8,9,10,11,12,13,14},{1,19},{13,21},{16,24}}
+\@namedef{dzg@parabolic@vinberg 19 1 1/A1+2E8}{{17,18,1,2,3,4,5,6},{1,19},{15,14,13,12,11,10,9,8},{13,21},{20,24}}
+\@namedef{dzg@parabolic@vinberg 19 1 1/E7+D10}{{2,1,18,17,16,15,14,13,12},{1,19},{13,21},{4,5,6,7,8,9,10},{7,20}}
