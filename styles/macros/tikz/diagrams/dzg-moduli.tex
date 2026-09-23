@@ -1,3 +1,194 @@
 % =============================================================================
 % Moduli-space strata: stable curves and their dual graphs
 % =============================================================================
+% Pics take their size from the x and y unit vectors. A picture that wants a
+% smaller object sets [x=0.6cm, y=0.6cm], not [scale=0.6]: like a node, a pic
+% is not transformed by the picture's scale.
+%
+% -----------------------------------------------------------------------------
+% The stratification of \overline{M}_2 (Deligne-Mumford), by topological type
+% -----------------------------------------------------------------------------
+% \overline{M}_2 has dimension 3 and seven strata, one for each stable graph
+% of genus 2: a connected graph with vertex genera g_v, possibly with loops,
+% such that sum g_v + h^1 = 2 and every genus-0 vertex has valence >= 3. A
+% stratum with n nodes (edges) has dimension 3 - n. The closure order is edge
+% contraction: the stratum of G lies in the closure of the stratum of G/e.
+% Enumeration by n (Harris-Morrison, "Moduli of curves", Sec. 3.C):
+%   n = 0  one genus-2 vertex                                     (smooth)
+%   n = 1  two genus-1 vertices, one edge                         (Delta_1)
+%          one genus-1 vertex, one loop                           (Delta_0)
+%   n = 2  genus-1 vertex, edge, genus-0 vertex with a loop
+%          one genus-0 vertex, two loops
+%   n = 3  two genus-0 vertices, one edge, a loop at each         (dumbbell)
+%          two genus-0 vertices, three edges                      (theta)
+%
+% Each stratum is named by a divisor d of 24 = 2^3 * 3. The map
+%   stratum -> d = 2^k * 3^c
+% is an isomorphism of the stratification poset onto Div(24) \ {1} ordered by
+% divisibility, and (k, c) is a nonempty subdiagram of the Coxeter diagram
+% `m2 coxeter` up to its S_3 symmetry: k of the three black vertices and c of
+% the white centre. The number of prime factors of d, with multiplicity, is
+% dim + 1.
+%
+% \dzgMtwoStrata lists divisor/dim/nodes/row/k/c; row is the side of the
+% canonical layout (+1, 0, -1). \dzgMtwoCovers lists the cover relations
+% generic/degenerate.
+\def\dzgMtwoStrata{24/3/0/0/3/1, 8/2/1/1/3/0, 12/2/1/-1/2/1, 4/1/2/1/2/0,
+  6/1/2/-1/1/1, 2/0/3/1/1/0, 3/0/3/-1/0/1}
+\def\dzgMtwoCovers{24/8, 24/12, 8/4, 12/4, 12/6, 4/2, 6/2, 6/3}
+%
+% Pics, each for the stratum with divisor d:
+%   \pic (G) {m2 graph=d};     its stable graph; vertices G-v1, G-v2
+%   \pic (C) {m2 curve=d};     a stable curve of that type, drawn with Hobby
+%                              curves through listed points
+%   \pic (P) {m2 divisor=d};   a poset node labelled d
+% Every one of them names its bounding box <name>-box.
+%   \pic (S) {m2 strata};      all seven strata in the canonical layout with
+%                              the cover relations as degeneration arrows;
+%                              stratum d is S-d, its box S-d-box
+% Keys: m2 render=graph|curve|divisor (what m2 strata draws at each stratum),
+%       m2 layout=horizontal|vertical (nodes left to right, or dim top to
+%       bottom), genus labels=all|none (default all: every component and
+%       vertex carries its genus, 0 included).
+%   \pic (C) {m2 coxeter};     the Coxeter diagram with white centre C-c and
+%                              black vertices C-o1, C-o2, C-o3, joined by
+%                              weight-4 edges
+
+\newif\ifdzg@genuslabels
+\dzg@genuslabelstrue
+\def\dzg@m@render{graph}
+\def\dzg@m@layout{horizontal}
+\tikzset{
+  genus labels/.is choice,
+  genus labels/all/.code={\dzg@genuslabelstrue},
+  genus labels/none/.code={\dzg@genuslabelsfalse},
+  m2 render/.is choice,
+  m2 render/graph/.code={\def\dzg@m@render{graph}},
+  m2 render/curve/.code={\def\dzg@m@render{curve}},
+  m2 render/divisor/.code={\def\dzg@m@render{divisor}},
+  m2 layout/.is choice,
+  m2 layout/horizontal/.code={\def\dzg@m@layout{horizontal}},
+  m2 layout/vertical/.code={\def\dzg@m@layout{vertical}},
+}
+
+% \dzg@m@genus{<label placement>}{<coordinate>}{<genus>}
+\def\dzg@m@genus#1#2#3{\ifdzg@genuslabels\node[genus, #1] at (#2) {$#3$};\fi}
+% \dzg@m@vertex{<name>}{<coordinate>}{<genus>}{<label placement>}
+\def\dzg@m@vertex#1#2#3#4{%
+  \node[dual vertex] (#1) at (#2) {};
+  \ifdzg@genuslabels\node[genus, #4=3pt] at (#1) {$#3$};\fi}
+\def\dzg@m@loopr{0.32}
+% \dzg@m@define{graph|curve}{<divisor>}{<drawing>}: the drawing of a stratum.
+\def\dzg@m@define#1#2#3{\expandafter\def\csname dzg@m@#1@#2\endcsname{#3}}
+
+% Stable graphs.
+\dzg@m@define{graph}{24}{%
+  \dzg@m@vertex{-v1}{0,0}{2}{left}}
+\dzg@m@define{graph}{8}{%
+  \dzg@m@vertex{-v1}{-0.45,0}{1}{left}
+  \dzg@m@vertex{-v2}{0.45,0}{1}{right}
+  \draw (-v1) -- (-v2);}
+\dzg@m@define{graph}{12}{%
+  \draw (\dzg@m@loopr,0) circle (\dzg@m@loopr);
+  \dzg@m@vertex{-v1}{0,0}{1}{left}}
+\dzg@m@define{graph}{4}{%
+  \draw (0.45+\dzg@m@loopr,0) circle (\dzg@m@loopr);
+  \dzg@m@vertex{-v1}{-0.45,0}{1}{left}
+  \dzg@m@vertex{-v2}{0.45,0}{0}{below left}
+  \draw (-v1) -- (-v2);}
+\dzg@m@define{graph}{6}{%
+  \draw (-\dzg@m@loopr,0) circle (\dzg@m@loopr);
+  \draw (\dzg@m@loopr,0) circle (\dzg@m@loopr);
+  \node[dual vertex] (-v1) at (0,0) {};
+  \ifdzg@genuslabels\node[genus, below=7pt] at (-v1) {$0$};\fi}
+\dzg@m@define{graph}{2}{%
+  \draw (-0.45-\dzg@m@loopr,0) circle (\dzg@m@loopr);
+  \draw (0.45+\dzg@m@loopr,0) circle (\dzg@m@loopr);
+  \dzg@m@vertex{-v1}{-0.45,0}{0}{below right}
+  \dzg@m@vertex{-v2}{0.45,0}{0}{below left}
+  \draw (-v1) -- (-v2);}
+\dzg@m@define{graph}{3}{%
+  \dzg@m@vertex{-v1}{-0.55,0}{0}{left}
+  \dzg@m@vertex{-v2}{0.55,0}{0}{right}
+  \draw (-v1) -- (-v2);
+  \draw (-v1) to[bend left=50] (-v2);
+  \draw (-v1) to[bend right=50] (-v2);}
+
+% Stable curves: Hobby splines through the listed points, one path per
+% component; a self-node is a loop of four points.
+\dzg@m@define{curve}{24}{%
+  \draw[curve component] (-1,0) to[curve through={(-0.5,0.3) .. (0,0) .. (0.5,-0.3)}] (1,0);
+  \dzg@m@genus{left}{-1.05,0.15}{2}}
+\dzg@m@define{curve}{8}{%
+  \draw[curve component] (-1,0.5) to[curve through={(-0.4,0.12) .. (0,0) .. (0.4,-0.12)}] (1,-0.5);
+  \draw[curve component, yscale=-1] (-1,0.5) to[curve through={(-0.4,0.12) .. (0,0) .. (0.4,-0.12)}] (1,-0.5);
+  \dzg@m@genus{left}{-0.95,0.55}{1}
+  \dzg@m@genus{right}{0.95,0.55}{1}}
+\dzg@m@define{curve}{12}{%
+  \draw[curve component] (-1,-0.45)
+    to[curve through={(0,0) .. (0.75,0.4) .. (1.1,0) .. (0.75,-0.4) .. (0,0)}] (-1,0.45);
+  \dzg@m@genus{above right}{0.35,0.4}{1}}
+\dzg@m@define{curve}{4}{%
+  \draw[curve component] (-0.7,0.6) to[curve through={(-0.5,0)}] (-0.1,-0.65);
+  \draw[curve component] (-1,-0.4)
+    to[curve through={(-0.5,-0.15) .. (0.1,0) .. (0.4,0.35) .. (0.2,0.55) .. (0,0.35)
+                      .. (0.3,0.02) .. (0.7,-0.1)}] (1.1,-0.4);
+  \dzg@m@genus{left}{-0.75,0.6}{1}
+  \dzg@m@genus{right}{1.1,-0.4}{0}}
+\dzg@m@define{curve}{6}{%
+  \draw[curve component] (-1.3,-0.2)
+    to[curve through={(-0.9,0) .. (-0.6,0.35) .. (-0.8,0.55) .. (-1,0.35) .. (-0.7,0.02)
+                      .. (0,-0.25)
+                      .. (0.6,0) .. (0.9,0.35) .. (0.7,0.55) .. (0.5,0.35) .. (0.8,0.02)}] (1.3,-0.2);
+  \dzg@m@genus{below}{0,-0.25}{0}}
+\dzg@m@define{curve}{2}{%
+  \draw[curve component] (-1.4,-0.2)
+    to[curve through={(-0.9,0) .. (-0.6,0.35) .. (-0.8,0.55) .. (-1,0.35) .. (-0.7,0.02)
+                      .. (0,-0.25)}] (0.8,-0.55);
+  \draw[curve component, xscale=-1] (-1.4,-0.2)
+    to[curve through={(-0.9,0) .. (-0.6,0.35) .. (-0.8,0.55) .. (-1,0.35) .. (-0.7,0.02)
+                      .. (0,-0.25)}] (0.8,-0.55);
+  \dzg@m@genus{left}{-1.4,-0.2}{0}
+  \dzg@m@genus{right}{1.4,-0.2}{0}}
+\dzg@m@define{curve}{3}{%
+  \draw[curve component] (-1.2,0.3)
+    to[curve through={(-0.8,0) .. (-0.4,-0.3) .. (0,0) .. (0.4,0.3) .. (0.8,0)}] (1.2,-0.3);
+  \draw[curve component, yscale=-1] (-1.2,0.3)
+    to[curve through={(-0.8,0) .. (-0.4,-0.3) .. (0,0) .. (0.4,0.3) .. (0.8,0)}] (1.2,-0.3);
+  \dzg@m@genus{left}{-1.2,0.3}{0}
+  \dzg@m@genus{left}{-1.2,-0.3}{0}}
+
+% Position (\dzg@m@x, \dzg@m@y) of the stratum with <nodes> and <row>.
+\def\dzg@m@position#1#2{%
+  \csname dzg@m@position@\dzg@m@layout\endcsname{#1}{#2}}
+\def\dzg@m@position@horizontal#1#2{%
+  \pgfmathsetmacro\dzg@m@x{4.6*#1}\pgfmathsetmacro\dzg@m@y{1.35*#2}}
+\def\dzg@m@position@vertical#1#2{%
+  \pgfmathsetmacro\dzg@m@x{-2.5*#2}\pgfmathsetmacro\dzg@m@y{-2*#1}}
+
+% \dzg@m@stratum{<position>}{<render>}{<divisor>}
+\def\dzg@m@stratum#1#2#3{\pic (-#3) at (#1) {m2 #2=#3};}
+
+\tikzset{
+  pics/m2 graph/.style={code={%
+    \begin{scope}[local bounding box=-box]\csname dzg@m@graph@#1\endcsname\end{scope}}},
+  pics/m2 curve/.style={code={%
+    \begin{scope}[local bounding box=-box]\csname dzg@m@curve@#1\endcsname\end{scope}}},
+  pics/m2 divisor/.style={code={\node[poset node] (-box) {$#1$};}},
+  pics/m2 strata/.style={code={%
+    \foreach \dzg@d/\dzg@dim/\dzg@n/\dzg@row/\dzg@k/\dzg@c in \dzgMtwoStrata {
+      \dzg@m@position{\dzg@n}{\dzg@row}
+      \edef\dzg@m@next{\noexpand\dzg@m@stratum{\dzg@m@x,\dzg@m@y}{\dzg@m@render}{\dzg@d}}%
+      \dzg@m@next
+    }
+    \foreach \dzg@a/\dzg@b in \dzgMtwoCovers
+      \draw[degeneration] (-\dzg@a-box) -- (-\dzg@b-box);
+  }},
+  pics/m2 coxeter/.style={code={%
+    \node[vertex=white] (-c) at (0,0) {};
+    \foreach \dzg@t [count=\dzg@i] in {90, 210, 330} {
+      \node[vertex=black] (-o\dzg@i) at (\dzg@t:1.15) {};
+      \scoped[on edge layer] \draw[coxeter edge=4] (-c) -- (-o\dzg@i);
+    }
+  }},
+}
