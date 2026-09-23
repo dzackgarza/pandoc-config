@@ -1,48 +1,64 @@
-
 % =============================================================================
 % Coxeter, Vinberg and cusp diagrams
 % =============================================================================
 % Every named diagram is a pic. Its vertices are nodes named by their index, so
-%   \pic (A) at (6,0) {k3 cusp=1};
+%   \pic (A) at (6,0) {sterk cusp=1};
 % names the vertices A0, A1, ...; without a pic name they are 0, 1, ....
 % Highlight a parabolic subdiagram through the vertex centres:
 %   \scoped[on background layer] \draw[parabolic] (A0.center) -- (A8.center);
 %
-% `root labels=<scheme>` labels every vertex by its index:
-%   r      $r_i$  (the default value of a bare `root labels`)
-%   ell    $\ell_i$
-%   index  $i$
-%   prime  $i'$
-%   none   no labels (the default)
+% Each pic labels its vertices with its canonical labels. `root labels=<scheme>`
+% switches them; the index is always the canonical vertex name:
+%   alpha  $\alpha_i$  (canonical for the (18,2,0) and (18,0,0) diagrams)
+%   r      $r_i$       (canonical for the Sterk cusp diagrams and k3 F2, k3 F4)
+%   ell    $\ell_i$    the coordinate \ell_i = \lambda\cdot\alpha_i of an
+%                      integral-affine sphere B(\lambda) (IAS figures)
+%   index  $i$         the bare index, for small reproductions
+%   none   no labels
+% A bare `root labels` selects the pic's canonical scheme.
 %
 % Published names:
-%   k3 cusp=1..6, k3 cusp=2 cover   Coxeter diagrams at the 0-cusps of F_{En,2}
-%                                   and their K3 covers
-%   sterk=1..5                      Sterk's diagrams I-V of the same five cusps
-%   vinberg 18 2 0, vinberg 18 0 0  Vinberg diagrams of (18,2,0) and (18,0,0)
-%   k3 F2, k3 F4                    Coxeter diagrams for F_2 and F_4
+%   vinberg 18 2 0, vinberg 18 0 0   Vinberg diagrams of (18,2,0)_1 and
+%                                    (18,0,0)_1, the 0-cusps of F_{(2,2,0)}
+%   sterk cusp=1..5                  Coxeter diagrams of the 0-cusps eta_1..eta_5
+%                                    of F_{En,2} (Sterk's diagrams I-V)
+%   sterk cusp cover=1..5            the K3 diagram covering sterk cusp=k, with
+%                                    the involution J_k that folds it
+%   k3 F2, k3 F4                     Coxeter diagrams for F_2 and F_4
+%   dynkin folding                   a Dynkin diagram above its folded quotient
+%   root chain                       a linear Coxeter diagram with root norms
 %   \coxeterHthree \coxeterHfour \coxeterGtwo \coxeterGtwoAffine
 %   \coxeterpair[<keys>], \coxetervertex{<mark>}   table legends
 
 \newif\ifdzg@rootlabels
-\newif\ifdzg@barbelllabels
-\dzg@barbelllabelstrue
-\def\dzg@labelscheme{none}
-\def\dzg@ellscheme{ell}
+\newif\ifdzg@paritymarks
+\dzg@paritymarkstrue
+\def\dzg@unset{unset}
+\def\dzg@labelscheme{unset}
 \tikzset{
   root labels/.is choice,
+  root labels/canonical/.code={\dzg@rootlabelstrue\def\dzg@labelscheme{unset}},
+  root labels/alpha/.code={\dzg@rootlabelstrue\def\dzg@labelscheme{alpha}},
   root labels/r/.code={\dzg@rootlabelstrue\def\dzg@labelscheme{r}},
   root labels/ell/.code={\dzg@rootlabelstrue\def\dzg@labelscheme{ell}},
   root labels/index/.code={\dzg@rootlabelstrue\def\dzg@labelscheme{index}},
-  root labels/prime/.code={\dzg@rootlabelstrue\def\dzg@labelscheme{prime}},
   root labels/none/.code={\dzg@rootlabelsfalse\def\dzg@labelscheme{none}},
-  root labels/.default=r,
+  root labels/.default=canonical,
+  % Draw the even boundary roots of the (18,2,0) and (18,0,0) diagrams doubled
+  % (true, AEGS25 Fig. 5) or plain white (false, the white/black convention).
+  parity marks/.is if=dzg@paritymarks,
 }
+\def\dzg@label@alpha#1{$\alpha_{#1}$}
 \def\dzg@label@r#1{$r_{#1}$}
 \def\dzg@label@ell#1{$\ell_{#1}$}
 \def\dzg@label@index#1{$#1$}
-\def\dzg@label@prime#1{$#1'$}
+\def\dzg@label@unset#1{$r_{#1}$}
 \def\dzg@rootlabel#1{\csname dzg@label@\dzg@labelscheme\endcsname{#1}}
+
+% \dzg@canonicallabels{<scheme>}: at the start of a pic, turn on its canonical
+% labels unless the figure chose a scheme.
+\def\dzg@canonicallabels#1{%
+  \ifx\dzg@labelscheme\dzg@unset\dzg@rootlabelstrue\def\dzg@labelscheme{#1}\fi}
 
 % \dzg@vertex{<index>}{<mark>}{<coordinate>}{<label direction>}
 \def\dzg@vertex#1#2#3#4{%
@@ -106,27 +122,6 @@
   \or\edef\dzg@p{0,\dzg@u}\dzg@square@corner{225}{180}%
   \fi}
 
-% \dzg@barbell{<corner>/<inner> for the sw, se, ne, nw corners}{<top>}{<bottom>}
-%   {<corner edge weight>}{<half length of the barbell>}
-% Inside the square [0,4]^2: white inner vertices at (1,1), (3,1), (3,3), (1,3)
-% joined to their corners, and a black barbell (infinity edge) at x=2 joined by
-% weight-4 edges to the sw and ne inner vertices (top) and to the se and nw
-% inner vertices (bottom).
-\def\dzg@barbell#1#2#3#4#5{%
-  \begingroup
-    \ifdzg@barbelllabels\else\dzg@rootlabelsfalse\fi
-    \dzg@vertex{#2}{black}{2,2+#5}{0}%
-    \dzg@vertex{#3}{black}{2,2-#5}{0}%
-  \endgroup
-  \dzg@edges{infinity}{(#2) -- (#3)}%
-  \foreach \dzg@c/\dzg@i [count=\dzg@k] in {#1}{%
-    \ifcase\dzg@k\or\def\dzg@p{1,1}\def\dzg@a{100}\or\def\dzg@p{3,1}\def\dzg@a{80}%
-    \or\def\dzg@p{3,3}\def\dzg@a{90}\or\def\dzg@p{1,3}\def\dzg@a{80}\fi
-    \ifodd\dzg@k\def\dzg@b{#2}\else\def\dzg@b{#3}\fi
-    \dzg@vertex{\dzg@i}{white}{\dzg@p}{\dzg@a}%
-    \dzg@edges{#4}{(\dzg@c) -- (\dzg@i)}%
-    \dzg@edges{4}{(\dzg@i) -- (\dzg@b)}}}
-
 % \dzg@trianglepoints{<A>}{<B>}{<C>}{<n>}{<m>}{<p>}: coordinates A, B, C and
 % the subdivision points ab-0..n of AB, bc-0..m of BC, ca-0..p of CA.
 \def\dzg@trianglepoints#1#2#3#4#5#6{%
@@ -138,141 +133,172 @@
   \foreach \dzg@k in {0,...,#6}{\coordinate (ca-\dzg@k) at ($(C)!\dzg@k/#6!(A)$);}}
 
 % -----------------------------------------------------------------------------
-% The five 0-cusps of F_{En,2} (k3 cusp=1..5) and the K3 covers of their
-% diagrams (k3 cusp=6 covers cusps 1, 3, 4, 5; k3 cusp=2 cover covers cusp 2).
-% White: roots of square -2; black: roots of square -4.
+% Vinberg diagrams of (18,2,0)_1 = U(2) + E_8^2 and (18,0,0)_1 = U + E_8^2,
+% the boundary lattices at the two 0-cusps of F_{(2,2,0)}.
 % -----------------------------------------------------------------------------
-\tikzset{pics/k3 cusp/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}\csname dzg@kcusp@#1\endcsname}}}
+% Numbering and layout: AEGS25 Fig. 5 and Sec. 3.5, which the dissertation
+% (475-our-cusps.md, 900-five-cusps.md) follows.
+% Roots: dzack_research.preamble.sterk, Sterk.roots_18_2_0 (v1..v22) and
+% Sterk.roots_18_0_0 (w1..w19), in TdP = U + U(2) + E_8 + E_8 (catalogue.TdP).
+% Their Gram matrices give every edge weight and vertex mark below:
+%   (18,2,0): alpha_i = v_{i+1}. alpha_0..alpha_15 is a 16-cycle of simple
+%   edges; alpha_16..alpha_19 are joined by simple edges to the corners
+%   alpha_0, alpha_4, alpha_8, alpha_12 (v1.v17 = 1, norms -2, so m = 3);
+%   alpha_20 is joined to alpha_16, alpha_18 and alpha_21 to alpha_17,
+%   alpha_19 with weight 4 (inner product 2, norms -2, -4); alpha_20 alpha_21
+%   is bold (inner product 4, norms -4, -4). alpha_0..alpha_19 have norm -2
+%   (white), alpha_20, alpha_21 norm -4 and divisibility 2 (black).
+%   (18,0,0): alpha_2..alpha_18 is a chain of simple edges (alpha_k = w_{k-1}),
+%   with alpha_1 = w18 joined to alpha_4 and alpha_19 = w19 joined to
+%   alpha_16. All nineteen roots have norm -2 (white).
+% Doubled vertices are the even boundary roots of AEGS25 Sec. 3.5 (even i on
+% the 16-cycle, resp. on the chain; the corners are even), a datum the
+% Kulikov and KSBA models track; `parity marks=false` draws them white.
+\tikzset{pics/vinberg 18 2 0/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\dzg@canonicallabels{alpha}%
+  \ifdzg@paritymarks\def\dzg@even{doubled}\else\def\dzg@even{white}\fi
+  \dzg@squareperimeter{4}{4}{0}{sw}{\dzg@even}{white}%
+  \dzg@vertices{16/white/{1,1}/180, 17/white/{3,1}/0, 18/white/{3,3}/0,
+    19/white/{1,3}/180, 20/black/{2,2.5}/90, 21/black/{2,1.5}/270}%
+  \dzg@edges{3}{(0) -- (16) (4) -- (17) (8) -- (18) (12) -- (19)}%
+  \dzg@edges{4}{(16) -- (20) -- (18) (17) -- (21) -- (19)}%
+  \dzg@edges{infinity}{(20) -- (21)}}}}
 
-\@namedef{dzg@kcusp@1}{%
-  \dzg@squareperimeter{4}{2}{0}{sw}{black}{black}%
-  \dzg@vertices{8/black/{0.75,0.75}/above left, 9/black/{1.5,1.5}/above left,
-    10/black/{2.25,2.25}/above left, 11/black/{3,3}/above left}%
-  \dzg@edges{3}{(0) -- (8) (11) -- (4)}%
+% Equilateral triangle of side 7.2 with left corner alpha_16 at the origin,
+% apex alpha_10 and right corner alpha_4; the chain runs 18, 17, 16 along the base, up the
+% left side to 10, down the right side to 4, and along the base to 2.
+\tikzset{pics/vinberg 18 0 0/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\dzg@canonicallabels{alpha}%
+  \ifdzg@paritymarks\def\dzg@even{doubled}\else\def\dzg@even{white}\fi
+  \dzg@vertices{
+    2/\dzg@even/{4.8,0}/270, 3/white/{6,0}/270, 4/\dzg@even/{7.2,0}/315,
+    5/white/{6.6,1.039}/0, 6/\dzg@even/{6,2.078}/0, 7/white/{5.4,3.118}/0,
+    8/\dzg@even/{4.8,4.157}/0, 9/white/{4.2,5.196}/0, 10/\dzg@even/{3.6,6.235}/90,
+    11/white/{3,5.196}/180, 12/\dzg@even/{2.4,4.157}/180,
+    13/white/{1.8,3.118}/180, 14/\dzg@even/{1.2,2.078}/180,
+    15/white/{0.6,1.039}/180, 16/\dzg@even/{0,0}/225, 17/white/{1.2,0}/270,
+    18/\dzg@even/{2.4,0}/270, 1/white/{5.988,0.7}/180, 19/white/{1.212,0.7}/0}%
+  \dzg@chain{3}{2}{18}%
+  \dzg@edges{3}{(4) -- (1) (16) -- (19)}}}}
+
+% -----------------------------------------------------------------------------
+% The five 0-cusps eta_1..eta_5 of F_{En,2} (Sterk 1991, diagrams I-V; the
+% dissertation numbers the cusps as Sterk does).
+% -----------------------------------------------------------------------------
+% Roots: dzack_research.preamble.sterk, Sterk.sterk_roots()["Sterk_k"], the
+% folds of the (18,2,0) and (18,0,0) roots under J_k. Vertex i is the (i+1)-th
+% root there and is labelled r_i, as in 900-five-cusps.md. Layout:
+% _STERK_DIAGRAM_LAYOUTS["Sterk_k"], scaled by 1/2, 1/4, 1/4, 1/4, 1/5.
+% Computed from the Gram matrices (white: norm -2; black: norm -4):
+%   1: all norm -4. 0..7 a cycle of simple edges; 2 -- 11 and 6 -- 8 simple;
+%      8 -- 9 -- 10 -- 11 bold (inner products 4). 9, 10 have divisibility 2.
+%   2: 8 has norm -2, the rest -4. 0..7 simple chain, 2 -- 9 simple, 7 -- 8
+%      weight 4.
+%   3: 0, 8 have norm -2. 1..7 simple chain, 4 -- 9 simple; 0 -- 1, 0 -- 10,
+%      7 -- 8, 8 -- 11 weight 4; 10 -- 11 bold.
+%   4: 0, 8 have norm -2. 1..7 simple chain, 2 -- 9 and 6 -- 10 simple;
+%      0 -- 1, 7 -- 8 weight 4.
+%   5: 8..11 have norm -2, the rest -4. 0..7 a cycle of simple edges; the
+%      corners 0, 2, 4, 6 are joined to 8, 9, 10, 11 with weight 4; 12 is
+%      joined to 8, 10 and 13 to 9, 11 with weight 4; 12 -- 13 bold.
+\tikzset{pics/sterk cusp/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\dzg@canonicallabels{r}%
+  \csname dzg@sterkcusp@#1\endcsname}}}
+
+\@namedef{dzg@sterkcusp@1}{%
+  \dzg@vertices{0/black/{0,0}/135, 1/black/{2,0}/90, 2/black/{4,0}/45,
+    3/black/{4,-2}/0, 4/black/{4,-4}/315, 5/black/{2,-4}/270,
+    6/black/{0,-4}/225, 7/black/{0,-2}/180, 8/black/{1,-3}/135,
+    9/black/{1.625,-2.375}/135, 10/black/{2.25,-1.75}/135, 11/black/{3,-1}/135}%
+  \dzg@chain{3}{0}{7}%
+  \dzg@edges{3}{(7) -- (0) (2) -- (11) (6) -- (8)}%
   \dzg@edges{infinity}{(8) -- (9) -- (10) -- (11)}}
 
-\@namedef{dzg@kcusp@2}{%
-  \dzg@trianglepoints{0,0}{4,0}{2,4}{5}{6}{6}%
-  \dzg@vertices{0/white/bc-6/above, 1/black/ca-1/left, 2/black/ca-2/left,
-    3/black/ca-3/left, 4/black/ca-4/left, 5/black/ca-5/left,
-    6/black/ab-0/below, 7/black/ab-1/below, 8/black/ab-2/below}%
-  \dzg@vertex{9}{black}{$(A)!0.3!(B)!0.2!(C)$}{below}%
-  \dzg@edges{3}{(1) -- (2) -- (3) -- (4) -- (5) -- (6) -- (7) -- (8) (6) -- (9)}%
-  \dzg@edges{4}{(0) -- (1)}}
+\@namedef{dzg@sterkcusp@2}{%
+  \dzg@vertices{0/black/{0,0}/270, 1/black/{-1,0}/270, 2/black/{-2,0}/270,
+    3/black/{-1.75,1}/180, 4/black/{-1.5,2}/180, 5/black/{-1.25,3}/180,
+    6/black/{-1,4}/180, 7/black/{-0.75,5}/180, 8/white/{-0.5,6}/90,
+    9/black/{-0.5,1.5}/0}%
+  \dzg@chain{3}{0}{7}%
+  \dzg@edges{3}{(2) -- (9)}%
+  \dzg@edges{4}{(7) -- (8)}}
 
-\@namedef{dzg@kcusp@3}{%
-  \dzg@vertices{0/white/{0,0}/below, 1/white/{4,4}/above,
-    2/black/{0,1}/left, 3/black/{0,2}/left, 4/black/{0,3}/left, 5/black/{0,4}/left,
-    6/black/{1,4}/above, 7/black/{2,4}/above, 8/black/{3,4}/above,
-    9/black/{1,3}/right}%
-  \dzg@vertex{10}{black}{$(0,0)!1/3!(4,4)$}{left}%
-  \dzg@vertex{11}{black}{$(0,0)!2/3!(4,4)$}{right}%
-  \dzg@edges{3}{(2) -- (3) -- (4) -- (5) -- (6) -- (7) -- (8) (5) -- (9)}%
-  \dzg@edges{infinity}{(10) -- (11)}%
-  \dzg@edges{4}{(8) -- (1) (2) -- (0) (0) -- (10) (11) -- (1)}}
+\@namedef{dzg@sterkcusp@3}{%
+  \dzg@vertices{0/white/{0,-1}/180, 1/black/{0,1}/180, 2/black/{0,2}/180,
+    3/black/{0,3}/180, 4/black/{0,4}/135, 5/black/{1,4}/90,
+    6/black/{2,4}/90, 7/black/{3,4}/90, 8/white/{5,4}/45, 9/black/{1,3}/0,
+    10/black/{1.5,0.5}/315, 11/black/{3.5,2.5}/315}%
+  \dzg@chain{3}{1}{7}%
+  \dzg@edges{3}{(4) -- (9)}%
+  \dzg@edges{4}{(0) -- (1) (0) -- (10) (7) -- (8) (8) -- (11)}%
+  \dzg@edges{infinity}{(10) -- (11)}}
 
-\@namedef{dzg@kcusp@4}{%
-  \dzg@vertices{0/white/{0,2}/left, 1/black/{0,3}/left, 2/black/{0,4}/left,
-    3/black/{1,4}/above, 4/black/{2,4}/above, 5/black/{3,4}/above,
-    6/black/{4,4}/above, 7/black/{4,3}/right, 8/white/{4,2}/right,
-    9/black/{1,3}/below, 10/black/{3,3}/below}%
-  \dzg@edges{3}{(1) -- (2) -- (3) -- (4) -- (5) -- (6) -- (7) (2) -- (9) (6) -- (10)}%
-  \dzg@edges{4}{(1) -- (0) (7) -- (8)}}
+\@namedef{dzg@sterkcusp@4}{%
+  \dzg@vertices{0/white/{0,0}/180, 1/black/{0,1}/180, 2/black/{0,2}/135,
+    3/black/{1,2}/90, 4/black/{2,2}/90, 5/black/{3,2}/90, 6/black/{4,2}/45,
+    7/black/{4,1}/0, 8/white/{4,0}/0, 9/black/{1,1}/270, 10/black/{3,1}/270}%
+  \dzg@chain{3}{1}{7}%
+  \dzg@edges{3}{(2) -- (9) (6) -- (10)}%
+  \dzg@edges{4}{(0) -- (1) (7) -- (8)}}
 
-\@namedef{dzg@kcusp@5}{%
-  \dzg@squareperimeter{4}{2}{0}{sw}{black}{black}%
-  \dzg@barbell{0/8, 2/9, 4/10, 6/11}{13}{12}{4}{0.4}}
-
-\@namedef{dzg@kcusp@6}{%
-  \dzg@squareperimeter{4}{4}{0}{sw}{doubled}{white}%
-  \dzg@barbell{0/16, 4/17, 8/18, 12/19}{20}{21}{4}{0.4}}
-
-\@namedef{dzg@kcusp@2 cover}{%
-  \dzg@trianglepoints{0,0}{4,0}{2,4}{5}{6}{6}%
-  \dzg@vertices{16/doubled/ab-0/below left, 17/white/ab-1/below,
-    18/doubled/ab-2/below, 2/doubled/ab-3/below, 3/white/ab-4/below,
-    4/doubled/ab-5/below right,
-    5/white/bc-1/right, 6/doubled/bc-2/right, 7/white/bc-3/right,
-    8/doubled/bc-4/right, 9/white/bc-5/right, 10/doubled/bc-6/above,
-    11/white/ca-1/left, 12/doubled/ca-2/left, 13/white/ca-3/left,
-    14/doubled/ca-4/left, 15/white/ca-5/left}%
-  \dzg@vertex{1}{white}{$(A)!0.7!(B)!0.2!(C)$}{above}%
-  \dzg@vertex{19}{white}{$(A)!0.3!(B)!0.2!(C)$}{above}%
-  \dzg@chain{3}{2}{18}%
-  \dzg@edges{3}{(16) -- (19) (1) -- (4)}}
+\@namedef{dzg@sterkcusp@5}{%
+  \dzg@vertices{0/black/{0,0}/135, 1/black/{2,0}/90, 2/black/{4,0}/45,
+    3/black/{4,-2}/0, 4/black/{4,-4}/315, 5/black/{2,-4}/270,
+    6/black/{0,-4}/225, 7/black/{0,-2}/180, 8/white/{0.8,-0.8}/45,
+    9/white/{3.2,-0.8}/135, 10/white/{3.2,-3.2}/225, 11/white/{0.8,-3.2}/315,
+    12/black/{1.6,-1.6}/45, 13/black/{1.6,-2.4}/225}%
+  \dzg@chain{3}{0}{7}%
+  \dzg@edges{3}{(7) -- (0)}%
+  \dzg@edges{4}{(0) -- (8) (2) -- (9) (4) -- (10) (6) -- (11)
+    (8) -- (12) -- (10) (9) -- (13) -- (11)}%
+  \dzg@edges{infinity}{(12) -- (13)}}
 
 % -----------------------------------------------------------------------------
-% Sterk's diagrams I-V (Sterk 1991) of the same five cusps, numbered 1', 2', ...
+% The K3 cusp diagram covering sterk cusp=k, with the involution J_k of
+% (18,2,0)_1 or (18,0,0)_1 whose folding gives it (475-our-cusps.md; the
+% involutions of Sterk.sterk_roots()):
+%   1  rotation by pi of vinberg 18 2 0:          alpha_i <-> alpha_{8+i}
+%   2  vertical reflection of vinberg 18 0 0:     alpha_i <-> alpha_{20-i}
+%   3  diagonal reflection of vinberg 18 2 0 fixing alpha_0, alpha_8, composed
+%      with the reflection in alpha_20 (crossed):  alpha_i <-> alpha_{16-i}
+%   4  horizontal reflection of vinberg 18 2 0 fixing alpha_6, alpha_14
+%   5  the reflections in the odd boundary roots alpha_1, alpha_3, ..., alpha_15
+% Blue arrows are diagram symmetries; crossed vertices are reflections.
 % -----------------------------------------------------------------------------
-\tikzset{pics/sterk/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}\csname dzg@sterk@#1\endcsname}}}
+\tikzset{pics/sterk cusp cover/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\csname dzg@sterkcover@#1\endcsname}}}
 
-\@namedef{dzg@sterk@1}{%
-  \dzg@squareperimeter{6}{2}{1}{nw}{black}{black}%
-  \dzg@vertices{9/black/{1.5,1.5}/170, 10/black/{2.5,2.5}/170,
-    11/black/{3.5,3.5}/170, 12/black/{4.5,4.5}/170}%
-  \dzg@edges{3}{(3) -- (12) (7) -- (9)}%
-  \dzg@edges{infinity}{(9) -- (10) -- (11) -- (12)}}
+\@namedef{dzg@sterkcover@1}{%
+  \pic {vinberg 18 2 0};
+  \draw[fold, ->] (2,2) ++(-0.9,0) arc[start angle=-180, end angle=0, radius=0.9];
+  \draw[fold, ->] (2,2) ++(0.9,0) arc[start angle=0, end angle=180, radius=0.9];}
 
-\@namedef{dzg@sterk@2}{%
-  \dzg@vertices{1/black/{2,0}/270, 2/black/{1,0}/270, 3/black/{0,0}/270,
-    4/black/{0,1}/170, 5/black/{0,2}/170, 6/black/{0,3}/170, 7/black/{0,4}/170,
-    8/black/{0,5}/170, 9/white/{0,6}/100, 10/black/{1,1}/10}%
-  \dzg@edges{3}{(1) -- (2) -- (3) -- (4) -- (5) -- (6) -- (7) -- (8) (3) -- (10)}%
-  \dzg@edges{4}{(8) -- (9)}}
+\@namedef{dzg@sterkcover@2}{%
+  \pic {vinberg 18 0 0};
+  \draw[fold axis] (3.6,-0.4) -- (3.6,6.9);
+  \draw[fold] (2.7,2.6) -- (4.5,2.6);}
 
-\@namedef{dzg@sterk@3}{%
-  \dzg@vertices{1/white/{0,0}/180, 2/black/{0,1.5}/180, 3/black/{0,3}/180,
-    4/black/{0,4.5}/180, 5/black/{0,6}/135, 6/black/{1.5,6}/90,
-    7/black/{3,6}/90, 8/black/{4.5,6}/90, 9/white/{6,6}/90,
-    10/black/{1.5,4.5}/10, 11/black/{2,2}/100, 12/black/{4,4}/100}%
-  \dzg@edges{3}{(2) -- (3) -- (4) -- (5) -- (6) -- (7) -- (8) (5) -- (10)}%
-  \dzg@edges{infinity}{(11) -- (12)}%
-  \dzg@edges{4}{(2) -- (1) -- (11) (8) -- (9) -- (12)}}
+\@namedef{dzg@sterkcover@3}{%
+  \pic {vinberg 18 2 0};
+  \draw[fold axis] (-0.3,-0.3) -- (4.3,4.3);
+  \draw[fold] (2,3.4) -- (3.4,2);
+  \node[reflected root] at (20) {};}
 
-\@namedef{dzg@sterk@4}{%
-  \dzg@vertices{1/white/{0,3}/180, 2/black/{0,4.5}/180, 3/black/{0,6}/135,
-    4/black/{1.5,6}/90, 5/black/{3,6}/90, 6/black/{4.5,6}/90,
-    7/black/{6,6}/45, 8/black/{6,4.5}/0, 9/white/{6,3}/0,
-    10/black/{1.5,4.5}/10, 11/black/{4.5,4.5}/170}%
-  \dzg@edges{3}{(2) -- (3) -- (4) -- (5) -- (6) -- (7) -- (8) (3) -- (10) (7) -- (11)}%
-  \dzg@edges{4}{(1) -- (2) (9) -- (8)}}
+\@namedef{dzg@sterkcover@4}{%
+  \pic {vinberg 18 2 0};
+  \draw[fold axis] (-0.3,2) -- (4.3,2);
+  \draw[fold] (2.6,0.9) -- (2.6,3.1);}
 
-\@namedef{dzg@sterk@5}{% the barbell roots are unlabelled in Sterk V
-  \dzg@barbelllabelsfalse
-  \dzg@squareperimeter{4}{2}{1}{nw}{black}{black}%
-  \dzg@barbell{7/12, 5/11, 3/10, 1/9}{13}{14}{3}{0.5}}
-
-% -----------------------------------------------------------------------------
-% Vinberg diagrams of the 2-elementary lattices (18,2,0) and (18,0,0).
-% Doubled and white vertices as in Nikulin's convention for delta.
-% -----------------------------------------------------------------------------
-% `root labels=ell` labels the twenty boundary lines l_1..l_20 of the integral-
-% affine sphere; the two barbell roots carry no line and stay unlabelled.
-\tikzset{pics/vinberg 18 2 0/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}%
-  \ifx\dzg@labelscheme\dzg@ellscheme\dzg@barbelllabelsfalse\fi
-  \dzg@squareperimeter{4}{4}{1}{nw}{doubled}{white}%
-  \dzg@barbell{13/20, 9/19, 5/18, 1/17}{22}{21}{3}{0.5}}}}
-
-\tikzset{pics/vinberg 18 0 0/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}%
-  \dzg@vertices{1/doubled/{2,0}/270, 2/white/{1,0}/270, 3/doubled/{0,0}/270,
-    4/white/{0,1}/170, 5/doubled/{0,2}/170, 6/white/{0,3}/170,
-    7/doubled/{0,4}/170, 8/white/{0,5}/170, 9/doubled/{0,6}/100,
-    10/white/{1,5}/10, 11/doubled/{2,4}/10, 12/white/{3,3}/10,
-    13/doubled/{4,2}/10, 14/white/{5,1}/10, 15/doubled/{6,0}/270,
-    16/white/{5,0}/270, 17/doubled/{4,0}/270, 18/white/{1,1}/10, 19/white/{4,1}/170}%
-  \dzg@chain{3}{1}{17}%
-  \dzg@edges{3}{(3) -- (18) (15) -- (19)}}}}
+\@namedef{dzg@sterkcover@5}{%
+  \pic {vinberg 18 2 0};
+  \foreach \dzg@k in {1,3,...,15} \node[reflected root] at (\dzg@k) {};}
 
 % -----------------------------------------------------------------------------
 % Coxeter diagrams for the moduli F_2 and F_4 of degree-2 and degree-4 K3
 % surfaces.
 % -----------------------------------------------------------------------------
 \tikzset{pics/k3 F2/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}%
+  \tikzset{transform shape=false}\dzg@canonicallabels{r}%
   \dzg@trianglepoints{0,0}{7,0}{3.5,6}{6}{6}{6}%
   \foreach \dzg@k in {0,...,5}{%
     \pgfmathtruncatemacro\dzg@j{\dzg@k+6}%
@@ -304,7 +330,7 @@
   \dzg@edges{dotted}{(21) -- (22) -- (23) -- (21)}}}}
 
 \tikzset{pics/k3 F4/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}%
+  \tikzset{transform shape=false}\dzg@canonicallabels{r}%
   \dzg@squareperimeter{6}{4}{0}{sw}{black}{black}%
   \dzg@vertex{16}{black}{$(0)!1/8!(8)$}{below right}%
   \dzg@vertex{17}{black}{$(4)!1/8!(12)$}{below left}%
@@ -324,6 +350,37 @@
   \dzg@edges{infinity}{
     (23) -- node[vertex label, midway, right] {$\infty$} (20)
     (22) -- node[vertex label, midway, left] {$\infty$} (21)}}}}
+
+% -----------------------------------------------------------------------------
+% Folding of Dynkin diagrams (dynkin-diagrams package): the diagram with its
+% symmetry above the folded diagram, joined by the quotient map.
+%   \pic {dynkin folding={<unfolded options>}{<type><spec>}{<folded options>}
+%     {<type><spec>}};
+% e.g. {ply=2}{A{ooo.ooooooo.ooo}}{}{C{ooo.ooo*}}. The nodes `unfolded` and
+% `folded` are the two diagrams.
+% -----------------------------------------------------------------------------
+% The folded diagram is left-aligned under the unfolded one. Its node resets
+% `anchor`, which the nested picture of \dynkin would otherwise inherit.
+\tikzset{pics/dynkin folding/.style n args={4}{code={%
+  \node[inner sep=2pt] (unfolded) at (0,0) {\dynkin[scale=3,#1]#2};
+  \node[inner sep=2pt, anchor=north west] (folded)
+    at ($(unfolded.south west)+(0,-10mm)$)
+    {\tikzset{anchor=center}\dynkin[scale=3, arrows=false, #3]#4};
+  \draw[quotient map] (unfolded.south) -- (unfolded.south |- folded.north);}}}
+
+% -----------------------------------------------------------------------------
+% A linear Coxeter diagram with the norm of each root written above it:
+%   \pic {root chain={<mark>/<norm label>/<weight to the next root>, ...,
+%     <mark>/<norm label>/}};
+% Weight 3 is a simple edge; the vertices are named 0, 1, ....
+% -----------------------------------------------------------------------------
+\tikzset{pics/root chain/.style={code={%
+  \foreach \dzg@m/\dzg@l/\dzg@w [count=\dzg@k from 0] in {#1}{%
+    \node[vertex=\dzg@m, label={[vertex label]90:{$\dzg@l$}}] (\dzg@k) at (1.5*\dzg@k,0) {};
+    \ifx\dzg@w\pgfutil@empty\else
+      \coordinate (\dzg@k-next) at (1.5*\dzg@k+1.5,0);
+      \scoped[on edge layer] \draw[coxeter edge=\dzg@w] (\dzg@k.center) -- (\dzg@k-next);
+    \fi}}}}
 
 % -----------------------------------------------------------------------------
 % Finite and affine Coxeter diagrams drawn with multiple edges: an edge of
@@ -374,5 +431,3 @@
     \fi
   \end{tikzpicture}}
 \newcommand{\coxetervertex}[1]{\tikz[baseline=-0.5ex]\node[vertex=#1] {};}
-
-
