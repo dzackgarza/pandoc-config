@@ -14,8 +14,8 @@
   \node at (11, 6.6) {$\bd_{0, 2}\bbcpt{ \fent }$};
   \foreach \v/\l in {1/{1/17}, 3/{2/16}, 4/{3/15}, 5/{4/14}, 6/{5/13},
                      7/{6/12}, 8/{7/11}, 9/{8/10}, 10/9}
-    \node[vertex label, below] at (E\v) {$\l$};
-  \node[vertex label, above] at (E2) {$18/19$};
+    \node[vertex label, below] at (E\v.south) {$\l$};
+  \node[vertex label, above] at (E2.north) {$18/19$};
   \scoped[on background layer]
     \node[marked vertex, label={[text=dzg accent]above:$\delta$}] at (E7) {};
 
@@ -25,8 +25,8 @@
   \node at (11, 2.1) {$\bd_{0, 2}\bbcpt{ F_{\Co, 2} }$};
   \foreach \v/\l in {1/{1/17}, 3/{2/16}, 4/{3/15}, 5/{4/14}, 6/{5/13},
                      7/{7/11}, 8/{8/10}, 9/9}
-    \node[vertex label, below] at (C\v) {$\l$};
-  \node[vertex label, above] at (C2) {$18/19$};
+    \node[vertex label, below] at (C\v.south) {$\l$};
+  \node[vertex label, above] at (C2.north) {$18/19$};
 
   \draw[->] (3, 6.8) to[bend left=20] node[above] {Fold} (6.6, 5.6);
   \draw[->] (16, 4) to[bend left=20]

@@ -1,11 +1,14 @@
 % E8 Dynkin diagram in the source's non-Bourbaki labelling: spine 7-6-5-4-3-2-1
-% from left to right, branch vertex 8 attached to vertex 5. `labels` lists the
-% label of each Bourbaki vertex 1..8 in turn.
+% from left to right, branch vertex 8 attached to vertex 5. The list gives the
+% source label of each Bourbaki vertex 1..8.
 \documentclass[tikz,border=2pt]{standalone}
 \usepackage{dzg-tikz}
 
 \begin{document}
-\begin{tikzpicture}
-  \dynkin[labels={7,8,6,5,4,3,2,1}, label directions={,right,,,,,,}, scale=1.8]E8
+\begin{tikzpicture}[scale=1.8]
+  \pic[root labels=none] (E) {coxeter E=8};
+  \foreach \v/\l in {1/7, 3/6, 4/5, 5/4, 6/3, 7/2, 8/1}
+    \node[vertex label, below] at (E\v.south) {$\l$};
+  \node[vertex label, right] at (E2.east) {$8$};
 \end{tikzpicture}
 \end{document}
