@@ -78,7 +78,9 @@
 % -----------------------------------------------------------------------------
 \tikzset{
   >={Latex[length=2mm]},
-  every picture/.append style={line cap=round, line join=round},
+  % Round caps and joins for strokes that meet at corners (polygon sides,
+  % curves), applied per style so tikz-cd double arrows keep butt caps.
+  round stroke/.style={line cap=round, line join=round},
 }
 
 % -----------------------------------------------------------------------------
@@ -159,7 +161,7 @@
 % -----------------------------------------------------------------------------
 \tikzset{
   ias region/.style={fill=dzg region},
-  ias boundary/.style={draw, line width=0.8pt},
+  ias boundary/.style={draw, line width=0.8pt, round stroke},
   ias edge/.style={draw, line width=0.5pt},
   % Singular point; the optional value is its multiplicity, set as a label:
   %   \node[ias singularity=16] at (p) {};
@@ -171,7 +173,7 @@
   ias surgery/.style={fill=dzg singular!35, draw=dzg singular, line width=0.6pt},
   fan ray/.style={->, draw=dzg accent, line width=1pt},
   kulikov component/.style={draw, line width=0.6pt, fill=dzg region},
-  double curve/.style={draw, line width=1.4pt},
+  double curve/.style={draw, line width=1.4pt, round stroke},
   nontoric blowup/.style={circle, fill=dzg singular, inner sep=0pt,
     minimum size=4pt},
 }
@@ -189,8 +191,8 @@
   lattice grid/.style={draw=dzg grid, line width=0.3pt},
   lattice point/.style={circle, fill=dzg muted, inner sep=0pt, minimum size=3pt},
   polygon region/.style={fill=dzg region},
-  long side/.style={draw, line width=2pt},
-  short side/.style={draw, line width=1pt},
+  long side/.style={draw, line width=2pt, round stroke},
+  short side/.style={draw, line width=1pt, round stroke},
   axis side/.style={draw=dzg muted, line width=0.8pt},
   % A lattice point on the boundary divisor; the value is its fill.
   boundary point/.style={circle, draw, fill=#1, line width=0.8pt,
@@ -207,7 +209,7 @@
   monomial/.style={font=\scriptsize, inner sep=4.5pt},
   polygon title/.style={font=\large, inner sep=2pt},
   % An edge of a lattice polytope (moment polytope, polytope of a fan).
-  polytope edge/.style={draw, line width=0.8pt},
+  polytope edge/.style={draw, line width=0.8pt, round stroke},
   % A lattice point the text singles out: a polytope vertex, a cone generator,
   % the origin of a fan; `lattice point` is the ambient lattice around it.
   distinguished point/.style={circle, fill=black, inner sep=0pt,
@@ -226,7 +228,7 @@
   poset node/.style={draw, rounded corners=2pt, line width=0.5pt,
     inner xsep=4pt, inner ysep=3pt, font=\small},
   degeneration/.style={->, line width=0.6pt, shorten >=3pt, shorten <=3pt},
-  moduli blob/.style={fill=dzg blob, draw, line width=0.8pt},
+  moduli blob/.style={fill=dzg blob, draw, line width=0.8pt, round stroke},
   stratum/.style={circle, fill=black, inner sep=0pt, minimum size=4pt},
   % Mirror moves of 2-elementary lattices (Alexeev-Engel): a lattice S to its
   % orthogonal complement T, then moves T -> e^perp/e of type U or U(2).
@@ -250,7 +252,7 @@
 % -----------------------------------------------------------------------------
 % Draw components with Hobby curves: to[curve through={...}] or closed hobby.
 \tikzset{
-  curve component/.style={draw, line width=0.9pt},
+  curve component/.style={draw, line width=0.9pt, round stroke},
   curve node/.style={circle, fill=black, inner sep=0pt, minimum size=3.5pt},
   dual vertex/.style={circle, fill=black, inner sep=0pt, minimum size=5pt},
   genus/.style={font=\scriptsize, inner sep=1pt},
@@ -265,7 +267,7 @@
   % A continuous map between two drawn spaces.
   map arrow/.style={->, line width=0.8pt},
   % A curve singled out in a space: a loop, a path, a fibre, a factor circle.
-  distinguished curve/.style={draw=dzg accent, line width=1pt},
+  distinguished curve/.style={draw=dzg accent, line width=1pt, round stroke},
   % An oriented path or integration contour, with arrow tips at the listed fractions
   % of its length: \draw[contour] ...; \draw[contour={0.2,0.7}] ...;
   contour/.style={draw, line width=0.8pt, postaction={decorate,
