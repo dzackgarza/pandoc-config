@@ -1,9 +1,7 @@
+% D'_6, D'_8, D'_10, D'_12 (AT Table 4: even rank only): `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\foreach \m [remember=\xnext as \xoff (initially 0),
-    evaluate=\m as \xnext using \xoff+\m] in {7,...,10} {
-  \begin{scope}[shift={(\xoff,0)}]
-    \ADEPrimeDn{\m}
-    \node[polygon title, below=7mm of lp.south] {$D_{\m}'$};
-  \end{scope}
-}
+\pic at (0,0) {ade polygon={D}{6}{prime}};
+\pic at (6,0) {ade polygon={D}{8}{prime}};
+\pic at (13,0) {ade polygon={D}{10}{prime}};
+\pic at (22,0) {ade polygon={D}{12}{prime}};
 \end{tikzpicture}

@@ -1,181 +1,262 @@
 % =============================================================================
-% ADE lattice polygons
+% ADE lattice polygons (Alexeev-Thompson)
 % =============================================================================
-% An ADE surface is a lattice polygon in the (x,y) plane; the lattice point
-% (i,j) is the monomial x^i y^j. A figure draws one polygon with
-%   \pic {lattice polygon={w}{h}{(0,0) -- (4,0) -- (0,2)}};
-% (grid and lattice points over [0,w]x[0,h], the polygon filled; the node `lp`
-% is that rectangle, for placing a title below it), then its sides with
-% `long side`, `short side`, `axis side`, the lattice points of the boundary
-% divisor with `boundary point`, the ADE chain with \dzgbottomchain,
-% \dzgleftchain and \dzgbranch, and monomials with
-%   \pic {monomials={0/0, 0/1, 4/0}};
-% Chain vertex marks: black at even distance from the corner (0,0), white at
-% odd distance.
+% One object, the toric ADE surface (Y, C) of a given shape:
+%   \pic (Q) {ade polygon={<letter>}{<rank>}{<variant>}};
+% <letter> is A, D or E; <variant> is one of
+%   pure        A_{2n-1}, A^-_{2n-2}, D_{2n}, D^-_{2n-1}, -E_6^-, -E_7, -E_8^-
+%               (AT Table 1; the right decoration follows from the rank)
+%   left-short  -A^-_{2n-1} and -A_{2n}: A with the left side short (AT Table 1
+%               row -A^-_{2n-3}, and its mirror A^-_{2n} of AT Remark 3.9)
+%   prime       'A_{2n-1}, 'A^-_{2n-2}, D'_{2n} (AT Table 4)
+%   both-prime  'A'_{2n-1} (AT Table 4)
+%   affine      \tilde D_{2n} (2n >= 6), \tilde E_7, \tilde E_8^- (AT Table 1)
+%
+% Source of the data: Alexeev-Thompson, "ADE surfaces and their moduli"
+% (arXiv:1712.07932), Table 1 (pure shapes), Table 4 (toric primed shapes),
+% Notation 3.7 (the Dynkin diagram on the polygon) and Notations 3.8, 3.21
+% (the decorated symbol). The research preamble implements the same polygons
+% in dzack_research.preamble.categories.schemes.ade_surfaces
+% (ADELogPairs.at21(letter, rank, variant=..., affine=...)); its variants map
+% here as pure->pure (A odd, D even, E), short->pure (A even, D odd),
+% both-short->left-short (A odd), prime->prime, affine=True->affine.
+% Checked against the preamble: polygon, p*, and the lengths of the sides
+% through p* agree for every shape both implement, except 'A^-_{2n-2}, where
+% the preamble returns the polygon of 'A_{2n-3} (vertex (2n-4,0), not
+% (2n-3,0) as in AT Table 4), and A^-_0, which at21 rejects (rank >= 1)
+% although AT Table 1 lists it (min(n) = 1).
+%
+% What the object draws, all derived from the polygon Q and p*:
+% - the lattice [0,w]x[0,h] with points named <i>-<j>, and Q filled;
+% - the boundary divisor C (the sides through p*) as `long side` (even lattice
+%   length) or `short side` (odd), labelled with its lattice length; the other
+%   sides C' as `axis side`; the lattice points of C as `boundary point` in the
+%   accent colour, and p* (named pstar) as `marked point`;
+% - the Dynkin diagram of AT Notation 3.7: a node at each lattice point of C'
+%   not on C, joined along the boundary, black at lattice length 2 from p* and
+%   white at length 1; at each corner node an internal node (`vertex=doubled`)
+%   at the corner plus the primitive vectors of its two sides. Nodes are named
+%   1, 2, ... along the boundary, then the internal nodes;
+% - the monomial x^i y^j at every boundary lattice point but p*, and at every
+%   internal node, set outside Q (along the outward normal of the side, or the
+%   bisector of the two normals at a vertex) and, at an internal node, away
+%   from its corner;
+% - the decorated Dynkin symbol below Q.
+% Keys: `ade labels=none` hides the monomials, side lengths and the p* label;
+% `ade title=false` hides the symbol.
 
 % x^i y^j, written 1, x, x^2, y, xy, ...
 \newcommand{\dzgmonomial}[2]{%
   \ifnum#1=0 \ifnum#2=0 1\fi\else x\ifnum#1>1 ^{#1}\fi\fi
   \ifnum#2>0 y\ifnum#2>1 ^{#2}\fi\fi}
 
+\newif\ifdzg@adelabels \dzg@adelabelstrue
+\newif\ifdzg@adetitle \dzg@adetitletrue
 \tikzset{
-  pics/lattice polygon/.style n args={3}{/tikz/transform shape, code={\tikzset{transform shape=false}%
-    \path[local bounding box=lp] (0,0) rectangle (#1,#2);
-    \begin{scope}[on background layer]
-      \fill[polygon region] #3 -- cycle;
-      \draw[lattice grid] (0,0) grid (#1,#2);
-    \end{scope}
-    \foreach \x in {0,...,#1} \foreach \y in {0,...,#2}
-      \node[lattice point] at (\x,\y) {};}},
-  % Label each listed lattice point i/j with its monomial: below on the x-axis,
-  % left on the y-axis, below right elsewhere.
-  pics/monomials/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
-    \foreach \dzgi/\dzgj in {#1} {
-      \pgfmathsetmacro\dzgwhere{\dzgj==0 ? "below"
-        : (\dzgi==0 ? "left" : "below right")}
-      \path (\dzgi,\dzgj) coordinate[label={[monomial]\dzgwhere:$\dzgmonomial{\dzgi}{\dzgj}$}];
-    }}},
+  ade labels/.is choice,
+  ade labels/monomials/.code={\dzg@adelabelstrue},
+  ade labels/none/.code={\dzg@adelabelsfalse},
+  ade title/.is if=dzg@adetitle,
+  pics/ade polygon/.style n args={3}{code={\dzg@adepolygon{#1}{#2}{#3}}},
 }
 
-% A side of the boundary divisor from (#1,#2) to (#3,#4), counterclockwise:
-% `short side` if its lattice length is 1, `long side` otherwise, labelled
-% with its lattice length.
-\newcommand{\dzgboundaryside}[4]{%
-  \pgfmathtruncatemacro\dzglength{gcd(abs(#3-#1),abs(#4-#2))}%
-  \pgfmathsetmacro\dzgside{\dzglength==1 ? "short side" : "long side"}%
-  \scoped[on edge layer]
-    \draw[\dzgside, side label=\dzglength] (#1,#2) -- (#3,#4);}
+% -----------------------------------------------------------------------------
+% Shapes. Each sets p* = (\dzg@px,\dzg@py) and \dzg@path, the vertices
+% v_1, ..., v_k of Q after p* in counterclockwise order: the boundary is
+% p* -> v_1 -> ... -> v_k -> p*, with C = [v_k, p*] + [p*, v_1] and
+% C' = v_1 -> ... -> v_k. For the affine shapes p* is interior to the one side
+% of C. \dzg@lprime and \dzg@rprime record priming on the left side [p*, v_1]
+% and the right side [v_k, p*].
+% -----------------------------------------------------------------------------
+\def\dzg@ade@rankerror#1{\PackageError{dzg}{ade polygon: #1}{AT Tables 1
+  and 4 list the toric shapes.}}
+\@namedef{dzg@ade@A@pure}{%
+  \def\dzg@px{0}\def\dzg@py{2}%
+  \pgfmathtruncatemacro\dzg@a{\dzg@r+1}\edef\dzg@path{0/0, \dzg@a/0}}
+\@namedef{dzg@ade@A@left-short}{%
+  \ifnum\dzg@r<1 \dzg@ade@rankerror{-A_n needs n >= 1}\fi
+  \def\dzg@px{0}\def\dzg@py{2}%
+  \pgfmathtruncatemacro\dzg@a{\dzg@r+2}\edef\dzg@path{1/0, \dzg@a/0}}
+\@namedef{dzg@ade@A@prime}{%
+  \ifnum\dzg@r<2 \dzg@ade@rankerror{'A_n needs n >= 2}\fi
+  \def\dzg@lprime{1}%
+  \pgfmathtruncatemacro\dzg@a{\dzg@r-1}\edef\dzg@path{0/1, 0/0, \dzg@a/0}}
+\@namedef{dzg@ade@A@both-prime}{%
+  \ifodd\dzg@r\else\dzg@ade@rankerror{'A'_n needs n odd}\fi
+  \ifnum\dzg@r<5 \dzg@ade@rankerror{'A'_n needs n >= 5}\fi
+  \def\dzg@lprime{1}\def\dzg@rprime{1}%
+  \pgfmathtruncatemacro\dzg@a{\dzg@r-3}\pgfmathtruncatemacro\dzg@b{(\dzg@r+1)/2}%
+  \edef\dzg@path{0/1, 0/0, \dzg@a/0, \dzg@b/1}}
+\@namedef{dzg@ade@D@pure}{%
+  \ifnum\dzg@r<4 \dzg@ade@rankerror{D_n needs n >= 4}\fi
+  \pgfmathtruncatemacro\dzg@a{\dzg@r-2}\edef\dzg@path{0/2, 0/0, \dzg@a/0}}
+\@namedef{dzg@ade@D@prime}{%
+  \ifodd\dzg@r\dzg@ade@rankerror{D'_n needs n even}\fi
+  \ifnum\dzg@r<6 \dzg@ade@rankerror{D'_n needs n >= 6}\fi
+  \def\dzg@rprime{1}%
+  \pgfmathtruncatemacro\dzg@a{\dzg@r-4}\pgfmathtruncatemacro\dzg@b{\dzg@r/2}%
+  \edef\dzg@path{0/2, 0/0, \dzg@a/0, \dzg@b/1}}
+\@namedef{dzg@ade@E@pure}{%
+  \ifnum\dzg@r<6 \dzg@ade@rankerror{E_n needs 6 <= n <= 8}\fi
+  \ifnum\dzg@r>8 \dzg@ade@rankerror{E_n needs 6 <= n <= 8}\fi
+  \pgfmathtruncatemacro\dzg@a{\dzg@r-3}\edef\dzg@path{0/3, 0/0, \dzg@a/0}}
+\@namedef{dzg@ade@D@affine}{%
+  \ifodd\dzg@r\dzg@ade@rankerror{\tilde D_n needs n even}\fi
+  \ifnum\dzg@r<6 \dzg@ade@rankerror{\tilde D_n is toric for n >= 6}\fi
+  \def\dzg@affine{1}%
+  \pgfmathtruncatemacro\dzg@a{\dzg@r-4}\edef\dzg@path{0/2, 0/0, \dzg@a/0, 4/2}}
+\@namedef{dzg@ade@E@affine}{%
+  \def\dzg@affine{1}%
+  \ifcase\numexpr\dzg@r-6\relax
+    \dzg@ade@rankerror{there is no \tilde E_6 shape (AT Remark 3.10)}%
+  \or\def\dzg@path{0/4, 0/0, 4/0}%
+  \or\def\dzg@path{0/3, 0/0, 6/0}%
+  \else\dzg@ade@rankerror{\tilde E_n needs n = 7 or 8}\fi}
 
-% The ADE chain along the x-axis from (#1,0) to (#2,0), or along the y-axis
-% from (0,#1) to (0,#2), highlighted; and one chain vertex (#1,#2) with mark
-% #3 joined to (#4,0).
-\newcommand{\dzgbottomchain}[2]{%
-  \foreach \i in {#1,...,#2} {
-    \pgfmathsetmacro\dzgmark{iseven(\i) ? "black" : "white"}
-    \node[vertex/.expanded=\dzgmark] at (\i,0) {};}
-  \scoped[on edge layer] \draw[coxeter edge=3] (#1,0) -- (#2,0);
-  \scoped[on background layer] \draw[parabolic] (#1,0) -- (#2,0);}
-\newcommand{\dzgleftchain}[2]{%
-  \foreach \i in {#1,...,#2} {
-    \pgfmathsetmacro\dzgmark{iseven(\i) ? "black" : "white"}
-    \node[vertex/.expanded=\dzgmark] at (0,\i) {};}
-  \scoped[on edge layer] \draw[coxeter edge=3] (0,#1) -- (0,#2);
-  \scoped[on background layer] \draw[parabolic] (0,#1) -- (0,#2);}
-\newcommand{\dzgbranch}[4]{%
-  \node[vertex=#3] at (#1,#2) {};
-  \scoped[on edge layer] \draw[coxeter edge=3] (#1,#2) -- (#4,0);
-  \scoped[on background layer] \draw[parabolic] (#1,#2) -- (#4,0);}
+\def\dzg@ade@shape#1#2#3{%
+  \def\dzg@letter{#1}\pgfmathtruncatemacro\dzg@r{#2}%
+  \def\dzg@px{2}\def\dzg@py{2}\let\dzg@path\relax
+  \def\dzg@lprime{0}\def\dzg@rprime{0}\def\dzg@affine{0}%
+  \ifcsname dzg@ade@#1@#3\endcsname\csname dzg@ade@#1@#3\endcsname
+  \else\dzg@ade@rankerror{no variant `#3' of #1}\fi}
 
-% The infinite families. Each takes the index n of its ADE type, sets \n,
-% and draws the polygon, its sides, boundary points, chain and monomials;
-% the figure adds the title.
+% \dzg@ade@side{<x0>}{<y0>}{<x1>}{<y1>}: lattice length \dzg@g and primitive
+% step (\dzg@sx,\dzg@sy) of the segment.
+\def\dzg@ade@side#1#2#3#4{%
+  \pgfmathtruncatemacro\dzg@g{gcd(abs(#3-#1),abs(#4-#2))}%
+  \pgfmathtruncatemacro\dzg@sx{(#3-#1)/\dzg@g}%
+  \pgfmathtruncatemacro\dzg@sy{(#4-#2)/\dzg@g}}
 
-% A_n: the triangle (0,0), (n+1,0), (0,2).
-\newcommand{\ADEAn}[1]{%
-  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n+1}%
-  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (0,2)}};
-  \scoped[on edge layer] \draw[axis side] (0,0) -- (\dzgw,0);
-  \dzgboundaryside{\dzgw}{0}{0}{2}\dzgboundaryside{0}{2}{0}{0}%
-  \dzgbottomchain{1}{\n}%
-  \foreach \p in {(0,0), (0,1), (0,2), (\dzgw,0)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 0/1, 0/2, \dzgw/0}};
-  \foreach \i in {1,...,\n} \pic {monomials={\i/0}};
-  \ifodd\n
-    \pgfmathtruncatemacro\dzgh{\dzgw/2}%
-    \node[boundary point] at (\dzgh,1) {};
-    \pic {monomials={\dzgh/1}};
+% \dzg@ade@monomial{<i>}{<j>}{<angle>}
+\def\dzg@ade@monomial#1#2#3{%
+  \ifdzg@adelabels
+    \path (#1,#2) node[label={[monomial]#3:$\dzgmonomial{#1}{#2}$}] {};%
   \fi}
 
-% -A_n: the triangle (1,0), (n+2,0), (0,2).
-\newcommand{\ADEmAnm}[1]{%
-  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n+2}%
-  \pgfmathtruncatemacro\dzge{\n+1}%
-  \pic {lattice polygon={\dzgw}{2}{(1,0) -- (\dzgw,0) -- (0,2)}};
-  \scoped[on edge layer] \draw[axis side] (1,0) -- (\dzgw,0);
-  \dzgboundaryside{\dzgw}{0}{0}{2}\dzgboundaryside{0}{2}{1}{0}%
-  \dzgbottomchain{2}{\dzge}%
-  \foreach \p in {(1,0), (0,2), (\dzgw,0)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 0/1, 1/0, 0/2, \dzgw/0}};
-  \foreach \i in {2,...,\dzge} \pic {monomials={\i/0}};
-  \ifodd\dzgw\else
-    \pgfmathtruncatemacro\dzgh{\dzgw/2}%
-    \node[boundary point] at (\dzgh,1) {};
-    \pic {monomials={\dzgh/1}};
+\def\dzg@adepolygon#1#2#3{%
+  \dzg@ade@shape{#1}{#2}{#3}%
+  \ifnum\dzg@affine=1 \let\dzg@cycle\dzg@path
+  \else\edef\dzg@cycle{\dzg@px/\dzg@py, \dzg@path}\fi
+  % Bounding box, the path of Q, and v_1, v_k.
+  \gdef\dzg@w{0}\gdef\dzg@h{0}\gdef\dzg@Q{}%
+  \foreach \x/\y [count=\k] in \dzg@cycle {%
+    \xdef\dzg@N{\k}%
+    \pgfmathtruncatemacro\dzg@t{max(\dzg@w,\x)}\xdef\dzg@w{\dzg@t}%
+    \pgfmathtruncatemacro\dzg@t{max(\dzg@h,\y)}\xdef\dzg@h{\dzg@t}%
+    \xdef\dzg@Q{\dzg@Q(\x,\y) -- }}%
+  \foreach \x/\y [count=\k] in \dzg@path {%
+    \ifnum\k=1 \xdef\dzg@vfirst{\x/\y}\xdef\dzg@vfirstx{\x}\xdef\dzg@vfirsty{\y}\fi
+    \xdef\dzg@vlast{\x/\y}\xdef\dzg@vlastx{\x}\xdef\dzg@vlasty{\y}}%
+  \path[local bounding box=lp] (0,0) rectangle (\dzg@w,\dzg@h);
+  \begin{scope}[on background layer]
+    \fill[polygon region] \dzg@Q cycle;
+    \draw[lattice grid] (0,0) grid (\dzg@w,\dzg@h);
+  \end{scope}
+  \foreach \x in {0,...,\dzg@w} \foreach \y in {0,...,\dzg@h}
+    \node[lattice point] (\x-\y) at (\x,\y) {};
+  % Monomials: outward along the normal of each side at its interior points,
+  % along the bisector of the two outward normals at each vertex.
+  \edef\dzg@wrapped{\dzg@cycle, \dzg@cycle}%
+  \foreach \x/\y [count=\k, remember=\xa as \xb (initially 0),
+      remember=\ya as \yb (initially 0), remember=\x as \xa (initially 0),
+      remember=\y as \ya (initially 0)] in \dzg@wrapped {%
+    \pgfmathtruncatemacro\dzg@atvertex{\k>2 && \k<\dzg@N+3}%
+    \pgfmathtruncatemacro\dzg@atside{\k>1 && \k<\dzg@N+2}%
+    \ifnum\dzg@atvertex=1 % vertex (\xa,\ya) between (\xb,\yb) and (\x,\y)
+      \pgfmathsetmacro\dzg@nx{(\ya-\yb)/veclen(\xa-\xb,\ya-\yb)
+        + (\y-\ya)/veclen(\x-\xa,\y-\ya)}%
+      \pgfmathsetmacro\dzg@ny{(\xb-\xa)/veclen(\xa-\xb,\ya-\yb)
+        + (\xa-\x)/veclen(\x-\xa,\y-\ya)}%
+      \pgfmathsetmacro\dzg@angle{atan2(\dzg@ny,\dzg@nx)}%
+      \ifnum\xa=\dzg@px \ifnum\ya=\dzg@py \else
+        \dzg@ade@monomial{\xa}{\ya}{\dzg@angle}\fi
+      \else\dzg@ade@monomial{\xa}{\ya}{\dzg@angle}\fi
+    \fi
+    \ifnum\dzg@atside=1 % interior lattice points of side (\xa,\ya) -> (\x,\y)
+      \dzg@ade@side{\xa}{\ya}{\x}{\y}%
+      \pgfmathsetmacro\dzg@angle{atan2(-\dzg@sx,\dzg@sy)}%
+      \pgfmathtruncatemacro\dzg@last{\dzg@g-1}%
+      \ifnum\dzg@last>0
+        \foreach \t in {1,...,\dzg@last} {%
+          \pgfmathtruncatemacro\dzg@i{\xa+\t*\dzg@sx}%
+          \pgfmathtruncatemacro\dzg@j{\ya+\t*\dzg@sy}%
+          \ifnum\dzg@i=\dzg@px \ifnum\dzg@j=\dzg@py \else
+            \dzg@ade@monomial{\dzg@i}{\dzg@j}{\dzg@angle}\fi
+          \else\dzg@ade@monomial{\dzg@i}{\dzg@j}{\dzg@angle}\fi}%
+      \fi
+    \fi}%
+  % C: the sides through p*, and their lattice points.
+  \ifnum\dzg@affine=1
+    \edef\dzg@Csides{\dzg@vlast/\dzg@vfirst}%
+  \else
+    \edef\dzg@Csides{\dzg@vlast/\dzg@px/\dzg@py, \dzg@px/\dzg@py/\dzg@vfirst}%
+  \fi
+  \foreach \xa/\ya/\x/\y in \dzg@Csides {%
+    \dzg@ade@side{\xa}{\ya}{\x}{\y}%
+    \ifodd\dzg@g\def\dzg@class{short side}\else\def\dzg@class{long side}\fi
+    \scoped[on edge layer] \draw[\dzg@class] (\xa,\ya) -- (\x,\y);
+    \ifdzg@adelabels \path[side label=\dzg@g] (\xa,\ya) -- (\x,\y);\fi
+    \foreach \t in {0,...,\dzg@g}
+      \node[boundary point=dzg accent] at (\xa+\t*\dzg@sx,\ya+\t*\dzg@sy) {};}%
+  \coordinate (pstar) at (\dzg@px,\dzg@py);
+  \ifdzg@adelabels \node[marked point=$p_\ast$] at (pstar) {};
+  \else \node[marked point] at (pstar) {};\fi
+  % C' and the Dynkin diagram along it.
+  \gdef\dzg@node{0}%
+  \foreach \x/\y [count=\k, remember=\x as \xa (initially 0),
+      remember=\y as \ya (initially 0)] in \dzg@path {%
+    \ifnum\k>1
+      \scoped[on edge layer] \draw[axis side] (\xa,\ya) -- (\x,\y);
+      \dzg@ade@side{\xa}{\ya}{\x}{\y}%
+      \foreach \t in {1,...,\dzg@g} {%
+        \pgfmathtruncatemacro\dzg@i{\xa+\t*\dzg@sx}%
+        \pgfmathtruncatemacro\dzg@j{\ya+\t*\dzg@sy}%
+        \edef\dzg@here{\dzg@i/\dzg@j}%
+        \ifx\dzg@here\dzg@vlast\else
+          \pgfmathtruncatemacro\dzg@n{\dzg@node+1}\xdef\dzg@node{\dzg@n}%
+          \pgfmathtruncatemacro\dzg@len{gcd(abs(\dzg@i-\dzg@px),abs(\dzg@j-\dzg@py))}%
+          \ifnum\dzg@len=2 \def\dzg@mark{black}\else\def\dzg@mark{white}\fi
+          \node[vertex=\dzg@mark] (\dzg@n) at (\dzg@i,\dzg@j) {};
+          \ifnum\dzg@n>1
+            \scoped[on edge layer]
+              \draw[coxeter edge=3] (\dzg@i-\dzg@sx,\dzg@j-\dzg@sy) -- (\dzg@i,\dzg@j);
+          \fi
+        \fi}%
+    \fi}%
+  % Internal nodes at the corners of C'.
+  \foreach \x/\y [count=\k, remember=\xa as \xb (initially 0),
+      remember=\ya as \yb (initially 0), remember=\x as \xa (initially 0),
+      remember=\y as \ya (initially 0)] in \dzg@path {%
+    \ifnum\k>2 % corner (\xa,\ya)
+      \dzg@ade@side{\xa}{\ya}{\xb}{\yb}\let\dzg@ux\dzg@sx\let\dzg@uy\dzg@sy
+      \dzg@ade@side{\xa}{\ya}{\x}{\y}%
+      \pgfmathtruncatemacro\dzg@dx{\dzg@ux+\dzg@sx}%
+      \pgfmathtruncatemacro\dzg@dy{\dzg@uy+\dzg@sy}%
+      \pgfmathtruncatemacro\dzg@i{\xa+\dzg@dx}%
+      \pgfmathtruncatemacro\dzg@j{\ya+\dzg@dy}%
+      \pgfmathtruncatemacro\dzg@n{\dzg@node+1}\xdef\dzg@node{\dzg@n}%
+      \node[vertex=doubled] (\dzg@n) at (\dzg@i,\dzg@j) {};
+      \scoped[on edge layer] \draw[coxeter edge=3] (\xa,\ya) -- (\dzg@i,\dzg@j);
+      \pgfmathsetmacro\dzg@angle{atan2(\dzg@dy,\dzg@dx)}%
+      \dzg@ade@monomial{\dzg@i}{\dzg@j}{\dzg@angle}%
+    \fi}%
+  % The decorated Dynkin symbol (AT Notations 3.8, 3.21): a prime on a primed
+  % side, else a minus on a short side; an affine shape carries its one
+  % decoration on the right.
+  \ifdzg@adetitle
+    \dzg@ade@side{\dzg@px}{\dzg@py}{\dzg@vfirstx}{\dzg@vfirsty}%
+    \let\dzg@lg\dzg@g
+    \dzg@ade@side{\dzg@vlastx}{\dzg@vlasty}{\dzg@px}{\dzg@py}%
+    \let\dzg@rg\dzg@g
+    \ifnum\dzg@affine=1
+      \dzg@ade@side{\dzg@vlastx}{\dzg@vlasty}{\dzg@vfirstx}{\dzg@vfirsty}%
+      \let\dzg@rg\dzg@g\def\dzg@lg{2}%
+      \def\dzg@body{\widetilde{\dzg@letter}}%
+    \else\def\dzg@body{\dzg@letter}\fi
+    \ifnum\dzg@lprime=1 \def\dzg@pre{{}'}%
+    \else\ifodd\dzg@lg\def\dzg@pre{{}^{-}}\else\def\dzg@pre{}\fi\fi
+    \ifnum\dzg@rprime=1 \def\dzg@post{'}%
+    \else\ifodd\dzg@rg\def\dzg@post{^{-}}\else\def\dzg@post{}\fi\fi
+    \node[polygon title, below=7mm of lp.south]
+      {$\dzg@pre\dzg@body_{\dzg@r}\dzg@post$};
   \fi}
-
-% D_n: the quadrilateral (0,0), (n-2,0), (2,2), (0,2).
-\newcommand{\ADEDn}[1]{%
-  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-2}%
-  \pgfmathtruncatemacro\dzge{\n-3}%
-  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (2,2) -- (0,2)}};
-  \scoped[on edge layer] \draw[axis side] (0,2) -- (0,0) -- (\dzgw,0);
-  \dzgboundaryside{\dzgw}{0}{2}{2}\dzgboundaryside{2}{2}{0}{2}%
-  \dzgbottomchain{0}{\dzge}\dzgbranch{0}{1}{white}{0}\dzgbranch{1}{1}{white}{0}%
-  \foreach \p in {(\dzgw,0), (0,2), (1,2), (2,2)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 0/1, 1/1, 0/2, 1/2, 2/2, \dzgw/0}};
-  \foreach \i in {1,...,\dzge} \pic {monomials={\i/0}};
-  \ifodd\dzge
-    \pgfmathtruncatemacro\dzgh{(\dzgw+2)/2}%
-    \node[boundary point] at (\dzgh,1) {};
-    \pic {monomials={\dzgh/1}};
-  \fi}
-
-% D~_n: the rectangle (0,0), (n-2,0), (n-2,2), (0,2).
-\newcommand{\ADEDntilde}[1]{%
-  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-2}%
-  \pgfmathtruncatemacro\dzge{\n-3}%
-  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (\dzgw,2) -- (0,2)}};
-  \scoped[on edge layer]
-    \draw[axis side] (0,2) -- (0,0) -- (\dzgw,0) -- (\dzgw,2);
-  \dzgboundaryside{\dzgw}{2}{0}{2}%
-  \dzgbottomchain{0}{\dzge}\dzgbranch{0}{1}{white}{0}\dzgbranch{1}{1}{white}{0}%
-  \dzgbranch{\dzgw}{0}{black}{\dzge}%
-  \dzgbranch{\dzgw}{1}{white}{\dzgw}\dzgbranch{\dzge}{1}{white}{\dzgw}%
-  \foreach \i in {0,...,\dzgw} \node[boundary point] at (\i,2) {};
-  \pic {monomials={1/1, \dzgw/0, \dzgw/1, \dzge/1}};
-  \foreach \i in {1,...,\dzge} \pic {monomials={\i/0}};
-  \foreach \i in {0,...,\dzgw} \pic {monomials={\i/2}};}
-
-% 'A_n: the quadrilateral (0,0), (n-1,0), (2,2), (0,1).
-\newcommand{\ADEPrimeAn}[1]{%
-  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-1}%
-  \pgfmathtruncatemacro\dzge{\n-2}%
-  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (2,2) -- (0,1)}};
-  \scoped[on edge layer] \draw[axis side] (0,1) -- (0,0) -- (\dzgw,0);
-  \dzgboundaryside{\dzgw}{0}{2}{2}\dzgboundaryside{2}{2}{0}{1}%
-  \dzgbottomchain{0}{\dzge}\dzgbranch{1}{1}{white}{0}%
-  \foreach \p in {(0,1), (\dzgw,0), (2,2)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 0/1, 0/2, 1/1, 2/2, \dzgw/0}};
-  \foreach \i in {1,...,\dzge} \pic {monomials={\i/0}};
-  \ifodd\n
-    \pgfmathtruncatemacro\dzgh{(\dzgw+2)/2}%
-    \node[boundary point] at (\dzgh,1) {};
-    \pic {monomials={\dzgh/1}};
-  \fi}
-
-% ''A_n: the pentagon (0,0), (n-3,0), (n-3,1), (2,2), (0,1).
-\newcommand{\ADEPrimePrimeAn}[1]{%
-  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-3}%
-  \pgfmathtruncatemacro\dzge{\n-4}%
-  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (\dzgw,1) -- (2,2) -- (0,1)}};
-  \scoped[on edge layer] \draw[axis side] (0,1) -- (0,0) -- (\dzgw,0);
-  \dzgboundaryside{\dzgw}{1}{2}{2}\dzgboundaryside{2}{2}{0}{1}%
-  \dzgbottomchain{0}{\dzgw}\dzgbranch{1}{1}{white}{0}%
-  \dzgbranch{\dzge}{1}{white}{\dzgw}%
-  \foreach \p in {(0,1), (\dzgw,1), (2,2)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 0/1, 0/2, 1/1, 2/2, \dzgw/1, \dzge/1}};
-  \foreach \i in {1,...,\dzgw} \pic {monomials={\i/0}};}
-
-% D'_n: the pentagon (0,0), (n-4,0), (n-4,1), (2,2), (0,2).
-\newcommand{\ADEPrimeDn}[1]{%
-  \pgfmathtruncatemacro\n{#1}\pgfmathtruncatemacro\dzgw{\n-4}%
-  \pgfmathtruncatemacro\dzge{\n-5}%
-  \pic {lattice polygon={\dzgw}{2}{(0,0) -- (\dzgw,0) -- (\dzgw,1) -- (2,2) -- (0,2)}};
-  \scoped[on edge layer]
-    \draw[axis side] (0,2) -- (0,0) -- (\dzgw,0) -- (\dzgw,1);
-  \dzgboundaryside{\dzgw}{1}{2}{2}\dzgboundaryside{2}{2}{0}{2}%
-  \dzgbottomchain{0}{\dzgw}\dzgbranch{0}{1}{white}{0}\dzgbranch{1}{1}{white}{0}%
-  \dzgbranch{\dzge}{1}{white}{\dzgw}%
-  \foreach \p in {(\dzgw,1), (0,2), (1,2), (2,2)} \node[boundary point] at \p {};
-  \pic {monomials={0/0, 0/1, 0/2, 1/1, 1/2, 2/2, \dzgw/1, \dzge/1}};
-  \foreach \i in {1,...,\dzgw} \pic {monomials={\i/0}};}

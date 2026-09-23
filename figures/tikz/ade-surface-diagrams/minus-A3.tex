@@ -1,12 +1,4 @@
+% -A_3^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\pic {lattice polygon={5}{2}{(1,0) -- (5,0) -- (0,2)}};
-\scoped[on edge layer] {
-  \draw[axis side] (1,0) -- (5,0);
-  \draw[long side, side label=long] (5,0) -- (0,2);
-  \draw[short side, side label=short] (0,2) -- (1,0);
-}
-\node[boundary point=black] at (1,0) {};
-\node[boundary point] at (5,0) {};
-\node[marked point=$p_\ast$] at (0,2) {};
-\node[polygon title, below=5mm of lp.south] {${}^{-}A_3$};
+\pic {ade polygon={A}{3}{left-short}};
 \end{tikzpicture}

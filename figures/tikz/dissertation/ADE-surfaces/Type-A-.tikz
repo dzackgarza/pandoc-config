@@ -1,10 +1,7 @@
+% -A_3^-, -A_4, -A_5^-, -A_6: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
 \begin{tikzpicture}
-\foreach \m [remember=\xnext as \xoff (initially 0),
-    evaluate=\m as \xnext using \xoff+\m+5] in {3,...,6} {
-  \begin{scope}[shift={(\xoff,0)}]
-    \ADEmAnm{\m}
-    \node[polygon title, below=7mm of lp.south]
-      {\ifodd\m ${}^{-}A_{\m}^{-}$\else ${}^{-}A_{\m}$\fi};
-  \end{scope}
-}
+\pic at (0,0) {ade polygon={A}{3}{left-short}};
+\pic at (8,0) {ade polygon={A}{4}{left-short}};
+\pic at (17,0) {ade polygon={A}{5}{left-short}};
+\pic at (27,0) {ade polygon={A}{6}{left-short}};
 \end{tikzpicture}
