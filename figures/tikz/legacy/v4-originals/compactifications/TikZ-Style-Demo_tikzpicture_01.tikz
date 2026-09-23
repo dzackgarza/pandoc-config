@@ -5,10 +5,7 @@
 % Index: 1
 
 \begin{tikzpicture}
-[cusp diagram]
-% Semantic node styles
-\node[zero cusp] (c1) at (0,0) {\cusptype{18}{2}{0}_1};
-\node[one cusp] (r1) at (3,0) {$E_8^2$};
-% Semantic arrow style
-\draw[cusp inclusion] (c1) -- (r1);
+  \node[cusp0, label={[cusp label]below:$(18,2,0)_1$}] (c1) at (0,0) {};
+  \node[cusp1] (r1) at (3,0) {$E_8^2$};
+  \draw[incidence] (c1) -- (r1);
 \end{tikzpicture}

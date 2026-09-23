@@ -11,6 +11,6 @@
       & (Z,D_Z + \epsilon R_Z) \arrow{d}{\rho} 
       & (Z',D_{Z'} + \epsilon R_{Z'}) \arrow{dl}{\rho'} 
       \\
-      (Y,C +\fraceps B) \arrow[swap]{r}{\varphi} 
-      & (W,C_W + \fraceps B_W)
+      (Y,C +\tfrac{1+\epsilon}{2}B) \arrow[swap]{r}{\varphi} 
+      & (W,C_W + \tfrac{1+\epsilon}{2}B_W)
 \end{tikzcd}

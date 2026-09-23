@@ -4,51 +4,25 @@
 % Category: general
 % Index: 5
 
+% 0-cusps s_1-s_5 labelled by the symmetry fixing them, 1-cusps labelled by
+% lattice and symmetries. The 0-cusp s_1 and the 1-cusps incident to it are
+% highlighted.
 \begin{tikzpicture}
-\node[circle, draw, label=above:{$\mathrm{v}$}] (2) at (0,0) {$s_2$};
-    
-    \node[fill=green!50, rectangle, draw, label=above:{$E_8^2, \mathrm{r}$}] (12) at (3,1.5) {$C_{12}$};
-    \node[rectangle, draw, label=below:{$D_{16}*, \mathrm{h}$}] (245) at (3,-2) {$C_{245}$};
-
-    \node[circle, draw, fill=red!50, label=above:{$\mathrm{r}$}] (1) at (6,3) {$s_1$};
-    \node[circle, draw, label=above:{$\mathrm d$}] (3) at (6,1) {$s_3$};
-    \node[circle, draw, label=above:{$\mathrm h$}] (4) at (6,-1) {$s_4$};
-    \node[circle, draw, label=above:$\mathrm{id}$] (5) at (6,-3) {$s_5$};
-
-    \node[rectangle, draw, fill=green!50, label=right:{$E_7^2A_1^2*, \mathrm{d, r}$}]
-    (13) at (10,4.5) {$C_{13}$};
-    \node[rectangle, draw, fill=green!50, label=right:{$D_8^2*, \mathrm{h,r}$}] (14) at (10,3) {$C_{14}$};
-    \node[rectangle, draw, fill=green!50, label=right:{$A_{15}A_1(2)*, \mathrm{d,h,r}$}]
-    (15) at (10,1.5) {$C_{15}$};
-    \node[rectangle, draw, label=right:{$A_{15}A_1(2)*, \mathrm{d,h,r}$}] (34) at (10,0) {$C_{34}$};
-    \node[rectangle, draw, label=right:{$D_{12}D_4*, \mathrm{d}$}] (35) at (10,-1.5) {$C_{35}$};
-    \node[rectangle, draw, label=right:{$D_8^2*, \mathrm{h, r}$}] (45) at (10,-3) {$C_{45}$};
-    \node[rectangle, draw, label=right:{$E_7^2A_1^2*, \mathrm{d,r}$}] (55) at (10,-4.5) {$C_5$};
-
-    \draw[-latex, shorten >= 0.4em] (2)--(12);
-    \draw[-latex, shorten >= 0.4em] (1)--(12);
-
-    \draw[-latex, shorten >= 0.4em] (2)--(245);
-    \draw[-latex, shorten >= 0.4em] (4)--(245);
-    \draw[-latex, shorten >= 0.4em] (5)--(245);
-
-    \draw[-latex, shorten >= 0.4em] (1)--(13);
-    \draw[-latex, shorten >= 0.4em] (3)--(13);
-    
-    \draw[-latex, shorten >= 0.4em] (1)--(14);
-    \draw[-latex, shorten >= 0.4em] (4)--(14);
-    
-    \draw[-latex, shorten >= 0.4em] (1)--(15);
-    \draw[-latex, shorten >= 0.4em] (5)--(15);
-    
-    \draw[-latex, shorten >= 0.4em] (3)--(34);
-    \draw[-latex, shorten >= 0.4em] (4)--(34);
-    
-    \draw[-latex, shorten >= 0.4em] (3)--(35);
-    \draw[-latex, shorten >= 0.4em] (5)--(35);
-    
-    \draw[-latex, shorten >= 0.4em] (4)--(45);
-    \draw[-latex, shorten >= 0.4em] (5)--(45);
-    
-    \draw[-latex, shorten >= 0.4em] (5)--(55);
+  \foreach \n/\x/\y/\s/\o in {2/0/0/v/none, 1/6/3/r/dzg highlight,
+      3/6/1/d/none, 4/6/-1/h/none, 5/6/-3/id/none}
+    \node[cusp0, fill=\o, label=above:{$\mathrm{\s}$}] (\n) at (\x,\y) {$s_{\n}$};
+  \foreach \n/\x/\y/\t/\p/\L/\o in {
+      12/3/1.5/12/above/{$E_8^2, \mathrm{r}$}/dzg highlight,
+      245/3/-2/245/below/{$D_{16}*, \mathrm{h}$}/none,
+      13/10/4.5/13/right/{$E_7^2A_1^2*, \mathrm{d, r}$}/dzg highlight,
+      14/10/3/14/right/{$D_8^2*, \mathrm{h,r}$}/dzg highlight,
+      15/10/1.5/15/right/{$A_{15}A_1(2)*, \mathrm{d,h,r}$}/dzg highlight,
+      34/10/0/34/right/{$A_{15}A_1(2)*, \mathrm{d,h,r}$}/none,
+      35/10/-1.5/35/right/{$D_{12}D_4*, \mathrm{d}$}/none,
+      45/10/-3/45/right/{$D_8^2*, \mathrm{h, r}$}/none,
+      55/10/-4.5/5/right/{$E_7^2A_1^2*, \mathrm{d,r}$}/none}
+    \node[cusp1, fill=\o, label={\p:\L}] (\n) at (\x,\y) {$C_{\t}$};
+  \foreach \s/\t in {2/12, 1/12, 2/245, 4/245, 5/245, 1/13, 3/13, 1/14, 4/14,
+      1/15, 5/15, 3/34, 4/34, 3/35, 5/35, 4/45, 5/45, 5/55}
+    \draw[incidence] (\s) -- (\t);
 \end{tikzpicture}
