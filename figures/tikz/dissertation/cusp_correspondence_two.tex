@@ -1,24 +1,9 @@
+% The cusp map of F_{En,2} -> F_{(2,2,0)}: 0-cusp 2 goes to U+E_8^2, 0-cusps
+% 1, 3, 4, 5 to U(2)+E_8^2.
 \begin{tikzpicture}
-  \input{tikz/pieces/fen2_cusp_diagram_named.tex}
-  \node[left=of p1] (top title) {$\bbcpt{\fent}$};
-
-  % Baily-Borel boundary of F_{2,2,0}: 0-cusps r_1, r_2, 1-cusps Z.
-  \matrix (f220) [matrix of math nodes, row sep={9mm,between origins},
-      column sep=8mm, below=1.5cm of fen2.south west, anchor=north west] {
-    & & & |[cusp1] (Z21)| Z_2^1 \\
-    & & & |[cusp1] (Z22)| Z_2^2 \\
-    & |[cusp1] (Z121)| Z_{12}^1 & & |[cusp1] (Z23)| Z_2^3 \\
-    |[cusp0] (r1)| r_1 & & |[cusp0] (r2)| r_2 & \\
-    & |[cusp1] (Z122)| Z_{12}^2 & & |[cusp1] (Z24)| Z_2^4 \\
-    & & & |[cusp1] (Z25)| Z_2^5 \\
-    & & & |[cusp1] (Z26)| Z_2^6 \\
-  };
-  \foreach \r/\z in {r1/Z121, r2/Z121, r1/Z122, r2/Z21, r2/Z22, r2/Z23, r2/Z24,
-      r2/Z25, r2/Z26}
-    \draw[incidence] (\r) -- (\z);
-  % Drawn from the 1-cusp to the 0-cusp, unlike every other incidence here.
-  \draw[incidence] (Z122) -- (r2);
-  \node (bottom title) at (top title |- r1) {$\bbcpt{\fttz}$};
-
+  \pic (S) {bb fen2};
+  \pic (K) at (0,-9) {bb f220};
+  \node[anchor=east] (top title) at (-1.5,0) {$\bbcpt{\fent}$};
+  \node[anchor=east] (bottom title) at (-1.5,-9) {$\bbcpt{\fttz}$};
   \draw[cusp map] (top title) -- (bottom title);
 \end{tikzpicture}

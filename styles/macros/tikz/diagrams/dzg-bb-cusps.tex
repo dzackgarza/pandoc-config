@@ -1,3 +1,269 @@
 % =============================================================================
 % Baily-Borel cusp diagrams of moduli spaces
 % =============================================================================
+% Every cusp diagram is a pic. A 0-cusp (the orbit of a primitive isotropic
+% line) is a cusp0 node and a 1-cusp (the orbit of a primitive isotropic plane)
+% a cusp1 node; an incidence arrow runs from a 0-cusp to each 1-cusp whose
+% closure contains it. Node names are the canonical names listed below, so
+%   \pic (S) {bb fen2};
+% names the 0-cusps S1, ..., S5 and the 1-cusps S12, S245, .... Decorate
+% through the node centres, e.g. the image of another boundary:
+%   \scoped[on background layer] \draw[cusp image] (S2.center) -- (S245.center);
+%
+% Keys:
+%   cusp labels=canonical   the labels below (default)
+%   cusp labels=eta         the names eta_i, I_{i,j} of the dissertation text
+%                           (Enriques-K3 chapter) where the object has them
+%   cusp labels=none        no labels
+%   incidence divisibility  double each incidence whose second isotropic
+%                           vector has divisibility 2 in the 0-cusp lattice
+%                           (an even move); a single arrow is divisibility 1.
+%                           For 2-elementary lattices this is the incidence at
+%                           which the a-invariant drops by 2 [AE22, Prop. 5.5].
+%
+% Published names and data:
+%   bb fen2    Sterk's F_{En,2}             [Ste91 §4]; 0-cusps 1..5,
+%              1-cusps named by the 0-cusps in their closure
+%   bb f220    F_{(2,2,0)}, quartic hyperelliptic K3   [AE22 §10]
+%   bb fen     unpolarized Enriques F_En    [AEGS25], [Ste91 §4.2]
+%   bb fco     unpolarized Coble F_Co       (writing/coble/cusp-correspondence)
+%   bb f2, bb f4, bb fell     degree 2 and 4 K3, elliptic K3   [Sca87 §6]
+%   bb f2d=1|3|5|p            Scattone's F_{2d} by the class of d   [Sca87 §6]
+%
+% Lattice names. A 0-cusp or 1-cusp is named by its boundary lattice
+% I^perp/I. Where the lattice has a standard name it is used (E_{10}(2) =
+% U(2)+E_8(2), D_8^*(2), D_{16}^+, A_1^{+7}); the (16,2,0) lattices of
+% F_{(2,2,0)} have none and carry Sterk's names, the root system of their
+% (-2)-roots and reflective (-4)-roots (C_2, A_1(2) contain (-4)-roots),
+% which determines the lattice in its genus. Computed with Sage (Gram
+% matrices of catalogue.py TEn, TdP, Tco; vectors of sterk.py
+% selected_isotropic_vectors and coble.py; 2026-09-24):
+%   Sterk cusp      1          2          3, 4, 5
+%   div in T_En     1          2          2
+%   eta^perp/eta    (10,10,0)  (10,8,0)   (10,8,0)
+%   div in T_dP     1          2          1
+%   eta^perp/eta    (18,2,0)   (18,0,0)   (18,2,0)
+% so cusp 2 lies over U+E_8^2 and cusps 1, 3, 4, 5 over U(2)+E_8^2. In T_En,
+% <e,e'>^perp/<e,e'> = E_8(2), with 240 (-4)-roots, and
+% <e',2e+2f+a1+a2>^perp/.. = (8,6,0), whose roots form B_8 (16 short, 112
+% long): the index-2 even overlattice of A_1^8, i.e. D_8^*(2). The Coble plane
+% <e', 2h+a1+a2> has divisibilities (2,2) in T_Co and T_En and (2,1) in T_dP,
+% quotients (9,9,1), (7,7,1) in T_Co and (10,8,0), (8,6,0) in T_En; in T_dP its
+% quotient is (16,0,0) with one irreducible root system of 480 roots, D_{16}^+.
+
+\def\dzg@bb@scheme{canonical}
+\tikzset{
+  cusp labels/.is choice,
+  cusp labels/canonical/.code={\def\dzg@bb@scheme{canonical}},
+  cusp labels/eta/.code={\def\dzg@bb@scheme{eta}},
+  cusp labels/none/.code={\def\dzg@bb@scheme{none}},
+  incidence divisibility/.style={even incidence/.style={doubled mark}},
+  even incidence/.style={},
+}
+
+% \dzg@bb@pick{<canonical>}{<eta>}: the text of the active scheme.
+\def\dzg@bb@canonical{canonical}
+\def\dzg@bb@eta{eta}
+\def\dzg@bb@none{none}
+\def\dzg@bb@pick#1#2{\csname dzg@bb@pick@\dzg@bb@scheme\endcsname{#1}{#2}}
+\def\dzg@bb@pick@canonical#1#2{#1}
+\def\dzg@bb@pick@eta#1#2{#2}
+\def\dzg@bb@pick@none#1#2{}
+
+% \dzg@bb@cusp{<cusp0|cusp1>}{<name>}{<coordinate>}{<content>}
+%   {<label direction>}{<canonical label>}{<eta label>}
+% Content and labels are math; an empty label in the active scheme draws nothing.
+\def\dzg@bb@cusp#1#2#3#4#5#6#7{%
+  \ifx\dzg@bb@scheme\dzg@bb@canonical\def\dzg@bb@text{#6}\fi
+  \ifx\dzg@bb@scheme\dzg@bb@eta\def\dzg@bb@text{#7}\fi
+  \ifx\dzg@bb@scheme\dzg@bb@none\let\dzg@bb@text\@empty\fi
+  \ifx\dzg@bb@text\@empty
+    \node[#1] (#2) at (#3) {$#4$};%
+  \else
+    \node[#1, label={[cusp label]#5:$\dzg@bb@text$}] (#2) at (#3) {$#4$};%
+  \fi}
+
+% \dzg@bb@incidences{<0-cusp>/<1-cusp>/<divisibility of the second vector>, ...}
+\def\dzg@bb@incidences#1{%
+  \foreach \dzg@p/\dzg@c/\dzg@d in {#1}{%
+    \ifnum\dzg@d=2
+      \draw[incidence, even incidence] (\dzg@p) -- (\dzg@c);%
+    \else
+      \draw[incidence] (\dzg@p) -- (\dzg@c);%
+    \fi}}
+
+% \dzg@bb@brace{<x from>}{<x to>}{<y>}{<text>}: invariants under a column,
+% shown in the canonical scheme.
+\def\dzg@bb@brace#1#2#3#4{%
+  \ifx\dzg@bb@scheme\dzg@bb@canonical
+    \draw[cusp brace] (#1,#3) -- (#2,#3) node[midway, below=5.5ex] {$#4$};%
+  \fi}
+
+\def\dzg@bb@pic#1{\tikzset{pics/#1/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\csname dzg@bb@#1\endcsname}}}}
+
+% -----------------------------------------------------------------------------
+% bb fen2: Sterk's F_{En,2} [Ste91 §4], five 0-cusps and nine 1-cusps. The
+% 1-cusps carry the K3 lattice of the corresponding 1-cusp of F_{(2,2,0)}.
+% Sources agree (Sterk; writing/coble FEn2 figure; dissertation 475-our-cusps;
+% V4 thesis drafts): 1-cusp 35 joins 0-cusps 3 and 5, and 55 meets only 5.
+% Even incidences: 1-12, 4-245, 5-245, the (16,0,0) 1-cusps at 0-cusps over
+% (18,2,0).
+% -----------------------------------------------------------------------------
+\dzg@bb@pic{bb fen2}
+\@namedef{dzg@bb@bb fen2}{%
+  \foreach \dzg@n/\dzg@y in {1/2.1, 3/0.7, 4/-0.7, 5/-2.1}
+    {\dzg@bb@cusp{cusp0, minimum width=8mm}{\dzg@n}{5,\dzg@y}
+      {\dzg@bb@pick{\dzg@n}{\eta_{\dzg@n}}}{}{}{}}%
+  \dzg@bb@cusp{cusp0, minimum width=8mm}{2}{0,0}{\dzg@bb@pick{2}{\eta_2}}{}{}{}%
+  \dzg@bb@cusp{cusp1}{12}{2.5,1.1}{E_8^2}{above}{12}{I_{1,2}}%
+  \dzg@bb@cusp{cusp1}{245}{2.5,-1.1}{D_{16}^+}{below}{245}{I_{2,4,5}}%
+  \foreach \dzg@n/\dzg@y/\dzg@L/\dzg@eta in {13/3/E_7^2C_2/{1,3}, 14/2/D_8^2/{1,4},
+      15/1/A_{15}A_1(2)/{1,5}, 34/0/A_{15}A_1(2)/{3,4}, 35/-1/D_{12}D_4/{3,5},
+      45/-2/D_8^2/{4,5}, 55/-3/E_7^2C_2/5}
+    {\dzg@bb@cusp{cusp1}{\dzg@n}{8.8,\dzg@y}{\dzg@L}{right}{\dzg@n}{I_{\dzg@eta}}}%
+  \dzg@bb@incidences{2/12/1, 2/245/1, 1/12/2, 4/245/2, 5/245/2,
+    1/13/1, 1/14/1, 1/15/1, 3/13/1, 3/34/1, 3/35/1, 4/14/1, 4/34/1, 4/45/1,
+    5/15/1, 5/35/1, 5/45/1, 5/55/1}}
+
+% -----------------------------------------------------------------------------
+% bb f220: F_{(2,2,0)}, T = U+U(2)+E_8^2 [AE22 §10]. Two 0-cusps, told apart by
+% divisibility; eight 1-cusps, E_8^2 and D_16^+ over both 0-cusps.
+% The divisibility pair of a 1-cusp is that of the plane <v_0, v_1> from the
+% 0-cusp drawn to its left: (2,1) for E_8^2 from U+E_8^2, (1,1) for D_8^2.
+% Eta names as in the dissertation text: eta~_1 = (18,2,0), eta~_2 = (18,0,0).
+% -----------------------------------------------------------------------------
+\dzg@bb@pic{bb f220}
+\@namedef{dzg@bb@bb f220}{%
+  \dzg@bb@cusp{cusp0}{UE8E8}{0,0}{U \oplus E_8^2}{above}
+    {\mathrm{div} = 2}{\tilde\eta_2}%
+  \dzg@bb@cusp{cusp0}{U2E8E8}{4.4,0}{U(2) \oplus E_8^2}{above}
+    {\mathrm{div} = 1}{\tilde\eta_1}%
+  \dzg@bb@cusp{cusp1}{E8E8}{2.2,1.1}{E_8^2}{above}{\mathrm{div} = (2, 1)}{}%
+  \dzg@bb@cusp{cusp1}{D16p}{2.2,-1.1}{D_{16}^+}{}{}{}%
+  \dzg@bb@cusp{cusp1}{D8D8}{7.4,3}{D_8^2}{above}{\mathrm{div} = (1, 1)}{}%
+  \foreach \dzg@n/\dzg@y/\dzg@L in {E7E7C2/2/E_7^2C_2, E8D8/1/E_8D_8,
+      D12D4/-1/D_{12}D_4, D16/-2/D_{16}, A15A1/-3/A_{15}A_1(2)}
+    {\dzg@bb@cusp{cusp1}{\dzg@n}{7.4,\dzg@y}{\dzg@L}{}{}{}}%
+  \dzg@bb@incidences{UE8E8/E8E8/1, UE8E8/D16p/1, U2E8E8/E8E8/2, U2E8E8/D16p/2,
+    U2E8E8/D8D8/1, U2E8E8/E7E7C2/1, U2E8E8/E8D8/1, U2E8E8/D12D4/1,
+    U2E8E8/D16/1, U2E8E8/A15A1/1}%
+  \dzg@bb@brace{-0.8}{0.8}{-3}{(18,0,0)_1}%
+  \dzg@bb@brace{1.5}{2.9}{-3}{(16,0,0)_0}%
+  \dzg@bb@brace{3.4}{5.4}{-3}{(18,2,0)_1}%
+  \dzg@bb@brace{6.5}{8.3}{-3}{(16,2,0)_0}}
+
+% -----------------------------------------------------------------------------
+% bb fen: unpolarized Enriques F_En, T_En = U+U(2)+E_8(2). The 0-cusps are
+% e (div 1, RP^2 type) and e' (div 2, D^2 type); the 1-cusps are <e,e'> and
+% <e', 2e+2f+a1+a2>. The second meets only e' [AE22 Prop. 5.13].
+% -----------------------------------------------------------------------------
+\dzg@bb@pic{bb fen}
+\@namedef{dzg@bb@bb fen}{%
+  \dzg@bb@cusp{cusp0}{E10}{0,0}{E_{10}(2)}{above}
+    {\mathbb{RP}^2,\ \mathrm{div} = 1}{\eta_1}%
+  \dzg@bb@cusp{cusp1}{E8}{2.9,0}{E_8(2)}{above}{}{I_{1,2}}%
+  \dzg@bb@cusp{cusp0}{UE8}{5.8,0}{U \oplus E_8(2)}{above}
+    {\mathbb{D}^2,\ \mathrm{div} = 2}{\eta_2}%
+  \dzg@bb@cusp{cusp1}{D8}{8.7,0}{D_8^*(2)}{above}{}{I_2}%
+  \dzg@bb@incidences{E10/E8/2, UE8/E8/1, UE8/D8/2}%
+  \dzg@bb@brace{-0.8}{0.8}{0}{(10,10,0)_1}%
+  \dzg@bb@brace{2.2}{3.6}{0}{(8,8,0)_0}%
+  \dzg@bb@brace{5.0}{6.6}{0}{(10,8,0)_1}%
+  \dzg@bb@brace{8.0}{9.4}{0}{(8,6,0)_0}}
+
+% -----------------------------------------------------------------------------
+% bb fco: unpolarized Coble F_Co, T_Co = <2>+E_10(2). One 0-cusp v_0 = e' and
+% one 1-cusp J = <e', 2h+a1+a2>, divisibilities (2,2).
+% -----------------------------------------------------------------------------
+\dzg@bb@pic{bb fco}
+\@namedef{dzg@bb@bb fco}{%
+  \dzg@bb@cusp{cusp0}{P}{0,0}{\langle 2 \rangle \oplus E_8(2)}{above}
+    {\mathbb{D}^2,\ \mathrm{div} = 2}{}%
+  \dzg@bb@cusp{cusp1}{C}{2.9,0}{A_1^{\oplus 7}}{}{}{}%
+  \dzg@bb@incidences{P/C/2}%
+  \dzg@bb@brace{-0.9}{0.9}{0}{(9,9,1)_1}%
+  \dzg@bb@brace{2.2}{3.6}{0}{(7,7,1)_0}}
+
+% -----------------------------------------------------------------------------
+% bb f2, bb f4, bb fell: K3 surfaces of degree 2 and 4 and elliptic K3
+% surfaces, one 0-cusp P each [Sca87 §6]. 1-cusps named by the root system of
+% the boundary lattice (Scattone); the unimodular D_16 lattice is D_16^+.
+% -----------------------------------------------------------------------------
+\dzg@bb@pic{bb f2}
+\@namedef{dzg@bb@bb f2}{%
+  \foreach \dzg@n/\dzg@y/\dzg@L in {A1E8E8/1.5/A_1E_8^2, E7D10/0.5/E_7D_{10},
+      A1D16/-0.5/A_1D_{16}, A17/-1.5/A_{17}}
+    {\dzg@bb@cusp{cusp1}{\dzg@n}{0,\dzg@y}{\dzg@L}{}{}{}}%
+  \dzg@bb@cusp{cusp0}{P}{3.6,0}{A_1 \oplus U \oplus E_8^2}{above}{}{\eta}%
+  \dzg@bb@incidences{P/A1E8E8/1, P/E7D10/1, P/A1D16/1, P/A17/1}%
+  \dzg@bb@brace{-0.7}{0.7}{-1.5}{(17,1,1)_0}%
+  \dzg@bb@brace{2.6}{4.6}{-1.5}{(19,1,1)_1}}
+
+\dzg@bb@pic{bb f4}
+\@namedef{dzg@bb@bb f4}{%
+  \foreach \dzg@L [count=\dzg@k] in {A_1(2)E_8^2, A_1(2)D_{16}, D_9E_8, A_3E_7^2,
+      D_{17}, D_5D_{12}, A_1(2)D_8^2, A_1^2A_{15}, A_{11}E_6}
+    {\dzg@bb@cusp{cusp1}{\dzg@k}{0,{5-\dzg@k}}{\dzg@L}{}{}{}}%
+  \dzg@bb@cusp{cusp0}{P}{3.6,0}{e}{}{}{}%
+  \foreach \dzg@k in {1,...,9}
+    {\dzg@bb@incidences{P/\dzg@k/1}}}
+
+\dzg@bb@pic{bb fell}
+\@namedef{dzg@bb@bb fell}{%
+  \dzg@bb@cusp{cusp1}{E8E8}{0,0.7}{E_8^2}{}{}{}%
+  \dzg@bb@cusp{cusp1}{D16p}{0,-0.7}{D_{16}^+}{}{}{}%
+  \dzg@bb@cusp{cusp0}{P}{3.6,0}{U \oplus E_8^2}{above}{}{\eta}%
+  \dzg@bb@incidences{P/E8E8/1, P/D16p/1}}
+
+% -----------------------------------------------------------------------------
+% bb f2d=<N>: the shape of Scattone's diagram of F_{2d} for the class N of d,
+% N = 1, 3, 5, or p (an odd prime) [Sca87 §6]: a 0-cusp p_0 meeting the
+% 1-cusps C_i over H/SL_2(Z), and further 0-cusps p_j meeting the 1-cusps
+% C_i^{(N)} over H/Gamma'(N).
+% -----------------------------------------------------------------------------
+\tikzset{pics/bb f2d/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\csname dzg@bb@f2d@#1\endcsname}}}
+% \dzg@bb@column{<x>}{<node prefix>}{<first>}{<second>}{<next to last>}{<last>}
+\def\dzg@bb@column#1#2#3#4#5#6{%
+  \foreach \dzg@k/\dzg@y/\dzg@L in {1/2/{#3}, 2/1/{#4}, 3/-1/{#5}, 4/-2/{#6}}
+    {\dzg@bb@cusp{cusp1}{#2\dzg@k}{#1,\dzg@y}{\dzg@L}{}{}{}}%
+  \node at (#1,0) {$\vdots$};}
+\@namedef{dzg@bb@f2d@1}{%
+  \dzg@bb@column{0}{C}{C_1}{C_2}{C_{n-1}}{C_n}%
+  \dzg@bb@cusp{cusp0}{P0}{3,0}{p_0}{}{}{}%
+  \node at (0,-3) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+  \foreach \dzg@k in {1,...,4} {\dzg@bb@incidences{P0/C\dzg@k/1}}}
+\@namedef{dzg@bb@f2d@3}{%
+  \dzg@bb@column{0}{C}{C_1}{C_2}{C_{n-1}}{C_n}%
+  \dzg@bb@column{5}{D}{C_1^{(3)}}{C_2^{(3)}}{C_{m-1}^{(3)}}{C_m^{(3)}}%
+  \dzg@bb@cusp{cusp0}{P0}{2.5,0}{p_0}{}{}{}%
+  \dzg@bb@cusp{cusp0}{P1}{8,0}{p_1}{}{}{}%
+  \node at (0,-3) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+  \node at (5,-3) {$\mathbb{H}/\Gamma'(3)$};
+  \foreach \dzg@k in {1,...,4}
+    {\dzg@bb@incidences{P0/C\dzg@k/1, P0/D\dzg@k/1, P1/D\dzg@k/1}}}
+\@namedef{dzg@bb@f2d@5}{%
+  \dzg@bb@column{0}{C}{C_1}{C_2}{C_{n-1}}{C_n}%
+  \dzg@bb@column{5}{D}{C_1^{(5)}}{C_2^{(5)}}{C_{n-1}^{(5)}}{C_n^{(5)}}%
+  \dzg@bb@cusp{cusp0}{P0}{2.5,0}{p_0}{}{}{}%
+  \dzg@bb@cusp{cusp0}{P1}{8,1}{p_1}{}{}{}%
+  \dzg@bb@cusp{cusp0}{P2}{8,-1}{p_2}{}{}{}%
+  \node at (0,-3) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+  \node at (5,-3) {$\mathbb{H}/\Gamma'(5)$};
+  \foreach \dzg@k in {1,...,4} {
+    \dzg@bb@incidences{P0/C\dzg@k/1, P1/D\dzg@k/1, P2/D\dzg@k/1}%
+    \draw[incidence] (P0) -- node[cusp label, midway, above, sloped] {$2$} (D\dzg@k);}}
+\@namedef{dzg@bb@f2d@p}{%
+  \dzg@bb@column{0}{C}{C_1}{C_2}{C_{m-1}}{C_m}%
+  \dzg@bb@column{5.5}{D}{C_1^{(N)}}{C_2^{(N)}}{C_{n-1}^{(N)}}{C_n^{(N)}}%
+  \dzg@bb@cusp{cusp0}{P0}{2.75,0}{p_0}{}{}{}%
+  \foreach \dzg@k/\dzg@y/\dzg@L in {1/2/p_1, 2/1/p_2, 3/-1/p_{(N-1)/2}}
+    {\dzg@bb@cusp{cusp0}{P\dzg@k}{9,\dzg@y}{\dzg@L}{}{}{}}%
+  \node at (9,0) {$\vdots$};
+  \node at (0,-3) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+  \node at (5.5,-3) {$\mathbb{H}/\Gamma'(N)$};
+  \foreach \dzg@k in {1,...,4} {
+    \dzg@bb@incidences{P0/C\dzg@k/1, P1/D\dzg@k/1, P2/D\dzg@k/1, P3/D\dzg@k/1}%
+    \draw[incidence] (P0) -- node[cusp label, midway, above, sloped] {$\frac{N-1}{2}$}
+      (D\dzg@k);}}

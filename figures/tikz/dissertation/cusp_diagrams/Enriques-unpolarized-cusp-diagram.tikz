@@ -1,21 +1,3 @@
-\begin{tikzpicture}[node distance=1.4cm]
-  \node[cusp0, label={[cusp label]above:$\mathrm{div}\gens{e} = 1$}] (w0) {$E_{10}(2)$};
-  \node[cusp1, right=of w0, label={[cusp label]above:$\mathrm{div}\gens{e, e'} = (1, 2)$}]
-    (C12) {$E_8(2)$};
-  \node[cusp0, right=of C12, label={[cusp label]above:$\mathrm{div}\gens{e'} = 2$}]
-    (w1) {$U \oplus E_8(2)$};
-  \node[cusp1, right=of w1,
-    label={[cusp label]above:$\mathrm{div}\gens{e', 2e+2f+2\bar\alpha_1} = (2, 2)$}]
-    (C2) {$A_1^{\oplus 8}*$};
-
-  \draw[incidence] (w0) -- (C12);
-  \draw[incidence] (w1) -- (C12);
-  \draw[incidence] (w1) -- (C2);
-
-  \draw[cusp brace] (w0.west) -- (w0.east)
-    node[midway, below=5.5ex] {$\mathbb{RP}^2,\, (10,10,0)_1$};
-  \draw[cusp brace] (C12.west) -- (C12.east) node[midway, below=5.5ex] {$(8,8,0)_0$};
-  \draw[cusp brace] (w1.west) -- (w1.east)
-    node[midway, below=5.5ex] {$\mathbb{D}^2, \, (10,8,0)_1$};
-  \draw[cusp brace] (C2.west) -- (C2.east) node[midway, below=5.5ex] {$(8,6,0)_0$};
+\begin{tikzpicture}
+  \pic {bb fen};
 \end{tikzpicture}

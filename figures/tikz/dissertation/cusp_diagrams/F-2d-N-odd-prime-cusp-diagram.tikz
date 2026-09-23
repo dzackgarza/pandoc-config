@@ -1,17 +1,4 @@
 \begin{tikzpicture}
-  \matrix [matrix of math nodes, row sep=4mm, column sep=1.6cm] {
-    & \underline{N \text{ an odd prime}} & &[1cm] \\
-    |[cusp1] (C1)| C_1     & & |[cusp1] (D1)| C_1^{(N)}     & |[cusp0] (P1)| p_1 \\
-    |[cusp1] (C2)| C_2     & & |[cusp1] (D2)| C_2^{(N)}     & |[cusp0] (P2)| p_2 \\
-    \vdots & |[cusp0] (P0)| p_0 & \vdots & \vdots \\
-    |[cusp1] (C3)| C_{m-1} & & |[cusp1] (D3)| C_{n-1}^{(N)} & |[cusp0] (P3)| p_{N-1\over 2} \\
-    |[cusp1] (C4)| C_m     & & |[cusp1] (D4)| C_n^{(N)}     & \\
-    H/\operatorname{SL}_2(\mathbb{Z}) & & H/\Gamma'(N) & \\
-  };
-  \foreach \i in {1,...,4} {
-    \draw[incidence] (P0) -- (C\i.east);
-    \draw[incidence] (P0) -- node[cusp label, above] {$N-1\over 2$} (D\i.west);
-    \foreach \p in {P1, P2, P3}
-      \draw[incidence] (\p) -- (D\i.east);
-  }
+  \pic {bb f2d=p};
+  \node at (2.75,3) {\underline{$N \text{ an odd prime}$}};
 \end{tikzpicture}

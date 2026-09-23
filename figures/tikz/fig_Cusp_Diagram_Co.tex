@@ -1,8 +1,7 @@
-\begin{tikzpicture}[node distance=2.4cm]
-  \node[cusp0, label={[cusp label]above:$\bD^2, \mathrm{div} = 2, v_1 = e'$},
-    label={[cusp label]below:$(9,9,1)_1$}] (v0) {$\gens{2} \oplus E_{8}(2)$};
-  \node[cusp1, right=of v0,
-    label={[cusp label]above:$\mathrm{div} = (2,2), v_2 = 2h+\alpha_1+\alpha_2$},
-    label={[cusp label]below:$(7,7,1)_0$}] (C0) {$A_1^{\oplus 7}$};
-  \draw[incidence] (v0) -- (C0);
+% Baily-Borel boundary of F_Co, with the isotropic vectors spanning each cusp.
+\begin{tikzpicture}
+  \pic (Co) {bb fco};
+  \node[cusp label, above=6mm] at (CoP) {$v_1 = e'$};
+  \node[cusp label, above=3mm] at (CoC)
+    {$\mathrm{div} = (2, 2),\ v_2 = 2h + \alpha_1 + \alpha_2$};
 \end{tikzpicture}
