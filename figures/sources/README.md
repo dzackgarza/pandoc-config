@@ -43,4 +43,3 @@ project was dismantled and its markdown source moved to
 | `figures/vector/aegs-paper/` | cusp, Sterk, and folding diagrams `fig-*.pdf` | figures of Alexeev–Engel–Garza–Schaffler, *Compact moduli of Enriques surfaces of degree 2* (arXiv 2312.03638 source) |
 | `figures/screenshots/` | dated `2025-*.png` captures | screenshots taken while drafting |
 | `figures/vector/` | `sphere.svg`, `triangulated_sphere.svg`, `triangulated-sphere.svg`, `type-ii-kulikov-degeneration2.svg` | Inkscape drawings; the Blender source is `triangulated_sphere.blend` above |
-| `figures/ade-diagrams/` | `A_3`, `A_4_minus`, `D_5`, `E_8` surface pictures used in chapter 5 | `research/computations/notebooks/ade_surfaces.ipynb` |
