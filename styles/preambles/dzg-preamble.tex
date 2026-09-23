@@ -49,6 +49,9 @@
 % xy [all] loads its xypdf driver, which needs the pdfTeX primitives; luatex85
 % provides them under LuaTeX (the standalone class loads it itself, article does not).
 \ifluatex\RequirePackage{luatex85}\fi
+% Hyperbolic plane and Poincare disk figures; the package computes in Lua, so
+% only LuaTeX figures can use it (AGENTS.md, Figures, rule 7).
+\ifluatex\RequirePackage{luahyperbolic}\fi
 \RequirePackage[all]{xy}
 
 
