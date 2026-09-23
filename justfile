@@ -412,7 +412,7 @@ _test-macros:
   #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
-  export TEXINPUTS=".:$HOME/.pandoc/styles//:$HOME/.pandoc/styles/macros//:$HOME/.pandoc/styles/preambles//:$HOME/.pandoc/config//:"
+  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:"
   cd "$PANDOC_DIR/tests"
   pdflatex -interaction=nonstopmode test-latex-macros.tex || true
   if [ -f test-latex-macros.pdf ]; then
@@ -427,7 +427,7 @@ _test-tikz:
   #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
-  export TEXINPUTS=".:$HOME/.pandoc/styles//:$HOME/.pandoc/styles/macros//:$HOME/.pandoc/styles/preambles//:$HOME/.pandoc/config//:"
+  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:"
   cd "$PANDOC_DIR/tests"
   pdflatex -interaction=nonstopmode test-tikz-macros.tex 2>&1 | tee /tmp/tikz-test.log
   if grep -q '^!' /tmp/tikz-test.log; then
