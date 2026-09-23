@@ -160,11 +160,15 @@
 % Baily-Borel cusp diagrams
 % -----------------------------------------------------------------------------
 % 0-cusp: rounded box; 1-cusp: box. The lattice goes in the node, invariants in
-% `label`. An incidence arrow joins a 1-cusp to a 0-cusp in its closure.
+% `label`. An incidence arrow runs from a 0-cusp to each 1-cusp whose closure
+% contains it (the cusp diagram of [AE22]: an edge F_1 -> F_2 when F_1 lies in
+% the closure of F_2). Nodes are filled so highlights drawn under them stop at
+% their borders. The cusp diagrams of named moduli spaces are pics in
+% diagrams/dzg-bb-cusps.tex.
 \tikzset{
-  cusp0/.style={rounded rectangle, draw, line width=0.6pt, minimum width=1.6cm,
-    minimum height=6mm, inner xsep=3pt},
-  cusp1/.style={rectangle, draw, line width=0.6pt, minimum width=1.4cm,
+  cusp0/.style={rounded rectangle, draw, fill=white, line width=0.6pt,
+    minimum width=1.6cm, minimum height=6mm, inner xsep=3pt},
+  cusp1/.style={rectangle, draw, fill=white, line width=0.6pt, minimum width=1.4cm,
     minimum height=6mm, inner xsep=3pt},
   cusp label/.style={font=\scriptsize, inner sep=1pt, label distance=0.5em},
   incidence/.style={->, line width=0.6pt, shorten >=1pt, shorten <=1pt},
