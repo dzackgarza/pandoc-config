@@ -20,7 +20,31 @@
   \draw[coxeter edge label=8] (c) -- (d);
   \scoped[on background layer] \draw[parabolic] (c.center) -- (d.center);
   \draw[fold] (3,-2) -- (4.5,-2);
+  \draw[fold axis] (3,-3) -- (4.5,-3);
+  \node[reflected root] at (b1) {};
+  \draw[quotient map] (3,-4) -- (4.5,-4);
 \end{tikzpicture}
+
+\section*{Named diagrams}
+Every pic and command in dzg-diagrams.tex, with each label scheme.
+
+\begin{tikzpicture}[scale=0.4]
+  \foreach \n [count=\k] in {1,2,3,4,5,6,2 cover}
+    \pic[root labels=index] at (6*\k,0) {k3 cusp=\n};
+  \foreach \n in {1,...,5}
+    \pic[root labels=prime] at (8*\n,-10) {sterk=\n};
+  \pic[root labels=ell] at (0,-20) {vinberg 18 2 0};
+  \pic[root labels=r] at (7,-20) {vinberg 18 0 0};
+  \pic (F) at (16,-20) {k3 F2};
+  \pic[root labels] at (26,-20) {k3 F4};
+  \scoped[on background layer] \draw[parabolic] (F0.center) -- (F6.center);
+\end{tikzpicture}
+
+\coxeterHthree\quad \coxeterHfour\quad \coxeterGtwo\quad \coxeterGtwoAffine
+
+\coxeterpair\quad \coxeterpair[marks=black/doubled, edge=none, roots=f_1/f_2]\quad
+\coxeterpair[edge=dotted, weight=$h_1h_2$]\quad
+\coxetervertex{white}\coxetervertex{black}\coxetervertex{doubled}
 
 \section*{Baily--Borel cusp diagrams}
 \begin{tikzpicture}
