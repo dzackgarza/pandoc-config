@@ -12,6 +12,7 @@
 %   ball=1|2|3            the closed ball B^n with its boundary sphere S^{n-1}
 %   cylinder              S^1 x I
 %   torus                 T^2
+%   torus fundamental square   the square with sides a b a^{-1} b^{-1}
 %   coffee cup            a coffee cup (no label: figures say what it stands for)
 %   \mobiusband           the Moebius band, a pgfplots axis (inside a tikzpicture)
 %   quarter disc contour  boundary of {|z| <= R, 0 <= arg z <= pi/2}
@@ -108,6 +109,28 @@
   \draw (0,0.5) arc (90:150:2 and 0.8);
   \draw (0,0.5) arc (90:30:2 and 0.8);
   \dzg@spacelabel{0,-3}{$T^2$}}}}
+
+% -----------------------------------------------------------------------------
+% The fundamental square of the torus, word a b a^{-1} b^{-1}: the square
+% [0,6]^2 with the horizontal sides glued (a, one arrow tip) and the vertical
+% sides glued (b, two arrow tips). The region is filled on the background
+% layer, so decorations drawn [on background layer] after it lie inside it.
+% Coordinates: -00, -10, -01, -11 (the corners).
+% -----------------------------------------------------------------------------
+\tikzset{pics/torus fundamental square/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
+  \coordinate (-00) at (0,0); \coordinate (-10) at (6,0);
+  \coordinate (-01) at (0,6); \coordinate (-11) at (6,6);
+  \scoped[on background layer] \fill[polygon region] (0,0) rectangle (6,6);
+  \draw[glued edge=1, dzg singular] (0,0) -- (6,0);
+  \draw[glued edge=1, dzg singular] (0,6) -- (6,6);
+  \draw[glued edge=2, dzg accent] (0,0) -- (0,6);
+  \draw[glued edge=2, dzg accent] (6,0) -- (6,6);
+  \ifdzg@spacelabels
+    \node[below=4pt, dzg singular] at (3,0) {$a$};
+    \node[above=4pt, dzg singular] at (3,6) {$a$};
+    \node[left=6pt, dzg accent] at (0,3) {$b$};
+    \node[right=6pt, dzg accent] at (6,3) {$b$};
+  \fi}}}
 
 % -----------------------------------------------------------------------------
 % A coffee cup, rim centred at the pic origin (rim radii 1 and 1/2).
