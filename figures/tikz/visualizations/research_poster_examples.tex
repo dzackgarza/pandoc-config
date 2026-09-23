@@ -6,32 +6,7 @@
 
 \begin{document}
 
-% Coffee cup with a map out (same drawing as MapOutOfCoffeeCup.tikz, twice the scale)
-\begin{tikzpicture}[scale=\textwidth/5cm]
-  % handle
-  \begin{scope}[shift=(10:7/8), rotate=-30, yslant=1/2, xslant=-1/8]
-    \shade[top color=dzg muted, bottom color=dzg grid]
-      (0,0) arc (130:-100:3/8 and 1/2) -- ++(0,1/4) arc (-100:130:1/8 and 1/4) -- cycle;
-    \shade[top color=dzg blob, bottom color=dzg muted]
-      (0,0) arc (130:-100:3/8 and 1/2) -- ++(0,1/32) arc (-100:130:1/4 and 1/3) -- cycle;
-  \end{scope}
-
-  % cup
-  \fill[dzg muted, path fading=fade out] (0,-1) ellipse [x radius=3/4, y radius=1/2];
-  \shade[left color=dzg muted, right color=dzg grid] (-1,0) arc (180:360:1 and 5/4);
-  \shade[bottom color=dzg muted, top color=dzg grid, opacity=1/2]
-    (-1,0) arc (180:360:1 and 5/4);
-  \shade[left color=dzg blob, right color=dzg grid]
-    (0,0) ellipse [x radius=1, y radius=1/2];
-  \shade[left color=dzg grid, right color=dzg blob]
-    (0,0) ellipse [x radius=1-1/16, y radius=1/2-1/16];
-  \shade[bottom color=dzg muted, top color=dzg blob, opacity=1/2]
-    (0,0) ellipse [x radius=1-1/16, y radius=1/2-1/16];
-  \node at (0,-1.7) {$X = $ A Coffee Cup};
-
-  \draw[map arrow] (1.5,-.5) to[curve through={(2.04,-0.5) (2.86,-0.17)}] (4.2,-.5);
-  \node at (3,0) {$f: X \to Y$};
-\end{tikzpicture}
+\input{MapOutOfCoffeeCup.tikz}
 
 % Torus in R^3 (Asymptote; produces no output)
 \begin{asy}
@@ -57,38 +32,12 @@
 
 % Spheres S^0, S^1, S^2
 \begin{tikzpicture}[scale=\textwidth/35cm]
-  \node[point, dzg singular] at (-7,0) {};
-  \node[point, dzg singular] at (-6,0) {};
-  \node at (-6.5,-1.3) {$S^0$};
-
-  \draw[dzg singular] (-3,0) circle (1cm);
-  \node at (-3,-1.3) {$S^1$};
-
-  \draw[dzg singular] (-1,0) arc (180:360:1cm and 0.5cm);
-  \draw[dzg singular, dashed] (-1,0) arc (180:0:1cm and 0.5cm);
-  \draw[dzg singular] (0,1) arc (90:270:0.5cm and 1cm);
-  \draw[dzg singular, dashed] (0,1) arc (90:-90:0.5cm and 1cm);
-  \draw[dzg singular] (0,0) circle (1cm);
-  \shade[ball color=dzg region, opacity=0.2] (0,0) circle (1cm);
-  \node at (0,-1.3) {$S^2$};
+  \foreach \n/\x in {0/-7, 1/-3, 2/0} \pic at (\x,0) {sphere=\n};
 \end{tikzpicture}
 
-% Balls B^0, B^1, B^2, each with its boundary sphere
+% Balls B^1, B^2, B^3, each with its boundary sphere
 \begin{tikzpicture}[scale=\textwidth/35cm]
-  \draw[distinguished curve] (-7,0) -- (-6,0);
-  \node[point, dzg singular] at (-7,0) {};
-  \node[point, dzg singular] at (-6,0) {};
-  \node at (-6.5,-1.3) {$B^0$};
-
-  \draw[pattern=horizontal lines, pattern color=dzg accent] (-3,0) circle (1cm);
-  \draw[dzg singular] (-3,0) circle (1cm);
-  \node at (-3,-1.3) {$B^1$};
-
-  \shade[ball color=dzg accent, opacity=0.9] (0,0) circle (1cm);
-  \draw[dzg singular] (0,0) circle (1cm);
-  \draw[dzg singular] (-1,0) arc (180:360:1cm and 0.5cm);
-  \draw[dzg singular] (0,1) arc (90:270:0.5cm and 1cm);
-  \node at (0,-1.3) {$B^2$};
+  \foreach \n/\x in {1/-7, 2/-3, 3/0} \pic at (\x,0) {ball=\n};
 \end{tikzpicture}
 
 \end{document}

@@ -11,99 +11,44 @@
 \begin{document}
 
 
-% Writing All E2 terms
+% The Serre spectral sequence of a fibration S^1 -> E -> CP^2:
+% E_2^{p,q} = H^p(CP^2) (x) H^q(S^1), in four stages.
+% Writing all E_2 terms
 \begin{tikzpicture}
-\matrix (m) [matrix of math nodes,
-  nodes in empty cells,nodes={minimum width=5ex,
-  minimum height=5ex,outer sep=-5pt},
-  column sep=1ex,row sep=1ex]{
-%
-S^1& 	&   &  	& 	& 	&	&	&	\\
-%
-0&	\ee{0}{5}&	\ee{1}{5}&	\ee{2}{5}&	\ee{3}{5}&	\ee{4}{5}&	\ee{5}{5}&	&\\
-0&	\ee{0}{4}&	\ee{1}{4}&	\ee{2}{4}&	\ee{3}{4}&	\ee{4}{4}&	\ee{5}{4}&	&\\
-0&	\ee{0}{3}&	\ee{1}{3}&	\ee{2}{3}&	\ee{3}{3}&	\ee{4}{3}&	\ee{5}{3}&	&\\
-0&	\ee{0}{2}&	\ee{1}{2}&	\ee{2}{2}&	\ee{3}{2}&	\ee{4}{2}&	\ee{5}{2}&	&\\
-0&	\ee{0}{1}&	\ee{1}{1}&	\ee{2}{1}&	\ee{3}{1}&	\ee{4}{1}&	\ee{5}{1}&	&\\
-0&	\ee{0}{0}&	\ee{1}{0}&	\ee{2}{0}&	\ee{3}{0}&	\ee{4}{0}&	\ee{5}{0}&	&\\ \quad\strut
-%
-&	0&	1&	2&	3&	4&	5&	\CP_2& \strut \\};
-%
-\draw (m-8-1.east) -- (m-1-1.east) ;
-\draw (m-8-1.north) -- (m-8-9.north) ;
+  \pic (E) [ss p name={$\CP^2$}, ss q name={$S^1$}, ss column sep=3.6cm] {ss page};
+  \foreach \p in {0,...,5} \foreach \q in {0,...,5}
+    {\ssentry{E}{\p}{\q}{$\ee{\p}{\q}$}}
 \end{tikzpicture}
 
 \vspace{1cm}
 
-% Plugging in known groups
+% Plugging in known groups: H^q(S^1) = Z for q = 0, 1 and 0 otherwise
 \begin{tikzpicture}
-\matrix (m) [matrix of math nodes,
-  nodes in empty cells,nodes={minimum width=5ex,
-  minimum height=5ex,outer sep=-5pt},
-  column sep=1ex,row sep=1ex]{
-%
-S^1& 	&   &  	& 	& 	&	&	&	\\
-%
-0&	\zt{\Z}{0}&		\HCPtensor{1}{0}&	\HCPtensor{2}{0}&	\HCPtensor{3}{0}&	\HCPtensor{4}{0}&	\HCPtensor{5}{0}&	&\\
-0&	\zt{\Z}{0}&		\HCPtensor{1}{0}&	\HCPtensor{2}{0}&	\HCPtensor{3}{0}&	\HCPtensor{4}{0}&	\HCPtensor{5}{0}&	&\\
-0&	\zt{\Z}{0}&		\HCPtensor{1}{0}&	\HCPtensor{2}{0}&	\HCPtensor{3}{0}&	\HCPtensor{4}{0}&	\HCPtensor{5}{0}&	&\\
-0&	\zt{\Z}{0}&		\HCPtensor{1}{0}&	\HCPtensor{2}{0}&	\HCPtensor{3}{0}&	\HCPtensor{4}{0}&	\HCPtensor{5}{0}&	&\\
-0&	\zt{\Z}{\Z}&	\HCPtensor{1}{\Z}&	\HCPtensor{2}{\Z}&	\HCPtensor{3}{\Z}&	\HCPtensor{4}{\Z}&	\HCPtensor{5}{\Z}&	&\\
-0&	\zt{\Z}{\Z}&	\HCPtensor{1}{\Z}&	\HCPtensor{2}{\Z}&	\HCPtensor{3}{\Z}&	\HCPtensor{4}{\Z}&	\HCPtensor{5}{\Z}&	&\\ \quad\strut
-%
-&	0&	1&	2&	3&	4&	5&	\CP_2& \strut \\};
-%
-\draw (m-8-1.east) -- (m-1-1.east) ;
-\draw (m-8-1.north) -- (m-8-9.north) ;
+  \pic (E) [ss p name={$\CP^2$}, ss q name={$S^1$}, ss column sep=3.2cm] {ss page};
+  \foreach \q/\g in {0/\Z, 1/\Z, 2/0, 3/0, 4/0, 5/0} {
+    \ssentry{E}{0}{\q}{$\zt{\Z}{\g}$}
+    \foreach \p in {1,...,5} {\ssentry{E}{\p}{\q}{$\HCPtensor{\p}{\g}$}}}
 \end{tikzpicture}
 
 % Simplifying
 \begin{tikzpicture}
-\matrix (m) [matrix of math nodes,
-  nodes in empty cells,nodes={minimum width=5ex,
-  minimum height=5ex,outer sep=-5pt},
-  column sep=1ex,row sep=1ex]{
-%
-S^1& 	&   &  	& 	& 	&	&	&	\\
-%
-0&	0&		0&	0&	0&	0&	0&	&\\
-0&	0&		0&	0&	0&	0&	0&	&\\
-0&	0&		0&	0&	0&	0&	0&	&\\
-0&	0&		0&	0&	0&	0&	0&	&\\
-0&	\Z&	\HCP{1}&	\HCP{2}&	\HCP{3}&	\HCP{4}&	\HCP{5}&	&\\
-0&	\Z&	\HCP{1}&	\HCP{2}&	\HCP{3}&	\HCP{4}&	\HCP{5}&	&\\ \quad\strut
-%
-&	0&	1&	2&	3&	4&	5&	\CP_2& \strut \\};
-%
-\draw (m-8-1.east) -- (m-1-1.east) ;
-\draw (m-8-1.north) -- (m-8-9.north) ;
+  \pic (E) [ss p name={$\CP^2$}, ss q name={$S^1$}, ss column sep=1.6cm] {ss page};
+  \foreach \q in {0,1} {
+    \ssentry{E}{0}{\q}{$\Z$}
+    \foreach \p in {1,...,5} {\ssentry{E}{\p}{\q}{$\HCP{\p}$}}}
+  \foreach \q in {2,...,5} \foreach \p in {0,...,5} {\ssentry{E}{\p}{\q}{$0$}}
 \end{tikzpicture}
 
+% The differentials d_2: E_2^{p,1} -> E_2^{p+2,0}
 \begin{tikzpicture}
-\matrix (m) [matrix of math nodes,
-  nodes in empty cells,nodes={minimum width=5ex,
-  minimum height=5ex,outer sep=-5pt},
-  column sep=1ex,row sep=1ex]{
-%
-S^1& 	&   &  	& 	& 	&	&	&	\\
-%
-0&	0&		0&	0&	0&	0&	0&	&\\
-0&	0&		0&	0&	0&	0&	0&	&\\
-0&	0&		0&	0&	0&	0&	0&	&\\
-0&	0&		0&	0&	0&	0&	0&	&\\
-0&	\Z&	\HCP{1}&	\HCP{2}&	\HCP{3}&	\HCP{4}&	\HCP{5}&	\cdots&\\
-0&	\Z&	\HCP{1}&	\HCP{2}&	\HCP{3}&	\HCP{4}&	\HCP{5}&	\cdots&\\ \quad\strut
-%
-&	0&	1&	2&	3&	4&	5&	\CP_2& \strut \\};
-%
-\draw (m-8-1.east) -- (m-1-1.east) ;
-\draw (m-8-1.north) -- (m-8-9.north) ;
-\draw[->] (m-6-2.south east) -- (m-7-4.north west);
-\draw[->] (m-6-3.south east) -- (m-7-5.north west);
-\draw[->] (m-6-4.south east) -- (m-7-6.north west);
-\draw[->] (m-6-5.south east) -- (m-7-7.north west);
-\draw[->] (m-6-6.south east) -- (m-7-8.north west);
-
+  \pic (E) [ss p name={$\CP^2$}, ss q name={$S^1$}, ss p={0,...,6},
+    ss column sep=1.6cm] {ss page};
+  \foreach \q in {0,1} {
+    \ssentry{E}{0}{\q}{$\Z$}
+    \foreach \p in {1,...,5} {\ssentry{E}{\p}{\q}{$\HCP{\p}$}}
+    \ssentry{E}{6}{\q}{$\cdots$}}
+  \foreach \q in {2,...,5} \foreach \p in {0,...,5} {\ssentry{E}{\p}{\q}{$0$}}
+  \foreach \p in {0,...,4} {\ssdifferential[ss unlabelled]{E}{2}{\p}{1}}
 \end{tikzpicture}
 
 \begin{tikzpicture}

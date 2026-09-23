@@ -37,30 +37,33 @@
 % -----------------------------------------------------------------------------
 % Spheres and balls, radius 1 about the pic origin. S^2 is drawn with its
 % equator and a meridian, back halves dashed. Coordinates: -center; for S^0
-% and B^1 the two points -left and -right.
+% and B^1 the two points -left and -right. The boundary sphere of a ball is
+% drawn in dzg singular.
 % -----------------------------------------------------------------------------
-\tikzset{pics/sphere/.style={code={\csname dzg@sphere@#1\endcsname
+\tikzset{pics/sphere/.style={/tikz/transform shape, code={\tikzset{transform shape=false}\csname dzg@sphere@#1\endcsname
   \dzg@spacelabel{0,-1.4}{$S^{#1}$}}}}
-\tikzset{pics/ball/.style={code={\csname dzg@ball@#1\endcsname
+\tikzset{pics/ball/.style={/tikz/transform shape, code={\tikzset{transform shape=false}\def\dzg@spherecolor{dzg singular}%
+  \csname dzg@ball@#1\endcsname
   \dzg@spacelabel{0,-1.4}{$B^{#1}$}}}}
 
+\def\dzg@spherecolor{black}
 \@namedef{dzg@sphere@0}{%
   \coordinate (-center) at (0,0);
-  \node[point, dzg singular] (-left) at (-1,0) {};
-  \node[point, dzg singular] (-right) at (1,0) {};}
+  \node[point, \dzg@spherecolor] (-left) at (-1,0) {};
+  \node[point, \dzg@spherecolor] (-right) at (1,0) {};}
 \@namedef{dzg@sphere@1}{%
   \coordinate (-center) at (0,0);
-  \draw[dzg singular] (0,0) circle (1);}
+  \draw[\dzg@spherecolor] (0,0) circle (1);}
 \def\dzg@sphere@equator@front{%
-  \draw[dzg singular] (-1,0) arc (180:360:1 and 0.5);
-  \draw[dzg singular] (0,1) arc (90:270:0.5 and 1);}
+  \draw[\dzg@spherecolor] (-1,0) arc (180:360:1 and 0.5);
+  \draw[\dzg@spherecolor] (0,1) arc (90:270:0.5 and 1);}
 \@namedef{dzg@sphere@2}{%
   \coordinate (-center) at (0,0);
   \shade[ball color=dzg region, opacity=0.2] (0,0) circle (1);
   \dzg@sphere@equator@front
-  \draw[dzg singular, dashed] (-1,0) arc (180:0:1 and 0.5);
-  \draw[dzg singular, dashed] (0,1) arc (90:-90:0.5 and 1);
-  \draw[dzg singular] (0,0) circle (1);}
+  \draw[\dzg@spherecolor, dashed] (-1,0) arc (180:0:1 and 0.5);
+  \draw[\dzg@spherecolor, dashed] (0,1) arc (90:-90:0.5 and 1);
+  \draw[\dzg@spherecolor] (0,0) circle (1);}
 
 \@namedef{dzg@ball@1}{%
   \draw[distinguished curve] (-1,0) -- (1,0);
@@ -71,7 +74,7 @@
 \@namedef{dzg@ball@3}{%
   \coordinate (-center) at (0,0);
   \shade[ball color=dzg accent, opacity=0.9] (0,0) circle (1);
-  \draw[dzg singular] (0,0) circle (1);
+  \draw[\dzg@spherecolor] (0,0) circle (1);
   \dzg@sphere@equator@front}
 
 % -----------------------------------------------------------------------------
@@ -79,7 +82,7 @@
 % Coordinates: -ll, -lr, -ul, -ur (ends of the two boundary circles' long
 % axes), -bottom and -top (centres of the boundary circles).
 % -----------------------------------------------------------------------------
-\tikzset{pics/cylinder/.style={code={%
+\tikzset{pics/cylinder/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
   \coordinate (-ll) at (-3,-2); \coordinate (-lr) at (3,-2);
   \coordinate (-ul) at (-3,2);  \coordinate (-ur) at (3,2);
   \coordinate (-bottom) at (0,-2); \coordinate (-top) at (0,2);
@@ -97,7 +100,7 @@
 % Coordinates: -longitude (centre of the core circle, radii 3 and 1) and
 % -meridian (top of a meridian circle, radii 0.5 and 0.85, through the front).
 % -----------------------------------------------------------------------------
-\tikzset{pics/torus/.style={code={%
+\tikzset{pics/torus/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
   \coordinate (-longitude) at (0,0.5);
   \coordinate (-meridian) at (-1,-0.25);
   \draw (4,0) arc (0:360:4 and 2);
@@ -110,7 +113,7 @@
 % A coffee cup, rim centred at the pic origin (rim radii 1 and 1/2).
 % Coordinates: -rim, -handle.
 % -----------------------------------------------------------------------------
-\tikzset{pics/coffee cup/.style={code={%
+\tikzset{pics/coffee cup/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
   \coordinate (-rim) at (0,0);
   \coordinate (-handle) at (10:1.25);
   \begin{scope}[shift=(10:7/8), rotate=-30, yslant=1/2, xslant=-1/8]
@@ -160,7 +163,7 @@
   \draw[coordinate axis] (0,#3) -- (0,#4);
   \ifdzg@spacelabels\node[font=\small] at (#2-0.3,#4-0.3) {$\mathbb{C}$};\fi}
 
-\tikzset{pics/quarter disc contour/.style={code={%
+\tikzset{pics/quarter disc contour/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
   \coordinate (-0) at (0,0); \coordinate (-R) at (3,0); \coordinate (-iR) at (0,3);
   \dzg@complexaxes{-2}{3.8}{-1.2}{3.8}
   \draw[contour={0.17,0.5,0.84}] (0,0) -- (3,0) arc (0:90:3) -- cycle;
@@ -170,7 +173,7 @@
     \node[font=\small] at (45:3.35) {$\Gamma$};
   \fi}}}
 
-\tikzset{pics/strip rectangle contour/.style={code={%
+\tikzset{pics/strip rectangle contour/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
   \coordinate (-R) at (2.5,0); \coordinate (-mR) at (-2.5,0);
   \coordinate (-Rb) at (2.5,-1.5); \coordinate (-mRb) at (-2.5,-1.5);
   \dzg@complexaxes{-3.5}{3.5}{-2.5}{1.5}
@@ -220,7 +223,7 @@
 \def\dzg@ssends#1#2#3{%
   \def#2{}\foreach \dzg@i in #1 {\ifx#2\empty\xdef#2{\dzg@i}\fi\xdef#3{\dzg@i}}}
 
-\tikzset{pics/ss page/.style={code={%
+\tikzset{pics/ss page/.style={/tikz/transform shape, code={\tikzset{transform shape=false}%
   \pgfmathsetlengthmacro\dzg@sx{\pgfkeysvalueof{/tikz/ss column sep}}%
   \pgfmathsetlengthmacro\dzg@sy{\pgfkeysvalueof{/tikz/ss row sep}}%
   \global\let\dzg@ssx\dzg@sx \global\let\dzg@ssy\dzg@sy
