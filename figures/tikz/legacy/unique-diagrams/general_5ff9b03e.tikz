@@ -4,10 +4,8 @@
 % Type: tikzcd
 
 \begin{tikzcd}
-
 & {\fent} \\
 {\fen} && {\fttz}
 \arrow[from=1-2, to=2-1, "\text{Finite}"']
 \arrow[from=1-2, to=2-3, "\text{Finite-to-one}"]
-
 \end{tikzcd}

@@ -4,7 +4,6 @@
 % Type: tikzcd
 
 \begin{tikzcd}
-
 	&& {h^{n,n}} \\
 	& {h^{n-q, n-p}} && {h^{n-p, n-q}} \\
 	{h^{n, 0}} &&&& {h^{0, n}} \\
@@ -15,5 +14,4 @@
 	\arrow[curve={height=-12pt}, Rightarrow, no head, from=4-2, to=2-4]
 	\arrow[dashed, no head, from=3-1, to=3-5]
 	\arrow[Rightarrow, no head, from=2-4, to=2-2]
-
 \end{tikzcd}

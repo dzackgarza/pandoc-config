@@ -4,8 +4,6 @@
 % Type: tikzpicture
 
 \begin{tikzpicture}
-
-\fontsize{45pt}{1em} 
-\node (node_one) at (0,0) { \import{/home/zack/SparkleShare/github.com/Notes/Class_Notes/2023/Spring/k3surfaces/sections/figures}{2023-01-10_10-42.pdf_tex} };
-
+  \fontsize{45pt}{1em}\selectfont
+  \node at (0,0) { \import{/home/dzack/notes/Class_Notes/2023/Spring/k3surfaces/sections/figures/}{2023-01-10_10-42.pdf_tex} };
 \end{tikzpicture}
