@@ -1,11 +1,11 @@
 \begin{tikzpicture}
-\input{18_2_0.tikz}
-\node[above=of r11] {\Large $E_7^2C_2$};
+\pic (r) {vinberg 18 2 0};
+\node[above=of r10] {\Large $E_7^2C_2$};
 \scoped[on background layer]
   \draw[parabolic]
-    (r4.center) -- (r1.center) -- (r14.center)
-    (r1.center) -- (r17.center)
-    (r12.center) -- (r9.center) -- (r6.center)
-    (r9.center) -- (r18.center)
-    (r19.center) -- (r22.center) -- (r20.center);
+    (r3.center) -- (r0.center) -- (r13.center)
+    (r0.center) -- (r16.center)
+    (r11.center) -- (r8.center) -- (r5.center)
+    (r8.center) -- (r18.center)
+    (r19.center) -- (r21.center) -- (r17.center);
 \end{tikzpicture}

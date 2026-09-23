@@ -1,3 +1,3 @@
-﻿\begin{tikzpicture}
-  \input{raw_Sterk1}
+\begin{tikzpicture}
+\pic {sterk cusp=1};
 \end{tikzpicture}

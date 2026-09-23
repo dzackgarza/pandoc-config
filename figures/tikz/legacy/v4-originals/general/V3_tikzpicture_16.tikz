@@ -5,5 +5,5 @@
 % Index: 16
 
 \begin{tikzpicture}
-  \pic[root labels=prime] {sterk=4};
+  \pic {sterk cusp=4};
 \end{tikzpicture}

@@ -1,12 +1,5 @@
 \begin{tikzpicture}
-\begin{scope}[scale=1.2]
-  \input{18_2_0.tikz}
-  \draw[fold] ($(r8)!1/2!(r18) + (0.1,0)$) to[bend right=45] ($(r6)!1/2!(r20) + (0.1,0)$);
-  \draw[fold] ($(r14)!1/2!(r19)$) to[bend right=45] ($(r16)!1/2!(r17)$);
-  \draw[fold axis] ($(r15) + (-0.1,0)$) -- ($(r7) + (0.1,0)$);
-  \draw[quotient map] ($(r7) + (0.25,0.5)$) -- ($(r7) + (1.75,0.5)$);
-\end{scope}
-\begin{scope}[shift={(7,2.4)}, scale=0.6]
-  \input{raw_Sterk4}
-\end{scope}
+\pic[root labels=index] {sterk cusp cover=4};
+\draw[quotient map] (4.6,2) -- (6,2);
+\pic at (7,1) {sterk cusp=4};
 \end{tikzpicture}

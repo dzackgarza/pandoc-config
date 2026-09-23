@@ -1,7 +1,7 @@
 \begin{tikzpicture}
 \pic (r) {vinberg 18 0 0};
 \scoped[on background layer]
-  \draw[parabolic] (r1.center) -- (r3.center) -- (r8.center) (r3.center) -- (r18.center)
-    (r17.center) -- (r15.center) -- (r10.center) (r15.center) -- (r19.center);
-\node[right = of r9] {\Large $E_8^2$};
+  \draw[parabolic] (r2.center) -- (r4.center) -- (r9.center) (r4.center) -- (r1.center)
+    (r18.center) -- (r16.center) -- (r11.center) (r16.center) -- (r19.center);
+\node[right = of r10] {\Large $E_8^2$};
 \end{tikzpicture}

@@ -4,8 +4,9 @@
 % Category: general
 % Index: 17
 
+% Sterk's diagram V; N and S mark its two barbell roots r_13 and r_12.
 \begin{tikzpicture}
-  \pic[root labels=prime] {sterk=5};
-  \node[above=0.1cm of 13] {$N$};
-  \node[below=0.1cm of 14] {$S$};
+  \pic {sterk cusp=5};
+  \node[left=0.1cm of 13] {$N$};
+  \node[right=0.1cm of 12] {$S$};
 \end{tikzpicture}

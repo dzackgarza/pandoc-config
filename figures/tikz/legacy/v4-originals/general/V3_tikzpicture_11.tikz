@@ -7,16 +7,10 @@
 % The horizontal reflection h of the Vinberg diagram of (18,2,0) and the
 % labels of its roots after identifying each h-orbit.
 \begin{tikzpicture}
-  \pic (L) [root labels=ell] {vinberg 18 2 0};
-  \draw[fold axis] (-0.5,2) -- (4.5,2);
-  \draw[fold, opacity=0.2] (1.5,1) -- (1.5,3);
-  \begin{scope}[shift={(7,0)}]
-    \pic (R) {vinberg 18 2 0};
-    \foreach \n/\a/\t in {15/180/1, 14/180/2, 1/135/3, 2/90/4, 3/90/5, 4/90/6, 5/45/7,
-        6/0/8, 7/0/9, 8/0/8, 9/-45/7, 10/270/6, 11/270/5, 12/270/4,
-        13/225/3, 16/180/2, 17/80/10, 18/90/11, 19/80/11, 20/100/10}
+  \pic (L) [root labels=ell] {sterk cusp cover=4};
+  \begin{scope}[shift={(6,0)}]
+    \pic (R) [root labels=none] {sterk cusp cover=4};
+    \foreach \n/\a/\t in {14/180/1, 15/180/2, 12/135/3, 11/90/4, 10/90/5, 9/90/6, 8/45/7, 7/0/8, 6/0/9, 5/0/8, 4/315/7, 3/270/6, 2/270/5, 1/270/4, 0/225/3, 13/180/2, 19/180/10, 18/0/11, 17/0/11, 16/180/10}
       \path (R\n) node[label={[vertex label]\a:$\ell'_{\t}$}] {};
-    \draw[fold axis] (-0.5,2) -- (4.5,2);
-    \draw[fold, opacity=0.2] (1.5,1) -- (1.5,3);
   \end{scope}
 \end{tikzpicture}

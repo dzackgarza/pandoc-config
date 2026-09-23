@@ -11,16 +11,12 @@
   \draw[fold axis] (-0.5,-0.5) -- (4.5,4.5);
   \draw[fold] (2,1) -- (1,2);
   \node at (2,-1) {d};
-  \begin{scope}[shift={(5,0)}]
-    \pic (H) {vinberg 18 2 0};
-    \draw[fold axis] (-0.5,2) -- (4.5,2);
-    \draw[fold] (1.5,1) -- (1.5,3);
+  \begin{scope}[shift={(6,0)}]
+    \pic (H) {sterk cusp cover=4};
     \node at (2,-1) {h};
   \end{scope}
-  \begin{scope}[shift={(10,0)}]
-    \pic (R) {vinberg 18 2 0};
-    \foreach \a in {5,185}
-      \draw[fold, ->] (2,2) ++(\a:1) arc[start angle=\a, delta angle=170, radius=1];
+  \begin{scope}[shift={(12,0)}]
+    \pic (R) {sterk cusp cover=1};
     \node at (2,-1) {r};
   \end{scope}
 \end{tikzpicture}
