@@ -1,0 +1,44 @@
+\begin{tikzpicture}[>=Latex, line cap=round, line join=round, scale=0.9]
+  % A planar projection of a triangulated integral-affine sphere.
+  \draw[thick] (0,0) circle (4);
+
+  \coordinate (N)  at (0,3.75);
+  \coordinate (NE) at (2.8,2.65);
+  \coordinate (E)  at (3.75,0);
+  \coordinate (SE) at (2.75,-2.7);
+  \coordinate (S)  at (0,-3.75);
+  \coordinate (SW) at (-2.8,-2.65);
+  \coordinate (W)  at (-3.75,0);
+  \coordinate (NW) at (-2.75,2.7);
+
+  \coordinate (a) at (-1.45,2.05);
+  \coordinate (b) at (1.45,2.05);
+  \coordinate (c) at (2.05,0.25);
+  \coordinate (d) at (1.35,-1.9);
+  \coordinate (e) at (-1.35,-1.9);
+  \coordinate (f) at (-2.05,0.25);
+  \coordinate (O) at (0,0.15);
+
+  % Triangulation.
+  \foreach \p/\q in {N/a,N/b,NE/b,NE/c,E/c,E/d,SE/d,SE/S,S/e,SW/e,SW/W,W/f,NW/f,NW/N,
+                       a/b,b/c,c/d,d/e,e/f,f/a,
+                       a/O,b/O,c/O,d/O,e/O,f/O,
+                       NW/a,NE/b,E/c,SE/d,SW/e,W/f} {
+    \draw[thin] (\p) -- (\q);
+  }
+
+  % A local fan at the central vertex.
+  \foreach \q in {a,b,c,d,e,f} {
+    \draw[blue!70!black, very thick, ->, shorten >=10pt] (O) -- (\q);
+  }
+  \fill[blue!70!black] (O) circle (3pt);
+  \node[blue!70!black, below right] at (O) {$\Sigma_p$};
+
+  % Mark representative integral-affine singularities.
+  \node[red!75!black] at (-2.55,1.25) {$\star$};
+  \node[red!75!black] at (2.55,1.05) {$\star$};
+  \node[red!75!black] at (2.05,-2.15) {$\star$};
+  \node[red!75!black] at (-1.95,-2.2) {$\star$};
+
+  \node[above] at (0,4.15) {$S^2$};
+\end{tikzpicture}

@@ -1,0 +1,45 @@
+\begin{tikzpicture}[line cap=round, line join=round, scale=0.72]
+  % Four octagonal components in the Sterk--2 combinatorial Kulikov model.
+  \tikzset{edge/.style={thick}, seam/.style={very thick}, nodept/.style={circle, draw, fill=yellow!70, inner sep=1.5pt}}
+
+  % Background gluing square.
+  \draw[gray!45] (-4,-4) rectangle (4,4);
+  \draw[gray!45] (-4,0) -- (4,0);
+  \draw[gray!45] (0,-4) -- (0,4);
+  \draw[gray!35] (-4,-4) -- (4,4);
+  \draw[gray!35] (-4,4) -- (4,-4);
+
+  \foreach \cx/\cy/\lab in {-2/2/{V_1},2/2/{V_2},-2/-2/{V_3},2/-2/{V_4}} {
+    \begin{scope}[shift={(\cx,\cy)}]
+      \coordinate (p1) at (-0.85,1.45);
+      \coordinate (p2) at (0.85,1.45);
+      \coordinate (p3) at (1.45,0.85);
+      \coordinate (p4) at (1.45,-0.85);
+      \coordinate (p5) at (0.85,-1.45);
+      \coordinate (p6) at (-0.85,-1.45);
+      \coordinate (p7) at (-1.45,-0.85);
+      \coordinate (p8) at (-1.45,0.85);
+      \draw[edge] (p1)--(p2)--(p3)--(p4)--(p5)--(p6)--(p7)--(p8)--cycle;
+      \foreach \p in {p1,p2,p3,p4,p5,p6,p7,p8} {\node[nodept] at (\p) {};}
+      \node at (0,0) {$\lab$};
+    \end{scope}
+  }
+
+  % Double curves/seams between neighboring components.
+  \draw[seam] (-0.55,2.85) -- (0.55,2.85);
+  \draw[seam] (-0.55,1.15) -- (0.55,1.15);
+  \draw[seam] (-0.55,-1.15) -- (0.55,-1.15);
+  \draw[seam] (-0.55,-2.85) -- (0.55,-2.85);
+  \draw[seam] (-2.85,-0.55) -- (-2.85,0.55);
+  \draw[seam] (-1.15,-0.55) -- (-1.15,0.55);
+  \draw[seam] (1.15,-0.55) -- (1.15,0.55);
+  \draw[seam] (2.85,-0.55) -- (2.85,0.55);
+
+  % Outer gluing arcs indicate the spherical closure of the dual complex.
+  \draw[thick] (-2.85,3.45) .. controls (-2.9,5.0) and (2.9,5.0) .. (2.85,3.45);
+  \draw[thick] (3.45,2.85) .. controls (5.0,2.9) and (5.0,-2.9) .. (3.45,-2.85);
+  \draw[thick] (2.85,-3.45) .. controls (2.9,-5.0) and (-2.9,-5.0) .. (-2.85,-3.45);
+  \draw[thick] (-3.45,-2.85) .. controls (-5.0,-2.9) and (-5.0,2.9) .. (-3.45,2.85);
+
+  \node[below] at (0,-5.15) {dual-complex model for Sterk $2$};
+\end{tikzpicture}

@@ -1,0 +1,38 @@
+\begin{tikzpicture}[line cap=round, line join=round, scale=0.95]
+  \tikzset{component/.style={draw, thick, minimum width=1.65cm, minimum height=2.4cm, inner sep=0pt}}
+
+  % Chain of components in a Type II Kulikov central fibre.
+  \node[component, fill=cyan!12] (V1) at (0,0) {};
+  \node[component, fill=red!10]  (V2) at (1.65,0) {};
+  \node[component, fill=red!10]  (V3) at (3.30,0) {};
+  \node at (4.75,0) {$\cdots$};
+  \node[component, fill=red!10]  (Vm) at (6.10,0) {};
+  \node[component, fill=cyan!12] (Vn) at (7.75,0) {};
+
+  % Curved top/bottom profiles suggest ruled/rational surface components.
+  \foreach \N in {V1,V2,V3,Vm,Vn} {
+    \draw[thin] (\N.north west) .. controls +(0.4,0.22) and +(-0.4,0.22) .. (\N.north east);
+    \draw[thin] (\N.south west) .. controls +(0.4,-0.22) and +(-0.4,-0.22) .. (\N.south east);
+  }
+
+  % Double curves between adjacent components.
+  \foreach \x in {0.825,2.475,6.925} {
+    \draw[very thick] (\x,-1.2) -- (\x,1.2);
+    \node[rotate=90, fill=white, inner sep=1pt] at (\x,0) {$E$};
+  }
+  \draw[very thick, dashed] (5.425,-1.2) -- (5.425,1.2);
+
+  \node[above=2pt of V1] {$V_1$};
+  \node[above=2pt of V2] {$V_2$};
+  \node[above=2pt of V3] {$V_3$};
+  \node[above=2pt of Vm] {$V_{n-1}$};
+  \node[above=2pt of Vn] {$V_n$};
+
+  \node[below=7pt of V1, align=center] {rational};
+  \node[below=7pt of V2, align=center] {$E\times\PP^1$};
+  \node[below=7pt of V3, align=center] {$E\times\PP^1$};
+  \node[below=7pt of Vm, align=center] {$E\times\PP^1$};
+  \node[below=7pt of Vn, align=center] {rational};
+
+  \draw[|-|, semithick] (0,-1.75) -- node[below] {dual complex $\bD^1$} (7.75,-1.75);
+\end{tikzpicture}

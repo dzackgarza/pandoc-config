@@ -1,0 +1,61 @@
+\begin{tikzpicture}[
+  scale=0.8,
+  latticept/.style={circle, fill=black!50, inner sep=0pt, minimum size=4.2pt},
+  blatticept/.style={fill=black},
+  openpt/.style={circle, draw=black, fill=white, line width=1.1pt,
+    inner sep=0pt, minimum size=8pt},
+  edge/.style={line width=2pt, line cap=round},
+  gridline/.style={gray!45, dashed, line width=0.35pt},
+  region/.style={fill=cyan!8, draw=none},
+  every node/.style={font=\small}
+]
+  % Type ^-E^-_8 polygon: (2,2), (0,3), (0,0), (5,0).
+  \foreach \x in {-2,-1,...,7} {
+    \draw[gridline] (\x,-2.5) -- (\x,5.5);
+  }
+  \foreach \y in {-2,-1,...,5} {
+    \draw[gridline] (-2.5,\y) -- (7.5,\y);
+  }
+  \foreach \x in {-2,-1,...,7} {
+    \foreach \y in {-2,-1,...,5} {
+      \node[latticept] at (\x,\y) {};
+    }
+  }
+
+  \coordinate (pstar) at (2,2);
+  \coordinate (q) at (0,3);
+  \coordinate (r) at (0,0);
+  \coordinate (s) at (5,0);
+
+  \fill[region] (pstar) -- (q) -- (r) -- (s) -- cycle;
+  \draw[edge] (pstar) -- (q);
+  \draw[edge] (pstar) -- (s);
+  \draw[gray!70, line width=0.8pt] (q) -- (r) -- (s);
+
+  \node[openpt] at (q) {};
+  \node[openpt] at (s) {};
+  \node[
+    star,
+    star points=5,
+    star point ratio=2.2,
+    draw=red,
+    fill=white,
+    line width=1.2pt,
+    minimum size=12pt,
+    inner sep=0pt
+  ] at (pstar) {};
+
+  \node[red, font=\Large] at (2.6,2.65) {$p_\ast$};
+  \node[font=\bfseries\small] at (0.9,3.0) {short};
+  \node[font=\bfseries\small] at (4.0,1.25) {short};
+  \node[font=\Large] at (2.15,0.75) {$E_8$};
+
+  \node[latticept, blatticept] at (0,1) {};
+  \node[latticept, blatticept] at (0,2) {};
+  \node[latticept, blatticept] at (1,0) {};
+  \node[latticept, blatticept] at (2,0) {};
+  \node[latticept, blatticept] at (3,0) {};
+  \node[latticept, blatticept] at (4,0) {};
+  \node[latticept, blatticept] at (1,1) {};
+  \node[latticept, blatticept] at (2,1) {};
+\end{tikzpicture}
