@@ -182,6 +182,19 @@ Every figure draws with the style vocabulary in
    `[on background layer]`.
 5. **Sizes are absolute.** A picture's `scale` spaces coordinates and does
    not change glyph sizes, so the same element looks the same in every figure.
+6. **One definition per mathematical object.** Each Coxeter diagram, cusp
+   diagram, lattice polygon, integral-affine sphere, lattice table, or stratum
+   is defined once, as a pic in `styles/macros/tikz/diagrams/dzg-<family>.tex`,
+   with canonical vertex names and canonical labels (toggleable, rarely
+   switched). A figure under `figures/` imports the object and decorates it:
+   highlights, extra labels, arrows, overlays. A second drawing of the same
+   object anywhere — another tree, a legacy copy, inline TikZ in a document —
+   is a defect.
+7. **Data comes from the mathematics.** When copies disagree, compute the
+   correct data (Gram matrices, root norms, polygon rules, lattice invariants)
+   with the research preamble (`~/research/src/dzack_research/preamble/`) or
+   derive it from the source paper, and cite the source in the object's
+   comment. Never keep two versions and never choose by appearance.
 
 ## Figures: survey the library landscape before drawing
 
