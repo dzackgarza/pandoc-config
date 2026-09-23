@@ -1,0 +1,17 @@
+% A 19-vertex Vinberg diagram whose vertices lie on a triangle with corners
+% 2, 10, 16. Picture body: \input it inside a tikzpicture.
+\foreach \v/\m/\p in {
+    1/white/{(0, 0)}, 2/black/{(-2, 0)}, 3/black/{(2, 0)}, 4/white/{(1, 2)},
+    5/white/{(-1, 2)}, 6/black/{(0, 4)}, 7/black/{(2, 8)}, 8/white/{(1, 6)},
+    9/white/{(3, 10)}, 10/black/{(4, 12)}, 11/white/{(5, 10)},
+    12/white/{(7, 6)}, 13/white/{(9, 2)}, 14/black/{(6, 8)},
+    15/black/{(8, 4)}, 16/black/{(10, 0)}, 17/black/{(6, 0)},
+    18/white/{(8, 0)}, 19/white/{(7, 2)}}
+  \node[vertex=\m] (\v) at \p {};
+\begin{scope}[on edge layer]
+  \draw[coxeter edge=3] (3.center) -- (1.center) -- (2.center) -- (4.center)
+    (2.center) -- (5.center) -- (6.center) -- (8.center) -- (7.center)
+      -- (9.center) -- (10.center) -- (11.center) -- (14.center) -- (12.center)
+      -- (15.center) -- (13.center) -- (16.center) -- (18.center) -- (17.center)
+    (16.center) -- (19.center);
+\end{scope}

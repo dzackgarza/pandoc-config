@@ -1,53 +1,19 @@
-\begin{tikzpicture}[decoration=snake]
-
-\node[style=white node] (p1) at (0, 0) {};
-
-\node[style=white node] (p2) at (2, 0) {};
-
-\node[style=white node] (p3) at (4, 2) {};
-
-\node[style=white node] (p4) at (4, -2) {};
-
-\node[style=white node] (p5) at (6, 0) {};
-
-\node[style=white node] (p6) at (6, -2) {};
-
-
-
-%\draw[shorten >= 0.2em, decorate] (p1) to (p2.west);
-\draw[-latex, shorten >= 0.4em] (p2) to (p3.west);
-\draw[-latex, shorten >= 0.4em, style=double] (p2) to (p4.west);
-
-\draw[-latex, shorten >= 0.4em, style=double] (p3) to (p5.west);
-\draw[-latex, shorten >= 0.4em] (p4) to (p5.west);
-
-\draw[-latex, shorten >= 0.4em, style=double] (p4) to (p6.west);
-
-
-\draw [-latex,decorate, ->]
-(0.2,0) -- (1.8,0);
-
-\node at (3.25, .75) {$U$};
-\node at (4.7, 0.75) {$U(2)$};
-
-\node at (3.25, -.75) {$U(2)$};
-\node at (4.7, -0.75) {$U$};
-
-\node at (4.7, -2.25) {$U(2)$};
-
-
-\node at (0, 3) {$S$};
-\node at (2, 3) {$T$};
-\node at (4, 3) {$\bar{T}$};
-\node at (6, 3) {$\bar{\bar{T}}$};
-
-\node at (-0.5, 0.5) {$(10, 10, 0)_1$};
-\node at (1.5, 0.5) {$(12, 10, 0)_2$};
-
-\node at (3.5, 2.5) {$(10, 10, 0)_1$};
-\node at (3.5, -2.5) {$(10, 8, 0)_1$};
-
-\node at (6.5, 0.5) {$(8, 8, 0)_0$};
-\node at (6.5, -1.5) {$(8, 6, 0)_0$};
-
+% Mirror moves for the Enriques lattice (10,10,0)_1: S to its complement T,
+% then moves of type U and U(2).
+\begin{tikzpicture}
+  \foreach \p/\pos/\lat/\where in {1/{(0, 0)}/{(10,10,0)_1}/above left,
+                                   2/{(2, 0)}/{(12,10,0)_2}/above left,
+                                   3/{(4, 2)}/{(10,10,0)_1}/above left,
+                                   4/{(4, -2)}/{(10,8,0)_1}/below left,
+                                   5/{(6, 0)}/{(8,8,0)_0}/above right,
+                                   6/{(6, -2)}/{(8,6,0)_0}/above right}
+    \node[vertex=white, label={\where:$\lat$}] (p\p) at \pos {};
+  \foreach \x/\stage in {0/S, 2/T, 4/\bar T, 6/\bar{\bar T}}
+    \node at (\x, 3) {$\stage$};
+  \draw[mirror move=complement] (p1) -- (p2);
+  \draw[mirror move=U] (p2) -- node[above left] {$U$} (p3);
+  \draw[mirror move=U(2)] (p2) -- node[below left] {$U(2)$} (p4);
+  \draw[mirror move=U(2)] (p3) -- node[above right] {$U(2)$} (p5);
+  \draw[mirror move=U] (p4) -- node[below right] {$U$} (p5);
+  \draw[mirror move=U(2)] (p4) -- node[below] {$U(2)$} (p6);
 \end{tikzpicture}

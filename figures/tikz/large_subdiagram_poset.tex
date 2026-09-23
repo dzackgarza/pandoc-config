@@ -1,395 +1,83 @@
-﻿\usetikzlibrary{arrows.meta,calc}
-
-\pgfdeclarelayer{hassebg}
-\pgfsetlayers{hassebg,main}
-
-\colorlet{ellbg}{green!14}
-\colorlet{parbg}{yellow!24}
-\colorlet{glowblue}{cyan!34}
-
-\tikzset{
-  hasse/.style={draw=gray!55, line width=.25pt},
-  cell/.style={
-    draw,
-    rounded corners=2pt,
-    minimum width=2.18cm,
-    minimum height=1.48cm,
-    inner sep=1.5pt
-  },
-  activewhite/.style={draw=black, fill=white, line width=.38pt},
-  activeblack/.style={draw=black, fill=black, line width=.38pt},
-  inactivewhite/.style={draw=gray!55, fill=white, line width=.22pt},
-  inactiveblack/.style={draw=gray!55, fill=black!18, line width=.22pt},
-  inactiveedge/.style={draw=gray!35, line width=.24pt},
-  activeedge/.style={draw=black, line width=.65pt},
-  inactivedoubleedge/.style={
-    draw=gray!35,
-    double=white,
-    double distance=.75pt,
-    line width=.24pt
-  },
-  activedoubleedge/.style={
-    draw=black,
-    double=white,
-    double distance=.75pt,
-    line width=.65pt
-  },
-  inactiveboldedge/.style={draw=gray!35, line width=.70pt},
-  activeboldedge/.style={draw=black, line width=1.25pt},
-}
-
-% Rounded convex capsule/hull path around a cyclic list of coordinates.
-% For two points this gives a capsule around the segment.
-% For one point use \GlowVertex.
-\makeatletter
-\def\convexpath#1#2{%
-  [create hullcoords/.code={%
-    \global\edef\namelist{#1}%
-    \foreach [count=\counter] \nodename in \namelist {%
-      \global\edef\numberofnodes{\counter}%
-      \coordinate (hullcoord\counter) at (\nodename);%
-    }%
-    \coordinate (hullcoord0) at (hullcoord\numberofnodes);%
-    \pgfmathtruncatemacro\lastnumber{\numberofnodes+1}%
-    \coordinate (hullcoord\lastnumber) at (hullcoord1);%
-  }, create hullcoords]
-  ($(hullcoord1)!#2!-90:(hullcoord0)$)
-  \foreach [
-    evaluate=\currentnode as \previousnode using \currentnode-1,
-    evaluate=\currentnode as \nextnode using \currentnode+1
-  ] \currentnode in {1,...,\numberofnodes} {%
-    let \p1 = ($(hullcoord\currentnode) - (hullcoord\previousnode)$),
-        \n1 = {atan2(\y1,\x1) + 90},
-        \p2 = ($(hullcoord\nextnode) - (hullcoord\currentnode)$),
-        \n2 = {atan2(\y2,\x2) + 90},
-        \n{delta} = {-Mod(\n1-\n2,360)}
-    in {arc [start angle=\n1, delta angle=\n{delta}, radius=#2]}
-    -- ($(hullcoord\nextnode)!#2!-90:(hullcoord\currentnode)$)%
-  }%
-}
-\makeatother
-
-% Main-layer glow.
-% It is drawn after the faded ambient diagram and before the final active
-% black strokes/nodes.
-\newcommand{\GlowSegment}[2]{%
-  \fill[glowblue, opacity=.72]
-    \convexpath{#1,#2}{5.8pt} -- cycle;
-  \draw[cyan!55, opacity=.48, line width=1.05pt]
-    \convexpath{#1,#2}{5.8pt} -- cycle;
-}
-
-\newcommand{\GlowVertex}[1]{%
-  \fill[glowblue, opacity=.72]
-    (#1) circle[radius=6.1pt];
-  \draw[cyan!55, opacity=.48, line width=1.05pt]
-    (#1) circle[radius=6.1pt];
-}
-
-% \SubdiagramCell{name}{(x,y)}{fillcolor}{n1}{n2}{n3}{n4}{n5}
-% n_i=1 iff node i is in the subdiagram.
+% Poset of subdiagrams of the Coxeter diagram C(L) of the lattice with root
+% Gram matrix G_L below. White roots have square -2, black roots square -4:
 %
-% White nodes have square -2.
-% Black nodes have square -4.
+%       3 == 4 === 5        1-2, 1-3, 2-3: (r_i, r_j) = 1   (weight 3)
+%      / \                  3-4:           (r_3, r_4) = 2   (weight 4)
+%     1---2                 4-5:           (r_4, r_5) = 4   (weight infinity)
 %
-% Integral root Gram matrix:
-%
-%   [ -2  1  1  0  0 ]
-%   [  1 -2  1  0  0 ]
-%   [  1  1 -2  2  0 ]
-%   [  0  0  2 -4  4 ]
-%   [  0  0  0  4 -4 ]
-%
-% Ambient diagram:
-%
-%       3 == 4 === 5
-%      / \
-%     1---2
-%
-% simple white-white edge:      (r_i,r_j)=1
-% double white-black edge 3==4: (r_3,r_4)=2
-% bold black-black edge 4===5:  (r_4,r_5)=4
-% no edge:                      (r_i,r_j)=0
+% A subdiagram is a subset of {1,...,5}, encoded as the bitmask
+% m = sum of 2^(i-1) over its vertices i. Cover arrows point from a subdiagram
+% to the subdiagrams with one more vertex.
+\begin{tikzpicture}[scale=0.72]
+  % Cell positions: one row per rank, subsets in lexicographic order.
+  \foreach \rank/\n/\row in {0/1/{0}, 1/5/{1, 2, 4, 8, 16},
+                             2/10/{3, 5, 9, 17, 6, 10, 18, 12, 20, 24},
+                             3/10/{7, 11, 19, 13, 21, 25, 14, 22, 26, 28},
+                             4/5/{15, 23, 27, 29, 30}, 5/1/{31}}
+    \foreach \m [count=\i] in \row
+      \path (({(\i - (\n + 1) / 2) * 2.451}, {2.05 * \rank})
+        node[minimum width=1.57cm, minimum height=1.07cm] (S\m) {};
 
-\newcommand{\SubdiagramCell}[8]{%
-  \node[cell, fill=#3] (#1) at #2 {};
-  \begin{scope}[shift={(#1.center)}, x=.55cm, y=.55cm]
-    \coordinate (v1) at (-1.10,-0.35);
-    \coordinate (v2) at (-0.25,-0.35);
-    \coordinate (v3) at (-0.68,0.39);
-    \coordinate (v4) at (0.20,0.92);
-    \coordinate (v5) at (1.05,0.92);
+  % Cover relations: add one vertex i not in m.
+  \foreach \m in {0, ..., 30}
+    \foreach \v in {1, ..., 5} {
+      \pgfmathtruncatemacro\sel{mod(floor(\m / 2^(\v - 1)), 2)}
+      \pgfmathtruncatemacro\up{\m + 2^(\v - 1)}
+      \ifnum\sel=0
+        \scoped[on background layer]
+          \draw[degeneration, dzg muted] (S\m) -- (S\up);
+      \fi
+    }
 
-    % Faded full ambient diagram.
-    \draw[inactiveedge] (v1)--(v2);
-    \draw[inactiveedge] (v1)--(v3);
-    \draw[inactiveedge] (v2)--(v3);
-    \draw[inactivedoubleedge] (v3)--(v4);
-    \draw[inactiveboldedge] (v4)--(v5);
+  % Cells, by bitmask: the type of the subdiagram and the diagram, with the
+  % vertices and edges outside the subdiagram inactive.
+  \foreach \type [count=\c from 0] in {elliptic, elliptic, elliptic, elliptic,
+      elliptic, elliptic, elliptic, parabolic, elliptic, elliptic, elliptic,
+      elliptic, elliptic, elliptic, elliptic, other, elliptic, elliptic,
+      elliptic, elliptic, elliptic, elliptic, elliptic, parabolic, parabolic,
+      parabolic, parabolic, parabolic, other, other, other, other} {
+    \scoped[on background layer]
+      \node[subdiagram cell=\type, minimum width=1.57cm, minimum height=1.07cm]
+        at (S\c) {};
+    \begin{scope}[shift={(S\c)}, x=0.55cm, y=0.55cm]
+      \foreach \v/\mark/\pos in {1/white/{(-1.10, -0.35)}, 2/white/{(-0.25, -0.35)},
+                                 3/white/{(-0.68, 0.39)}, 4/black/{(0.20, 0.92)},
+                                 5/black/{(1.05, 0.92)}} {
+        \pgfmathtruncatemacro\sel{mod(floor(\c / 2^(\v - 1)), 2)}
+        \ifnum\sel=1
+          \node[vertex=\mark] (v\v) at \pos {};
+          \scoped[on background layer] \draw[parabolic] (v\v.center) -- (v\v.center);
+        \else
+          \node[inactive, vertex=\mark] (v\v) at \pos {};
+        \fi
+      }
+      \foreach \a/\b/\w in {1/2/3, 1/3/3, 2/3/3, 3/4/4, 4/5/infinity} {
+        \pgfmathtruncatemacro\sel{mod(floor(\c / 2^(\a - 1)), 2)
+                                  * mod(floor(\c / 2^(\b - 1)), 2)}
+        \ifnum\sel=1
+          \scoped[on edge layer] \draw[coxeter edge=\w] (v\a.center) -- (v\b.center);
+          \scoped[on background layer] \draw[parabolic] (v\a.center) -- (v\b.center);
+        \else
+          \scoped[on edge layer]
+            \draw[inactive, coxeter edge=\w] (v\a.center) -- (v\b.center);
+        \fi
+      }
+    \end{scope}
+  }
 
-    \node[inactivewhite, circle, inner sep=0pt, minimum size=3.2mm] at (v1) {};
-    \node[inactivewhite, circle, inner sep=0pt, minimum size=3.2mm] at (v2) {};
-    \node[inactivewhite, circle, inner sep=0pt, minimum size=3.2mm] at (v3) {};
-    \node[inactiveblack, circle, inner sep=0pt, minimum size=3.2mm] at (v4) {};
-    \node[inactiveblack, circle, inner sep=0pt, minimum size=3.2mm] at (v5) {};
+  \node[font=\small] at (0, 11.45) {Subdiagram Poset of $C(L)$};
 
-    % Exact selected-subdiagram glow: one capsule per selected edge,
-    % and one halo per selected vertex. No hull is taken across unrelated
-    % vertices or disconnected components.
-    \ifnum#4=1\ifnum#5=1\GlowSegment{v1}{v2}\fi\fi
-    \ifnum#4=1\ifnum#6=1\GlowSegment{v1}{v3}\fi\fi
-    \ifnum#5=1\ifnum#6=1\GlowSegment{v2}{v3}\fi\fi
-    \ifnum#6=1\ifnum#7=1\GlowSegment{v3}{v4}\fi\fi
-    \ifnum#7=1\ifnum#8=1\GlowSegment{v4}{v5}\fi\fi
+  \foreach \type/\name [count=\i] in {elliptic/Elliptic,
+                                     parabolic/Maximal Parabolic, other/Neither}
+    \node[subdiagram cell=\type, minimum width=0.47cm, minimum height=0.27cm,
+          label={[font=\scriptsize]right:\name}] at (7.9, {9.8 - 0.55 * \i}) {};
 
-    \ifnum#4=1\GlowVertex{v1}\fi
-    \ifnum#5=1\GlowVertex{v2}\fi
-    \ifnum#6=1\GlowVertex{v3}\fi
-    \ifnum#7=1\GlowVertex{v4}\fi
-    \ifnum#8=1\GlowVertex{v5}\fi
-
-    % Active selected edges.
-    \ifnum#4=1\ifnum#5=1\draw[activeedge] (v1)--(v2);\fi\fi
-    \ifnum#4=1\ifnum#6=1\draw[activeedge] (v1)--(v3);\fi\fi
-    \ifnum#5=1\ifnum#6=1\draw[activeedge] (v2)--(v3);\fi\fi
-    \ifnum#6=1\ifnum#7=1\draw[activedoubleedge] (v3)--(v4);\fi\fi
-    \ifnum#7=1\ifnum#8=1\draw[activeboldedge] (v4)--(v5);\fi\fi
-
-    % Active selected nodes, redrawn over the glow.
-    \ifnum#4=1
-      \node[activewhite, circle, inner sep=0pt, minimum size=3.2mm] at (v1) {};
-    \fi
-    \ifnum#5=1
-      \node[activewhite, circle, inner sep=0pt, minimum size=3.2mm] at (v2) {};
-    \fi
-    \ifnum#6=1
-      \node[activewhite, circle, inner sep=0pt, minimum size=3.2mm] at (v3) {};
-    \fi
-    \ifnum#7=1
-      \node[activeblack, circle, inner sep=0pt, minimum size=3.2mm] at (v4) {};
-    \fi
-    \ifnum#8=1
-      \node[activeblack, circle, inner sep=0pt, minimum size=3.2mm] at (v5) {};
-    \fi
-  \end{scope}
-}
-
-\begin{tikzpicture}[>=Stealth, scale=.72, transform shape]
-
-%------------------------------------------------
-% Rank 0
-%------------------------------------------------
-\SubdiagramCell{Sempty}{(0.00,0.00)}{ellbg}{0}{0}{0}{0}{0}
-
-%------------------------------------------------
-% Rank 1
-%------------------------------------------------
-\SubdiagramCell{S1}{(-4.90,2.05)}{ellbg}{1}{0}{0}{0}{0}
-\SubdiagramCell{S2}{(-2.45,2.05)}{ellbg}{0}{1}{0}{0}{0}
-\SubdiagramCell{S3}{(0.00,2.05)}{ellbg}{0}{0}{1}{0}{0}
-\SubdiagramCell{S4}{(2.45,2.05)}{ellbg}{0}{0}{0}{1}{0}
-\SubdiagramCell{S5}{(4.90,2.05)}{ellbg}{0}{0}{0}{0}{1}
-
-%------------------------------------------------
-% Rank 2
-%------------------------------------------------
-\SubdiagramCell{S12}{(-11.03,4.10)}{ellbg}{1}{1}{0}{0}{0}
-\SubdiagramCell{S13}{(-8.58,4.10)}{ellbg}{1}{0}{1}{0}{0}
-\SubdiagramCell{S14}{(-6.12,4.10)}{ellbg}{1}{0}{0}{1}{0}
-\SubdiagramCell{S15}{(-3.68,4.10)}{ellbg}{1}{0}{0}{0}{1}
-\SubdiagramCell{S23}{(-1.23,4.10)}{ellbg}{0}{1}{1}{0}{0}
-\SubdiagramCell{S24}{(1.23,4.10)}{ellbg}{0}{1}{0}{1}{0}
-\SubdiagramCell{S25}{(3.68,4.10)}{ellbg}{0}{1}{0}{0}{1}
-\SubdiagramCell{S34}{(6.12,4.10)}{ellbg}{0}{0}{1}{1}{0}
-\SubdiagramCell{S35}{(8.58,4.10)}{ellbg}{0}{0}{1}{0}{1}
-\SubdiagramCell{S45}{(11.03,4.10)}{parbg}{0}{0}{0}{1}{1}
-
-%------------------------------------------------
-% Rank 3
-%------------------------------------------------
-\SubdiagramCell{S123}{(-11.03,6.15)}{parbg}{1}{1}{1}{0}{0}
-\SubdiagramCell{S124}{(-8.58,6.15)}{ellbg}{1}{1}{0}{1}{0}
-\SubdiagramCell{S125}{(-6.12,6.15)}{ellbg}{1}{1}{0}{0}{1}
-\SubdiagramCell{S134}{(-3.68,6.15)}{ellbg}{1}{0}{1}{1}{0}
-\SubdiagramCell{S135}{(-1.23,6.15)}{ellbg}{1}{0}{1}{0}{1}
-\SubdiagramCell{S145}{(1.23,6.15)}{parbg}{1}{0}{0}{1}{1}
-\SubdiagramCell{S234}{(3.68,6.15)}{ellbg}{0}{1}{1}{1}{0}
-\SubdiagramCell{S235}{(6.12,6.15)}{ellbg}{0}{1}{1}{0}{1}
-\SubdiagramCell{S245}{(8.58,6.15)}{parbg}{0}{1}{0}{1}{1}
-\SubdiagramCell{S345}{(11.03,6.15)}{white}{0}{0}{1}{1}{1}
-
-%------------------------------------------------
-% Rank 4
-%------------------------------------------------
-\SubdiagramCell{S1234}{(-4.90,8.20)}{white}{1}{1}{1}{1}{0}
-\SubdiagramCell{S1235}{(-2.45,8.20)}{parbg}{1}{1}{1}{0}{1}
-\SubdiagramCell{S1245}{(0.00,8.20)}{parbg}{1}{1}{0}{1}{1}
-\SubdiagramCell{S1345}{(2.45,8.20)}{white}{1}{0}{1}{1}{1}
-\SubdiagramCell{S2345}{(4.90,8.20)}{white}{0}{1}{1}{1}{1}
-
-%------------------------------------------------
-% Rank 5
-%------------------------------------------------
-\SubdiagramCell{S12345}{(0.00,10.25)}{white}{1}{1}{1}{1}{1}
-
-%------------------------------------------------
-% Hasse edges, drawn behind cells
-%------------------------------------------------
-\begin{pgfonlayer}{hassebg}
-  \draw[hasse] (Sempty) -- (S1);
-  \draw[hasse] (Sempty) -- (S2);
-  \draw[hasse] (Sempty) -- (S3);
-  \draw[hasse] (Sempty) -- (S4);
-  \draw[hasse] (Sempty) -- (S5);
-
-  \draw[hasse] (S1) -- (S12);
-  \draw[hasse] (S1) -- (S13);
-  \draw[hasse] (S1) -- (S14);
-  \draw[hasse] (S1) -- (S15);
-
-  \draw[hasse] (S2) -- (S12);
-  \draw[hasse] (S2) -- (S23);
-  \draw[hasse] (S2) -- (S24);
-  \draw[hasse] (S2) -- (S25);
-
-  \draw[hasse] (S3) -- (S13);
-  \draw[hasse] (S3) -- (S23);
-  \draw[hasse] (S3) -- (S34);
-  \draw[hasse] (S3) -- (S35);
-
-  \draw[hasse] (S4) -- (S14);
-  \draw[hasse] (S4) -- (S24);
-  \draw[hasse] (S4) -- (S34);
-  \draw[hasse] (S4) -- (S45);
-
-  \draw[hasse] (S5) -- (S15);
-  \draw[hasse] (S5) -- (S25);
-  \draw[hasse] (S5) -- (S35);
-  \draw[hasse] (S5) -- (S45);
-
-  \draw[hasse] (S12) -- (S123);
-  \draw[hasse] (S12) -- (S124);
-  \draw[hasse] (S12) -- (S125);
-
-  \draw[hasse] (S13) -- (S123);
-  \draw[hasse] (S13) -- (S134);
-  \draw[hasse] (S13) -- (S135);
-
-  \draw[hasse] (S14) -- (S124);
-  \draw[hasse] (S14) -- (S134);
-  \draw[hasse] (S14) -- (S145);
-
-  \draw[hasse] (S15) -- (S125);
-  \draw[hasse] (S15) -- (S135);
-  \draw[hasse] (S15) -- (S145);
-
-  \draw[hasse] (S23) -- (S123);
-  \draw[hasse] (S23) -- (S234);
-  \draw[hasse] (S23) -- (S235);
-
-  \draw[hasse] (S24) -- (S124);
-  \draw[hasse] (S24) -- (S234);
-  \draw[hasse] (S24) -- (S245);
-
-  \draw[hasse] (S25) -- (S125);
-  \draw[hasse] (S25) -- (S235);
-  \draw[hasse] (S25) -- (S245);
-
-  \draw[hasse] (S34) -- (S134);
-  \draw[hasse] (S34) -- (S234);
-  \draw[hasse] (S34) -- (S345);
-
-  \draw[hasse] (S35) -- (S135);
-  \draw[hasse] (S35) -- (S235);
-  \draw[hasse] (S35) -- (S345);
-
-  \draw[hasse] (S45) -- (S145);
-  \draw[hasse] (S45) -- (S245);
-  \draw[hasse] (S45) -- (S345);
-
-  \draw[hasse] (S123) -- (S1234);
-  \draw[hasse] (S123) -- (S1235);
-
-  \draw[hasse] (S124) -- (S1234);
-  \draw[hasse] (S124) -- (S1245);
-
-  \draw[hasse] (S125) -- (S1235);
-  \draw[hasse] (S125) -- (S1245);
-
-  \draw[hasse] (S134) -- (S1234);
-  \draw[hasse] (S134) -- (S1345);
-
-  \draw[hasse] (S135) -- (S1235);
-  \draw[hasse] (S135) -- (S1345);
-
-  \draw[hasse] (S145) -- (S1245);
-  \draw[hasse] (S145) -- (S1345);
-
-  \draw[hasse] (S234) -- (S1234);
-  \draw[hasse] (S234) -- (S2345);
-
-  \draw[hasse] (S235) -- (S1235);
-  \draw[hasse] (S235) -- (S2345);
-
-  \draw[hasse] (S245) -- (S1245);
-  \draw[hasse] (S245) -- (S2345);
-
-  \draw[hasse] (S345) -- (S1345);
-  \draw[hasse] (S345) -- (S2345);
-
-  \draw[hasse] (S1234) -- (S12345);
-  \draw[hasse] (S1235) -- (S12345);
-  \draw[hasse] (S1245) -- (S12345);
-  \draw[hasse] (S1345) -- (S12345);
-  \draw[hasse] (S2345) -- (S12345);
-\end{pgfonlayer}
-
-%------------------------------------------------
-% Title and legend
-%------------------------------------------------
-\node[font=\small] at (0,11.45)
-  {Subdiagram Poset of $C(L)$};
-
-\begin{scope}[shift={(7.6,9.25)}]
-  \node[
-    cell,
-    minimum width=.65cm,
-    minimum height=.38cm,
-    fill=ellbg,
-    anchor=west
-  ] at (0,0) {};
-  \node[anchor=west, font=\scriptsize] at (.6,0)
-    {Elliptic};
-
-  \node[
-    cell,
-    minimum width=.65cm,
-    minimum height=.38cm,
-    fill=parbg,
-    anchor=west
-  ] at (0,-.55) {};
-  \node[anchor=west, font=\scriptsize] at (.6,-.55)
-    {Maximal Parabolic};
-
-  \node[
-    cell,
-    minimum width=.65cm,
-    minimum height=.38cm,
-    fill=white,
-    anchor=west
-  ] at (0,-1.10) {};
-  \node[anchor=west, font=\scriptsize] at (.6,-1.10)
-    {Neither};
-\end{scope}
-
-\node at (-9, 0) {$G_L
-=
-\begin{pmatrix}
--2 &  1 &  1 &  0 &  0 \\
- 1 & -2 &  1 &  0 &  0 \\
- 1 &  1 & -2 &  2 &  0 \\
- 0 &  0 &  2 & -4 &  4 \\
- 0 &  0 &  0 &  4 & -4
-\end{pmatrix}$};
-
+  \node at (-9, 0) {$G_L =
+    \begin{pmatrix}
+      -2 &  1 &  1 &  0 &  0 \\
+       1 & -2 &  1 &  0 &  0 \\
+       1 &  1 & -2 &  2 &  0 \\
+       0 &  0 &  2 & -4 &  4 \\
+       0 &  0 &  0 &  4 & -4
+    \end{pmatrix}$};
 \end{tikzpicture}
