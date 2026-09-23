@@ -154,7 +154,7 @@ def main():
             if not tikz_dir.exists():
                 print(f"Directory {tikz_dir} does not exist. Skipping.")
                 continue
-            for tex_file in tikz_dir.glob("*.tex"):
+            for tex_file in sorted([*tikz_dir.glob("*.tex"), *tikz_dir.glob("*.tikz")]):
                 if not render_tikz(str(tex_file), str(output_dir), cache, force):
                     success = False
 
@@ -176,9 +176,12 @@ def main():
                 if p.exists():
                     target_path = p
                     break
-                p_tex = base_dir / sub / f"{target}.tex"
-                if p_tex.exists():
-                    target_path = p_tex
+                for ext in (".tex", ".tikz"):
+                    p_ext = base_dir / sub / f"{target}{ext}"
+                    if p_ext.exists():
+                        target_path = p_ext
+                        break
+                if target_path.exists():
                     break
     
     if not target_path.exists() or not target_path.is_file():

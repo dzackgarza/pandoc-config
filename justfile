@@ -183,12 +183,12 @@ format-markdown *files:
     uvx --from 'git+https://github.com/dzackgarza/flowmark.git' flowmark --semantic "$f" > "$f.tmp" && mv "$f.tmp" "$f"
   done
 
-# Render TikZ figures to SVG using the global renderer
-render-figures:
+# Render TikZ figures to SVG+PDF via templates/standalone-tikz.tex; no argument renders all, a path or figure name renders one (add --force to skip the cache)
+render-figures *args:
   #!/usr/bin/env bash
   set -euo pipefail
   # TEXINPUTS inherited from shell env (~/.zshrc)
-  python3 "$HOME/.pandoc/bin/render_figures.py"
+  python3 "$HOME/.pandoc/bin/render_figures.py" {{args}}
 
 # Compile LaTeX source
 compile-tex main_file="main.tex" output_name="paper" bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_TEX:
