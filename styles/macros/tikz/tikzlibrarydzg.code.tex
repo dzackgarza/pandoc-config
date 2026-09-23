@@ -1,0 +1,197 @@
+% =============================================================================
+% TikZ library "dzg": the figure vocabulary of this repository.
+% =============================================================================
+% Loaded by \usetikzlibrary{dzg} in styles/preambles/dzg-preamble.tex, so every
+% document, every standalone figure, and every figure the tikzcd filter compiles
+% sees the same styles. Figures use the semantic style names below and never
+% redefine them; a figure that needs a new element adds it here.
+%
+% Every size is an absolute length. Node sizes therefore do not change with a
+% picture's `scale`, which only spaces the coordinates.
+%
+% Families:
+%   colours ........ dzg accent, dzg singular, dzg highlight, dzg region, ...
+%   Coxeter ........ vertex=white|black|doubled, coxeter edge=3|4|5|6|infinity|
+%                    dotted, coxeter edge label, parabolic, vertex label
+%   Baily-Borel .... cusp0, cusp1, incidence, cusp brace
+%   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
+%                    fan ray, kulikov component, double curve
+%   lattice ........ lattice grid, lattice point, polygon region, long side,
+%                    short side, boundary point, marked point
+%   posets, moduli . poset node, degeneration, moduli blob, stratum
+%   curves ......... curve component, curve node, dual vertex, genus
+% =============================================================================
+
+\usetikzlibrary{arrows.meta, backgrounds, calc, decorations.pathreplacing,
+  decorations.markings, fit, hobby, positioning, shapes.geometric, shapes.misc}
+
+% -----------------------------------------------------------------------------
+% Layers
+% -----------------------------------------------------------------------------
+% dynkin-diagrams declares background and "Dynkin behind"; the backgrounds
+% library declares background. Diagram edges go on the edges layer so vertices
+% cover their ends, and highlights go on background under both. Never call
+% \pgfsetlayers in a figure.
+\pgfutil@ifundefined{pgf@layerbox@background}{\pgfdeclarelayer{background}}{}
+\pgfutil@ifundefined{pgf@layerbox@Dynkin behind}{\pgfdeclarelayer{Dynkin behind}}{}
+\pgfdeclarelayer{edges}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,Dynkin behind,edges,main,foreground}
+
+% Scope keys for the two extra layers, after `on background layer` in
+% tikzlibrarybackgrounds.code.tex:
+%   \begin{scope}[on edge layer] \draw[coxeter edge=4] (a) -- (b); \end{scope}
+\tikzset{
+  on edge layer/.style={
+    execute at begin scope={\pgfonlayer{edges}\let\tikz@options=\pgfutil@empty
+      \tikzset{#1}\tikz@options},
+    execute at end scope={\endpgfonlayer}},
+  on foreground layer/.style={
+    execute at begin scope={\pgfonlayer{foreground}\let\tikz@options=\pgfutil@empty
+      \tikzset{#1}\tikz@options},
+    execute at end scope={\endpgfonlayer}},
+}
+
+% -----------------------------------------------------------------------------
+% Colours
+% -----------------------------------------------------------------------------
+\colorlet{dzg accent}{blue!70!black}      % rays, maps, distinguished curves
+\colorlet{dzg singular}{red!75!black}     % singular points, surgeries
+\colorlet{dzg highlight}{cyan!30}         % parabolic subdiagrams, emphasis
+\colorlet{dzg region}{cyan!8}             % filled regions of polygons and IAS
+\colorlet{dzg grid}{gray!40}              % coordinate and lattice grids
+\colorlet{dzg muted}{black!45}            % secondary strokes and points
+\colorlet{dzg blob}{black!8}              % moduli-space schematics
+
+% -----------------------------------------------------------------------------
+% Global defaults
+% -----------------------------------------------------------------------------
+\tikzset{
+  >={Latex[length=2mm]},
+  every picture/.append style={line cap=round, line join=round},
+}
+
+% -----------------------------------------------------------------------------
+% Coxeter, Dynkin and Vinberg diagrams
+% -----------------------------------------------------------------------------
+% The vertex mark is the datum. Its meaning is set by the document: in the
+% Coble and Enriques writing white is a root of square -2 and black a root of
+% square -4; in the Nikulin tables the marks encode delta.
+\tikzset{
+  vertex/.style={vertex/#1},
+  vertex/base/.style={circle, draw, line width=0.6pt, inner sep=0pt,
+    minimum size=5.5pt},
+  vertex/white/.style={vertex/base, fill=white},
+  vertex/black/.style={vertex/base, fill=black},
+  vertex/doubled/.style={vertex/base, fill=white, line width=0.5pt,
+    double, double distance=1.2pt, minimum size=6.5pt},
+  vertex label/.style={font=\scriptsize, inner sep=1.5pt},
+  %
+  % Coxeter weight m of the edge; m=3 is the simple edge.
+  coxeter edge/.style={coxeter edge/#1},
+  coxeter edge/3/.style={draw, line width=0.6pt},
+  coxeter edge/4/.style={draw, line width=0.5pt, double, double distance=1.6pt},
+  coxeter edge/5/.style={coxeter edge/4, postaction={draw, line width=0.5pt}},
+  coxeter edge/6/.style={draw, line width=0.5pt, double, double distance=3.4pt,
+    postaction={draw, line width=0.5pt, double, double distance=0.6pt}},
+  coxeter edge/infinity/.style={draw, line width=2pt},
+  coxeter edge/dotted/.style={draw, line width=0.8pt, dash pattern=on 2pt off 2pt},
+  % m >= 7: a simple edge carrying its weight.
+  coxeter edge label/.style={coxeter edge/3, postaction={decorate,
+    decoration={markings, mark=at position 0.5 with
+      {\node[above, font=\scriptsize, inner sep=1.5pt] {$#1$};}}}},
+  %
+  % A parabolic subdiagram is highlighted by stroking its edges, and a zero-
+  % length segment at each isolated vertex, under the diagram. Use the node
+  % centres so the stroke is one unbroken path:
+  %   \scoped[on background layer]
+  %     \draw[parabolic] (a.center)--(b.center)--(c.center) (d.center)--(d.center);
+  parabolic/.style={draw=dzg highlight, line width=12pt, line cap=round,
+    line join=round},
+  % A fold of a diagram onto its quotient.
+  fold/.style={dzg singular, dashed, line width=1pt, <->},
+}
+
+% -----------------------------------------------------------------------------
+% Baily-Borel cusp diagrams
+% -----------------------------------------------------------------------------
+% 0-cusp: rounded box; 1-cusp: box. The lattice goes in the node, invariants in
+% `label`. An incidence arrow joins a 1-cusp to a 0-cusp in its closure.
+\tikzset{
+  cusp0/.style={rounded rectangle, draw, line width=0.6pt, minimum width=1.6cm,
+    minimum height=6mm, inner xsep=3pt},
+  cusp1/.style={rectangle, draw, line width=0.6pt, minimum width=1.4cm,
+    minimum height=6mm, inner xsep=3pt},
+  cusp label/.style={font=\scriptsize, inner sep=1pt, label distance=0.5em},
+  incidence/.style={->, line width=0.6pt, shorten >=1pt, shorten <=1pt},
+  cusp brace/.style={decorate, decoration={brace, amplitude=5pt, mirror,
+    raise=4ex}},
+}
+
+% -----------------------------------------------------------------------------
+% Integral-affine spheres, fans, Kulikov models
+% -----------------------------------------------------------------------------
+\tikzset{
+  ias region/.style={fill=dzg region},
+  ias boundary/.style={draw, line width=0.8pt},
+  ias edge/.style={draw, line width=0.5pt},
+  % Singular point; the optional value is its multiplicity, set as a label:
+  %   \node[ias singularity=16] at (p) {};
+  ias singularity/.style={star, star points=5, star point ratio=2.4,
+    draw=dzg singular, fill=white, line width=0.8pt, inner sep=0pt,
+    minimum size=9pt,
+    label={[font=\footnotesize, text=dzg singular, inner sep=1pt]above right:#1}},
+  ias singularity/.default={},
+  ias surgery/.style={fill=dzg singular!35, draw=dzg singular, line width=0.6pt},
+  fan ray/.style={->, draw=dzg accent, line width=1pt},
+  kulikov component/.style={draw, line width=0.6pt, fill=dzg region},
+  double curve/.style={draw, line width=1.4pt},
+  nontoric blowup/.style={circle, fill=dzg singular, inner sep=0pt,
+    minimum size=4pt},
+}
+
+% -----------------------------------------------------------------------------
+% Lattice polygons (toric and ADE surfaces)
+% -----------------------------------------------------------------------------
+\tikzset{
+  lattice grid/.style={draw=dzg grid, line width=0.3pt},
+  lattice point/.style={circle, fill=dzg muted, inner sep=0pt, minimum size=3pt},
+  polygon region/.style={fill=dzg region},
+  long side/.style={draw, line width=2pt},
+  short side/.style={draw=dzg muted, line width=0.8pt},
+  boundary point/.style={circle, draw, fill=white, line width=0.8pt,
+    inner sep=0pt, minimum size=6pt},
+  marked point/.style={ias singularity=#1},
+  marked point/.default={},
+}
+
+% -----------------------------------------------------------------------------
+% Posets and moduli-space schematics
+% -----------------------------------------------------------------------------
+% Arrows point from the generic stratum to the more degenerate one.
+\tikzset{
+  poset node/.style={draw, rounded corners=2pt, line width=0.5pt,
+    inner xsep=4pt, inner ysep=3pt, font=\small},
+  degeneration/.style={->, line width=0.6pt, shorten >=3pt, shorten <=3pt},
+  moduli blob/.style={fill=dzg blob, draw, line width=0.8pt},
+  stratum/.style={circle, fill=black, inner sep=0pt, minimum size=4pt},
+  boundary stratum/.style={draw=dzg singular, line width=1.4pt},
+}
+
+% -----------------------------------------------------------------------------
+% Stable curves and dual graphs
+% -----------------------------------------------------------------------------
+% Draw components with Hobby curves: to[curve through={...}] or closed hobby.
+\tikzset{
+  curve component/.style={draw, line width=0.9pt},
+  curve node/.style={circle, fill=black, inner sep=0pt, minimum size=3.5pt},
+  dual vertex/.style={circle, fill=black, inner sep=0pt, minimum size=5pt},
+  genus/.style={font=\scriptsize, inner sep=1pt},
+}
+
+% -----------------------------------------------------------------------------
+% Named diagrams built from the vocabulary above
+% -----------------------------------------------------------------------------
+\input{dzg-diagrams}
+
+\endinput

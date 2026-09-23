@@ -10,7 +10,7 @@ styles/                     # LaTeX macro system (styles assemble macros)
 ├── dzg-mathjax.sty        # MathJax subset (tiers 1-2)
 ├── freetikz.sty           # External TikZ helper
 ├── quiver.sty             # Commutative diagrams
-├── tikzit.sty             # TikZ editor integration
+├── macros/tikz/tikzlibrarydzg.code.tex  # TikZ figure vocabulary (\usetikzlibrary{dzg})
 ├── macros/                # Raw .tex macro files (tier system)
 │   ├── tier1-mathjax-simple.tex
 │   ├── tier2-mathjax-args.tex

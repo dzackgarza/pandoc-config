@@ -18,10 +18,10 @@ local figures_dir = os.getenv("FIGURES_DIR") or (home .. "/.pandoc/figures")
 local svg_dir = os.getenv("SVG_DIR") or (figures_dir .. "/rendered")
 
 -- Per-figure preamble template: the standalone LaTeX document each figure body is
--- wrapped in. It \usepackage's dzg-tikz, which \input's the broken-out macro files
+-- wrapped in. It \usepackage's dzg-tikz, whose preamble loads the dzg TikZ library
 -- (the single source of truth for tikz styles/defs — the same files the MathJax
 -- path consumes), so the template carries the tikz macros directly; there is no
--- separate shared .tikzstyles/.tikzdefs palette. Standalone filter use defaults
+-- separate palette. Standalone filter use defaults
 -- to the template under PANDOC_DIR (mirroring the PANDOC_DIR default above).
 -- Zettlr supplies FIGURE_TEMPLATE_FILE explicitly from ~/.pandoc so a separately
 -- selected filter data tree cannot become a second preamble owner. Read LAZILY
