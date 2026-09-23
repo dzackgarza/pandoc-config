@@ -12,18 +12,21 @@
 % Families:
 %   colours ........ dzg accent, dzg singular, dzg highlight, dzg region, ...
 %   Coxeter ........ vertex=white|black|doubled, coxeter edge=3|4|5|6|infinity|
-%                    dotted, coxeter edge label, parabolic, vertex label
+%                    dotted, coxeter edge label, parabolic, vertex label,
+%                    inactive, marked vertex, subdiagram cell=elliptic|
+%                    parabolic|other
 %   Baily-Borel .... cusp0, cusp1, incidence, cusp brace
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
 %                    fan ray, kulikov component, double curve
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
 %                    short side, boundary point, marked point
-%   posets, moduli . poset node, degeneration, moduli blob, stratum
+%   posets, moduli . poset node, degeneration, moduli blob, stratum,
+%                    mirror move=complement|U|U(2)
 %   curves ......... curve component, curve node, dual vertex, genus
 % =============================================================================
 
 \usetikzlibrary{arrows.meta, backgrounds, calc, decorations.pathreplacing,
-  decorations.markings, fit, hobby, positioning, shapes.geometric, shapes.misc}
+  decorations.markings, decorations.pathmorphing, fit, hobby, positioning, shapes.geometric, shapes.misc}
 
 % -----------------------------------------------------------------------------
 % Layers
@@ -62,6 +65,8 @@
 \colorlet{dzg grid}{gray!40}              % coordinate and lattice grids
 \colorlet{dzg muted}{black!45}            % secondary strokes and points
 \colorlet{dzg blob}{black!8}              % moduli-space schematics
+\colorlet{dzg elliptic}{green!14}         % elliptic subdiagrams (finite type)
+\colorlet{dzg parabolic}{yellow!24}       % maximal parabolic subdiagrams
 
 % -----------------------------------------------------------------------------
 % Global defaults
@@ -110,6 +115,22 @@
     line join=round},
   % A fold of a diagram onto its quotient.
   fold/.style={dzg singular, dashed, line width=1pt, <->},
+  % Vertices and edges of an ambient diagram that lie outside the subdiagram
+  % being shown. Apply to a scope, or before vertex= on a single vertex:
+  %   \node[inactive, vertex=black] ...;  \draw[inactive, coxeter edge=4] ...;
+  inactive/.style={draw=dzg grid, text=dzg grid,
+    vertex/black/.append style={fill=dzg grid}},
+  % A distinguished root (e.g. the root delta whose complement is taken),
+  % drawn on the background layer behind its vertex.
+  marked vertex/.style={circle, fill=dzg accent, fill opacity=0.5,
+    inner sep=0pt, minimum size=10pt},
+  % A cell of a subdiagram poset, coloured by the type of its subdiagram:
+  % elliptic (finite), maximal parabolic (affine of maximal rank), or other.
+  subdiagram cell/.style={subdiagram cell/#1},
+  subdiagram cell/base/.style={draw, rounded corners=2pt, line width=0.5pt},
+  subdiagram cell/elliptic/.style={subdiagram cell/base, fill=dzg elliptic},
+  subdiagram cell/parabolic/.style={subdiagram cell/base, fill=dzg parabolic},
+  subdiagram cell/other/.style={subdiagram cell/base, fill=white},
 }
 
 % -----------------------------------------------------------------------------
@@ -175,6 +196,13 @@
   degeneration/.style={->, line width=0.6pt, shorten >=3pt, shorten <=3pt},
   moduli blob/.style={fill=dzg blob, draw, line width=0.8pt},
   stratum/.style={circle, fill=black, inner sep=0pt, minimum size=4pt},
+  % Mirror moves of 2-elementary lattices (Alexeev-Engel): a lattice S to its
+  % orthogonal complement T, then moves T -> e^perp/e of type U or U(2).
+  mirror move/.style={mirror move/#1},
+  mirror move/complement/.style={->, decorate, decoration={snake,
+    amplitude=0.6mm, segment length=3mm, post length=2mm}},
+  mirror move/U/.style={degeneration},
+  mirror move/U(2)/.style={degeneration, double, double distance=1.2pt},
   boundary stratum/.style={draw=dzg singular, line width=1.4pt},
 }
 
