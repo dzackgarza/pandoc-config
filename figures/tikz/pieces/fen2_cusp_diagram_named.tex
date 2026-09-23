@@ -1,0 +1,19 @@
+% Baily-Borel boundary of F_{En,2}: 0-cusps p_1..p_5, 1-cusps X_I.
+% Shared by dissertation/cusp-diagram-bb-deg-2-En.tex and
+% dissertation/cusp_correspondence_{one,two}.tex; \input inside a tikzpicture.
+\matrix (fen2) [matrix of math nodes, row sep={7mm,between origins},
+    column sep=8mm] {
+  & |[cusp1] (X12)| X_{12} & |[cusp0] (p2)| p_2 & &[1cm] \\
+  & & & |[cusp1] (X245)| X_{245} & \\
+  & |[cusp1] (X13)| X_{13} & |[cusp0] (p3)| p_3 & & |[cusp1] (X3)| X_3 \\
+  |[cusp0] (p1)| p_1 & & & & \\
+  & |[cusp1] (X14)| X_{14} & |[cusp0] (p4)| p_4 & & |[cusp1] (X34)| X_{34} \\
+  & & & & \\
+  & |[cusp1] (X15)| X_{15} & |[cusp0] (p5)| p_5 & & |[cusp1] (X45)| X_{45} \\
+  & & & & \\
+  & & & & |[cusp1] (X5)| X_5 \\
+};
+\foreach \p/\x in {p1/X12, p1/X13, p1/X14, p1/X15, p2/X12, p3/X13, p4/X14,
+    p5/X15, p2/X245, p4/X245, p5/X245, p3/X3, p3/X34, p4/X34, p4/X45, p5/X45,
+    p5/X5}
+  \draw[incidence] (\p) -- (\x);

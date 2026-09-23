@@ -1,38 +1,34 @@
-\begin{tikzpicture}[line cap=round, line join=round, scale=0.95]
-  \tikzset{component/.style={draw, thick, minimum width=1.65cm, minimum height=2.4cm, inner sep=0pt}}
+\begin{tikzpicture}[scale=0.95, label distance=2mm]
+  % Chain of components in a Type II Kulikov central fibre: rational ends and
+  % E x P^1 in the middle, glued along double curves E.
+  \node[kulikov component, minimum width=1.65cm, minimum height=2.4cm,
+    label=above:{$V_1$}, label={[name=type]below:rational}] (V1) {};
+  \foreach \N/\prev/\lab in {V2/V1/V_2, V3/V2/V_3}
+    \node[kulikov component, fill=dzg singular!10, minimum width=1.65cm,
+      minimum height=2.4cm, right=0pt of \prev, label=above:{$\lab$},
+      label=below:{$E\times\PP^1$}] (\N) {};
+  \node[right=0.6cm of V3] (dots) {$\cdots$};
+  \node[kulikov component, fill=dzg singular!10, minimum width=1.65cm,
+    minimum height=2.4cm, right=0.6cm of dots, label=above:{$V_{n-1}$},
+    label=below:{$E\times\PP^1$}] (Vm) {};
+  \node[kulikov component, minimum width=1.65cm, minimum height=2.4cm,
+    right=0pt of Vm, label=above:{$V_n$}, label=below:{rational}] (Vn) {};
 
-  % Chain of components in a Type II Kulikov central fibre.
-  \node[component, fill=cyan!12] (V1) at (0,0) {};
-  \node[component, fill=red!10]  (V2) at (1.65,0) {};
-  \node[component, fill=red!10]  (V3) at (3.30,0) {};
-  \node at (4.75,0) {$\cdots$};
-  \node[component, fill=red!10]  (Vm) at (6.10,0) {};
-  \node[component, fill=cyan!12] (Vn) at (7.75,0) {};
-
-  % Curved top/bottom profiles suggest ruled/rational surface components.
-  \foreach \N in {V1,V2,V3,Vm,Vn} {
-    \draw[thin] (\N.north west) .. controls +(0.4,0.22) and +(-0.4,0.22) .. (\N.north east);
-    \draw[thin] (\N.south west) .. controls +(0.4,-0.22) and +(-0.4,-0.22) .. (\N.south east);
+  % Curved top and bottom profiles suggest ruled or rational components.
+  \foreach \N in {V1, V2, V3, Vm, Vn} {
+    \draw[ias edge] (\N.north west) to[curve through={([yshift=1.7mm] \N.north)}]
+      (\N.north east);
+    \draw[ias edge] (\N.south west) to[curve through={([yshift=-1.7mm] \N.south)}]
+      (\N.south east);
   }
 
   % Double curves between adjacent components.
-  \foreach \x in {0.825,2.475,6.925} {
-    \draw[very thick] (\x,-1.2) -- (\x,1.2);
-    \node[rotate=90, fill=white, inner sep=1pt] at (\x,0) {$E$};
-  }
-  \draw[very thick, dashed] (5.425,-1.2) -- (5.425,1.2);
+  \foreach \N in {V1, V2, Vm}
+    \draw[double curve] (\N.north east) -- node[rotate=90, fill=white, inner sep=1pt]
+      {$E$} (\N.south east);
+  \draw[double curve, dashed] (Vm.north west) -- (Vm.south west);
 
-  \node[above=2pt of V1] {$V_1$};
-  \node[above=2pt of V2] {$V_2$};
-  \node[above=2pt of V3] {$V_3$};
-  \node[above=2pt of Vm] {$V_{n-1}$};
-  \node[above=2pt of Vn] {$V_n$};
-
-  \node[below=7pt of V1, align=center] {rational};
-  \node[below=7pt of V2, align=center] {$E\times\PP^1$};
-  \node[below=7pt of V3, align=center] {$E\times\PP^1$};
-  \node[below=7pt of Vm, align=center] {$E\times\PP^1$};
-  \node[below=7pt of Vn, align=center] {rational};
-
-  \draw[|-|, semithick] (0,-1.75) -- node[below] {dual complex $\bD^1$} (7.75,-1.75);
+  \coordinate[below=2mm of type.south] (dual row);
+  \draw[|-|] (V1 |- dual row) -- node[below] {dual complex $\bD^1$}
+    (Vn |- dual row);
 \end{tikzpicture}

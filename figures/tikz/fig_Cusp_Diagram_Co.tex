@@ -1,7 +1,8 @@
-\begin{tikzpicture}
-    \node [rounded rectangle, draw, label={[label distance=0.75em]-90: $(9,9,1)_1$},
-    label={[label distance=0.5em]90: $\bD^2, \mathrm{div} = 2, v_1 = e'$}
-    ] (v0) at (0, 0) {$\gens{2} \oplus E_{8}(2)$};
-    \node [rectangle, draw, anchor=west, label={[label distance=0.95em]-90: $(7,7,1)_0$}, label={[label distance=0.5em]90: $\mathrm{div} = (2,2), v_2 = 2h+\alpha_1+\alpha_2$}] (C0) at (4,0) {$A_1^{\oplus 7}$};
-    \draw[-latex, shorten >= 0.4em] (v0) to (C0.west);
-    \end{tikzpicture}
+\begin{tikzpicture}[node distance=2.4cm]
+  \node[cusp0, label={[cusp label]above:$\bD^2, \mathrm{div} = 2, v_1 = e'$},
+    label={[cusp label]below:$(9,9,1)_1$}] (v0) {$\gens{2} \oplus E_{8}(2)$};
+  \node[cusp1, right=of v0,
+    label={[cusp label]above:$\mathrm{div} = (2,2), v_2 = 2h+\alpha_1+\alpha_2$},
+    label={[cusp label]below:$(7,7,1)_0$}] (C0) {$A_1^{\oplus 7}$};
+  \draw[incidence] (v0) -- (C0);
+\end{tikzpicture}

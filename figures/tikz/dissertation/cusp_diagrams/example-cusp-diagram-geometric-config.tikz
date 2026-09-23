@@ -1,14 +1,11 @@
-﻿\begin{tikzpicture}
-	\begin{pgfonlayer}{nodelayer}
-		\node [style=none] (0) at (0, 0) {};
-		\node [style=none] (1) at (4, 3) {};
-		\node [style=none] (2) at (0, 4) {};
-		\node [style=none] (3) at (4, 0) {};
-		\node [style=black node, label=above:{$p_{2}$}] (4) at (1, 2) {};
-		\node [style=black node, label=above:{$p_{1}$}] (6) at (2.75, 3) {};
-	\end{pgfonlayer}
-	\begin{pgfonlayer}{edgelayer}
-		\draw [bend left=45] (0) edge["$C_{12}$" very near start] (1);
-		\draw [bend left=60, looseness=0.50] (3) edge["$C_{2}$" near start] (2);
-	\end{pgfonlayer}
-    \end{tikzpicture}
+\begin{tikzpicture}
+  % The boundary curves C_12 and C_2 meet at the 0-cusp p_2; p_1 lies on C_12.
+  \coordinate (p2) at (1, 2);
+  \coordinate (p1) at (2.75, 3);
+  \draw[curve component] (0, 0) node[left] {$C_{12}$}
+    to[curve through={(p2) (p1)}] (4, 3.1);
+  \draw[curve component] (4, 0) node[below] {$C_2$}
+    to[curve through={(2.4, 0.6) (p2)}] (0, 4);
+  \node[curve node, label=above:{$p_{2}$}] at (p2) {};
+  \node[curve node, label=above:{$p_{1}$}] at (p1) {};
+\end{tikzpicture}

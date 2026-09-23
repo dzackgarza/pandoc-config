@@ -16,15 +16,17 @@
 %                    inactive, marked vertex, subdiagram cell=elliptic|
 %                    parabolic|other, fold, fold axis, reflected root,
 %                    quotient map
-%   Baily-Borel .... cusp0, cusp1, incidence, cusp brace
+%   Baily-Borel .... cusp0, cusp1, cusp label, incidence, cusp brace, cusp map,
+%                    cusp image, doubled mark
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
-%                    fan ray, kulikov component, double curve
+%                    fan ray, kulikov component, double curve, ias chart,
+%                    nontoric blowup, exceptional curve
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
 %                    short side, axis side, boundary point, marked point,
 %                    side label, monomial, polygon title, polytope edge,
 %                    distinguished point, coordinate axis, hatched region
 %   posets, moduli . poset node, degeneration, morphism, poset group,
-%                    moduli blob, stratum, boundary stratum,
+%                    moduli blob, stratum, boundary stratum, hyperplane,
 %                    mirror move=complement|U|U(2)
 %   curves ......... curve component, curve node, dual vertex, genus,
 %                    curve point, singular point, constructed point
@@ -33,7 +35,8 @@
 % =============================================================================
 
 \usetikzlibrary{arrows.meta, backgrounds, calc, decorations.pathreplacing,
-  decorations.markings, decorations.pathmorphing, fit, hobby, positioning, shapes.geometric, shapes.misc}
+  decorations.markings, decorations.pathmorphing, fit, hobby, patterns,
+  positioning, shapes.geometric, shapes.misc}
 
 % -----------------------------------------------------------------------------
 % Layers
@@ -167,6 +170,16 @@
   incidence/.style={->, line width=0.6pt, shorten >=1pt, shorten <=1pt},
   cusp brace/.style={decorate, decoration={brace, amplitude=5pt, mirror,
     raise=4ex}},
+  % The map of Baily-Borel boundaries induced by a morphism of moduli spaces,
+  % drawn from the source cusp to its image.
+  cusp map/.style={->, dashed, line width=0.6pt, shorten >=2pt, shorten <=2pt},
+  % The image of another boundary under a cusp map, highlighted like a
+  % parabolic subdiagram: stroke its incidences between node centres under
+  % the diagram,
+  %   \scoped[on background layer] \draw[cusp image] (a.center)--(b.center);
+  cusp image/.style={parabolic, line width=7pt},
+  % A doubled cusp or incidence; the document states what the doubling marks.
+  doubled mark/.style={double, double distance=1.3pt, line width=0.4pt},
 }
 
 % -----------------------------------------------------------------------------
@@ -189,6 +202,15 @@
   double curve/.style={draw, line width=1.4pt, round stroke},
   nontoric blowup/.style={circle, fill=dzg singular, inner sep=0pt,
     minimum size=4pt},
+  % The exceptional curve of a blowup.
+  exceptional curve/.style={draw=dzg singular, line width=0.8pt},
+  % The charts of an integral-affine structure, told apart by hatching:
+  %   \fill[ias chart=1] ...;   (1 to 4)
+  ias chart/.style={ias chart/#1},
+  ias chart/1/.style={pattern=north east lines, pattern color=green!60!black},
+  ias chart/2/.style={pattern=vertical lines, pattern color=dzg accent},
+  ias chart/3/.style={pattern=north west lines, pattern color=dzg singular},
+  ias chart/4/.style={pattern=horizontal lines, pattern color=orange!60!black},
 }
 
 % -----------------------------------------------------------------------------
@@ -258,6 +280,8 @@
   % draw it on the background layer.
   poset group/.style={draw, rounded corners=4pt, line width=0.5pt,
     fill=dzg region, inner sep=8pt},
+  % A hyperplane v^perp in a period domain.
+  hyperplane/.style={draw=dzg singular, line width=0.8pt},
 }
 
 % -----------------------------------------------------------------------------

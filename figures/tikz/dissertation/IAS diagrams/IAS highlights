@@ -1,143 +1,47 @@
-﻿\usetikzlibrary{intersections, math}
-\makeatletter % https://tex.stackexchange.com/a/38995/121799
-\tikzset{
-  use path/.code={\pgfsyssoftpath@setcurrentpath{#1}}
-}
-\makeatother
+\begin{tikzpicture}
+  % Half of an IAS^2 cut open along p_0 p_17, with its unit lattice
+  % triangulation, and the two Symington surgeries on sides p_2 p_3 and
+  % p_14 p_15.
+  \foreach \i/\x/\y in {0/0/0, 1/0/1, 2/-1/5, 3/-2/8, 4/-4/13, 5/-5/15,
+      6/-7/18, 7/-8/19, 8/-10/20, 9/-11/20, 10/-13/19, 11/-14/18, 12/-16/15,
+      13/-17/13, 14/-19/8, 15/-20/5, 16/-21/1, 17/-21/0}
+    \coordinate (p\i) at (\x, \y);
+  \coordinate (cut r) at ($(p2) + (-1, 2)$);
+  \coordinate (cut l) at ($(p15) + (1, 2)$);
 
-\begin{tikzpicture}[broadcast/.code n args={2}{\xdef#2{#1}}]
+  \begin{scope}[on background layer]
+    \draw[lattice grid] (-22, -1) grid (1, 21);
+    \fill[ias region] (p0) \foreach \i in {1,...,17} { -- (p\i) } -- cycle;
+    % The unit triangulation of the lattice: horizontal, vertical and both
+    % diagonal lines through lattice points, inside the polygon.
+    \begin{scope}
+      \clip (p0) \foreach \i in {1,...,17} { -- (p\i) } -- cycle;
+      \draw[ias edge, draw=dzg muted] (-22, -1) grid (1, 21);
+      \foreach \c in {-43,...,22}
+        \draw[ias edge, draw=dzg muted] (-22, \c + 22) -- ++(23, -23)
+          (-22, \c) -- ++(23, 23);
+    \end{scope}
+  \end{scope}
 
-\begin{pgfonlayer}{nodelayer}
-  \newcounter{nodecount}
-  \setcounter{nodecount}{0}
-  \def\currentx{0}
-  \def\currenty{0}
-  \node[style=black node, label={[right]$p_0$ (0,0)}] (p_0) at (0, 0) {};
-  \stepcounter{nodecount}
+  % Boundary edges; the surgery sides p_2 p_3 and p_14 p_15 are faint.
+  \foreach \i [evaluate=\i as \j using int(\i + 1)] in {0, 1, 3, 4, ..., 13, 15, 16}
+    \draw[fan ray] (p\i) -- (p\j);
+  \draw[fan ray, opacity=0.3] (p2) -- (p3)  (p14) -- (p15);
+  \draw[ias boundary, dashed, draw=dzg muted] (p0) -- (p17);
 
-  \foreach \x/\y in {
-    0/1,    % v19
-    -1/4,   % v18
-    -1/3,   % v16
-    -2/5,   % v15
-    -1/2,   % v14
-    -2/3,   % v13
-    -1/1,   % v12
-    -2/1,   % v11
-    -1/0,   % v10
-    -2/-1,  % v9
-    -1/-1,  % v8
-    -2/-3,  % v7
-    -1/-2,  % v6
-    -2/-5,  % v5
-    -1/-3,  % v4
-    -1/-4,  % v2
-    0/-1    % v1
-  } {
-    \pgfmathsetmacro{\nextx}{\currentx + \x}
-    \pgfmathsetmacro{\nexty}{\currenty + \y}
-	\coordinate (next) at (\nextx,\nexty);
-	\begin{pgfonlayer}{edgelayer}
-	\ifthenelse{ \not \( \thenodecount = 15\) \and \not \( \thenodecount = 3\) }{
-	    \draw[style=IAS edge] (\currentx,\currenty) -- (next);
-	}{}
-	\end{pgfonlayer}
-	\ifthenelse{\thenodecount = 17}{
-		\node[style=black node, label={[left]$p_{\thenodecount}$ (\pgfmathparse{int(\nextx)}\pgfmathresult,\pgfmathparse{int(\nexty)}\pgfmathresult)}] (p_\thenodecount) at (next) {};
-	}{
-	\ifthenelse{\thenodecount < 9}{
-	    \node[style=black node, label={[above right]$p_{\thenodecount}$ (\pgfmathparse{int(\nextx)}\pgfmathresult,\pgfmathparse{int(\nexty)}\pgfmathresult)}] (p_\thenodecount) at (next) {};
-	}{
-	    \node[style=black node, label={[above left]$p_{\thenodecount}$ (\pgfmathparse{int(\nextx)}\pgfmathresult,\pgfmathparse{int(\nexty)}\pgfmathresult)}] (p_\thenodecount) at (next) {};
-	}
-}
-    \global\let\currentx\nextx
-    \global\let\currenty\nexty
-    \stepcounter{nodecount}
-  }
+  \begin{scope}[on edge layer]
+    \path[ias surgery, dashed] (p15) -- (cut l) -- (p14);
+    \path[ias surgery, dashed] (p2) -- (cut r) -- (p3);
+  \end{scope}
+  \node[ias singularity] at (cut r) {};
+  \node[ias singularity] at (cut l) {};
 
-\draw[dashed, gray, ultra thick] (p_0) to (p_17);
-\node[style=IAS star] (cut_r) at ($(p_2)+(-1,2)$) {};
-\node[style=IAS star] (cut_l) at ($(p_15)+(1,2)$) {};
-\end{pgfonlayer}
-
-
-\begin{pgfonlayer}{edgelayer}
-\draw[red, dashed, ultra thick, fill=red!40] (p_15.center) -- (cut_l.center) -- (p_14.center);
-\draw[red, dashed, ultra thick, fill=red!40] (p_2.center) -- (cut_r.center) -- (p_3.center);
-\draw[style=IAS edge, opacity=0.3] (p_14) to (p_15);
-\draw[style=IAS edge, opacity=0.3] (p_2) to (p_3);
-\end{pgfonlayer}
-
-\begin{pgfonlayer}{background}
-\fill[green!10] (p_0.south) \foreach \i in {1,...,17} { -- (p_\i) } -- cycle;
-\draw[very thin, gray!30] (-22,-1) grid (1,21);
-\end{pgfonlayer}
-
-\path[draw=none, name path=poly] (p_0.south) \foreach \i in {1,...,16} { -- (p_\i.center) } -- (p_17.south) -- cycle;
-\coordinate (star) at (-10,2);
-
-\tikzstyle{topright triangle}=[isosceles triangle, isosceles triangle apex angle=90, draw=none, rotate=45, fill=none, minimum size=0.6cm, anchor=apex]
-\tikzstyle{bottomleft triangle}=[isosceles triangle, isosceles triangle apex angle=90, draw=none, rotate=225, fill=none, minimum size=0.6cm, anchor=apex]
-
-\tikzstyle{topleft triangle}=[isosceles triangle, isosceles triangle apex angle=90, draw=none, rotate=-225, fill=none, minimum size=0.6cm, anchor=apex]
-\tikzstyle{bottomright triangle}=[isosceles triangle, isosceles triangle apex angle=90, draw=none, rotate=-45, fill=none, minimum size=0.6cm, anchor=apex]
-
-\begin{pgfonlayer}{background}
-
-\foreach \x in {-22,...,-1} {
-    \foreach \y in {0,...,20} {
-	
-	\node[style=bottomleft triangle, name path=bottomleft, save path=\pathC] (C\x\y) at (\x, \y) {};
-	\path[name path=auxC] (C\x\y.center) coordinate (C\x\y.center) to[bend left=0] (star);
-	\path[name intersections={of=poly and auxC, total=\t},broadcast={\t}{\intT}];
-	\path[name intersections={of=poly and bottomleft, total=\t},broadcast={\t}{\intS}];
-	\pgfmathtruncatemacro{\itesta}{\intS+\intT}
-	\ifnum\itesta=0
-	\draw[fill=green!10] (\x, \y) -- (\x+1,\y) -- (\x, \y+1) -- cycle;
-	\draw[gray] (\x, \y) -- (\x+1,\y) -- (\x, \y+1) -- cycle;
-	\else
-	% \fill[red!10, use path=\pathC];
-	\fi
-	
-	\node[style=topright triangle, name path=topright, save path=\pathD] (D\x\y) at (\x+1, \y+1) {};
-	\path[name path=auxD] (D\x\y.center) coordinate (D\x\y.center) to[bend left=0] (star);
-	\path[name intersections={of=poly and auxD, total=\t},broadcast={\t}{\intT}];
-	\path[name intersections={of=poly and topright, total=\t},broadcast={\t}{\intS}];
-	\pgfmathtruncatemacro{\itesta}{\intS+\intT}
-	\ifnum\itesta=0
-	=\draw[fill=green!10] (\x+1, \y+1) -- (\x,\y+1) -- (\x+1, \y) -- cycle;
-	\draw[gray] (\x+1, \y+1) -- (\x,\y+1) -- (\x+1, \y) -- cycle;
-	\else
-	% \fill[red!10, use path=\pathD];
-	\fi
-	
-	\node[style=bottomright triangle, name path=bottomright, save path=\pathE] (E\x\y) at (\x+1, \y-1) {};
-	\path[name path=auxE] (E\x\y.center) coordinate (E\x\y.center) to[bend left=0] (star);
-	\path[name intersections={of=poly and auxE, total=\t},broadcast={\t}{\intT}];
-	\path[name intersections={of=poly and bottomright, total=\t},broadcast={\t}{\intS}];
-	\pgfmathtruncatemacro{\itesta}{\intS+\intT}
-	\ifnum\itesta=0
-	\draw[fill=green!10] (\x+1, \y-1) -- (\x,\y-1) -- (\x+1, \y) -- cycle;
-	\draw[gray] (\x+1, \y-1) -- (\x,\y-1) -- (\x+1, \y) -- cycle;
-	\else
-	\fi
-	
-	\node[style=topleft triangle, name path=topleft, save path=\pathF] (F\x\y) at (\x, \y) {};
-	\path[name path=auxF] (F\x\y.center) coordinate (F\x\y.center) to[bend left=0] (star);
-	\path[name intersections={of=poly and auxF, total=\t},broadcast={\t}{\intT}];
-	\path[name intersections={of=poly and topleft, total=\t},broadcast={\t}{\intS}];
-	\pgfmathtruncatemacro{\itesta}{\intS+\intT}
-	\ifnum\itesta=0
-	\draw[fill=green!10] (\x, \y) -- (\x,\y-1) -- (\x+1, \y) -- cycle;
-	\draw[gray] (\x, \y) -- (\x,\y-1) -- (\x+1, \y) -- cycle;
-	\else
-	\fi
-
-}
-}
-
-\end{pgfonlayer}
-
-
+  % Points, labelled with their lattice coordinates.
+  \foreach \i/\x/\y in {0/0/0, 1/0/1, 2/-1/5, 3/-2/8, 4/-4/13, 5/-5/15,
+      6/-7/18, 7/-8/19, 8/-10/20}
+    \node[stratum, label=above right:{$p_{\i}$ (\x,\y)}] at (p\i) {};
+  \foreach \i/\x/\y in {9/-11/20, 10/-13/19, 11/-14/18, 12/-16/15,
+      13/-17/13, 14/-19/8, 15/-20/5, 16/-21/1}
+    \node[stratum, label=above left:{$p_{\i}$ (\x,\y)}] at (p\i) {};
+  \node[stratum, label=left:{$p_{17}$ (-21,0)}] at (p17) {};
 \end{tikzpicture}
