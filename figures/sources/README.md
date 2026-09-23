@@ -27,8 +27,7 @@ directories, so existing documents keep their relative `\input` paths while the
 editable sources have one canonical owner.
 
 Standalone TikZ documents imported from the Notes and dissertation repositories
-live in `figures/tikz/visualizations/standalone/` and
-`figures/tikz/legacy/standalone/`. Obsidian diagram sidecars live in
+live in `figures/tikz/visualizations/standalone/`. Obsidian diagram sidecars live in
 `figures/tikz/obsidian/`; archived raw sources live in
 `figures/tikz/legacy/unique-diagrams/` and `figures/tikz/legacy/v4-originals/`.
 The Algebra II standalone figures live in `figures/tikz/legacy/algebra-franke/`.
