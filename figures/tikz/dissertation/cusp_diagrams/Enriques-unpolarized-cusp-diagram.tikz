@@ -1,23 +1,21 @@
-﻿\begin{tikzpicture}
-\node [BB  cusp point, ] (w0) at (0, 0) {$E_{10}(2)$};
-\node [BB cusp curve] (C12) at (3,0) {$E_8(2)$};
-\node [BB cusp point] (w1) at (6, 0) {$U \oplus E_8(2)$};
-\node [BB cusp curve] (C2) at (9,0) {$A_1^{\oplus 8}*$};
+\begin{tikzpicture}[node distance=1.4cm]
+  \node[cusp0, label={[cusp label]above:$\mathrm{div}\gens{e} = 1$}] (w0) {$E_{10}(2)$};
+  \node[cusp1, right=of w0, label={[cusp label]above:$\mathrm{div}\gens{e, e'} = (1, 2)$}]
+    (C12) {$E_8(2)$};
+  \node[cusp0, right=of C12, label={[cusp label]above:$\mathrm{div}\gens{e'} = 2$}]
+    (w1) {$U \oplus E_8(2)$};
+  \node[cusp1, right=of w1,
+    label={[cusp label]above:$\mathrm{div}\gens{e', 2e+2f+2\bar\alpha_1} = (2, 2)$}]
+    (C2) {$A_1^{\oplus 8}*$};
 
-\draw[BB cusp arrow] (w0) to (C12.west);
-\draw[BB cusp arrow] (w1) to (C12.east);
-\draw[BB cusp arrow] (w1) to (C2.west);
+  \draw[incidence] (w0) -- (C12);
+  \draw[incidence] (w1) -- (C12);
+  \draw[incidence] (w1) -- (C2);
 
-\node[above = 0.1cm of w0] {\scriptsize $\mathrm{div}\gens{e} = 1$};
-\draw [BB cusp brace] (-1,0) -- (1,0) node[midway,yshift=-3em]{$\mathbb{RP}^2,\, (10,10,0)_1$};
-
-\node[above = 0.1cm of C12] {\scriptsize $\mathrm{div}\gens{e, e'} = (1, 2)$};
-\draw [BB cusp brace] (2,0) -- (4,0) node[midway,yshift=-3em]{$(8,8,0)_0$};
-
-\node[above = 0.1cm of w1] {\scriptsize $\mathrm{div}\gens{e'} = 2$};
-\draw [BB cusp brace] (5,0) -- (7,0) node[midway,yshift=-3em]{$\mathbb{D}^2, \, (10,8,0)_1$};
-
-\node[above = 0.1cm of C2] {\scriptsize $\mathrm{div}\gens{e', 2e+2f+2\bar\alpha_1} = (2, 2)$};
-\draw [BB cusp brace] (8,0) -- (10,0) node[midway,yshift=-3em]{$(8,6,0)_0$};
-
+  \draw[cusp brace] (w0.west) -- (w0.east)
+    node[midway, below=5.5ex] {$\mathbb{RP}^2,\, (10,10,0)_1$};
+  \draw[cusp brace] (C12.west) -- (C12.east) node[midway, below=5.5ex] {$(8,8,0)_0$};
+  \draw[cusp brace] (w1.west) -- (w1.east)
+    node[midway, below=5.5ex] {$\mathbb{D}^2, \, (10,8,0)_1$};
+  \draw[cusp brace] (C2.west) -- (C2.east) node[midway, below=5.5ex] {$(8,6,0)_0$};
 \end{tikzpicture}

@@ -1,51 +1,17 @@
-﻿\begin{tikzpicture}[scale=1.2]
-
-% Left side nodes
-\node[BB cusp curve] (c1) at (0,2) {$C_1$};
-\node[BB cusp curve]  (c2) at (0,1) {$C_2$};
-\node[scale=2] at (0,0) {$\vdots$};
-\node[BB cusp curve]  (cnm1) at (0,-1) {$C_{n-1}$};
-\node[BB cusp curve]  (cn) at (0,-2) {$C_n$};
-
-\node at (0,-2.5) {$H/\operatorname{SL}_2(\mathbb{Z})$};
-\node at (4,-2.5) {$H/\Gamma'(5)$};
-\node at (2,2.5) {$\underline{N=5}$};
-
-% Center node
-\node[BB cusp point] (p0) at (2,0) {$p_0$};
-
-% Right side nodes
-\node[BB cusp curve] (c15) at (4,2) {$C_1^{(5)}$};
-\node[BB cusp curve] (c25) at (4,1) {$C_2^{(5)}$};
-\node[scale=2] at (4,0) {$\vdots$};
-\node[BB cusp curve]  (cnm15) at (4,-1) {$C_{n-1}^{(5)}$};
-\node[BB cusp curve]  (cn5) at (4,-2) {$C_n^{(5)}$};
-
-\node[BB cusp point] (p1) at (7,1) {$p_1$};
-\node[BB cusp point] (p2) at (7,-1) {$p_2$};
-
-% Arrows
-\draw[BB cusp arrow] (p0) -- (c1.e) ;
-\draw[BB cusp arrow] (p0) -- (c2.e);
-\draw[BB cusp arrow] (p0) -- (cnm1.e);
-\draw[BB cusp arrow] (p0) -- (cn.e);
-
-\draw[BB cusp arrow] (p0) -- node[above] {$2$} (c15.west);
-\draw[BB cusp arrow] (p0) -- node[above] {$2$} (c25.west);
-\draw[BB cusp arrow] (p0) -- node[above] {$2$} (cnm15.west);
-\draw[BB cusp arrow] (p0) -- node[above] {$2$} (cn5.west);
-
-
-\draw[BB cusp arrow] (p1) -- (c15.e);
-\draw[BB cusp arrow] (p1) -- (c25.e);
-\draw[BB cusp arrow] (p1) -- (cnm15.e);
-\draw[BB cusp arrow] (p1) -- (cn5.e);
-
-
-\draw[BB cusp arrow] (p2) -- (c15.e);
-\draw[BB cusp arrow] (p2) -- (c25.e);
-\draw[BB cusp arrow] (p2) -- (cnm15.e);
-\draw[BB cusp arrow] (p2) -- (cn5.e);
-
-
+\begin{tikzpicture}
+  \matrix [matrix of math nodes, row sep=4mm, column sep=1.4cm] {
+    & \underline{N=5} & &[1cm] \\
+    |[cusp1] (C1)| C_1     & & |[cusp1] (D1)| C_1^{(5)}     & \\
+    |[cusp1] (C2)| C_2     & & |[cusp1] (D2)| C_2^{(5)}     & |[cusp0] (P1)| p_1 \\
+    \vdots & |[cusp0] (P0)| p_0 & \vdots & \\
+    |[cusp1] (C3)| C_{n-1} & & |[cusp1] (D3)| C_{n-1}^{(5)} & |[cusp0] (P2)| p_2 \\
+    |[cusp1] (C4)| C_n     & & |[cusp1] (D4)| C_n^{(5)}     & \\
+    H/\operatorname{SL}_2(\mathbb{Z}) & & H/\Gamma'(5) & \\
+  };
+  \foreach \i in {1,...,4} {
+    \draw[incidence] (P0) -- (C\i.east);
+    \draw[incidence] (P0) -- node[cusp label, above] {$2$} (D\i.west);
+    \draw[incidence] (P1) -- (D\i.east);
+    \draw[incidence] (P2) -- (D\i.east);
+  }
 \end{tikzpicture}

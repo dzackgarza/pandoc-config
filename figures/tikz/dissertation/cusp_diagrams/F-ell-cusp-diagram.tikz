@@ -1,24 +1,14 @@
-﻿\begin{tikzpicture}[scale=1]
+\begin{tikzpicture}
+  \matrix (C) [matrix of math nodes, nodes={cusp1}, row sep=1cm] {
+    D_{16} \\ E_8^2 \\
+  };
+  \node[cusp0, right=1.5cm of C] (P0) {$e$};
+  \foreach \i in {1,2}
+    \draw[incidence] (P0) -- (C-\i-1.east);
+  \node[above=1cm of P0] {\underline{$F_{\mathrm{ell}}$}};
 
-% Nodes
-\node[BB cusp point] (P0) at (3,0) {$e$};
-
-\node[BB cusp curve] (C1) at (0,-1) {$E_8^2$};
-\node[BB cusp curve] (C2) at (0,1) {$D_{16}$};
-
-\node (HmodSL2Z) at (0,-1.75) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
-
-% Arrows
-\draw[BB cusp arrow] (P0) -- (C1.east);
-\draw[BB cusp arrow] (P0) -- (C2.east);
-
-
-\node at (3,2) {\underline{$F_{\mathrm{ell}}$}};
-
-\draw [BB cusp brace]
-  (-1,-1.75) -- (1,-1.75) node[midway,yshift=-3em]{$(0, 16)$};
-
-\draw [BB cusp brace]
-  (2,-1.75) -- (4,-1.75) node[midway,yshift=-3em]{$U \oplus E_8^2$};
-
+  \node[below=2mm of C] (H) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+  \draw[cusp brace] (H.west) -- (H.east) node[midway, below=5.5ex] {$(0, 16)$};
+  \draw[cusp brace] (P0.west |- H) -- (P0.east |- H)
+    node[midway, below=5.5ex] {$U \oplus E_8^2$};
 \end{tikzpicture}

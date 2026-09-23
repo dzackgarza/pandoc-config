@@ -13,7 +13,8 @@
 %   colours ........ dzg accent, dzg singular, dzg highlight, dzg region, ...
 %   Coxeter ........ vertex=white|black|doubled, coxeter edge=3|4|5|6|infinity|
 %                    dotted, coxeter edge label, parabolic, vertex label
-%   Baily-Borel .... cusp0, cusp1, incidence, cusp brace
+%   Baily-Borel .... cusp0, cusp1, cusp label, incidence, cusp brace, cusp map,
+%                    cusp image, doubled mark
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
 %                    fan ray, kulikov component, double curve
 %   lattice ........ lattice grid, lattice point, polygon region, long side,
@@ -126,6 +127,16 @@
   incidence/.style={->, line width=0.6pt, shorten >=1pt, shorten <=1pt},
   cusp brace/.style={decorate, decoration={brace, amplitude=5pt, mirror,
     raise=4ex}},
+  % The map of Baily-Borel boundaries induced by a morphism of moduli spaces,
+  % drawn from the source cusp to its image.
+  cusp map/.style={->, dashed, line width=0.6pt, shorten >=2pt, shorten <=2pt},
+  % The image of another boundary under a cusp map, highlighted like a
+  % parabolic subdiagram: stroke its incidences between node centres under
+  % the diagram,
+  %   \scoped[on background layer] \draw[cusp image] (a.center)--(b.center);
+  cusp image/.style={parabolic, line width=7pt},
+  % A doubled cusp or incidence; the document states what the doubling marks.
+  doubled mark/.style={double, double distance=1.3pt, line width=0.4pt},
 }
 
 % -----------------------------------------------------------------------------
