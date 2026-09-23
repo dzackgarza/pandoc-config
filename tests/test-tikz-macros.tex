@@ -100,6 +100,22 @@ Every ADE constructor in dzg-diagrams.tex, for an odd and an even index.
   \draw[boundary stratum] (2.2,-0.8) -- (3.2,-0.8);
 \end{tikzpicture}
 
+\section*{Nikulin's table of 2-elementary lattices}
+\begin{tikzpicture}[x=0.3cm, y=0.3cm]
+  \pic (N) {nikulin table};
+  \pic[nikulin labels=none] at (24,0) {nikulin table};
+  \scoped[on background layer] \draw[parabolic] (N-2-2.center) -- (N-10-10.center);
+\end{tikzpicture}
+
+\section*{Strata of $\overline{M}_2$}
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+  \pic[m2 render=curve] (C) {m2 strata};
+  \pic[m2 render=graph, genus labels=none] (G) at (0,-6) {m2 strata};
+  \pic[m2 render=divisor, m2 layout=vertical] (P) at (20,0) {m2 strata};
+  \draw[degeneration] (G-12-v1) -- (P-12-box);
+  \pic (X) at (26,0) {m2 coxeter};
+\end{tikzpicture}
+
 \section*{Stable curves and dual graphs}
 \begin{tikzpicture}
   \draw[curve component] (0,0) to[curve through={(0.6,0.4) (1.2,-0.2)}] (1.8,0.2);

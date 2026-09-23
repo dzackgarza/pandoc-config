@@ -1,15 +1,5 @@
-% Nikulin's table of even hyperbolic 2-elementary lattices, dissertation copy.
-% This copy marks (r, a) = (2, 2) black where tikz/nikulin_2elementary_table.tex
-% and the data file mark it doubled; the override below keeps that content.
-\input{tikz/data/nikulin_2elementary}
-\begin{tikzpicture}[scale=0.65]
-  \draw[lattice grid] (0,0) grid (20,11);
-  \draw[->] (0,0) -- (21,0);
-  \draw[->] (0,0) -- (0,11);
-  \foreach \r in {1,...,20} \node[below=2pt] at (\r,0) {\r};
-  \foreach \a in {1,...,11} \node[left=2pt] at (0,\a) {\a};
-  \foreach \r/\a/\m in \nikulinTwoElementaryPoints {
-    \ifnum\r=2 \ifnum\a=2 \def\m{black}\fi\fi
-    \node[vertex=\m] at (\r,\a) {};
-  }
+% Nikulin's table of even hyperbolic 2-elementary lattices (dzg-nikulin.tex),
+% the dissertation figure fig:nikulin-table.
+\begin{tikzpicture}[x=0.65cm, y=0.65cm]
+  \pic {nikulin table};
 \end{tikzpicture}

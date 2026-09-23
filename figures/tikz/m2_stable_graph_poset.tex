@@ -1,59 +1,19 @@
-% Boundary strata of \overline{M}_2 as the poset Div(24) \ {1}. Each divisor
-% labels a stratum; beside it is the stable graph of that stratum (vertices are
-% components labelled by genus, edges are nodes, loops are self-nodes).
-% Arrows point from the generic stratum to the more degenerate one.
-% Layout: graphdrawing, so this figure renders only with lualatex.
+% Stratification poset of \overline{M}_2 (dzg-moduli.tex) as Div(24) \ {1}:
+% each stratum is labelled by its divisor, with its stable graph beside it and
+% its dimension at the left. The header states the isomorphisms with Div(24)
+% and with the subdiagrams of the Coxeter diagram `m2 coxeter`.
 \begin{tikzpicture}[font=\small]
-  \graph[layered layout, level distance=2cm, sibling distance=5cm,
-         nodes={poset node}, edges={degeneration}] {
-    P24/"$24$" -> {P8/"$8$", P12/"$12$"};
-    P8 -> P4/"$4$";
-    P12 -> {P4, P6/"$6$"};
-    P4 -> P2/"$2$";
-    P6 -> {P2, P3/"$3$"};
-  };
-
-  % Stable graphs.
-  \begin{scope}[nodes={dual vertex}, node distance=1.2cm]
-    % dim 3: one genus-2 vertex
-    \node[label={[genus]below:$2$}, right=1.5cm of P24] (g24) {};
-    % dim 2: two genus-1 vertices joined by an edge
-    \node[label={[genus]below:$1$}, left=3cm of P8] (g8r) {};
-    \node[label={[genus]below:$1$}, left=of g8r] (g8l) {};
-    \draw (g8l) -- (g8r);
-    % dim 2: one genus-1 vertex with a loop
-    \node[label={[genus]below:$1$}, right=2cm of P12] (g12) {};
-    \draw (g12) ++(0,0.32) circle (0.32);
-    % dim 1: genus-1 vertex joined to a genus-0 vertex with a loop
-    \node[label={[genus]below:$0$}, left=3cm of P4] (g4r) {};
-    \node[label={[genus]below:$1$}, left=of g4r] (g4l) {};
-    \draw (g4l) -- (g4r) ++(0,0.32) circle (0.32);
-    % dim 1: one genus-0 vertex with two loops
-    \node[label={[genus, label distance=0.3cm]below:$0$}, right=2cm of P6] (g6) {};
-    \draw (g6) ++(-0.32,0) circle (0.32) (g6) ++(0.32,0) circle (0.32);
-    % dim 0: two genus-0 vertices joined by an edge, each with a loop
-    \node[label={[genus]below:$0$}, left=3cm of P2] (g2r) {};
-    \node[label={[genus]below:$0$}, left=of g2r] (g2l) {};
-    \draw (g2l) -- (g2r) ++(0,0.32) circle (0.32) (g2l) ++(0,0.32) circle (0.32);
-    % dim 0: theta graph, two genus-0 vertices joined by three edges
-    \node[label={[genus]below:$0$}, right=2cm of P3] (g3l) {};
-    \node[label={[genus]below:$0$}, right=of g3l] (g3r) {};
-    \draw (g3l) -- (g3r) (g3l) edge[bend left] (g3r) (g3l) edge[bend right] (g3r);
-  \end{scope}
-
-  % Dimension of each row.
-  \coordinate (dims) at ([xshift=-1cm]g2l.west);
-  \foreach \p/\d in {P24/3, P8/2, P4/1, P2/0}
-    \node[anchor=east] at (dims |- \p) {dim $\d$};
-
-  % The Coxeter diagram whose subdiagrams index the strata.
-  \node[font=\Large, above=0.6cm of P24] {$\bd \overline{\mcm}_{2, 0}
+  \pic[m2 render=divisor, m2 layout=vertical] (P) {m2 strata};
+  \foreach \d/\dim/\n/\row/\k/\c in \dzgMtwoStrata {
+    \ifnum\row>0
+      \pic (G\d) at ([xshift=-3.2cm]P-\d-box) {m2 graph=\d};
+    \else
+      \pic (G\d) at ([xshift=2.6cm]P-\d-box) {m2 graph=\d};
+    \fi
+    \node[anchor=east] at (-7.4,-2*\n) {dim $\dim$};
+  }
+  \node[font=\Large, above=0.6cm of P-24-box] {$\mathrm{Strata}(\overline{\mcm}_{2, 0})
     \cong \mathrm{Div}(24)\sm\ts{1}
-    \cong \mathrm{SubDiag}\qty{\vcenter{\hbox{\tikz[x=1em, y=1em]{
-      \node[vertex=white] (c) at (0,0) {};
-      \foreach \t in {90, 210, 330} {
-        \node[vertex=black] (o\t) at (\t:1.15) {};
-        \scoped[on edge layer] \draw[coxeter edge=4] (c) -- (o\t);
-      }}}}
+    \cong \mathrm{SubDiag}\qty{\vcenter{\hbox{\tikz[x=1em, y=1em]{\pic {m2 coxeter};}}}
       \subseteq \I_{1, 3}(2)\tensor_\ZZ \RR} - \ts{\emptyset}$};
 \end{tikzpicture}

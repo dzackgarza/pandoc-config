@@ -1,22 +1,9 @@
-% Nikulin's table of even hyperbolic 2-elementary lattices drawn as a
-% pyramid: the slanted lines bound the occurring (r, a), and a legend
-% explains the marks.
-\input{tikz/data/nikulin_2elementary}
-\begin{tikzpicture}[scale=0.6]
-  \draw[lattice grid] (0,0) grid (22,12);
-  \draw[->] (0,0) -- (22.1,0) node[right] {$r$};
-  \draw[->] (0,0) -- (0,12) node[above] {$a$};
+% Nikulin's table of even hyperbolic 2-elementary lattices (dzg-nikulin.tex)
+% drawn as a pyramid: the lines a = r and a = 22 - r bound the occurring
+% (r, a), and a legend explains the marks.
+\begin{tikzpicture}[x=0.6cm, y=0.6cm]
+  \pic {nikulin table};
   \draw[<->] (0.5,0.5) -- (11,11) -- (21.15,0.85);
-  \foreach \r in {0,...,21} {
-    \draw (\r,0.12) -- (\r,-0.12);
-    \node[below=2pt, font=\scriptsize] at (\r,0) {\r};
-  }
-  \foreach \a in {1,...,11} {
-    \draw (-0.12,\a) -- (0.12,\a);
-    \node[left=4pt, font=\scriptsize] at (0,\a) {\a};
-  }
-  \foreach \r/\a/\m in \nikulinTwoElementaryPoints
-    \node[vertex=\m] at (\r,\a) {};
   \foreach \m/\text [count=\i] in
       {black/{$\delta=1$ only}, white/{$\delta=0$ only}, doubled/both}
     \node[vertex=\m, label={[label distance=0.3cm]right:\text}]
