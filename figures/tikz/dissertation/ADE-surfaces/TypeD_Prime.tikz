@@ -1,18 +1,9 @@
-﻿\input{ADE_macros.tikz}
-
-
-
-\begin{tikzpicture}[]
-\pgfmathsetmacro{\total}{0}
-\foreach \m in {7,...,10}
-{
-\begin{scope}[shift={(\total, 0)}]
-\ADEPrimeDn{\m}
-\draw[BB cusp brace, blue] (\dmaxttt-0.1,.8) to node[midway, yshift=2.25em,xshift=2.2em] {$1$} (1.95, 1.75);
-\draw[BB cusp brace, blue] (2,2.1) to node[midway, yshift=3em,xshift=0em] {$2$} (0,2.1);
-
-\end{scope}
-\pgfmathtruncatemacro{\newtotal}{\total + \m-2}
-  \xdef\total{\newtotal} % make the new total globally available
+\begin{tikzpicture}
+\foreach \m [remember=\xnext as \xoff (initially 0),
+    evaluate=\m as \xnext using \xoff+\m] in {7,...,10} {
+  \begin{scope}[shift={(\xoff,0)}]
+    \ADEPrimeDn{\m}
+    \node[polygon title, below=7mm of lp.south] {$D_{\m}'$};
+  \end{scope}
 }
 \end{tikzpicture}
