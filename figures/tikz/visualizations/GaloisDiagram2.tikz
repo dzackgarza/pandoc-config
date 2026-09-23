@@ -1,4 +1,4 @@
-﻿\begin{tikzcd}
+\begin{tikzcd}
                                                                 &  & \mathbb{Q} \arrow[rrrrdd] \arrow[rrdd] \arrow[lldd, dashed] \arrow[dd] &                                           &                                                              &  &                                             \\
                                                                 &  &                                                                        &                                           &                                                              &  &                                             \\
 {\mathbb{Q}(\sqrt[3] 2)} \arrow[rrrrdd] \arrow[rrdd] \arrow[dd] &  & \mathbb Q(\sqrt 3) \arrow[rrrrdd] \arrow[lldd, dashed]                 &                                           & \mathbb Q(\zeta_3 \sqrt 3) \arrow[rrdd] \arrow[lldd, dashed] &  & \mathbb Q(\zeta_3) \arrow[dd] \arrow[lldd]  \\

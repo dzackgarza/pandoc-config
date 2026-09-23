@@ -1,5 +1,6 @@
-﻿ \begin{tikzpicture}
-  \draw (-1,0) to[bend left] (1,0);
-  \draw (-1.2,.1) to[bend right] (1.2,.1);
-  \draw[rotate=0] (0,0) ellipse (100pt and 50pt);
+\begin{tikzpicture}
+  % a torus: outline and the two arcs of its hole
+  \draw (0,0) ellipse (100pt and 50pt);
+  \draw (-1,0) to[curve through={(0,0.27)}] (1,0);
+  \draw (-1.2,.1) to[curve through={(0,-0.22)}] (1.2,.1);
 \end{tikzpicture}

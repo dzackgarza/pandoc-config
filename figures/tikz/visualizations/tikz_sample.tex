@@ -1,18 +1,11 @@
 \documentclass{article}
-\usepackage{tikz}
+\usepackage{dzg-tikz}
 \begin{document}
 \begin{tikzpicture}
-\draw[gray, thick] (-1,2) -- (2,-4);
-\draw[gray, thick] (-1,-1) -- (2,2);
-\filldraw[black] (0,0) circle (2pt) node[anchor=west]{Intersection point};
-
-\draw[red, thick] (0,0) -- (1,1);
-\draw[red, thick] (0,0) -- (1,2);
-\draw[red, thick] (0,0) -- (1,3);
-\draw[red, thick] (0,0) -- (1,4);
-\draw[red, thick] (0,0) -- (1,5);
-\draw[red, thick] (0,0) -- (1,6);
-\draw[red, thick] (0,0) -- (1,7);
-\draw[red, thick] (0,0) -- (1,8);
+  \draw[dzg muted] (-1,2) -- (2,-4);
+  \draw[dzg muted] (-1,-1) -- (2,2);
+  \node[point, label=right:Intersection point] at (0,0) {};
+  % a pencil of lines through the intersection point
+  \foreach \k in {1,...,8} \draw[dzg singular] (0,0) -- (1,\k);
 \end{tikzpicture}
 \end{document}

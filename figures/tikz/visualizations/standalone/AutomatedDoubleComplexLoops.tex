@@ -1,42 +1,11 @@
 \documentclass[crop,tikz]{standalone}
-\usepackage{tikz}
+\usepackage{dzg-tikz}
 \usepackage{dsfont}
-\usepackage{amsmath, amsthm, amssymb}
-\usetikzlibrary{matrix, cd}
-\usepackage{etoolbox}
 \newcommand*\Z{\mathds{Z}}
-\newcommand*\CP{\mathbb{CP}}
 \newcommand*\ee[2]{H^{#1}(\CP^2) \otimes_{\Z} H^{#2}(S^1)}
 \newcommand*\zt[2]{#1 \otimes_{\Z} #2}
-\newcommand*\HT[2]{H^{#1}(\CP^2) \otimes_{\Z} #2}
+\newcommand*\HCPtensor[2]{H^{#1}(\CP^2) \otimes_{\Z} #2}
 \newcommand*\HCP[1]{H^{#1}(\CP^2)}
-
-
-\newcommand\mygrid[3][]{      % this definition uses \foreach inside a matrix
-  \let\mymatrixcontent\empty  % see http://tex.stackexchange.com/q/60394/18228
-  \newcommand{\row}{%
-    \foreach \j in {1,...,#2}{
-      \foreach \i in {1,...,#3} {%
-        \begingroup\edef\x{\endgroup
-           \noexpand\gappto\noexpand\mymatrixcontent{|[draw,minimum size=1cm,#1]| \&}}\x
-        }%
-      \gappto\mymatrixcontent{\\}%
-    }
-  }
-  \row
-  \matrix(m)[matrix of nodes,ampersand replacement=\&,row sep=-\pgflinewidth,column sep=-\pgflinewidth]{
-    \mymatrixcontent
-  };
-  \foreach \x[count=\i from 0] in {1,...,#2}\node[left] at (m-\x-1.west) {$\i$};
-  \foreach \y[count=\j from 0] in {1,...,#3}\node[above] at (m-1-\y.north) {$\j$};
-}
-
-
-
-
-
-\newcommand*\ZZ{|[draw,circle]| \Z_2}
-\usepackage{graphicx}
 \usepackage{caption}
 
 \begin{document}
@@ -60,8 +29,8 @@ S^1& 	&   &  	& 	& 	&	&	&	\\
 %
 &	0&	1&	2&	3&	4&	5&	\CP_2& \strut \\};
 %
-\draw[thick] (m-8-1.east) -- (m-1-1.east) ;
-\draw[thick] (m-8-1.north) -- (m-8-9.north) ;
+\draw (m-8-1.east) -- (m-1-1.east) ;
+\draw (m-8-1.north) -- (m-8-9.north) ;
 \end{tikzpicture}
 
 \vspace{1cm}
@@ -75,17 +44,17 @@ S^1& 	&   &  	& 	& 	&	&	&	\\
 %
 S^1& 	&   &  	& 	& 	&	&	&	\\
 %
-0&	\zt{\Z}{0}&		\HT{1}{0}&	\HT{2}{0}&	\HT{3}{0}&	\HT{4}{0}&	\HT{5}{0}&	&\\
-0&	\zt{\Z}{0}&		\HT{1}{0}&	\HT{2}{0}&	\HT{3}{0}&	\HT{4}{0}&	\HT{5}{0}&	&\\
-0&	\zt{\Z}{0}&		\HT{1}{0}&	\HT{2}{0}&	\HT{3}{0}&	\HT{4}{0}&	\HT{5}{0}&	&\\
-0&	\zt{\Z}{0}&		\HT{1}{0}&	\HT{2}{0}&	\HT{3}{0}&	\HT{4}{0}&	\HT{5}{0}&	&\\
-0&	\zt{\Z}{\Z}&	\HT{1}{\Z}&	\HT{2}{\Z}&	\HT{3}{\Z}&	\HT{4}{\Z}&	\HT{5}{\Z}&	&\\
-0&	\zt{\Z}{\Z}&	\HT{1}{\Z}&	\HT{2}{\Z}&	\HT{3}{\Z}&	\HT{4}{\Z}&	\HT{5}{\Z}&	&\\ \quad\strut
+0&	\zt{\Z}{0}&		\HCPtensor{1}{0}&	\HCPtensor{2}{0}&	\HCPtensor{3}{0}&	\HCPtensor{4}{0}&	\HCPtensor{5}{0}&	&\\
+0&	\zt{\Z}{0}&		\HCPtensor{1}{0}&	\HCPtensor{2}{0}&	\HCPtensor{3}{0}&	\HCPtensor{4}{0}&	\HCPtensor{5}{0}&	&\\
+0&	\zt{\Z}{0}&		\HCPtensor{1}{0}&	\HCPtensor{2}{0}&	\HCPtensor{3}{0}&	\HCPtensor{4}{0}&	\HCPtensor{5}{0}&	&\\
+0&	\zt{\Z}{0}&		\HCPtensor{1}{0}&	\HCPtensor{2}{0}&	\HCPtensor{3}{0}&	\HCPtensor{4}{0}&	\HCPtensor{5}{0}&	&\\
+0&	\zt{\Z}{\Z}&	\HCPtensor{1}{\Z}&	\HCPtensor{2}{\Z}&	\HCPtensor{3}{\Z}&	\HCPtensor{4}{\Z}&	\HCPtensor{5}{\Z}&	&\\
+0&	\zt{\Z}{\Z}&	\HCPtensor{1}{\Z}&	\HCPtensor{2}{\Z}&	\HCPtensor{3}{\Z}&	\HCPtensor{4}{\Z}&	\HCPtensor{5}{\Z}&	&\\ \quad\strut
 %
 &	0&	1&	2&	3&	4&	5&	\CP_2& \strut \\};
 %
-\draw[thick] (m-8-1.east) -- (m-1-1.east) ;
-\draw[thick] (m-8-1.north) -- (m-8-9.north) ;
+\draw (m-8-1.east) -- (m-1-1.east) ;
+\draw (m-8-1.north) -- (m-8-9.north) ;
 \end{tikzpicture}
 
 % Simplifying
@@ -106,8 +75,8 @@ S^1& 	&   &  	& 	& 	&	&	&	\\
 %
 &	0&	1&	2&	3&	4&	5&	\CP_2& \strut \\};
 %
-\draw[thick] (m-8-1.east) -- (m-1-1.east) ;
-\draw[thick] (m-8-1.north) -- (m-8-9.north) ;
+\draw (m-8-1.east) -- (m-1-1.east) ;
+\draw (m-8-1.north) -- (m-8-9.north) ;
 \end{tikzpicture}
 
 \begin{tikzpicture}
@@ -127,18 +96,18 @@ S^1& 	&   &  	& 	& 	&	&	&	\\
 %
 &	0&	1&	2&	3&	4&	5&	\CP_2& \strut \\};
 %
-\draw[thick] (m-8-1.east) -- (m-1-1.east) ;
-\draw[thick] (m-8-1.north) -- (m-8-9.north) ;
-\draw[-stealth] (m-6-2.south east) -- (m-7-4.north west);
-\draw[-stealth] (m-6-3.south east) -- (m-7-5.north west);
-\draw[-stealth] (m-6-4.south east) -- (m-7-6.north west);
-\draw[-stealth] (m-6-5.south east) -- (m-7-7.north west);
-\draw[-stealth] (m-6-6.south east) -- (m-7-8.north west);
+\draw (m-8-1.east) -- (m-1-1.east) ;
+\draw (m-8-1.north) -- (m-8-9.north) ;
+\draw[->] (m-6-2.south east) -- (m-7-4.north west);
+\draw[->] (m-6-3.south east) -- (m-7-5.north west);
+\draw[->] (m-6-4.south east) -- (m-7-6.north west);
+\draw[->] (m-6-5.south east) -- (m-7-7.north west);
+\draw[->] (m-6-6.south east) -- (m-7-8.north west);
 
 \end{tikzpicture}
 
 \begin{tikzpicture}
-\draw[step=0.5cm,color=gray] (-1,-1) grid (1,1);
+\draw[lattice grid, step=0.5cm] (-1,-1) grid (1,1);
 \node at (-0.75,+0.75) {A};
 \node at (-0.25,+0.75) {B};
 \node at (+0.25,+0.75) {C};
@@ -156,15 +125,16 @@ S^1& 	&   &  	& 	& 	&	&	&	\\
 };
 
 
-\begin{tikzpicture}[scale=.5,]
-\mygrid[scale=.6]{6}{8} % two extra columns just for demonstration
-
-\foreach\j[count=\i,remember=\i as \x(initially 3)] in{1,...,6}{
-  \filldraw(m-\i-\j)circle[radius=2pt];
-  \filldraw(m-\x-\j)circle[radius=2pt];
-  \filldraw(m-\j-\x)circle[radius=2pt];
-  \filldraw(m-6-4)circle[radius=2pt];
-}
+% 6 x 8 grid of cells, rows and columns numbered from 0; cell (r,c), counted
+% from 1, is centred at (c - 1/2, 1/2 - r). Marked: the diagonal, the cells
+% beside it, and the cells (1,3), (3,1), (6,4).
+\begin{tikzpicture}[x=0.6cm, y=0.6cm]
+\draw[step={(1,1)}] (0,0) grid (8,-6);
+\foreach \r in {0,...,5} \node[left] at (0,-\r-0.5) {$\r$};
+\foreach \c in {0,...,7} \node[above] at (\c+0.5,0) {$\c$};
+\foreach \r/\c in {1/1, 2/2, 3/3, 4/4, 5/5, 6/6, 1/2, 2/3, 3/4, 4/5, 5/6,
+    2/1, 3/2, 4/3, 5/4, 6/5, 1/3, 3/1, 6/4}
+  \node[point] at (\c-0.5,0.5-\r) {};
 \end{tikzpicture}
 
 \begin{tikzcd}

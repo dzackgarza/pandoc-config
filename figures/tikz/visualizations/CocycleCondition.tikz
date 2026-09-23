@@ -1,27 +1,19 @@
-﻿\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+\begin{tikzpicture}[x=0.75pt, y=0.75pt, yscale=-1]
+  % P^3 and the curve C in it
+  \node[draw, circle, minimum size=12cm, inner sep=0pt,
+    label={[scale=2]$\PP^3$}] at (320,150) {};
+  \draw[distinguished curve] (152.5,225) to[curve through={(201,208) (313,135)
+    (350,62) (287,42) (254,76) (251,115)}] (270,135);
+  \draw[distinguished curve] (339.5,151) to[curve through={(452.5,104)}] (503.5,54);
+  \node[scale=2] at (350,180) {$C$};
 
-\node[draw,circle,minimum size=12cm,inner sep=0pt, label={[xshift=-0cm, yshift=-0.0cm, scale=2.0] $\PP^3$ }] at (320,150) {};
-%\draw [red] plot [smooth] coordinates {(-2,-2) (1,1) (0, 2) (-1, 1) (1, -1) (2,2) };
+  % P^1
+  \draw[distinguished curve] (-50,400) -- (-50,100);
+  \draw (-70,400) -- (-30,400);
+  \draw (-70,100) -- (-30,100);
+  \node[scale=2] at (-25,80) {$\PP^1$};
 
-\draw[very thick, blue] (-50,400) -- (-50,100);
-\draw[thick] (-50-20,400) -- (-50+20,400);
-\draw[thick] (-50-20,100) -- (-50+20,100);
-\node[scale=2.0] at (-25, 100-20) {$\PP^1$};
-
-\draw  [color={rgb, 255:red, 0; green, 0; blue, 255 }  ][line width=2] [line join = round][line cap = round] (152.5,225) .. 
-controls (170,225) and (185,215) .. (201,208) .. 
-controls (243,189) and (283,170) .. (313,135) .. 
-controls (326,120) and (355,84) .. (350,62) .. 
-controls (342,34) and (318,33) .. (287,42) ..
-controls (255,65) and (255,72) .. (254,76) .. 
-controls (251,90) and (245,100) .. (251,115) .. 
-controls (253,124) and (264,128) .. (270,135) ;
-\draw  [color={rgb, 255:red, 0; green, 0; blue, 255 }  ][line width=2] [line join = round][line cap = round] (339.5,151) .. controls (382.37,151) and (419.21,130.75) .. (452.5,104) .. controls (467.73,91.76) and (491.83,72.67) .. (503.5,54) ;
-
-
-\draw [thick, right hook-latex ] (-50+20, 200) -- (150, 200);     
-\node[scale=2.0] at (50, 180) {$\iota$}; 
-
-\node[scale=2.0] at (350, 180) {$C$}; 
-
+  % the embedding
+  \draw[map arrow, right hook->] (-30,200) -- (150,200)
+    node[midway, above=8pt, scale=2] {$\iota$};
 \end{tikzpicture}
