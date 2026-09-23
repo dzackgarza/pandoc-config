@@ -26,6 +26,8 @@
 %                    moduli blob, stratum, boundary stratum,
 %                    mirror move=complement|U|U(2)
 %   curves ......... curve component, curve node, dual vertex, genus
+%   spaces, maps ... point, map arrow, distinguished curve, contour, over strand,
+%                    branch cut, glued edge=1|2, complex plane (pgfplots axis)
 % =============================================================================
 
 \usetikzlibrary{arrows.meta, backgrounds, calc, decorations.pathreplacing,
@@ -253,6 +255,39 @@
   dual vertex/.style={circle, fill=black, inner sep=0pt, minimum size=5pt},
   genus/.style={font=\scriptsize, inner sep=1pt},
 }
+
+% -----------------------------------------------------------------------------
+% Spaces, maps and contours (topology and complex-analysis pictures)
+% -----------------------------------------------------------------------------
+\tikzset{
+  % A point of a space: a basepoint, an endpoint, a pole, a point of a fibre.
+  point/.style={circle, fill, inner sep=0pt, minimum size=4pt},
+  % A continuous map between two drawn spaces.
+  map arrow/.style={->, line width=0.8pt},
+  % A curve singled out in a space: a loop, a path, a fibre, a factor circle.
+  distinguished curve/.style={draw=dzg accent, line width=1pt},
+  % An oriented path or integration contour, with arrow tips at the listed fractions
+  % of its length: \draw[contour] ...; \draw[contour={0.2,0.7}] ...;
+  contour/.style={draw, line width=0.8pt, postaction={decorate,
+    decoration={markings, reset marks}, contour mark/.list={#1}}},
+  contour/.default={0.5},
+  contour mark/.style={decoration={mark=at position #1 with {\arrow{>}}}},
+  % A strand passing over the strands drawn before it: a white halo cuts the
+  % strand beneath at each crossing.
+  over strand/.style={preaction={draw=white, line width=4pt, line cap=butt}},
+  % A branch cut of a multivalued function.
+  branch cut/.style={draw=dzg singular, line width=1.4pt},
+  % An edge of a fundamental polygon; the number of arrow tips (1 or 2) names
+  % the class of edges it is glued to.
+  glued edge/.style={glued edge/#1},
+  glued edge/1/.style={draw, line width=1.4pt, -{Stealth[length=3mm]}},
+  glued edge/2/.style={draw, line width=1.4pt,
+    -{Stealth[length=3mm] Stealth[length=3mm]}},
+}
+% pgfplots axis for the complex plane: axes through 0, equal units, small ticks.
+%   \begin{axis}[complex plane, xmin=..., ...]
+\pgfkeys{/pgfplots/complex plane/.style={axis lines=middle, axis equal,
+  disabledatascaling, tick label style={font=\tiny}}}
 
 % -----------------------------------------------------------------------------
 % Named diagrams built from the vocabulary above

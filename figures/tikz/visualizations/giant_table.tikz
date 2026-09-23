@@ -1,19 +1,7 @@
-﻿\begin{tikzpicture}[rotate=-90, scale=0.2]
-\def\n{50}
-\pgfmathparse{\n+1}
-\xdef\nn{\pgfmathresult}
-\foreach \i in {1,...,\n} {
-	\foreach \j in {1,...,\n} {
-		\pgfmathparse{\i+2}
-		\ifthenelse{\j=\pgfmathresult}{
-			\draw[fill=red] (\i-1,\j-1)--(\i,\j-1)--(\i,\j)--(\i-1,\j)--(\i-1,\j-1);
-		}{
-			\ifthenelse{\j=\i}{
-			\draw[fill=blue] (\i-1,\j-1)--(\i,\j-1)--(\i,\j)--(\i-1,\j)--(\i-1,\j-1);
-		}{
-			\draw (\i-1,\j-1)--(\i,\j-1)--(\i,\j)--(\i-1,\j)--(\i-1,\j-1);
-		}	
-		}
-	}
-}
+\begin{tikzpicture}[rotate=-90, scale=0.2]
+  % 50 x 50 table; cell (i,j) is the unit square [i-1,i] x [j-1,j].
+  % The diagonal j = i and the band j = i + 2 are marked.
+  \foreach \i in {1,...,50} \fill[dzg accent] (\i-1,\i-1) rectangle ++(1,1);
+  \foreach \i in {1,...,48} \fill[dzg singular] (\i-1,\i+1) rectangle ++(1,1);
+  \draw (0,0) grid (50,50);
 \end{tikzpicture}

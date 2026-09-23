@@ -1,9 +1,9 @@
-﻿\begin{tikzpicture}[scale=\textwidth/10cm,samples=200]
-\draw (0,0) grid (7,5);
-\foreach \ytick in {1,...,5}
-	\foreach \xtick in {1,...,7}{
-		\pgfmathsetmacro\result{\xtick + 7*(\ytick-1)} 
-		\node at (\xtick - 0.5,6-\ytick-0.5) {\pgfmathprintnumber{\result}}; 
-}
-
+\begin{tikzpicture}[scale=\textwidth/10cm]
+  % a 7 x 5 grid, cells numbered 1..35 row by row from the top left
+  \draw (0,0) grid (7,5);
+  \foreach \row in {1,...,5}
+    \foreach \col in {1,...,7} {
+      \pgfmathtruncatemacro\cell{\col + 7*(\row-1)}
+      \node at (\col-0.5, 5.5-\row) {\cell};
+    }
 \end{tikzpicture}

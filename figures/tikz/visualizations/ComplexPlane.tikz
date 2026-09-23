@@ -1,32 +1,19 @@
-﻿\begin{tikzpicture}
-\pgfplotsset{every x tick label/.append style={font=\tiny, yshift=0.5ex}}
-\pgfplotsset{every y tick label/.append style={font=\tiny, xshift=0.5ex}}
-\begin{axis}[
-    xmin=-6,
-    xmax=6,
-    ymin=-4,
-    ymax=4,
-		xtick = {-1, -3, 3, 1},
-		ytick = {-1, -3, 3, 1},
-    axis equal,
-    axis lines=middle,
-    disabledatascaling]
+\begin{tikzpicture}
+\begin{axis}[complex plane, xmin=-6, xmax=6, ymin=-4, ymax=4,
+    xtick={-3,-1,1,3}, ytick={-3,-1,1,3}, axis on top]
+  % nested regions |z| < 1, |z| < 3, |z| < 5
+  \fill[dzg region] (0,0) circle [radius=5];
+  \fill[dzg highlight] (0,0) circle [radius=3];
+  \fill[dzg accent!40] (0,0) circle [radius=1];
 
-\fill[red] [opacity=0.5] (0,0) circle [radius=1];
-\fill[orange] [opacity=0.2] (0,0) circle [radius=3];
-\fill[cyan] [opacity=0.1] (0,0) circle [radius=5];
+  \draw[->, dzg muted] (axis cs:3,3) -- (axis cs:4,4);
+  \draw[->, dzg muted] (axis cs:-3,3) -- (axis cs:-4,4);
+  \draw[->, dzg muted] (axis cs:3,-3) -- (axis cs:4,-4);
+  \draw[->, dzg muted] (axis cs:-3,-3) -- (axis cs:-4,-4);
 
-\draw[->][cyan][opacity=0.3] (axis cs:3.0, 3.0) -- (axis cs:4, 4);
-\draw[->][cyan][opacity=0.3] (axis cs:-3.0, 3.0) -- (axis cs:-4, 4);
-\draw[->][cyan][opacity=0.3] (axis cs:3.0, -3.0) -- (axis cs:4, -4);
-\draw[->][cyan][opacity=0.3] (axis cs:-3.0, -3.0) -- (axis cs:-4, -4);
-
-\node[font=\tiny] at (axis cs:0,1) [anchor=north west] {Region 1};
-\node[font=\tiny] at (axis cs:1,2) [anchor=north west] {Region 2};
-\node[font=\tiny] at (axis cs:2,3) [anchor=north west] {Region 3};
-
-\node at (axis cs:2.5,5) [anchor=north east] {$\mathbb{C}$};
-
-
+  \node[font=\tiny, anchor=north west] at (axis cs:0,1) {Region 1};
+  \node[font=\tiny, anchor=north west] at (axis cs:1,2) {Region 2};
+  \node[font=\tiny, anchor=north west] at (axis cs:2,3) {Region 3};
+  \node[anchor=north east] at (axis cs:2.5,5) {$\mathbb{C}$};
 \end{axis}
 \end{tikzpicture}

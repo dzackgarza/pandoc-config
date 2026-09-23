@@ -1,54 +1,33 @@
-﻿\begin{tikzpicture}
-    [%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        box/.style={rectangle,draw=black,thick, minimum size=1cm},
-		y=-1cm
-    ]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\def\size{10}
-\foreach \k in {1,2,...,\size}{
-    \foreach \n in {1,2,...,\size} {
-        \node[box, fill = white] at (\k,\n){};
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Stable Range
-		\pgfmathtruncatemacro{\jk}{\k+1}
-		\pgfmathtruncatemacro{\jn}{2*\n}
-		\ifthenelse{\jk < \jn}{\node[box, fill = blue!50] at (\k,\n){};}{}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% k < n
-		\ifthenelse{\k < \n}{\node[box, fill = gray!50] at (\k,\n){};}{}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% k = n
-		\ifthenelse{\k = 1 \AND \n = 1}{\node[box, fill = green!50] at (\k,\n){};}{}
-\ifthenelse{\k = 2 \AND \n = 2}{\node[box, fill = green!50] at (\k,\n){};}{}
-\ifthenelse{\k = 3 \AND \n = 2}{\node[box, fill = green!50] at (\k,\n){};}{}
-\ifthenelse{\k = 3 \AND \n = 3}{\node[box, fill = green!50] at (\k,\n){};}{}
-
-		 \ifthenelse{\k = \n}{\node[box, fill = green!50] at (\k,\n){};}{}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% S^1
-		\ifthenelse{\n = 1 \AND \k > 1}{\node[box, fill = gray!50] at (\k,\n){};}{}
-
-
+\begin{tikzpicture}[y=-1cm]
+  % Cell (k,n) is pi_k(S^n), centred at (k,n). Fills, later ones on top:
+  %   stable range k + 1 < 2n ........ dzg highlight
+  %   k = n, and (k,n) = (3,2) ....... dzg singular!30
+  %   k < n, and n = 1 with k > 1 .... dzg blob
+  \foreach \n in {2,...,10} {
+    \pgfmathtruncatemacro{\kmax}{min(2*\n-2,10)}
+    \foreach \k in {\n,...,\kmax} \fill[dzg highlight] (\k-.5,\n-.5) rectangle ++(1,1);
   }
-}
+  \foreach \k in {1,...,10} \fill[dzg singular!30] (\k-.5,\k-.5) rectangle ++(1,1);
+  \fill[dzg singular!30] (2.5,1.5) rectangle ++(1,1);
+  \foreach \n in {2,...,10} \foreach \k in {1,...,\n} {
+    \ifnum\k<\n \fill[dzg blob] (\k-.5,\n-.5) rectangle ++(1,1); \fi
+  }
+  \foreach \k in {2,...,10} \fill[dzg blob] (\k-.5,.5) rectangle ++(1,1);
+  \draw[shift={(0.5,0.5)}] (0,0) grid (10,10);
 
-\node at (1,0){$k=1$};  
-\node at (-0.25,1){$n=1$}; 
+  % lines of constant k - n
+  \draw[dzg singular, dashed] (2,2) -- (10,10);
+  \draw[dzg singular, dashed] (4,3) -- (10,9);
+  \draw[dzg singular, dashed] (6,4) -- (10,8);
 
-\foreach \t in {2,3,...,\size}{
-\node at (-0.25,\t){\t}; 
-\node at (\t,0){\t};
-}
-\node at (-0.25,\size+1){$\vdots$}; 
-\node at (\size+1,0){$\cdots$};  
-
-\node at (\size/2, -1.5){\Huge $\pi_k(S^n)$};  
-
-\draw[fill=orange, dashed] (2,2) -- (10, 10);
-\draw[fill=orange, dashed] (4, 3) -- (10, 9);
-\draw[fill=orange, dashed] (6,4) -- (10, 8);
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% k < n
-
-
+  % indices
+  \node at (1,0) {$k=1$};
+  \node at (-0.25,1) {$n=1$};
+  \foreach \t in {2,...,10} {
+    \node at (-0.25,\t) {\t};
+    \node at (\t,0) {\t};
+  }
+  \node at (-0.25,11) {$\vdots$};
+  \node at (11,0) {$\cdots$};
+  \node at (5,-1.5) {\Huge $\pi_k(S^n)$};
 \end{tikzpicture}

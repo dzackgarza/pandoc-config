@@ -1,21 +1,15 @@
 \documentclass{standalone}
-\usepackage{tikz}
-\usetikzlibrary{positioning}
+\usepackage{dzg-tikz}
 \begin{document}
-\begin{tikzpicture}[
-roundnode/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=7mm},
-squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size=5mm},
-]
-%Nodes
-\node[squarednode]      (maintopic)                              {2};
-\node[roundnode]        (uppercircle)       [above=of maintopic] {1};
-\node[squarednode]      (rightsquare)       [right=of maintopic] {3};
-\node[roundnode]        (lowercircle)       [below=of maintopic] {4};
- 
-%Lines
-\draw[->] (uppercircle.south) -- (maintopic.north);
-\draw[->] (maintopic.east) -- (rightsquare.west);
-\draw[->] (rightsquare.south) .. controls +(down:7mm) and +(right:7mm) .. (lowercircle.east);
- 
+\begin{tikzpicture}
+  \node[poset node] (maintopic) {2};
+  \node[poset node, circle] (uppercircle) [above=of maintopic] {1};
+  \node[poset node] (rightsquare) [right=of maintopic] {3};
+  \node[poset node, circle] (lowercircle) [below=of maintopic] {4};
+
+  \draw[->] (uppercircle.south) -- (maintopic.north);
+  \draw[->] (maintopic.east) -- (rightsquare.west);
+  \draw[->] (rightsquare.south) to[curve through={($(rightsquare.south)+(-0.3,-0.9)$)}]
+    (lowercircle.east);
 \end{tikzpicture}
 \end{document}

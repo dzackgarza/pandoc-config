@@ -1,12 +1,13 @@
-﻿\begin{tikzpicture}
-\draw [decorate,decoration={brace,amplitude=10pt, mirror},xshift=-4pt,yshift=0pt] (0,0) -- (0,1.2) node [black,midway,xshift=0.8cm] {\footnotesize $M(\mu)$};
-\draw [decorate,decoration={brace,amplitude=10pt},xshift=-4pt,yshift=0pt] (0,-0.25) -- (0,-2) node [black,midway,xshift=0.8cm] {\footnotesize $M(\lambda)$};
-\node at (-1,1) {$L(\mu)$};
-\draw (-1.7, .25) -- (-.2, .25);
+\begin{tikzpicture}
+  % Loewy layers: M(mu) = [L(mu)], M(lambda) = [L(lambda) / L(mu)]
+  \node at (-1,1) {$L(\mu)$};
+  \draw (-1.7,.25) -- (-.2,.25);
+  \node at (-1,-.5) {$L(\lambda)$};
+  \draw (-1.7,-1) -- (-.2,-1);
+  \node at (-1,-1.5) {$L(\mu)$};
 
-\node at (-1,-.5) {$L(\lambda)$};
-\draw (-1.7, -1) -- (-.2, -1);
-
-\node at (-1,-1.5) {$L(\mu)$};
+  \draw[decorate, decoration={brace, amplitude=10pt, mirror}] (-4pt,0) -- (-4pt,1.2)
+    node[midway, right=12pt, font=\footnotesize] {$M(\mu)$};
+  \draw[decorate, decoration={brace, amplitude=10pt}] (-4pt,-0.25) -- (-4pt,-2)
+    node[midway, right=12pt, font=\footnotesize] {$M(\lambda)$};
 \end{tikzpicture}
-
