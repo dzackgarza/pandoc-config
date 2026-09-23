@@ -10,7 +10,7 @@
 % Each pic labels its vertices with its canonical labels. `root labels=<scheme>`
 % switches them; the index is always the canonical vertex name:
 %   alpha  $\alpha_i$  (canonical for the (18,2,0) and (18,0,0) diagrams)
-%   r      $r_i$       (canonical for the Sterk cusp diagrams and k3 F2, k3 F4)
+%   r      $r_i$       (canonical for the Sterk cusp diagrams and k3 F4)
 %   ell    $\ell_i$    the coordinate \ell_i = \lambda\cdot\alpha_i of an
 %                      integral-affine sphere B(\lambda) (IAS figures)
 %   index  $i$         the bare index, for small reproductions
@@ -20,11 +20,14 @@
 % Published names:
 %   vinberg 18 2 0, vinberg 18 0 0   Vinberg diagrams of (18,2,0)_1 and
 %                                    (18,0,0)_1, the 0-cusps of F_{(2,2,0)}
-%   sterk cusp=1..5                  Coxeter diagrams of the 0-cusps eta_1..eta_5
-%                                    of F_{En,2} (Sterk's diagrams I-V)
-%   sterk cusp cover=1..5            the K3 diagram covering sterk cusp=k, with
-%                                    the involution J_k that folds it
-%   k3 F2, k3 F4                     Coxeter diagrams for F_2 and F_4
+%   sterk cusp=1, 3, 4, 5            Coxeter diagrams of the 0-cusps eta_1,
+%                                    eta_3, eta_4, eta_5 of F_{En,2} (Sterk's
+%                                    diagrams I, III-V); the diagram of eta_2
+%                                    (Sterk's II) is vinberg 10 8 0
+%   sterk cusp cover=1..5            the K3 diagram covering the diagram of
+%                                    eta_k, with the involution J_k that folds it
+%   k3 F4                            Coxeter diagram for F_4 (the diagram for
+%                                    F_2 is vinberg 19 1 1)
 %   dynkin folding                   a Dynkin diagram above its folded quotient
 %   root chain                       a linear Coxeter diagram with root norms
 %   \coxeterHthree \coxeterHfour \coxeterGtwo \coxeterGtwoAffine
@@ -122,16 +125,6 @@
   \or\edef\dzg@p{0,\dzg@u}\dzg@square@corner{225}{180}%
   \fi}
 
-% \dzg@trianglepoints{<A>}{<B>}{<C>}{<n>}{<m>}{<p>}: coordinates A, B, C and
-% the subdivision points ab-0..n of AB, bc-0..m of BC, ca-0..p of CA.
-\def\dzg@trianglepoints#1#2#3#4#5#6{%
-  \coordinate (A) at (#1);
-  \coordinate (B) at (#2);
-  \coordinate (C) at (#3);
-  \foreach \dzg@k in {0,...,#4}{\coordinate (ab-\dzg@k) at ($(A)!\dzg@k/#4!(B)$);}
-  \foreach \dzg@k in {0,...,#5}{\coordinate (bc-\dzg@k) at ($(B)!\dzg@k/#5!(C)$);}
-  \foreach \dzg@k in {0,...,#6}{\coordinate (ca-\dzg@k) at ($(C)!\dzg@k/#6!(A)$);}}
-
 % -----------------------------------------------------------------------------
 % Vinberg diagrams of (18,2,0)_1 = U(2) + E_8^2 and (18,0,0)_1 = U + E_8^2,
 % the boundary lattices at the two 0-cusps of F_{(2,2,0)}.
@@ -193,7 +186,12 @@
 %   1: all norm -4. 0..7 a cycle of simple edges; 2 -- 11 and 6 -- 8 simple;
 %      8 -- 9 -- 10 -- 11 bold (inner products 4). 9, 10 have divisibility 2.
 %   2: 8 has norm -2, the rest -4. 0..7 simple chain, 2 -- 9 simple, 7 -- 8
-%      weight 4.
+%      weight 4. This weighted graph is the Vinberg diagram of
+%      eta_2^perp/eta_2 = (10,8,0)_1 (dzg-bb-cusps.tex), so W_2 is the full
+%      reflection group W(U + E_8(2)) and the diagram is `vinberg 10 8 0`:
+%      root i of Sterk_2 is its vertex 1, 3, 4, 5, 6, 7, 8, 9, 10, 2 for
+%      i = 0..9 (networkx isomorphism with marks and weights as colours; the
+%      E~_8 and B~_8 parabolics correspond).
 %   3: 0, 8 have norm -2. 1..7 simple chain, 4 -- 9 simple; 0 -- 1, 0 -- 10,
 %      7 -- 8, 8 -- 11 weight 4; 10 -- 11 bold.
 %   4: 0, 8 have norm -2. 1..7 simple chain, 2 -- 9 and 6 -- 10 simple;
@@ -203,7 +201,9 @@
 %      joined to 8, 10 and 13 to 9, 11 with weight 4; 12 -- 13 bold.
 \tikzset{pics/sterk cusp/.style={/tikz/transform shape, code={%
   \tikzset{transform shape=false}\dzg@canonicallabels{r}%
-  \csname dzg@sterkcusp@#1\endcsname}}}
+  \ifcsname dzg@sterkcusp@#1\endcsname\csname dzg@sterkcusp@#1\endcsname
+  \else\PackageError{dzg}{sterk cusp=#1 is not defined}{The cusps are 1, 3,
+    4, 5; the diagram of cusp 2 is the pic vinberg 10 8 0.}\fi}}}
 
 \@namedef{dzg@sterkcusp@1}{%
   \dzg@vertices{0/black/{0,0}/135, 1/black/{2,0}/90, 2/black/{4,0}/45,
@@ -213,15 +213,6 @@
   \dzg@chain{3}{0}{7}%
   \dzg@edges{3}{(7) -- (0) (2) -- (11) (6) -- (8)}%
   \dzg@edges{infinity}{(8) -- (9) -- (10) -- (11)}}
-
-\@namedef{dzg@sterkcusp@2}{%
-  \dzg@vertices{0/black/{0,0}/270, 1/black/{-1,0}/270, 2/black/{-2,0}/270,
-    3/black/{-1.75,1}/180, 4/black/{-1.5,2}/180, 5/black/{-1.25,3}/180,
-    6/black/{-1,4}/180, 7/black/{-0.75,5}/180, 8/white/{-0.5,6}/90,
-    9/black/{-0.5,1.5}/0}%
-  \dzg@chain{3}{0}{7}%
-  \dzg@edges{3}{(2) -- (9)}%
-  \dzg@edges{4}{(7) -- (8)}}
 
 \@namedef{dzg@sterkcusp@3}{%
   \dzg@vertices{0/white/{0,-1}/180, 1/black/{0,1}/180, 2/black/{0,2}/180,
@@ -254,7 +245,7 @@
   \dzg@edges{infinity}{(12) -- (13)}}
 
 % -----------------------------------------------------------------------------
-% The K3 cusp diagram covering sterk cusp=k, with the involution J_k of
+% The K3 cusp diagram covering the diagram of eta_k, with the involution J_k of
 % (18,2,0)_1 or (18,0,0)_1 whose folding gives it (475-our-cusps.md; the
 % involutions of Sterk.sterk_roots()):
 %   1  rotation by pi of vinberg 18 2 0:          alpha_i <-> alpha_{8+i}
@@ -294,41 +285,9 @@
   \foreach \dzg@k in {1,3,...,15} \node[reflected root] at (\dzg@k) {};}
 
 % -----------------------------------------------------------------------------
-% Coxeter diagrams for the moduli F_2 and F_4 of degree-2 and degree-4 K3
-% surfaces.
+% The Coxeter diagram for the moduli F_4 of degree-4 K3 surfaces. The diagram
+% for F_2 is vinberg 19 1 1 (dzg-vinberg.tex).
 % -----------------------------------------------------------------------------
-\tikzset{pics/k3 F2/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}\dzg@canonicallabels{r}%
-  \dzg@trianglepoints{0,0}{7,0}{3.5,6}{6}{6}{6}%
-  \foreach \dzg@k in {0,...,5}{%
-    \pgfmathtruncatemacro\dzg@j{\dzg@k+6}%
-    \pgfmathtruncatemacro\dzg@l{\dzg@k+12}%
-    \ifnum\dzg@k=0
-      \dzg@vertex{0}{black}{ab-0}{below left}%
-      \dzg@vertex{6}{black}{bc-0}{below right}%
-      \dzg@vertex{12}{black}{ca-0}{above}%
-    \else
-      \dzg@vertex{\dzg@k}{black}{ab-\dzg@k}{below}%
-      \dzg@vertex{\dzg@j}{black}{bc-\dzg@k}{above right}%
-      \dzg@vertex{\dzg@l}{black}{ca-\dzg@k}{above left}%
-    \fi}%
-  \dzg@vertex{18}{black}{$(A)!2.5/10!(9)$}{below right}%
-  \dzg@vertex{21}{black}{$(A)!4.5/10!(9)$}{below right}%
-  \dzg@vertex{19}{black}{$(B)!2.5/10!(15)$}{below left}%
-  \dzg@vertex{22}{black}{$(B)!4.5/10!(15)$}{below left}%
-  \dzg@vertex{20}{black}{$(C)!2.5/10!(3)$}{left}%
-  \dzg@vertex{23}{black}{$(C)!4.5/10!(3)$}{left}%
-  \dzg@chain{3}{0}{17}%
-  \dzg@edges{3}{(17) -- (0) (0) -- (18) (6) -- (19) (12) -- (20)}%
-  \dzg@edges{infinity}{
-    (18) -- node[vertex label, midway, above, sloped] {$\infty$} (21)
-    (21) -- node[vertex label, midway, above, sloped, near end] {$\infty$} (9)
-    (19) -- node[vertex label, midway, above, sloped] {$\infty$} (22)
-    (22) -- node[vertex label, midway, above, sloped, near end] {$\infty$} (15)
-    (20) -- node[vertex label, midway, right] {$\infty$} (23)
-    (23) -- node[vertex label, midway, right, near end] {$\infty$} (3)}%
-  \dzg@edges{dotted}{(21) -- (22) -- (23) -- (21)}}}}
-
 \tikzset{pics/k3 F4/.style={/tikz/transform shape, code={%
   \tikzset{transform shape=false}\dzg@canonicallabels{r}%
   \dzg@squareperimeter{6}{4}{0}{sw}{black}{black}%

@@ -1,42 +1,33 @@
-% The (18,0,0) diagram of the K3 cusp with the involution J_2, its fold to the
-% Enriques diagram of cusp eta_2 (vertex i/j is the orbit {alpha_i, alpha_j}),
-% and the restriction to delta^perp giving the Coble diagram.
+% The (18,0,0)_1 diagram of the K3 cusp with the involution J_2 : alpha_i <->
+% alpha_{20-i} (475-our-cusps.md, cusp eta_2), its fold to the Enriques diagram
+% of eta_2, which is the Vinberg diagram of (10,8,0)_1, and the restriction to
+% delta^perp giving the Coble diagram (9,9,1)_1. A folded vertex is labelled by
+% the J_2-orbit j/i of (18,0,0) vertices it comes from.
 \begin{tikzpicture}
   % Left: the (18,0,0) diagram with its symmetry.
   \pic (K) [root labels=index] {sterk cusp cover=2};
   \node at (3.6, 7.6) {$\bd_{0, 1}\bbcpt{ F_{(2,2,0)} }$};
 
-  % Middle: the folded diagram, the Enriques cusp eta_2.
-  \begin{scope}[shift={(11.5, 0)}]
-    \node at (-1, 7.6) {$\bd_{0, 2}\bbcpt{ \fent }$};
-    \pic (E) [root labels=none] {sterk cusp=2};
-    \foreach \n/\a/\l in {0/270/{18/2}, 1/270/{17/3}, 2/270/{16/4}, 3/180/{15/5},
-        4/180/{14/6}, 5/180/{13/7}, 6/180/{12/8}, 7/180/{11/9}, 8/90/{10}, 9/0/{19/1}}
-      \path (E\n) node[label={[vertex label]\a:$\l$}] {};
-    \scoped[on background layer]
-      \node[marked vertex, label={[text=dzg accent]right:$\delta$}] at (E5) {};
-  \end{scope}
+  % Right, top: the folded diagram, the Enriques cusp eta_2.
+  \pic (E) [root labels=none] at (10, 4.5) {vinberg 10 8 0};
+  \node at (14, 6.6) {$\bd_{0, 2}\bbcpt{ \fent }$};
+  \foreach \v/\l in {1/{18/2}, 3/{17/3}, 4/{16/4}, 5/{15/5}, 6/{14/6},
+                     7/{13/7}, 8/{12/8}, 9/{11/9}, 10/10}
+    \node[vertex label, below] at (E\v.south) {$\l$};
+  \node[vertex label, above] at (E2.north) {$19/1$};
+  \scoped[on background layer]
+    \node[marked vertex, label={[text=dzg accent]above:$\delta$}] at (E7) {};
 
-  % Right: the folded diagram with the vertex delta = 13/7 removed.
-  \begin{scope}[shift={(15, 0)}]
-    \node at (2, 7) {$\bd_{0, 2}\bbcpt{ F_{\Co, 2} }$};
-    \coordinate (f0) at (0, 0);
-    \coordinate (f6) at (4.8, 6.8);
-    \node[vertex=black, label={[vertex label]below:$16/4$}] (c0) at (f0) {};
-    \foreach \i/\l in {1/{15/5}, 2/{14/6}, 4/{12/8}, 5/{11/9}}
-      \node[vertex=black, label={[vertex label]left:$\l$}] (c\i) at ($(f0)!\i/6!(f6)$) {};
-    \node[vertex=white, label={[vertex label]left:$10$}] (c6) at (f6) {};
-    \node[vertex=black, label={[vertex label]below:$17/3$}] (cb1) at (1.55, 0) {};
-    \node[vertex=black, label={[vertex label]below:$18/2$}] (cb2) at (3, 0) {};
-    \node[vertex=black, label={[vertex label]right:$19/1$}] (ci) at (2.15, 1.12) {};
-    \begin{scope}[on edge layer]
-      \draw[coxeter edge=3] (c0.center) -- (c5.center) (cb2.center) -- (c0.center)
-        -- (ci.center);
-      \draw[coxeter edge=4] (c5.center) -- (c6.center);
-    \end{scope}
-  \end{scope}
+  % Right, bottom: the folded diagram restricted to delta^perp, the Coble
+  % diagram (9,9,1)_1.
+  \pic (C) [root labels=none] at (10, 0) {vinberg 9 9 1};
+  \node at (14, 2.1) {$\bd_{0, 2}\bbcpt{ F_{\Co, 2} }$};
+  \foreach \v/\l in {1/{18/2}, 3/{17/3}, 4/{16/4}, 5/{15/5}, 6/{14/6},
+                     7/{12/8}, 8/{11/9}, 9/10}
+    \node[vertex label, below] at (C\v.south) {$\l$};
+  \node[vertex label, above] at (C2.north) {$19/1$};
 
-  \draw[->] (4.5, 7.9) to[bend left=20] node[above] {Fold} (9.5, 7.9);
-  \draw[->] (12, 7.9) to[bend left=20]
-    node[above] {Restrict to $\textcolor{dzg accent}{\delta^\perp}$} (16.5, 7.9);
+  \draw[->] (6, 7.4) to[bend left=20] node[above] {Fold} (9.6, 5.6);
+  \draw[->] (19, 4) to[bend left=20]
+    node[right] {Restrict to $\textcolor{dzg accent}{\delta^\perp}$} (19, 0.6);
 \end{tikzpicture}

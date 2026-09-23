@@ -4,17 +4,12 @@
 % Category: general
 % Index: 7
 
-% The symmetry v of the Vinberg diagram of (18,0,0) and the Sterk diagram of
-% its quotient, with matching parabolic subdiagrams highlighted.
+% The symmetry v of the Vinberg diagram of (18,0,0) and the diagram of its
+% quotient (10,8,0), with matching parabolic subdiagrams 2E~_8 and E~_8.
 \begin{tikzpicture}
   \pic (K) [root labels=none] {sterk cusp cover=2};
-  \scoped[on background layer]
-    \draw[parabolic] (K2.center) -- (K4.center) -- (K1.center) (K4.center) -- (K9.center)
-      (K11.center) -- (K16.center) (K19.center) -- (K16.center) -- (K18.center);
+  \coxeterparabolic[K]{vinberg 18 0 0/2E8}
   \draw[quotient map] (7.8,3) -- node[above] {$v$} (9.2,3);
-  \begin{scope}[shift={(12,0)}]
-    \pic (S) {sterk cusp=2};
-    \scoped[on background layer]
-      \draw[parabolic] (S0.center) -- (S2.center) -- (S9.center) (S2.center) -- (S7.center);
-  \end{scope}
+  \pic (S) at (10,2.5) {vinberg 10 8 0};
+  \coxeterparabolic[S]{vinberg 10 8 0/E8}
 \end{tikzpicture}

@@ -1,6 +1,0 @@
-% The maximal parabolic subdiagram \tilde D_{16} of II_{1,17} = (18,0,0)_1.
-\begin{tikzpicture}
-  \pic[root labels=r] {vinberg 18 0 0};
-  \coxeterparabolic{vinberg 18 0 0/D16}
-  \node at (4.5, 5) {$\tilde D_{16}$};
-\end{tikzpicture}

@@ -1,5 +1,5 @@
 \begin{tikzpicture}
 \pic[root labels=index] {sterk cusp cover=2};
 \draw[quotient map] (7.8,3) -- (9.2,3);
-\pic at (12,0) {sterk cusp=2};
+\pic at (10,2.5) {vinberg 10 8 0};
 \end{tikzpicture}

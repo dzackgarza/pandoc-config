@@ -1,14 +1,7 @@
-\begin{tikzpicture}[scale=1.2]
-\pic[root labels] (r) {k3 F2};
-\scoped[on background layer]
-  \draw[parabolic]
-    (r0.center) -- (r17.center)
-    (r0.center) -- (r6.center)
-    (r6.center) -- (r7.center)
-    (r0.center) -- (r18.center)
-    (r6.center) -- (r19.center)
-    (r15.center) -- (r12.center)
-    (r9.center) -- (r12.center)
-    (r20.center) -- (r12.center);
-\node at (1,5.5) {\Huge $E_7D_{10}$};
+% A maximal parabolic subdiagram of the Coxeter diagram for F_2, the Vinberg
+% diagram of (19,1,1)_1: E~_7 + D~_10.
+\begin{tikzpicture}
+\pic {vinberg 19 1 1};
+\coxeterparabolic{vinberg 19 1 1/E7+D10}
+\node at (-1.5,10) {\Huge $E_7D_{10}$};
 \end{tikzpicture}

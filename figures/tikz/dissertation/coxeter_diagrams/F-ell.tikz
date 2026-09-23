@@ -1,4 +1,0 @@
-% The Coxeter diagram of N^1_{F_ell} = II_{1,17} = (18,0,0)_1 (Vinberg 1972).
-\begin{tikzpicture}
-  \pic[root labels=r] {vinberg 18 0 0};
-\end{tikzpicture}

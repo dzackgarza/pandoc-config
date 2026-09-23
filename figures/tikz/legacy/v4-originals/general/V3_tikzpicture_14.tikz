@@ -4,6 +4,7 @@
 % Category: general
 % Index: 14
 
+% Sterk's diagram II: the Vinberg diagram of (10,8,0)_1.
 \begin{tikzpicture}
-  \pic {sterk cusp=2};
+  \pic {vinberg 10 8 0};
 \end{tikzpicture}

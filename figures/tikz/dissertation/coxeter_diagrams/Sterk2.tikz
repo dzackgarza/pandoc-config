@@ -1,3 +1,5 @@
+% The Coxeter diagram of the 0-cusp eta_2 of F_{En,2} (Sterk's diagram II): the
+% Vinberg diagram of eta_2^perp/eta_2 = (10,8,0)_1.
 \begin{tikzpicture}
-\pic {sterk cusp=2};
+\pic {vinberg 10 8 0};
 \end{tikzpicture}
