@@ -1,104 +1,50 @@
+% The A-infinity operation b_n drawn two ways: as a corolla tree (inputs
+% a_1..a_n on the leaves, output b_n on the root) and as a halfdisk (inputs on
+% the subdivided upper arc, output on the base chord).
 \documentclass[tikz,border=3pt]{standalone}
-
-% Core libraries (subset of preamble that is actually needed)
-\usetikzlibrary{
-    arrows.meta,
-    calc,
-    positioning,
-}
-
-\tikzset{>=Stealth}
-\tikzset{
-    mathnode/.style={rectangle, draw=none, fill=none, inner sep=2pt},
-    labelnode/.style={rectangle, draw=none, fill=none, font=\small, inner sep=1pt},
-}
+\usepackage{dzg-tikz}
 
 \begin{document}
-
-\begin{tikzpicture}[
-    every node/.style={mathnode},
-    dot/.style={circle, fill=black, inner sep=2pt},
-    smalldot/.style={circle, fill=black, inner sep=1.5pt},
-]
-
-% ================================================================
-%  Crop 1: Corolla Tree (planar rooted tree)
-% ================================================================
+\begin{tikzpicture}
+% Corolla tree
 \begin{scope}[shift={(-6,0)}]
-  % --- Caption ---
-  \node[anchor=south, font=\bfseries] at (0,5.5)
-    {$b_n$ as a corolla tree};
+  \node[anchor=south, font=\bfseries] at (0,5.5) {$b_n$ as a corolla tree};
 
-  % --- Central vertex: the operation itself (m_n / b_n) ---
-  \node[dot] (v) at (0,0) {};
-  % Small label identifying the operation vertex
-  \node[above right=1mm of v, font=\small] {$m_n$};
-
-  % --- Input edges: 8 strands fanning upward ---
+  \node[dual vertex, label={[font=\small]above right:$m_n$}] (v) at (0,0) {};
+  % Eight input leaves at angles 160, 140, ..., 20.
   \foreach \i [evaluate={\a=160-(\i-1)*20}] in {1,...,8} {
-    \node[smalldot] (l\i) at (\a:3.5) {};
+    \node[curve node] (l\i) at (\a:3.5) {};
     \draw (v) -- (l\i);
   }
-
-  % --- Input labels ---
-  \node at (160:4.3) {$a_1$};
-  \node at (140:4.3) {$a_2$};
-  \node at (120:4.3) {$a_3$};
-  % Ellipsis for unlabelled intermediate inputs (a_4 through a_{n-1})
+  \foreach \a/\lbl in {160/a_1, 140/a_2, 120/a_3, 20/a_n}
+    \node at (\a:4.3) {$\lbl$};
   \node at (80:4.5) {$\cdots$};
-  \node at (20:4.3) {$a_n$};
 
-  % --- Output edge (descending) ---
-  \node[smalldot] (out) at (0,-2.8) {};
+  \node[curve node, label={below:$b_n$}] (out) at (0,-2.8) {};
   \draw (v) -- (out);
-  \node at (0,-3.6) {$b_n$};
 
-  % --- Annotation: arity-n operation ---
-  \node[anchor=north west, font=\scriptsize, gray, align=left] at (-3, -4)
+  \node[anchor=north west, font=\scriptsize, text=dzg muted, align=left] at (-3,-4)
     {Note: central vertex = operation $m_n$,\\[2pt]
      output $b_n$ at bottom of root edge.};
 \end{scope}
 
-
-% ================================================================
-%  Crop 2: Halfdisk (subdivided upper arc, single base chord)
-% ================================================================
+% Halfdisk
 \begin{scope}[shift={(6,0)}]
-  % --- Caption ---
-  \node[anchor=south, font=\bfseries] at (0,5.5)
-    {$b_n$ as a halfdisk};
+  \node[anchor=south, font=\bfseries] at (0,5.5) {$b_n$ as a halfdisk};
 
-  % --- 10 vertices on the upper semicircle ---
-  \foreach \i [evaluate={\a=180-(\i-1)*20}] in {1,...,10} {
-    \node[smalldot] (p\i) at (\a:3) {};
-  }
-
-  % --- 9 edges along the upper arc ---
-  \foreach \i [evaluate=\i as \next using int(\i+1)] in {1,...,9} {
+  % Ten vertices on the upper semicircle, joined in order by nine edges.
+  \foreach \i [evaluate={\a=180-(\i-1)*20}] in {1,...,10}
+    \node[curve node] (p\i) at (\a:3) {};
+  \foreach \i [evaluate={\next=int(\i+1)}] in {1,...,9}
     \draw (p\i) -- (p\next);
-  }
+  \draw (p1) -- node[below=3mm] {$b_n$} (p10);
 
-  % --- 1 base edge (output) ---
-  \draw[thick] (p1) -- (p10);
+  \foreach \i/\j/\lbl in {1/2/a_1, 2/3/a_2, 3/4/a_3, 5/6/\cdots, 6/7/a_n}
+    \path (p\i) -- node[above=3mm] {$\lbl$} (p\j);
 
-  % --- Labels on upper-arc edges (first three) ---
-  \path (p1) -- (p2) node[midway, above=3mm] {$a_1$};
-  \path (p2) -- (p3) node[midway, above=3mm] {$a_2$};
-  \path (p3) -- (p4) node[midway, above=3mm] {$a_3$};
-
-  % Ellipsis for the remaining upper-arc edges
-  \path (p5) -- (p6) node[midway, above=3mm] {$\cdots$};
-  \path (p6) -- (p7) node[midway, above=3mm] {$a_n$};
-
-  % --- Output label on base edge ---
-  \path (p1) -- (p10) node[midway, below=3mm] {$b_n$};
-
-  % --- Annotation ---
-  \node[anchor=north, font=\scriptsize, gray, align=center] at (0, -4)
+  \node[anchor=north, font=\scriptsize, text=dzg muted, align=center] at (0,-4)
     {10 vertices, 9 upper-arc edges (inputs),\\[2pt]
      1 base edge (output $b_n$).};
 \end{scope}
-
 \end{tikzpicture}
-
 \end{document}
