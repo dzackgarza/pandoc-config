@@ -90,7 +90,7 @@ def render_tikz(filepath: str, output_dir: str, cache: dict, force: bool = False
     return True
 
 def main():
-    output_dir = pathlib.Path("/home/dzack/.pandoc/figures/rendered")
+    output_dir = ROOT / "figures" / "rendered"
     output_dir.mkdir(parents=True, exist_ok=True)
     cache_file = output_dir / ".cache.json"
 
@@ -145,8 +145,8 @@ def main():
 
     if target == "--all":
         tikz_dirs = [
-            pathlib.Path("/home/dzack/.pandoc/figures/tikz"),
-            pathlib.Path("/home/dzack/.pandoc/figures/tikzcd")
+            ROOT / "figures" / "tikz",
+            ROOT / "figures" / "tikzcd"
         ]
 
         success = True
@@ -166,7 +166,7 @@ def main():
     # Single target resolution
     target_path = pathlib.Path(target)
     if not target_path.exists():
-        base_dir = pathlib.Path("/home/dzack/.pandoc/figures")
+        base_dir = ROOT / "figures"
         potential_path = base_dir / target
         if potential_path.exists():
             target_path = potential_path
