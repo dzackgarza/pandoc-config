@@ -1,20 +1,8 @@
-% Mirror moves for the Enriques lattice (10,10,0)_1, with the stages S, T,
-% \bar T, \bar{\bar T} separated into columns.
+% The mirror moves of S_En = (10,10,0)_1, with the stages S, T, \bar T,
+% \bar{\bar T} separated into columns.
 \begin{tikzpicture}
-  \foreach \p/\pos in {1/{(0, 0)}, 2/{(2, 0)}, 3/{(4, 2)}, 4/{(4, -2)},
-                       5/{(6, 0)}, 6/{(6, -2)}}
-    \node[vertex=black] (p\p) at \pos {};
-  \foreach \p/\lat/\where in {3/{(10,10,0)_1}/above, 2/{(12,10,0)_2}/right,
-                              4/{(10,8,0)_1}/below, 5/{(8,8,0)_0}/right,
-                              6/{(8,6,0)_0}/right}
-    \node[font=\scriptsize, \where=0.1cm of p\p] {$\lat$};
-  \foreach \x/\stage in {0/S, 2/T, 4/\bar T, 6/\bar{\bar T}}
-    \node (stage\x) at (\x, 3) {$\stage$};
+  \pic {mirror moves enriques};
   \scoped[on background layer]
     \foreach \x in {1, 3, 5}
       \draw[dzg grid, dashed] (\x, 3.25) -- (\x, -2.6);
-  \draw[mirror move=complement] (p1) -- (p2);
-  \foreach \a/\b/\m in {2/3/U, 2/4/U(2), 3/5/U(2), 4/5/U, 4/6/U(2)}
-    \draw[mirror move=\m] (p\a) -- node[midway, fill=white, circle,
-      font=\scriptsize] {$\m$} (p\b);
 \end{tikzpicture}

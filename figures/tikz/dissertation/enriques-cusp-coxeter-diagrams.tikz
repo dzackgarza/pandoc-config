@@ -1,6 +1,5 @@
+% The Coxeter diagrams at the two 0-cusps of F_En: (10,10,0)_1 and (10,8,0)_1.
 \begin{tikzpicture}[scale=0.8]
-  \input{tikz/coxeter-diagrams/fragments/en-10-10-0.tex}
-  \begin{scope}[shift={(9, 0)}]
-    \input{tikz/coxeter-diagrams/fragments/en-10-8-0.tex}
-  \end{scope}
+  \pic {vinberg 10 10 0};
+  \pic at (9, 0) {vinberg 10 8 0};
 \end{tikzpicture}

@@ -1,7 +1,6 @@
+% The maximal parabolic subdiagram 2\tilde E_8 of II_{1,17} = (18,0,0)_1.
 \begin{tikzpicture}
-\input{raw-F-ell}
-\scoped[on background layer]
-  \draw[parabolic] (r1.center) -- (r3.center) -- (r8.center) (r17.center) -- (r15.center) -- (r10.center)
-    (r3.center) -- (r0.center) (r15.center) -- (r18.center);
-\node at (1,5.5) {\Large $E_8^2$};
+  \pic[root labels=r] {vinberg 18 0 0};
+  \coxeterparabolic{vinberg 18 0 0/2E8}
+  \node at (4.5, 5) {$2\tilde E_8$};
 \end{tikzpicture}

@@ -1,19 +1,5 @@
 % Mirror moves for the Enriques lattice (10,10,0)_1: S to its complement T,
 % then moves of type U and U(2).
 \begin{tikzpicture}
-  \foreach \p/\pos/\lat/\where in {1/{(0, 0)}/{(10,10,0)_1}/above left,
-                                   2/{(2, 0)}/{(12,10,0)_2}/above left,
-                                   3/{(4, 2)}/{(10,10,0)_1}/above left,
-                                   4/{(4, -2)}/{(10,8,0)_1}/below left,
-                                   5/{(6, 0)}/{(8,8,0)_0}/above right,
-                                   6/{(6, -2)}/{(8,6,0)_0}/above right}
-    \node[vertex=white, label={\where:$\lat$}] (p\p) at \pos {};
-  \foreach \x/\stage in {0/S, 2/T, 4/\bar T, 6/\bar{\bar T}}
-    \node at (\x, 3) {$\stage$};
-  \draw[mirror move=complement] (p1) -- (p2);
-  \draw[mirror move=U] (p2) -- node[above left] {$U$} (p3);
-  \draw[mirror move=U(2)] (p2) -- node[below left] {$U(2)$} (p4);
-  \draw[mirror move=U(2)] (p3) -- node[above right] {$U(2)$} (p5);
-  \draw[mirror move=U] (p4) -- node[below right] {$U$} (p5);
-  \draw[mirror move=U(2)] (p4) -- node[below] {$U(2)$} (p6);
+  \pic {mirror moves enriques};
 \end{tikzpicture}

@@ -1,40 +1,4 @@
-% 24-vertex Coxeter diagram: a 16-cycle r_0..r_15 on a square, four corner
-% leaves r_16..r_19, and a central hexagon r_20..r_23 with two weight-infinity
-% edges. Same diagram as the named diagram \kthreeffour in
-% styles/macros/tikz/dzg-diagrams.tex.
+% The Coxeter diagram of the lattice F_4 (canonical diagram k3 F4).
 \begin{tikzpicture}
-  \coordinate (A) at (0, 0);
-  \coordinate (B) at (6, 0);
-  \coordinate (C) at (6, 6);
-  \coordinate (D) at (0, 6);
-  % The 16-cycle: corners r_0, r_4, r_8, r_12 and three vertices per side.
-  \foreach \c/\s/\e/\cl/\sl in {0/A/B/below left/below, 4/B/C/below right/right,
-                                8/C/D/above right/above, 12/D/A/above left/left} {
-    \node[vertex=black, label={\cl:$r_{\c}$}] (r\c) at (\s) {};
-    \foreach \i in {1, 2, 3} {
-      \pgfmathtruncatemacro\k{\c + \i}
-      \node[vertex=black, label={\sl:$r_{\k}$}] (r\k) at ($(\s)!\i/4!(\e)$) {};
-    }
-  }
-  % Corner leaves, one eighth of the way along the diagonals.
-  \foreach \v/\a/\b/\l in {16/r0/r8/below right, 17/r4/r12/below left,
-                           18/r8/r0/above left, 19/r12/r4/above right}
-    \node[vertex=black, label={\l:$r_{\v}$}] (r\v) at ($(\a)!1/8!(\b)$) {};
-  % Central hexagon: thirds of the segments joining midpoints of edges of the
-  % top side to midpoints of edges of the bottom side.
-  \foreach \v/\a/\b/\c/\d/\t/\l in {23/r10/r11/r1/r2/1/above left,
-                                    20/r10/r11/r1/r2/2/below left,
-                                    22/r9/r10/r2/r3/1/above right,
-                                    21/r9/r10/r2/r3/2/below right}
-    \node[vertex=black, label={\l:$r_{\v}$}] (r\v) at
-      ($($(\a)!0.5!(\b)$)!\t/3!($(\c)!0.5!(\d)$)$) {};
-  \begin{scope}[on edge layer]
-    \draw[coxeter edge=3] (r0.center) -- (r4.center) -- (r8.center) -- (r12.center)
-      -- cycle;
-    \foreach \a/\b in {0/16, 4/17, 8/18, 12/19, 16/23, 16/21, 17/20, 17/22,
-                       18/23, 18/21, 19/22, 19/20}
-      \draw[coxeter edge=3] (r\a.center) -- (r\b.center);
-    \draw[coxeter edge=infinity] (r23.center) -- node[right] {$\infty$} (r20.center);
-    \draw[coxeter edge=infinity] (r22.center) -- node[left] {$\infty$} (r21.center);
-  \end{scope}
+  \pic[root labels=r] {k3 F4};
 \end{tikzpicture}

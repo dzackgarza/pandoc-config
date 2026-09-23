@@ -1,11 +1,12 @@
+% The maximal parabolic subdiagrams at the two 0-cusps of F_En.
 \begin{tikzpicture}[scale=0.8]
-  \begin{scope}[shift={(0, -1.25)}]
-    \input{tikz/coxeter-diagrams/fragments/en-10-10-0-E8-2.tex}
-  \end{scope}
-  \begin{scope}[shift={(9, 0)}]
-    \input{tikz/coxeter-diagrams/fragments/en-10-8-0-E8-2.tex}
-  \end{scope}
-  \begin{scope}[shift={(9, -2.5)}]
-    \input{tikz/coxeter-diagrams/fragments/en-10-8-0-B8-2.tex}
-  \end{scope}
+  \pic (A) at (0, -1.25) {vinberg 10 10 0};
+  \coxeterparabolic[A]{vinberg 10 10 0/E8}
+  \node at (6, -0.25) {$\tilde E_8(2) \subset (10, 10, 0)_1$};
+  \pic (B) at (9, 0) {vinberg 10 8 0};
+  \coxeterparabolic[B]{vinberg 10 8 0/E8}
+  \node at (15, 1) {$\tilde E_8(2) \subset (10, 8, 0)_1$};
+  \pic (C) at (9, -2.5) {vinberg 10 8 0};
+  \coxeterparabolic[C]{vinberg 10 8 0/B8}
+  \node at (15, -1.5) {$\tilde B_8(2) \subset (10, 8, 0)_1$};
 \end{tikzpicture}

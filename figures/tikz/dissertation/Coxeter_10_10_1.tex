@@ -1,12 +1,5 @@
-% Unlabelled Coxeter diagram of the 10-vertex Enriques diagram whose last
-% root, of the other square, is joined by a weight-4 edge.
+% The Coxeter diagram of (10,10,1)_1, unlabelled; it is the diagram of
+% (10,8,0)_1.
 \begin{tikzpicture}
-  \foreach \v/\x in {2/-4, 1/-2, 0/0, 4/2, 5/4, 6/6, 7/8, 8/10}
-    \node[vertex=black] (\v) at (\x, 0) {};
-  \node[vertex=black] (3) at (0, 2) {};
-  \node[vertex=white] (9) at (12, 0) {};
-  \begin{scope}[on edge layer]
-    \draw[coxeter edge=3] (2.center) -- (8.center) (3.center) -- (0.center);
-    \draw[coxeter edge=4] (8.center) -- (9.center);
-  \end{scope}
+  \pic[root labels=none] {vinberg 10 10 1};
 \end{tikzpicture}

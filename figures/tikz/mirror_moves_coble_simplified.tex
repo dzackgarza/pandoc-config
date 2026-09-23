@@ -1,11 +1,5 @@
 % Mirror moves for S_Co = (11,11,1)_1: S to its complement T, then two U(2)
 % moves.
 \begin{tikzpicture}
-  \foreach \p/\x/\lat/\stage in {1/0/{(11,11,1)_1}/S, 2/2/{(11,11,1)_2}/T,
-                                 3/4/{(9,9,1)_1}/\bar T, 4/6/{(7,7,1)_0}/\bar{\bar T}}
-    \node[vertex=black, label={[label distance=0.75em]below:$\lat$},
-          label={[label distance=0.75em]above:$\stage$}] (p\p) at (\x, 0) {};
-  \draw[mirror move=complement] (p1) -- (p2);
-  \draw[mirror move=U(2)] (p2) -- node[above] {$U(2)$} (p3);
-  \draw[mirror move=U(2)] (p3) -- node[above] {$U(2)$} (p4);
+  \pic {mirror moves coble};
 \end{tikzpicture}
