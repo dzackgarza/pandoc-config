@@ -1,35 +1,24 @@
-% The (18,0,0) diagram of the K3 cusp, its fold by the diagram symmetry to the
-% Enriques diagram, and the restriction to delta^perp giving the Coble diagram.
+% The (18,0,0) diagram of the K3 cusp with the involution J_2, its fold to the
+% Enriques diagram of cusp eta_2 (vertex i/j is the orbit {alpha_i, alpha_j}),
+% and the restriction to delta^perp giving the Coble diagram.
 \begin{tikzpicture}
   % Left: the (18,0,0) diagram with its symmetry.
-  \input{tikz/coxeter-diagrams/fragments/18-0-0.tex}
-  \node at (2, 7) {$\bd_{0, 1}\bbcpt{ F_{(2,2,0)} }$};
-  \draw[dzg muted, densely dotted] (0, 0) -- (apex);
-  \draw[fold] (-1.45, 2.55) -- (1.45, 2.55);
+  \pic (K) [root labels=index] {sterk cusp cover=2};
+  \node at (3.6, 7.6) {$\bd_{0, 1}\bbcpt{ F_{(2,2,0)} }$};
 
-  % Middle: the folded diagram; vertex i/j is the orbit {i, j}.
-  \begin{scope}[shift={(7, 0)}]
-    \node at (1, 7) {$\bd_{0, 2}\bbcpt{ \fent }$};
-    \coordinate (f0) at (0, 0);
-    \coordinate (f6) at (4.8, 6.8);
-    \node[vertex=black, label={[vertex label]below:$16/4$}] (e0) at (f0) {};
-    \foreach \i/\l in {1/{15/5}, 2/{14/6}, 3/{13/7}, 4/{12/8}, 5/{11/9}}
-      \node[vertex=black, label={[vertex label]left:$\l$}] (e\i) at ($(f0)!\i/6!(f6)$) {};
-    \node[vertex=white, label={[vertex label]left:$10$}] (e6) at (f6) {};
-    \node[vertex=black, label={[vertex label]below:$17/3$}] (eb1) at (1.55, 0) {};
-    \node[vertex=black, label={[vertex label]below:$18/2$}] (eb2) at (3, 0) {};
-    \node[vertex=black, label={[vertex label]right:$19/1$}] (ei) at (2.15, 1.12) {};
+  % Middle: the folded diagram, the Enriques cusp eta_2.
+  \begin{scope}[shift={(11.5, 0)}]
+    \node at (-1, 7.6) {$\bd_{0, 2}\bbcpt{ \fent }$};
+    \pic (E) [root labels=none] {sterk cusp=2};
+    \foreach \n/\a/\l in {0/270/{18/2}, 1/270/{17/3}, 2/270/{16/4}, 3/180/{15/5},
+        4/180/{14/6}, 5/180/{13/7}, 6/180/{12/8}, 7/180/{11/9}, 8/90/{10}, 9/0/{19/1}}
+      \path (E\n) node[label={[vertex label]\a:$\l$}] {};
     \scoped[on background layer]
-      \node[marked vertex, label={[text=dzg accent]right:$\delta$}] at (e3) {};
-    \begin{scope}[on edge layer]
-      \draw[coxeter edge=3] (e0.center) -- (e5.center) (eb2.center) -- (e0.center)
-        -- (ei.center);
-      \draw[coxeter edge=4] (e5.center) -- (e6.center);
-    \end{scope}
+      \node[marked vertex, label={[text=dzg accent]right:$\delta$}] at (E5) {};
   \end{scope}
 
   % Right: the folded diagram with the vertex delta = 13/7 removed.
-  \begin{scope}[shift={(12, 0)}]
+  \begin{scope}[shift={(15, 0)}]
     \node at (2, 7) {$\bd_{0, 2}\bbcpt{ F_{\Co, 2} }$};
     \coordinate (f0) at (0, 0);
     \coordinate (f6) at (4.8, 6.8);
@@ -47,7 +36,7 @@
     \end{scope}
   \end{scope}
 
-  \draw[->] (2.5, 7.5) to[bend left=30] node[above] {Fold} (7, 7.5);
-  \draw[->] (8.5, 7.5) to[bend left=30]
-    node[above] {Restrict to $\textcolor{dzg accent}{\delta^\perp}$} (13.5, 7.5);
+  \draw[->] (4.5, 7.9) to[bend left=20] node[above] {Fold} (9.5, 7.9);
+  \draw[->] (12, 7.9) to[bend left=20]
+    node[above] {Restrict to $\textcolor{dzg accent}{\delta^\perp}$} (16.5, 7.9);
 \end{tikzpicture}

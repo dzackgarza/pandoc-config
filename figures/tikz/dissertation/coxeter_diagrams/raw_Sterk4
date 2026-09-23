@@ -1,9 +1,0 @@
-\foreach \n/\m/\p/\a in {0/white/{0,0}/left, 1/black/{0,2}/left, 2/black/{0,4}/above,
-    3/black/{2,4}/above, 4/black/{4,4}/above, 5/black/{6,4}/above,
-    6/black/{8,4}/above, 7/black/{8,2}/right, 8/white/{8,0}/right,
-    9/black/{2,2}/below left, 10/black/{6,2}/below right}
-  \node[vertex=\m, label={[vertex label]\a:$r_{\n}$}] (\n) at (\p) {};
-\begin{scope}[on edge layer]
-  \draw[coxeter edge=3] (1) -- (2) -- (3) -- (4) -- (5) -- (6) -- (7) (2) -- (9) (6) -- (10);
-  \draw[coxeter edge=4] (0) -- (1) (7) -- (8);
-\end{scope}

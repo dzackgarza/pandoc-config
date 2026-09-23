@@ -4,23 +4,13 @@
 % Category: general
 % Index: 6
 
-% The Vinberg diagram of (18,2,0) with its boundary lines l_1..l_20, and the
-% labels after identifying the orbits of the horizontal reflection h.
+% The Vinberg diagram of (18,2,0) with the coordinates l_i, and the labels
+% after identifying the orbits of the horizontal reflection h.
 \begin{tikzpicture}
-  \pic (L) {vinberg 18 2 0};
-  \foreach \n/\a/\t in {13/225/1, 12/270/2, 11/270/3, 10/270/4, 9/-45/5, 8/0/6,
-      7/0/7, 6/0/8, 5/45/9, 4/90/10, 3/90/11, 2/90/12, 1/135/13,
-      16/180/14, 15/180/15, 14/180/16, 20/100/17, 18/90/18,
-      17/80/19, 19/80/20}
-    \path (L\n) node[label={[vertex label]\a:$\ell_{\t}$}] {};
+  \pic (L) [root labels=ell] {vinberg 18 2 0};
   \begin{scope}[shift={(7,0)}]
-    \pic (R) {vinberg 18 2 0};
-    \foreach \n/\a/\t in {13/225/1, 12/270/2, 11/270/3, 10/270/4, 9/-45/5, 8/0/6,
-        7/0/7, 6/0/6, 5/45/5, 4/90/4, 3/90/3, 2/90/2, 1/135/1,
-        16/180/8, 15/180/9, 14/180/8, 20/100/10, 18/90/9, 17/80/10,
-        19/80/9}
+    \pic (R) [root labels=none] {sterk cusp cover=4};
+    \foreach \n/\a/\t in {0/225/1, 1/270/2, 2/270/3, 3/270/4, 4/315/5, 5/0/6, 6/0/7, 7/0/6, 8/45/5, 9/90/4, 10/90/3, 11/90/2, 12/135/1, 13/180/8, 14/180/9, 15/180/8, 16/180/10, 18/0/9, 19/180/10, 17/0/9}
       \path (R\n) node[label={[vertex label]\a:$\ell_{\t}$}] {};
-    \draw[fold axis] (-0.5,2) -- (4.5,2);
-    \draw[fold] (1.5,1) -- (1.5,3);
   \end{scope}
 \end{tikzpicture}

@@ -1,4 +1,3 @@
-﻿\begin{tikzpicture}
-\node at (0,0) {\dynkin[ply=2,scale=3]{E}{oooooo}};
-\node at (0.08,-.96-1) {\dynkin[scale=3,arrows=false]{F}{**oo}};
+\begin{tikzpicture}
+\pic {dynkin folding={ply=2}{E{oooooo}}{}{F{**oo}}};
 \end{tikzpicture}

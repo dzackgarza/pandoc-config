@@ -4,34 +4,22 @@
 % Category: general
 % Index: 6
 
-% Each symmetry r, d, h of the Vinberg diagram of (18,2,0) (left, faded)
-% and the Sterk diagram of its quotient (right).
+% Each symmetry r, d, h of the Vinberg diagram of (18,2,0) (left) and the
+% Sterk diagram of its quotient (right).
 \begin{tikzpicture}
-  \pic (R) [root labels=index] {vinberg 18 2 0};
-  \foreach \a in {5,185}
-    \draw[fold, ->, opacity=0.2] (2,2) ++(\a:1) arc[start angle=\a, delta angle=170, radius=1];
-  \begin{scope}[shift={(6,0)}, scale=0.68]
-    \draw[quotient map] (-1.9,3) -- node[above] {$\mathrm{r}$} (-0.6,3);
-    \pic (S1) [root labels=prime] {sterk=1};
+  \begin{scope}[shift={(0,0)}]
+    \pic[root labels=index] {sterk cusp cover=1};
+    \draw[quotient map] (4.8,2) -- node[above] {$\mathrm{r}$} (6.2,2);
+    \pic at (7,4) {sterk cusp=1};
   \end{scope}
-
-  \begin{scope}[shift={(0,-6)}]
-    \pic (D) [root labels=index] {vinberg 18 2 0};
-    \draw[fold axis, opacity=0.5] (-0.8,-0.8) -- (4.8,4.8);
-    \draw[fold, opacity=0.3] (1,2) -- (2,1);
+  \begin{scope}[shift={(0,-8)}]
+    \pic[root labels=index] {sterk cusp cover=3};
+    \draw[quotient map] (4.8,2) -- node[above] {$\mathrm{d}$} (6.2,2);
+    \pic at (7,0) {sterk cusp=3};
   \end{scope}
-  \begin{scope}[shift={(6,-6)}, scale=0.68]
-    \pic (S3) [root labels=prime] {sterk=3};
-    \draw[quotient map] (-1.9,3) -- node[above] {$\mathrm{d}$} (-0.6,3);
-  \end{scope}
-
-  \begin{scope}[shift={(0,-12)}]
-    \pic (H) [root labels=index] {vinberg 18 2 0};
-    \draw[fold axis] (-0.5,2) -- (4.5,2);
-    \draw[fold] (1.5,1) -- (1.5,3);
-  \end{scope}
-  \begin{scope}[shift={(6,-12)}, scale=0.68]
-    \pic (S4) [root labels=prime] {sterk=4};
-    \draw[quotient map] (-1.9,3) -- node[above] {$\mathrm{h}$} (-0.6,3);
+  \begin{scope}[shift={(0,-16)}]
+    \pic[root labels=index] {sterk cusp cover=4};
+    \draw[quotient map] (4.8,2) -- node[above] {$\mathrm{h}$} (6.2,2);
+    \pic at (7,0) {sterk cusp=4};
   \end{scope}
 \end{tikzpicture}

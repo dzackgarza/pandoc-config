@@ -1,11 +1,5 @@
 \begin{tikzpicture}
-\begin{scope}[scale=1.2]
-  \input{18_2_0.tikz}
-  \draw[quotient map] ($(r7) + (0.25,0.5)$) -- ($(r7) + (1.75,0.5)$);
-  \foreach \i in {2,4,...,16}
-    \node[reflected root] at (r\i) {};
-\end{scope}
-\begin{scope}[shift={(7,0)}, scale=1.2]
-  \input{raw_Sterk5}
-\end{scope}
+\pic[root labels=index] {sterk cusp cover=5};
+\draw[quotient map] (4.6,2) -- (6,2);
+\pic at (6.8,4) {sterk cusp=5};
 \end{tikzpicture}

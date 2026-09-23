@@ -1,11 +1,11 @@
 \begin{tikzpicture}
-\input{18_2_0.tikz}
-\node[above=of r11] {\Large $D_{12}D_4$};
+\pic (r) {vinberg 18 2 0};
+\node[above=of r10] {\Large $D_{12}D_4$};
 \scoped[on background layer]
   \draw[parabolic]
-    (r12.center) -- (r13.center) -- (r1.center) -- (r5.center) -- (r6.center)
-    (r13.center) -- (r19.center)
-    (r5.center) -- (r20.center)
-    (r10.center) -- (r9.center) -- (r8.center)
-    (r9.center) -- (r18.center) -- (r21.center);
+    (r11.center) -- (r12.center) -- (r0.center) -- (r4.center) -- (r5.center)
+    (r12.center) -- (r19.center)
+    (r4.center) -- (r17.center)
+    (r9.center) -- (r8.center) -- (r7.center)
+    (r8.center) -- (r18.center) -- (r20.center);
 \end{tikzpicture}

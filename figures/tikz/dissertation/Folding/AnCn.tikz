@@ -1,4 +1,3 @@
-﻿\begin{tikzpicture}
-\node at (0,0) {\dynkin[ply=2,scale=3]{A}{ooo.ooooooo.ooo}};
-\node at (0.08,-.96-1) {\dynkin[scale=3,arrows=false]{C}{ooo.ooo*}};
+\begin{tikzpicture}
+\pic {dynkin folding={ply=2}{A{ooo.ooooooo.ooo}}{}{C{ooo.ooo*}}};
 \end{tikzpicture}

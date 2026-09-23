@@ -1,9 +1,5 @@
 \begin{tikzpicture}
-\input{18_0_0.tikz}
-\draw[fold, ->] ($(r6)!2/10!(r12)$) to[bend left=90] ($(r6)!8/10!(r12)$);
-\draw[fold axis] ($(r9) + (0,0.25)$) -- ($(r1)!1/2!(r17) + (0,-0.65)$);
-\draw[quotient map] ($(r11) + (1,0.5)$) -- ($(r11) + (4,0.5)$);
-\begin{scope}[shift={(8,0)}]
-  \input{raw_Sterk2}
-\end{scope}
+\pic[root labels=index] {sterk cusp cover=2};
+\draw[quotient map] (7.8,3) -- (9.2,3);
+\pic at (12,0) {sterk cusp=2};
 \end{tikzpicture}

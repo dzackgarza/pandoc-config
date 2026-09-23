@@ -6,7 +6,5 @@
 
 \begin{tikzpicture}
   \pic[root labels=index] {vinberg 18 2 0};
-  \begin{scope}[shift={(6,0)}, x={(1,0)}, y={(60:1)}]
-    \pic {vinberg 18 0 0};
-  \end{scope}
+  \pic[root labels=none] at (6,0) {vinberg 18 0 0};
 \end{tikzpicture}

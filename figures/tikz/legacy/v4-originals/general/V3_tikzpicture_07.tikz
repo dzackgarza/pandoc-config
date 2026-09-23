@@ -6,18 +6,15 @@
 
 % The symmetry v of the Vinberg diagram of (18,0,0) and the Sterk diagram of
 % its quotient, with matching parabolic subdiagrams highlighted.
-\begin{tikzpicture}[x={(1,0)}, y={(60:1)}]
-  \pic {vinberg 18 0 0};
-  \draw[fold axis, opacity=0.5] (3.5,-1) -- (-0.5,7);
-  \draw[fold, opacity=0.3] (1.25,2) -- (2.75,2);
+\begin{tikzpicture}
+  \pic (K) [root labels=none] {sterk cusp cover=2};
   \scoped[on background layer]
-    \draw[parabolic] (2,0) -- (0,0) -- (1,1)  (0,0) -- (0,5)  (1,5) -- (6,0)
-      (4,1) -- (6,0) -- (4,0);
-
-  \begin{scope}[shift={(8,0)}]
-    \draw[quotient map] (-3.7,4) -- node[above] {$v$} (-2.3,4);
-    \pic[root labels=prime] {sterk=2};
+    \draw[parabolic] (K2.center) -- (K4.center) -- (K1.center) (K4.center) -- (K9.center)
+      (K11.center) -- (K16.center) (K19.center) -- (K16.center) -- (K18.center);
+  \draw[quotient map] (7.8,3) -- node[above] {$v$} (9.2,3);
+  \begin{scope}[shift={(12,0)}]
+    \pic (S) {sterk cusp=2};
     \scoped[on background layer]
-      \draw[parabolic] (2,0) -- (0,0) -- (1,1)  (0,0) -- (0,5);
+      \draw[parabolic] (S0.center) -- (S2.center) -- (S9.center) (S2.center) -- (S7.center);
   \end{scope}
 \end{tikzpicture}
