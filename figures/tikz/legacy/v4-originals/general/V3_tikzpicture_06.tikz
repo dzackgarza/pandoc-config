@@ -11,7 +11,7 @@
   \foreach \a in {5,185}
     \draw[fold, ->, opacity=0.2] (2,2) ++(\a:1) arc[start angle=\a, delta angle=170, radius=1];
   \begin{scope}[shift={(6,0)}, scale=0.68]
-    \node at (-1.5,3) {$\xlongrightarrow{\mathrm{r}}$};
+    \draw[quotient map] (-1.9,3) -- node[above] {$\mathrm{r}$} (-0.6,3);
     \pic (S1) [root labels=prime] {sterk=1};
   \end{scope}
 
@@ -22,7 +22,7 @@
   \end{scope}
   \begin{scope}[shift={(6,-6)}, scale=0.68]
     \pic (S3) [root labels=prime] {sterk=3};
-    \node at (-1.5,3) {$\xlongrightarrow{\mathrm{d}}$};
+    \draw[quotient map] (-1.9,3) -- node[above] {$\mathrm{d}$} (-0.6,3);
   \end{scope}
 
   \begin{scope}[shift={(0,-12)}]
@@ -32,6 +32,6 @@
   \end{scope}
   \begin{scope}[shift={(6,-12)}, scale=0.68]
     \pic (S4) [root labels=prime] {sterk=4};
-    \node at (-1.5,3) {$\xlongrightarrow{\mathrm{h}}$};
+    \draw[quotient map] (-1.9,3) -- node[above] {$\mathrm{h}$} (-0.6,3);
   \end{scope}
 \end{tikzpicture}

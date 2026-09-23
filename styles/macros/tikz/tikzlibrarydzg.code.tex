@@ -12,8 +12,7 @@
 % Families:
 %   colours ........ dzg accent, dzg singular, dzg highlight, dzg region, ...
 %   Coxeter ........ vertex=white|black|doubled, coxeter edge=3|4|5|6|infinity|
-%                    dotted, coxeter edge label, parabolic, vertex label,
-%                    fold, fold axis
+%                    dotted, coxeter edge label, parabolic, vertex label
 %   Baily-Borel .... cusp0, cusp1, incidence, cusp brace
 %   IAS / Kulikov .. ias region, ias boundary, ias singularity, ias surgery,
 %                    fan ray, kulikov component, double curve
@@ -113,8 +112,6 @@
     line join=round},
   % A fold of a diagram onto its quotient.
   fold/.style={dzg singular, dashed, line width=1pt, <->},
-  % The fixed line of a reflection symmetry of a diagram.
-  fold axis/.style={draw=dzg singular, dotted, line width=0.8pt},
 }
 
 % -----------------------------------------------------------------------------
