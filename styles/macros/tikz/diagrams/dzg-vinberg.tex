@@ -12,6 +12,7 @@
 %
 % Published names:
 %   coxeter E=<n>        E_n in Bourbaki numbering, white (the root lattice E_n)
+%   coxeter A=<n>        A_n, the chain 1..n, white (the root lattice A_n)
 %   vinberg 10 10 0      (10,10,0)_1 = E_10(2)
 %   vinberg 10 8 0       (10,8,0)_1 = U + E_8(2). Also the Vinberg diagram of
 %                        (10,10,1)_1 = U(2) + A_1^8, and the Coxeter diagram
@@ -76,6 +77,13 @@
 \dzg@vinbergpic{vinberg 8 8 1}{\dzg@Echainwhite{8}}
 \tikzset{pics/coxeter E/.style={/tikz/transform shape, code={%
   \tikzset{transform shape=false}\dzg@canonicallabels{index}\dzg@Echain{#1}{white}}}}
+% A_n: the chain 1..n on the x-axis, white (the root lattice A_n).
+\tikzset{pics/coxeter A/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\dzg@canonicallabels{index}%
+  \foreach \dzg@k in {1,...,#1}{%
+    \pgfmathtruncatemacro\dzg@x{\dzg@k-1}%
+    \dzg@vertex{\dzg@k}{white}{\dzg@x,0}{below}}%
+  \ifnum#1>1 \dzg@chain{3}{1}{#1}\fi}}}
 
 % -----------------------------------------------------------------------------
 % Maximal parabolic subdiagrams
