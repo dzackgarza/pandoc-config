@@ -22,11 +22,26 @@
 %   grade distance=<length>  the distance per unit of grade
 %   element width, element height   the box every element's content fits in
 %   element sep=<length>     the least gap between two boxes of one grade
+%   element positions=dot|even
+%                            dot's coordinates (default: covers as vertical as
+%                            dot can make them, rows with gaps; best for
+%                            sparse or irregular posets), or dot's
+%                            order within each grade, evenly spaced and
+%                            centred (compact rows; best when every grade is
+%                            a full row, as in Boolean and face lattices, and
+%                            too steep for sparse posets such as Tamari)
 %   element style=<style>    added to each element node (default none)
 %   element labels=true|false   the JSON labels in the boxes (default true)
+%   element layer=<layer>    the layer of the element nodes (default main;
+%                            background puts filled cells under content
+%                            that draws on the background layer)
+%   cover layer=<layer>      the layer of the covers (default edges)
 %   cover style=<style>      each cover, drawn from the larger element to
 %                            the smaller (default poset cover; degeneration
 %                            for strata posets, AGENTS.md rule 3)
+%   cover direction=down|up  covers drawn from the larger element to the
+%                            smaller (default), or from the smaller to the
+%                            larger
 % Other keys apply to the scope holding the diagram.
 % LuaLaTeX with --shell-escape only: the layout runs Graphviz dot.
 
@@ -38,6 +53,10 @@
 \def\poset@sep{3mm}
 \def\poset@element{}
 \def\poset@cover{poset cover}
+\def\poset@direction{down}
+\def\poset@layer{main}
+\def\poset@coverlayer{edges}
+\def\poset@positions{dot}
 \newif\ifposet@labels \poset@labelstrue
 \tikzset{
   poset grading/.store in=\poset@grading,
@@ -48,6 +67,10 @@
   element sep/.store in=\poset@sep,
   element style/.store in=\poset@element,
   cover style/.store in=\poset@cover,
+  cover direction/.store in=\poset@direction,
+  element layer/.store in=\poset@layer,
+  cover layer/.store in=\poset@coverlayer,
+  element positions/.store in=\poset@positions,
   element labels/.is if=poset@labels,
   poset element/.style={shape=rectangle, inner sep=0pt,
     minimum width=\posetelementwidth, minimum height=\posetelementheight},
@@ -57,7 +80,11 @@
   \directlua{dzgposet = require("dzg-poset")}
   \newcommand\posetfromjson[2][]{%
     \begingroup
+    % Read the settings; the transformations among #1 apply once, in the
+    % scope the layout emits.
+    \pgfgettransform\poset@transform
     \tikzset{#1}%
+    \pgfsettransform\poset@transform
     \pgfmathsetmacro\poset@w{(\posetelementwidth)/1cm}%
     \pgfmathsetmacro\poset@h{(\posetelementheight)/1cm}%
     \pgfmathsetmacro\poset@s{(\poset@sep)/1cm}%
@@ -69,6 +96,10 @@
       element = "\luaescapestring{\unexpanded\expandafter{\poset@element}}",
       cover = "\luaescapestring{\unexpanded\expandafter{\poset@cover}}",
       labels = \ifposet@labels true\else false\fi,
+      direction = "\luaescapestring{\poset@direction}",
+      layer = "\luaescapestring{\poset@layer}",
+      cover_layer = "\luaescapestring{\poset@coverlayer}",
+      positions = "\luaescapestring{\poset@positions}",
       width = \poset@w, height = \poset@h, sep = \poset@s, distance = \poset@d}}%
     \endgroup}
 \else

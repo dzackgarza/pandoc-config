@@ -37,4 +37,12 @@
   \draw[fold] (G-24) -- (G-3);
 \end{tikzpicture}
 
+\section*{Per-element styles, even positions, layers and upward covers}
+\begin{tikzpicture}
+  \posetfromjson[name prefix=B-, element positions=even, element width=8mm,
+    element height=5mm, element sep=1mm, grade distance=9mm,
+    element layer=Dynkin behind, cover layer=background, element labels=false,
+    cover style=degeneration, cover direction=up]{objects/posets/subdiagrams-C-L.json}
+\end{tikzpicture}
+
 \end{document}

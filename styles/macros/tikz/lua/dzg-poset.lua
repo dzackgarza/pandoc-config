@@ -5,9 +5,11 @@
 -- each element to the elements covering it (Sage:
 --   networkx.node_link_data(G) for the DiGraph of P.cover_relations()):
 --   { "nodes": [ { "id": <id>, "name": <TikZ name>, "label": <TeX>,
+--                  "style": <TikZ keys>,
 --                  "grade": <int or "p/q"> }, ... ],
 --     "links": [ { "source": <x>, "target": <y> }, ... ] }   -- x < y a cover
 -- ("edges" is accepted for "links", as networkx >= 3.4 writes it). "name",
+-- "style" (added to the element's node, e.g. the type of a subdiagram),
 -- "label" and "grade" are optional; the node is named by "name", else by
 -- "id"; a grade is on every element or on none.
 --
@@ -170,7 +172,11 @@ end
 -- keys of the scope around the diagram), grading, the lengths width,
 -- height, sep, distance in cm, axis (vertical: grades bottom to top;
 -- horizontal: grades right to left, the top element leftmost), element and
--- cover (the styles of the element nodes and the cover paths), labels (the
+-- cover (the styles of the element nodes and the cover paths), direction
+-- (down: covers drawn from the larger element to the smaller; up: the
+-- reverse), positions (dot: dot's coordinates; even: dot's order within each
+-- grade, evenly spaced), layer and cover_layer (the layers of the element nodes and of
+-- the covers), labels (the
 -- JSON labels in the boxes, or empty boxes). Elements are
 -- keyed n1, n2, ... internally (dot needs no quoting); the TikZ node of an
 -- element is named by its "name", else its "id", which must then be a TikZ
@@ -186,11 +192,13 @@ function poset.emit(s)
     "dzg.poset: poset axis is vertical or horizontal, not `" .. s.axis .. "'")
 
   local keys, key_of, names, labels, given, up, down, covers = {}, {}, {}, {}, {}, {}, {}, {}
+  local styles = {}
   for k, node in ipairs(data.nodes) do
     local key = "n" .. k
     key_of[tostring(node.id)] = key
     keys[#keys + 1], labels[key], up[key], down[key] = key, node.label or "", {}, {}
     names[key] = tostring(node.name or node.id)
+    styles[key] = node.style or ""
     assert(names[key]:match("^[%w_%-]+$"), "dzg.poset: `" .. names[key]
       .. "' is not a TikZ node name; give the element a \"name\"")
     if node.grade ~= nil then given[key] = parse_grade(node.grade) end
@@ -226,20 +234,46 @@ function poset.emit(s)
   for _, key in ipairs(keys) do layer[key] = layer_of[h[key]] end
 
   local x = run_dot(keys, covers, layer, across, along, s.sep)
+  -- `element positions=even`: keep dot's order within each grade, which
+  -- carries its crossing reduction, and space the grade evenly about 0.
+  if s.positions == "even" then
+    local by_layer = {}
+    for _, key in ipairs(keys) do
+      by_layer[layer[key]] = by_layer[layer[key]] or {}
+      table.insert(by_layer[layer[key]], key)
+    end
+    for _, members in pairs(by_layer) do
+      table.sort(members, function(a, b) return x[a] < x[b] end)
+      for i, key in ipairs(members) do
+        x[key] = (i - (#members + 1) / 2) * (across + s.sep)
+      end
+    end
+  else
+    assert(s.positions == "dot", "dzg.poset: element positions is dot or even, not `"
+      .. s.positions .. "'")
+  end
+  -- Centre the layout across the grades on 0, so that figures can align
+  -- several layouts; the top element is at grade coordinate 0.
+  local low, high = math.huge, -math.huge
+  for _, key in ipairs(keys) do low, high = math.min(low, x[key]), math.max(high, x[key]) end
+  for _, key in ipairs(keys) do x[key] = x[key] - (low + high) / 2 end
   local top = values[1]
-  local out, list = { "\\begin{scope}[" .. s.options .. "]" }, {}
+  local out, list = { "\\begin{scope}[" .. s.options .. "]",
+    "\\begin{pgfonlayer}{" .. s.layer .. "}" }, {}
   for _, key in ipairs(keys) do
     list[#list + 1] = names[key]
     local a, b = x[key], (h[key] - top) * s.distance
     if s.axis == "horizontal" then a, b = -b, -a end
-    out[#out + 1] = string.format("\\node[poset element, %s] (%s) at (%.4fcm,%.4fcm) {%s};",
-      s.element, names[key], a, b, s.labels and labels[key] or "")
+    out[#out + 1] = string.format("\\node[poset element, %s, %s] (%s) at (%.4fcm,%.4fcm) {%s};",
+      s.element, styles[key], names[key], a, b, s.labels and labels[key] or "")
   end
-  out[#out + 1] = "\\begin{scope}[on edge layer]"
+  out[#out + 1] = "\\end{pgfonlayer}\\begin{pgfonlayer}{" .. s.cover_layer .. "}"
   for _, c in ipairs(covers) do
-    out[#out + 1] = string.format("\\draw[%s] (%s) -- (%s);", s.cover, names[c[2]], names[c[1]])
+    local from, to = names[c[2]], names[c[1]]
+    if s.direction == "up" then from, to = to, from end
+    out[#out + 1] = string.format("\\draw[%s] (%s) -- (%s);", s.cover, from, to)
   end
-  out[#out + 1] = "\\end{scope}\\end{scope}"
+  out[#out + 1] = "\\end{pgfonlayer}\\end{scope}"
   tex.sprint("\\gdef\\posetelements{" .. table.concat(list, ",") .. "}")
   tex.sprint(table.concat(out, " "))
 end

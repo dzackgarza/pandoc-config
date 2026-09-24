@@ -1,60 +1,40 @@
-% Compactifications of F_T over the Baily-Borel compactification. Inside each
+% Compactifications of F_T over the Baily-Borel compactification: the
+% semitoroidal and toroidal posets of objects/posets/compactifications-over-BB
+% (semitoroidal.json, toroidal.json), laid out by \posetfromjson. Inside each
 % sub-poset the arrows point from the generic member to the more degenerate
 % one; thick arrows are morphisms of compactifications.
 \begin{tikzpicture}[font=\small]
   % Strictly non-toroidal semitoroidal compactifications.
-  \begin{scope}[nodes={poset node, dashed, minimum width=2.7cm, minimum height=0.9cm}]
-    \node (SemiTop) at (0,10)    {$\semitorcpt{F_T}$};
-    \node (SemiL2)  at (-4.5,8.3) {$\semifancpt{F_T}{\mcf_\bullet^{1,2}}$};
-    \node (SemiR3)  at (0,8.3)   {$\semifancpt{F_T}{\mcf_\bullet^{2,3}}$};
-    \node (SemiR4)  at (4,8.3)   {$\semifancpt{F_T}{\mcf_\bullet^{3,4}}$};
-    \node (SemiL1)  at (-6,6.7)  {$\semifancpt{F_T}{\mcf_\bullet^1}$};
-    \node (SemiM1)  at (-2,6.7)  {$\semifancpt{F_T}{\mcf_\bullet^2}$};
-    \node (SemiR1)  at (2,6.7)   {$\semifancpt{F_T}{\mcf_\bullet^3}$};
-    \node (SemiR2)  at (6,6.7)   {$\semifancpt{F_T}{\mcf_\bullet^4}$};
-  \end{scope}
+  \posetfromjson[name prefix=S-, yshift=10cm, grade distance=1.65cm,
+    element width=2.7cm, element height=0.9cm, element sep=1.3cm,
+    element style={poset node, dashed}, cover style=degeneration,
+    cover direction=up]{objects/posets/semitoroidal.json}
   % Toroidal compactifications; the Coxeter fan is highlighted.
-  \begin{scope}[nodes={poset node, minimum width=2.7cm, minimum height=0.9cm}]
-    \node (TorTop) at (0,5)     {$\torcpt{F_T}$};
-    \node (Tor12)  at (-2,3.5)  {$\semifancpt{F_T}{\Sigma_\bullet^{1,2}}$};
-    \node (Tor23)  at (2,3.5)   {$\semifancpt{F_T}{\Sigma_\bullet^{2,3}}$};
-    \node (Tor1)   at (-4.5,2)  {$\semifancpt{F_T}{\Sigma_\bullet^1}$};
-    \node[fill=dzg highlight] (Tor2) at (0,2) {$\semifancpt{F_T}{\Sigma_\Cox}$};
-    \node (Tor3)   at (4.5,2)   {$\semifancpt{F_T}{\Sigma_\bullet^3}$};
-    \node[minimum width=1.6cm] (GIT)  at (-5,0) {$\gitcpt{\mcm}$};
-    \node[minimum width=1.6cm] (KSBA) at (5,0)  {$\ksbacpt{\mcm}$};
-    \node[minimum width=3.8cm] (BB)   at (0,-2) {$\bbcpt{F_T}$};
-  \end{scope}
+  \posetfromjson[name prefix=T-, yshift=5cm, grade distance=1.5cm,
+    element width=2.7cm, element height=0.9cm, element sep=1.8cm,
+    element style=poset node, cover style=degeneration,
+    cover direction=up]{objects/posets/toroidal.json}
+  \node[poset node, minimum width=3.8cm, minimum height=0.9cm] (BB)
+    at ([yshift=-4cm]T-2) {$\bbcpt{F_T}$};
+  \node[poset node, minimum width=1.6cm, minimum height=0.9cm] (GIT)
+    at ([xshift=-5cm, yshift=2cm]BB) {$\gitcpt{\mcm}$};
+  \node[poset node, minimum width=1.6cm, minimum height=0.9cm] (KSBA)
+    at ([xshift=5cm, yshift=2cm]BB) {$\ksbacpt{\mcm}$};
 
-  \graph[use existing nodes, edges={degeneration}] {
-    {SemiL1, SemiM1} -> SemiL2;
-    {SemiM1, SemiR1} -> SemiR3;
-    {SemiR1, SemiR2} -> SemiR4;
-    {SemiL2, SemiR3, SemiR4} -> SemiTop;
-    {Tor1, Tor2} -> Tor12;
-    {Tor2, Tor3} -> Tor23;
-    {Tor12, Tor23} -> TorTop;
-  };
-  \graph[use existing nodes, edges={morphism}] {
-    SemiL1 -> Tor1;
-    SemiM1 -> Tor12;
-    SemiR1 -> Tor23;
-    SemiR2 -> Tor3;
-    SemiL2 -> [bend right=15] Tor12;
-    SemiR3 -> TorTop;
-    SemiR4 -> [bend left=15] Tor23;
-    {Tor1, Tor2, Tor3} -> BB;
-    GIT -> [bend right=15] BB;
-    KSBA -> [bend left=15] BB;
-  };
+  \foreach \a/\b in {S-1/T-1, S-2/T-12, S-3/T-23, S-4/T-3, S-23/T-top,
+      T-1/BB, T-2/BB, T-3/BB}
+    \draw[morphism] (\a) -- (\b);
+  \draw[morphism] (S-12) to[bend right=15] (T-12);
+  \draw[morphism] (S-34) to[bend left=15] (T-23);
+  \draw[morphism] (GIT) to[bend right=15] (BB);
+  \draw[morphism] (KSBA) to[bend left=15] (BB);
 
   \begin{scope}[on background layer]
     \node[poset group, fill=dzg blob, inner sep=24pt,
-          fit=(SemiTop)(SemiL1)(SemiR2)(Tor1)(Tor3)] (SemiBox) {};
-    \node[poset group, fit=(Tor1)(Tor2)(Tor3)(Tor12)(Tor23)(TorTop)] (TorBox) {};
+          fit=(S-top)(S-1)(S-4)(T-1)(T-3)] (SemiBox) {};
+    \node[poset group, fit=(T-1)(T-2)(T-3)(T-12)(T-23)(T-top)] (TorBox) {};
     \node[poset group, fill=dzg highlight!40,
-          fit=(SemiL1)(SemiM1)(SemiR1)(SemiR2)(SemiL2)(SemiR3)(SemiR4)(SemiTop)]
-      (NonTorBox) {};
+          fit=(S-1)(S-2)(S-3)(S-4)(S-12)(S-23)(S-34)(S-top)] (NonTorBox) {};
   \end{scope}
   \begin{scope}[nodes={font=\scriptsize, inner sep=4pt}]
     \node[anchor=north west] at (SemiBox.north west) {Semitoroidal Compactifications};

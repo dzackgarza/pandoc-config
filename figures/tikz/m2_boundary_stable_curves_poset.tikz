@@ -8,7 +8,7 @@
     element labels=false, cover style=degeneration]{objects/moduli/m2-strata.json}
   \foreach \e in \posetelements \pic at (C-\e) {object=moduli/m2-curve-\e};
   \coordinate (separator) at ([yshift=-3mm]current bounding box.south);
-  \posetfromjson[name prefix=G-, yshift=-2.8cm, poset axis=horizontal,
+  \posetfromjson[name prefix=G-, yshift=-5.4cm, poset axis=horizontal,
     grade distance=4.6cm, element width=2.4cm, element height=1.2cm,
     element sep=1.5cm, element labels=false,
     cover style=degeneration]{objects/moduli/m2-strata.json}

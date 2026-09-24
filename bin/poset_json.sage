@@ -9,21 +9,26 @@
 #   their own content at every element).
 # name(x): the TikZ node name of x (default: e<k>, k the index of x in P);
 #   letters, digits, - and _ only.
+# style(x): TikZ keys added to x's node (default: none), e.g. its type.
+# order: a sort key for the elements; dot starts from this order within each
+#   grade, so a figure can fix left to right (default: the order of P).
 # graded: write P.rank_function() as each element's grade (default: when P
 #   is graded); otherwise the layout computes a grading.
 import json
 import networkx as nx
 
 
-def poset_json(P, path, label=None, name=None, graded=None):
+def poset_json(P, path, label=None, name=None, graded=None, style=None, order=None):
     index = {x: k for k, x in enumerate(P)}
     name = name or (lambda x: "e%d" % index[x])
     if graded is None:
         graded = P.is_graded()
     rank = P.rank_function() if graded else None
     G = nx.DiGraph()
-    for x in P:
+    for x in (sorted(P, key=order) if order else P):
         data = {"label": label(x) if label else ""}
+        if style:
+            data["style"] = style(x)
         if rank is not None:
             data["grade"] = int(rank(x))
         G.add_node(name(x), **data)
