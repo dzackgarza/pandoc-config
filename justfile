@@ -288,9 +288,13 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   # Symlink global bib for easy resolution
   ln -sf "{{bib_source}}" "$ROOT/global.bib"
 
-  # Run pandoc from ROOT to ensure relative include.lua paths work correctly
+  # Run pandoc from ROOT to ensure relative include.lua paths work correctly.
+  # \(...\) and \[...\] are math in these documents (the Zettlr editor and
+  # Flowmark's lint dialect read them so); plain `markdown` reads them as
+  # escaped brackets, hence +tex_math_single_backslash.
   cd "$ROOT"
   pandoc "${@:5}" \
+      --from=markdown+tex_math_single_backslash \
       --lua-filter="{{source_directory()}}/filters/include.lua" \
       "${CROSSREF_ARGS[@]}" \
       --lua-filter="{{source_directory()}}/filters/convert_amsthm_envs.lua" \

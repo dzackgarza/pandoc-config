@@ -49,19 +49,27 @@ $$ x = 1 $$ {#eq:one}
 See @tbl:ranks and @eq:one, following [@FS86].
 EOF
 
-echo "[1/3] cross-references and citations resolve"
+echo "[1/4] cross-references and citations resolve"
 check "export succeeds" compile "$SCRATCH/refs.bib" references.md resolved
 check "table reference is numbered" \
   bash -c "pdftotext resolved-*.pdf - | grep -q 'See tbl. 1 and eq. (1)'"
 check "citation is resolved" bash -c "pdftotext resolved-*.pdf - | grep -q 'FS86'"
 
-echo "[2/3] an unknown citation key fails the export"
+echo "[2/4] backslash-delimited math is math"
+printf 'Inline \\(x_i^2\\) and display\n\n\\[\n\\sum_{n \\ge 1} a_n\n\\]\n' > backslash.md
+check "export succeeds" compile "$SCRATCH/refs.bib" backslash.md backslash
+check "inline math is typeset, not printed as (x_i^2)" \
+  bash -c "! pdftotext backslash-*.pdf - | grep -qF '(x_i^2)'"
+check "the tex source holds math, not escaped parentheses" \
+  grep -qF '\(x_i^2\)' .build_pandoc/output.tex
+
+echo "[3/4] an unknown citation key fails the export"
 printf 'See [@NoSuchKey2099].\n' > unknown.md
 check "export fails" bash -c "! compile '$SCRATCH/refs.bib' unknown.md unknown"
 check "no PDF is written" bash -c "! ls unknown-*.pdf"
 check "the failure names the key" grep -q "Citation 'NoSuchKey2099'" unknown.log
 
-echo "[3/3] a missing bibliography fails the export before pandoc runs"
+echo "[4/4] a missing bibliography fails the export before pandoc runs"
 check "export fails" bash -c "! compile /nonexistent/refs.bib references.md nobib"
 check "the failure names the file" grep -q "/nonexistent/refs.bib does not exist" nobib.log
 
