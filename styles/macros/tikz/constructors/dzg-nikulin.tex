@@ -1,75 +1,51 @@
 % =============================================================================
-% The table of 2-elementary hyperbolic lattices (r, a, delta)
+% Tables of lattice invariants: constructor
 % =============================================================================
-% Nikulin's table: the even hyperbolic 2-elementary lattices S of signature
-% (1, r-1) that embed primitively in the K3 lattice II_{3,19}, by rank r,
-% 2-rank a of the discriminant group A_S = (Z/2)^a, and parity delta
-% (delta = 0 iff q_S takes values in Z/2Z). There are 75 triples (r, a, delta)
-% at 64 points (r, a).
+% A table of lattice invariants is the grid of integer points (x, y) of two
+% invariants, with a vertex mark at each point where a lattice with those
+% invariants occurs; the mark says which values of a third invariant occur
+% there. Nikulin's table of 2-elementary lattices by (r, a, delta),
+% figures/objects/nikulin/two-elementary-table.tikz, is one such object.
+% \input by dzg-constructors.tex, so "@" is a letter here.
 %
-% Source: dzack_research.preamble.catalogue, _TwoElementaryTable (the 75-row
-% table TwoElementary with a realizing orthogonal sum for every triple). The
-% same 75 triples follow from Nikulin, "Integral symmetric bilinear forms and
-% some of their applications" (1979), Thm. 3.6.2, applied to S of signature
-% (1, r-1) and to its orthogonal complement in II_{3,19}, of signature
-% (2, 20-r) with the same (a, delta). The two computations agree point for
-% point. At (r, a) = (2, 2) both parities occur: U(2) has q values {0, 0, 0, 1}
-% in Q/2Z, so delta = 0, and <2> + <-2> has q values {0, 1/2, 3/2, 0}, so
-% delta = 1.
+% Command:
+%   \latticetable{<x name>}{<x max>}{<y name>}{<y max>}{<x/y/mark, ...>}
+%       the grid [0, x max + 1] x [0, y max + 1] with axes named <x name> and
+%       <y name> and ticks 1, ..., x max and 1, ..., y max; at each listed
+%       point a node[vertex=<mark>] (mark white, black or doubled) named
+%       -<x>-<y>.
 %
-% The vertex mark encodes which delta occur at (r, a):
-%   white   delta = 0 only
-%   black   delta = 1 only
-%   doubled delta = 0,1
-%
-%   \pic (N) {nikulin table};          grid, axes, and the 64 marked points
-%   \pic[nikulin labels=none] {nikulin table};   without axis names and ticks
-% The point (r, a) is the node <name>-<r>-<a>, e.g. (N-10-10) for the Enriques
-% lattice U(2) + E_8(2). Figures loop over the data with
-%   \foreach \r/\a/\m in \nikulinTwoElementaryPoints {...}
+% Key:
+%   lattice table labels=axes|none   axis names and ticks (default axes)
 
-\def\nikulinTwoElementaryPoints{%
-  2/0/white, 10/0/white, 18/0/white,
-  1/1/black, 3/1/black, 9/1/black, 11/1/black, 17/1/black, 19/1/black,
-  2/2/doubled, 4/2/black, 6/2/white, 8/2/black, 10/2/doubled, 12/2/black,
-  14/2/white, 16/2/black, 18/2/doubled, 20/2/black,
-  3/3/black, 5/3/black, 7/3/black, 9/3/black, 11/3/black, 13/3/black,
-  15/3/black, 17/3/black, 19/3/black,
-  4/4/black, 6/4/doubled, 8/4/black, 10/4/doubled, 12/4/black, 14/4/doubled,
-  16/4/black, 18/4/doubled,
-  5/5/black, 7/5/black, 9/5/black, 11/5/black, 13/5/black, 15/5/black,
-  17/5/black,
-  6/6/black, 8/6/black, 10/6/doubled, 12/6/black, 14/6/doubled, 16/6/black,
-  7/7/black, 9/7/black, 11/7/black, 13/7/black, 15/7/black,
-  8/8/black, 10/8/doubled, 12/8/black, 14/8/black,
-  9/9/black, 11/9/black, 13/9/black,
-  10/10/doubled, 12/10/black,
-  11/11/black%
+\newif\ifdzg@lt@labels
+\dzg@lt@labelstrue
+\tikzset{
+  lattice table labels/.is choice,
+  lattice table labels/axes/.code={\dzg@lt@labelstrue},
+  lattice table labels/none/.code={\dzg@lt@labelsfalse},
 }
 
-\newif\ifdzg@nikulinlabels
-\dzg@nikulinlabelstrue
-\tikzset{
-  nikulin labels/.is choice,
-  nikulin labels/axes/.code={\dzg@nikulinlabelstrue},
-  nikulin labels/none/.code={\dzg@nikulinlabelsfalse},
-  pics/nikulin table/.style={code={%
-    \draw[lattice grid, step={(1,1)}] (0,0) grid (21,12);
-    \draw[->] (0,0) -- (21.6,0);
-    \draw[->] (0,0) -- (0,12.6);
-    \ifdzg@nikulinlabels
-      \node[right] at (21.6,0) {$r$};
-      \node[above] at (0,12.6) {$a$};
-      \foreach \dzg@r in {1,...,20} {
-        \draw (\dzg@r,0.12) -- (\dzg@r,-0.12);
-        \node[below=2pt, font=\scriptsize] at (\dzg@r,0) {\dzg@r};
-      }
-      \foreach \dzg@a in {1,...,11} {
-        \draw (-0.12,\dzg@a) -- (0.12,\dzg@a);
-        \node[left=4pt, font=\scriptsize] at (0,\dzg@a) {\dzg@a};
-      }
-    \fi
-    \foreach \dzg@r/\dzg@a/\dzg@m in \nikulinTwoElementaryPoints
-      \node[vertex=\dzg@m] (-\dzg@r-\dzg@a) at (\dzg@r,\dzg@a) {};
-  }},
+\newcommand\latticetable[5]{%
+  \pgfmathtruncatemacro\dzg@lt@xgrid{#2+1}%
+  \pgfmathtruncatemacro\dzg@lt@ygrid{#4+1}%
+  \pgfmathsetmacro\dzg@lt@xend{#2+1.6}%
+  \pgfmathsetmacro\dzg@lt@yend{#4+1.6}%
+  \draw[lattice grid, step={(1,1)}] (0,0) grid (\dzg@lt@xgrid,\dzg@lt@ygrid);
+  \draw[->] (0,0) -- (\dzg@lt@xend,0);
+  \draw[->] (0,0) -- (0,\dzg@lt@yend);
+  \ifdzg@lt@labels
+    \node[right] at (\dzg@lt@xend,0) {$#1$};
+    \node[above] at (0,\dzg@lt@yend) {$#3$};
+    \foreach \dzg@x in {1,...,#2} {
+      \draw (\dzg@x,0.12) -- (\dzg@x,-0.12);
+      \node[below=2pt, font=\scriptsize] at (\dzg@x,0) {\dzg@x};
+    }
+    \foreach \dzg@y in {1,...,#4} {
+      \draw (-0.12,\dzg@y) -- (0.12,\dzg@y);
+      \node[left=4pt, font=\scriptsize] at (0,\dzg@y) {\dzg@y};
+    }
+  \fi
+  \foreach \dzg@x/\dzg@y/\dzg@m in {#5}
+    \node[vertex=\dzg@m] (-\dzg@x-\dzg@y) at (\dzg@x,\dzg@y) {};
 }

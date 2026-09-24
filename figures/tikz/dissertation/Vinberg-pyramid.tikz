@@ -1,5 +1,0 @@
-% Nikulin's table of even hyperbolic 2-elementary lattices (dzg-nikulin.tex),
-% the dissertation figure fig:nikulin-table.
-\begin{tikzpicture}[x=0.65cm, y=0.65cm]
-  \pic {nikulin table};
-\end{tikzpicture}

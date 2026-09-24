@@ -156,18 +156,22 @@ passed in \verb|\dzgobjects| by the test recipe.
 
 \section*{Nikulin's table of 2-elementary lattices}
 \begin{tikzpicture}[x=0.3cm, y=0.3cm]
-  \pic (N) {nikulin table};
-  \pic[nikulin labels=none] at (24,0) {nikulin table};
+  \pic (N) {object=nikulin/two-elementary-table};
+  \pic[lattice table labels=none] at (24,0) {object=nikulin/two-elementary-table};
   \scoped[on background layer] \draw[parabolic] (N-2-2.center) -- (N-10-10.center);
 \end{tikzpicture}
 
 \section*{Strata of $\overline{M}_2$}
 \begin{tikzpicture}[x=0.5cm, y=0.5cm]
-  \pic[m2 render=curve] (C) {m2 strata};
-  \pic[m2 render=graph, genus labels=none] (G) at (0,-6) {m2 strata};
-  \pic[m2 render=divisor, m2 layout=vertical] (P) at (20,0) {m2 strata};
+  \pic[strata render=curve] (C) {object=moduli/m2-strata};
+  \pic[strata render=graph, genus labels=none] (G) at (0,-6) {object=moduli/m2-strata};
+  \pic[strata render=name, strata layout=vertical] (P) at (20,0) {object=moduli/m2-strata};
   \draw[degeneration] (G-12-v1) -- (P-12-box);
-  \pic (X) at (26,0) {m2 coxeter};
+  \foreach \d/\n/\row in \strataposetdata
+    \draw[dashed] (P-\d-box) -- ++(1,0);
+  \pic (X) at (26,0) {object=moduli/m2-coxeter};
+  \pic[genus labels=none] (V) at (26,-6) {object=moduli/m2-graph-6};
+  \draw[degeneration] (X-c) -- (V-box);
 \end{tikzpicture}
 
 \section*{Stable curves and dual graphs}
