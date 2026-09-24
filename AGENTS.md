@@ -168,6 +168,7 @@ Every figure draws with the style vocabulary in
    `self intersection`. Lattice polygons use
    `lattice grid`, `lattice point`, `polygon region`, `long side`, `short side`,
    `boundary point`, `marked point`. Posets and schematics use `poset node`,
+   `poset element` and `poset cover` (`\posetfromjson`),
    `degeneration`, `moduli blob`, `stratum`, `boundary stratum`. Stable curves
    use `curve component`, `curve node`, `dual vertex`, `genus`.
 2. **Figures define no styles.** No `\tikzset`, `\tikzstyle`, `\colorlet`,
@@ -249,9 +250,10 @@ through listed points, had been loaded by the preamble the entire time.
    *Adding a library* below. Hand-rolling because a library is not yet loaded
    is the same failure as not surveying.
 7. **Both figure renderers run lualatex.** `bin/render_figures.py` and
-   `filters/tikzcd.lua` compile with lualatex, so packages that do their
+   `filters/tikzcd.lua` compile with `lualatex --shell-escape`, so packages that do their
    arithmetic in Lua through the `\directlua` primitive are available:
-   PGF's `graphdrawing` implements its layout algorithms in Lua, and
+   PGF's `graphdrawing` implements its layout algorithms in Lua, `\posetfromjson`
+   runs Graphviz `dot` from Lua, and
    `luahyperbolic` is a LuaLaTeX package. The whole-document recipes
    (`compile-tex`, `compile-pandoc`) still run latexmk in pdflatex mode, so
    a figure that needs a Lua package must be rendered as a standalone figure
@@ -341,6 +343,8 @@ Go to these first, in this order, for the figure kinds this repository draws:
 | Surfaces of genus g, cobordisms, pants decompositions, degenerations drawn as surfaces | `tqft` library | add to preamble | `texdoc tqft` |
 | Coxeter and Dynkin diagrams: finite, affine, folded, marked, with edge labels | `dynkin-diagrams` package | add to preamble; `styles/macros/tikz/constructors/dzg-coxeter.tex` still hand-rolls these and should migrate | `texdoc dynkin-diagrams` |
 | Commutative diagrams | `tikz-cd`, `quiver` | preamble; `styles/quiver.sty` | `texdoc tikz-cd` |
+| Hasse diagram of any finite poset: divisor lattices, subgroup lattices, strata posets, Tamari lattices | `\posetfromjson` (`styles/macros/tikz/constructors/dzg-posets.tex`): Sage writes the poset as JSON with `bin/poset_json.sage`; the library grades it (default `balanced`), lets Graphviz `dot` order and space each grade, and names each element's box so a figure places any content in it | preamble; LuaLaTeX with `--shell-escape`, figures only (rule 7) | `styles/macros/tikz/lua/dzg-poset.lua` |
+| Root posets of simple Lie algebras, coloured by simple root | `lie-hasse` package | add to preamble | `texdoc lie-hasse` |
 | Dual graphs, stable-graph posets, stratification Hasse diagrams drawn by hand placement | `graphs` library (node/edge syntax, `graphs.standard`) | add to preamble | `texdoc pgf`, Part V |
 | The same, with automatic layered or force-directed layout | `graphdrawing` library with `layered` / `force` | add to preamble; Lua-based, figures only (rule 7) | `texdoc pgf`, Part IV |
 | Hasse diagrams of finite posets without graph drawing | `causets` package | add to preamble | `texdoc causets` |

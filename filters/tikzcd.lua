@@ -162,7 +162,7 @@ local function run_latex_and_convert(tex_source, tmp_prefix, hash, doc_dir, figu
   -- rendered document, breaking a downstream `pandoc -f latex` re-parse of the
   -- output (the figure renders, but the log corrupts the stream). Diagnostics on
   -- failure come from the .log file via emit_figure_compile_error, not this stream.
-  local cmd1 = inputs_env .. "lualatex -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " >/dev/null 2>&1"
+  local cmd1 = inputs_env .. "lualatex --shell-escape -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " >/dev/null 2>&1"
   local ok1 = os.execute(cmd1)
   if not ok1 then
     -- Surface the figure-compile diagnostic (mapped to the figure source line)

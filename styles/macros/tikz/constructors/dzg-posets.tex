@@ -1,0 +1,56 @@
+% =============================================================================
+% Hasse diagrams of serialized posets: constructors
+% =============================================================================
+% \posetfromjson[<keys>]{<file.json>}: the Hasse diagram of the poset in a
+% networkx node-link JSON file, which Sage writes for any finite poset. The
+% layout (lua/dzg-poset.lua) grades the poset, lets Graphviz dot order and
+% space the elements of each grade, and places every element at the height
+% of its grade. Each element is a node named by its id (so ids must be TikZ
+% node names), an `element width` x `element height` box holding its label;
+% \posetelements lists the ids, so a figure can place arbitrary content (a
+% pic, a scope) in every box after the layout:
+%   \posetfromjson[element width=2cm, element height=1.5cm]{m2.json}
+%   \foreach \e in \posetelements \pic at (\e) {object=moduli/m2-graph-\e};
+% Keys:
+%   poset grading=<method>   used when the elements carry no `grade`:
+%                            balanced (default), longest chain from bottom,
+%                            longest chain to top, minimum total cover length
+%                            (lua/dzg-poset.lua defines and compares them)
+%   grade distance=<length>  the vertical distance per unit of grade
+%   element width, element height   the box every element's content fits in
+%   element sep=<length>     the least horizontal gap between two boxes
+% Other keys apply to the scope holding the diagram.
+% LuaLaTeX with --shell-escape only: the layout runs Graphviz dot.
+
+\def\poset@grading{balanced}
+\def\poset@distance{1cm}
+\def\posetelementwidth{1cm}
+\def\posetelementheight{0.6cm}
+\def\poset@sep{3mm}
+\tikzset{
+  poset grading/.store in=\poset@grading,
+  grade distance/.store in=\poset@distance,
+  element width/.store in=\posetelementwidth,
+  element height/.store in=\posetelementheight,
+  element sep/.store in=\poset@sep,
+  poset element/.style={shape=rectangle, inner sep=0pt,
+    minimum width=\posetelementwidth, minimum height=\posetelementheight},
+  poset cover/.style={draw, line width=0.6pt, -},
+}
+\ifdefined\directlua
+  \directlua{dzgposet = require("dzg-poset")}
+  \newcommand\posetfromjson[2][]{%
+    \begingroup
+    \tikzset{#1}%
+    \pgfmathsetmacro\poset@w{(\posetelementwidth)/1cm}%
+    \pgfmathsetmacro\poset@h{(\posetelementheight)/1cm}%
+    \pgfmathsetmacro\poset@s{(\poset@sep)/1cm}%
+    \pgfmathsetmacro\poset@d{(\poset@distance)/1cm}%
+    \directlua{dzgposet.emit("\luaescapestring{#2}", "\luaescapestring{\unexpanded{#1}}",
+      "\luaescapestring{\poset@grading}", \poset@w, \poset@h, \poset@s, \poset@d)}%
+    \endgroup}
+\else
+  \newcommand\posetfromjson[2][]{\PackageError{dzg}{\string\posetfromjson\space
+    needs LuaLaTeX}{The layout runs Graphviz dot from Lua; render the figure
+    with lualatex --shell-escape.}}
+\fi

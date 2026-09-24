@@ -22,7 +22,7 @@ def get_file_hash(filepath: str) -> str:
     with open(filepath, 'rb') as f:
         h.update(f.read())
     for library_dir in LIBRARY:
-        for library_file in sorted(library_dir.rglob("*.tex")):
+        for library_file in sorted([*library_dir.rglob("*.tex"), *library_dir.rglob("*.lua")]):
             h.update(library_file.read_bytes())
     return h.hexdigest()
 
@@ -76,7 +76,7 @@ def render_tikz(filepath: str, output_dir: str, cache: dict, force: bool = False
         try:
             # Use -interaction=nonstopmode for speed
             subprocess.run(
-                ["lualatex", "-interaction=nonstopmode", f"-output-directory={tmpdir}", tex_file],
+                ["lualatex", "--shell-escape", "-interaction=nonstopmode", f"-output-directory={tmpdir}", tex_file],
                 cwd=tmpdir, check=True, capture_output=True, text=True
             )
         except subprocess.CalledProcessError as e:

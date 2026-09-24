@@ -445,8 +445,19 @@ _test-tikz:
     exit 1
   fi
 
-# Run all tests (macros, templates, tikz compilation, filter)
-test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof
+# Test the poset layout: draw the fixtures of tests/fixtures/posets with every grading
+_test-posets:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  PANDOC_DIR="{{source_directory()}}"
+  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/figures//:"
+  cd "$PANDOC_DIR/tests"
+  lualatex --shell-escape -interaction=nonstopmode -halt-on-error test-posets.tex > /tmp/posets-test.log 2>&1 \
+    || { grep -A4 '^!\|dzg-poset.lua:[0-9]*:' test-posets.log; exit 1; }
+  echo "✅ Poset test compiled: test-posets.pdf"
+
+# Run all tests (macros, templates, tikz compilation, filter, poset layout)
+test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-posets
 
 # Commit-tier gate entry point expected by the machine-wide ai-review-ci hook;
 # this repo's commit-tier QC is its own test suite.

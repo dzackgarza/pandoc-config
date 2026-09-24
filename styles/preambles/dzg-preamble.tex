@@ -36,7 +36,17 @@
 \usetikzlibrary{arrows.meta, cd, fadings, patterns, calc, matrix, positioning, decorations, decorations.pathreplacing, decorations.markings, shapes, backgrounds, fit, shapes.geometric, intersections, hobby, matrix,arrows,decorations.pathmorphing, graphs}
 % Automatic graph layout computes in Lua, so it exists only under LuaTeX; the
 % figures that use it are rendered standalone with lualatex (AGENTS.md rule 7).
-\ifluatex\usetikzlibrary{graphdrawing}\usegdlibrary{layered}\fi
+% LuaTeX finds Lua modules on LUAINPUTS only, which does not include
+% TEXINPUTS; this searcher also finds <a/b/c>.lua for require("a.b.c") on
+% TEXINPUTS, where the repository's modules (styles/macros/tikz/lua/) live.
+\ifluatex
+  \directlua{table.insert(package.searchers, function(name)
+      local path = kpse.find_file((string.gsub(name, "[.]", "/")) .. ".lua", "tex")
+      if path then return loadfile(path), path end
+      return "no " .. name .. ".lua on TEXINPUTS"
+    end)}
+  \usetikzlibrary{graphdrawing}\usegdlibrary{layered}
+\fi
 \tikzfading[name=fade out, inner color=transparent!0, outer color=transparent!100]
 
 % Utilities

@@ -1,0 +1,31 @@
+% Draws the poset fixtures (tests/fixtures/posets/, written by
+% bin/poset_json.sage) through \posetfromjson with every grading, so a broken
+% layout, a grading that draws a cover level or downward, or a missing dot
+% fails `just test`. Needs lualatex --shell-escape.
+\documentclass{article}
+\usepackage{dzg-tikz}
+\pagestyle{empty}
+
+\begin{document}
+
+\section*{Given grades: the divisor lattice of 720}
+\begin{tikzpicture}
+  \posetfromjson[element width=6mm, element height=4mm, grade distance=9mm]{fixtures/posets/divisors-720.json}
+  \draw[fold] (d720) -- (d1);
+\end{tikzpicture}
+
+\section*{Computed gradings: the Tamari lattice $T_5$}
+\foreach \g in {balanced, longest chain from bottom, longest chain to top,
+    minimum total cover length} {\par\noindent\texttt{\g}\par
+  \begin{tikzpicture}
+    \posetfromjson[poset grading/.expanded=\g, element width=2.5mm, element height=2.5mm,
+      grade distance=6mm, element sep=1.5mm]{fixtures/posets/tamari-5.json}
+  \end{tikzpicture}\par}
+
+\section*{Content placed at the elements: the subgroups of $S_4$}
+\begin{tikzpicture}
+  \posetfromjson[name prefix=S-, element width=5mm, element height=5mm]{fixtures/posets/subgroups-S4.json}
+  \foreach \e in \posetelements \node[draw, circle, minimum size=5mm] at (S-\e) {};
+\end{tikzpicture}
+
+\end{document}
