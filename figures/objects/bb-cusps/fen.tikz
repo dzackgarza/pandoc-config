@@ -1,0 +1,19 @@
+% Unpolarized Enriques F_En [AEGS25], [Ste91 §4.2], T_En = U+U(2)+E_8(2).
+% The 0-cusps are e (div 1, RP^2 type) and e' (div 2, D^2 type); the 1-cusps
+% are <e,e'> and <e', 2e+2f+a1+a2>. The second meets only e' [AE22 Prop. 5.13].
+% Lattice names, computed with Sage (Gram matrix of catalogue.py TEn;
+% 2026-09-24): in T_En, <e,e'>^perp/<e,e'> = E_8(2), with 240 (-4)-roots, and
+% <e',2e+2f+a1+a2>^perp/.. = (8,6,0), whose roots form B_8 (16 short, 112
+% long): the index-2 even overlattice of A_1^8, i.e. D_8^*(2).
+% Points: 0-cusps -E10, -UE8; 1-cusps -E8, -D8.
+\bbcusp{cusp0}{-E10}{0,0}{E_{10}(2)}{above}
+  {\mathbb{RP}^2,\ \mathrm{div} = 1}{\eta_1}
+\bbcusp{cusp1}{-E8}{2.9,0}{E_8(2)}{above}{}{I_{1,2}}
+\bbcusp{cusp0}{-UE8}{5.8,0}{U \oplus E_8(2)}{above}
+  {\mathbb{D}^2,\ \mathrm{div} = 2}{\eta_2}
+\bbcusp{cusp1}{-D8}{8.7,0}{D_8^*(2)}{above}{}{I_2}
+\bbincidences{-E10/-E8/2, -UE8/-E8/1, -UE8/-D8/2}
+\bbbrace{-0.8}{0.8}{0}{(10,10,0)_1}
+\bbbrace{2.2}{3.6}{0}{(8,8,0)_0}
+\bbbrace{5.0}{6.6}{0}{(10,8,0)_1}
+\bbbrace{8.0}{9.4}{0}{(8,6,0)_0}

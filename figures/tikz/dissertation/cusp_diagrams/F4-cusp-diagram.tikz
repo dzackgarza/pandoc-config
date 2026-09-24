@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-  \pic {bb f4};
+  \pic {object=bb-cusps/f4};
   \node at (3.6,4) {\underline{$F_4$}};
   \node (H) at (0,-4.8) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
   \draw[cusp brace] (H.west) -- (H.east) node[midway, below=5.5ex] {$(0, 17)$};

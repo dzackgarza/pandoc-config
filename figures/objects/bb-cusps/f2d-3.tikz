@@ -1,0 +1,12 @@
+% The shape of Scattone's diagram of F_{2d} for d of class N = 3 [Sca87 §6]:
+% a 0-cusp p_0 meeting the 1-cusps C_i over H/SL_2(Z), and a 0-cusp p_1
+% meeting the 1-cusps C_i^{(3)} over H/Gamma'(3), which p_0 also meets.
+% Points: 0-cusps -P0, -P1; 1-cusps -C1, ..., -C4 and -D1, ..., -D4.
+\bbcolumn{0}{-C}{C_1}{C_2}{C_{n-1}}{C_n}
+\bbcolumn{5}{-D}{C_1^{(3)}}{C_2^{(3)}}{C_{m-1}^{(3)}}{C_m^{(3)}}
+\bbcusp{cusp0}{-P0}{2.5,0}{p_0}{}{}{}
+\bbcusp{cusp0}{-P1}{8,0}{p_1}{}{}{}
+\node at (0,-3) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+\node at (5,-3) {$\mathbb{H}/\Gamma'(3)$};
+\foreach \k in {1,...,4}
+  {\bbincidences{-P0/-C\k/1, -P0/-D\k/1, -P1/-D\k/1}}

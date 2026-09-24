@@ -1,0 +1,9 @@
+% F_4, K3 surfaces of degree 4: one 0-cusp -P [Sca87 §6]. 1-cusps named by the
+% root system of the boundary lattice (Scattone).
+% Points: 0-cusp -P; 1-cusps -1, ..., -9 from the top.
+\foreach \lat [count=\k] in {A_1(2)E_8^2, A_1(2)D_{16}, D_9E_8, A_3E_7^2,
+    D_{17}, D_5D_{12}, A_1(2)D_8^2, A_1^2A_{15}, A_{11}E_6}
+  {\bbcusp{cusp1}{-\k}{0,{5-\k}}{\lat}{}{}{}}
+\bbcusp{cusp0}{-P}{3.6,0}{e}{}{}{}
+\foreach \k in {1,...,9}
+  {\bbincidences{-P/-\k/1}}

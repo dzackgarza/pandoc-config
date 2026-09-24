@@ -2,13 +2,13 @@
 % D^2-type 0-cusp U+E_8(2) and the Coble 1-cusp to D_8^*(2)
 % (writing/coble/cusp-correspondence/enriques-to-coble-cusp-correspondence.md).
 \begin{tikzpicture}
-  \pic (En) {bb fen};
-  \pic (Co) at (5.8,-3.8) {bb fco};
+  \pic (En) {object=bb-cusps/fen};
+  \pic (Co) at (5.8,-3.8) {object=bb-cusps/fco};
   \node[anchor=east] (m1) at (-1.4,0) {$\bd \bbcpt{\fen}$};
   \node[anchor=east] (m2) at (-1.4,-3.8) {$\bd \bbcpt{F_{\Co}}$};
   % From above the labels of the Coble cusps to below the invariants of their
   % images.
   \draw[cusp map] (5.8,-2.95) -- (5.8,-1.55);
-  \draw[cusp map] (CoC.north) -- (8.7,-1.55);
+  \draw[cusp map] (Co-C.north) -- (8.7,-1.55);
   \draw[cusp map] (m2) -- (m1);
 \end{tikzpicture}

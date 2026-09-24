@@ -1,8 +1,8 @@
 % The cusp map of F_{En,2} -> F_En (forgetting the polarization): 0-cusp 1
 % goes to E_10(2), 0-cusps 2-5 to U+E_8(2).
 \begin{tikzpicture}
-  \pic (S) {bb fen2};
-  \pic (E) at (0.5,-6) {bb fen};
+  \pic (S) {object=bb-cusps/fen2};
+  \pic (E) at (0.5,-6) {object=bb-cusps/fen};
   \node[anchor=east] (top title) at (-1.5,0) {$\bbcpt{\fent}$};
   \node[anchor=east] (bottom title) at (-1.5,-6) {$\bbcpt{\fen}$};
   \draw[cusp map] (top title) -- (bottom title);

@@ -1,0 +1,32 @@
+% Sterk's F_{En,2} [Ste91 §4]: five 0-cusps -1, ..., -5 and nine 1-cusps named
+% by the 0-cusps in their closure (-12, -245, -13, ...). The 1-cusps carry the
+% K3 lattice of the corresponding 1-cusp of F_{(2,2,0)}.
+% Sources agree (Sterk; writing/coble FEn2 figure; dissertation 475-our-cusps;
+% V4 thesis drafts): 1-cusp 35 joins 0-cusps 3 and 5, and 55 meets only 5.
+% Even incidences: 1-12, 4-245, 5-245, the (16,0,0) 1-cusps at 0-cusps over
+% (18,2,0).
+% Lattice names: the (16,2,0) lattices of F_{(2,2,0)} have no standard name
+% and carry Sterk's names, the root system of their (-2)-roots and reflective
+% (-4)-roots (C_2, A_1(2) contain (-4)-roots), which determines the lattice in
+% its genus. The 0-cusps, computed with Sage (Gram matrices of catalogue.py
+% TEn, TdP; vectors of sterk.py selected_isotropic_vectors; 2026-09-24):
+%   Sterk cusp      1          2          3, 4, 5
+%   div in T_En     1          2          2
+%   eta^perp/eta    (10,10,0)  (10,8,0)   (10,8,0)
+%   div in T_dP     1          2          1
+%   eta^perp/eta    (18,2,0)   (18,0,0)   (18,2,0)
+% so cusp 2 lies over U+E_8^2 and cusps 1, 3, 4, 5 over U(2)+E_8^2.
+% Labels: canonical 1, ..., 5 and 12, 245, ...; eta eta_1, ..., eta_5 and
+% I_{1,2}, I_{2,4,5}, ....
+\foreach \n/\y in {1/2.1, 3/0.7, 4/-0.7, 5/-2.1}
+  {\bbcusp{cusp0, minimum width=8mm}{-\n}{5,\y}{\bblabel{\n}{\eta_{\n}}}{}{}{}}
+\bbcusp{cusp0, minimum width=8mm}{-2}{0,0}{\bblabel{2}{\eta_2}}{}{}{}
+\bbcusp{cusp1}{-12}{2.5,1.1}{E_8^2}{above}{12}{I_{1,2}}
+\bbcusp{cusp1}{-245}{2.5,-1.1}{D_{16}^+}{below}{245}{I_{2,4,5}}
+\foreach \n/\y/\lat/\idx in {13/3/E_7^2C_2/{1,3}, 14/2/D_8^2/{1,4},
+    15/1/A_{15}A_1(2)/{1,5}, 34/0/A_{15}A_1(2)/{3,4}, 35/-1/D_{12}D_4/{3,5},
+    45/-2/D_8^2/{4,5}, 55/-3/E_7^2C_2/5}
+  {\bbcusp{cusp1}{-\n}{8.8,\y}{\lat}{right}{\n}{I_{\idx}}}
+\bbincidences{-2/-12/1, -2/-245/1, -1/-12/2, -4/-245/2, -5/-245/2,
+  -1/-13/1, -1/-14/1, -1/-15/1, -3/-13/1, -3/-34/1, -3/-35/1, -4/-14/1,
+  -4/-34/1, -4/-45/1, -5/-15/1, -5/-35/1, -5/-45/1, -5/-55/1}

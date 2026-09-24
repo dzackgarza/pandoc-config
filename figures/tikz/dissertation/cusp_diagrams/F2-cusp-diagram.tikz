@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-  \pic {bb f2};
+  \pic {object=bb-cusps/f2};
   \node at (0,-3.4) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
   \node at (3.6,-3.4) {\underline{$F_2$}};
 \end{tikzpicture}

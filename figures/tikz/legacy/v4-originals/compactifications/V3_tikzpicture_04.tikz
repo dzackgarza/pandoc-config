@@ -7,6 +7,6 @@
 % The RP^2-type 0-cusp E_10(2) and its 1-cusp E_8(2) are singled out (red and
 % green in the source) against the D^2-type 0-cusp and D_8^*(2).
 \begin{tikzpicture}
-  \pic (En) {bb fen};
-  \scoped[on background layer] \draw[cusp image] (EnE10.center) -- (EnE8.center);
+  \pic (En) {object=bb-cusps/fen};
+  \scoped[on background layer] \draw[cusp image] (En-E10.center) -- (En-E8.center);
 \end{tikzpicture}

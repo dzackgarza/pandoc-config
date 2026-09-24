@@ -1,7 +1,7 @@
 % Baily-Borel boundary of F_En, with the isotropic vectors spanning each cusp.
 \begin{tikzpicture}
-  \pic (En) {bb fen};
+  \pic (En) {object=bb-cusps/fen};
   \foreach \c/\v in {E10/{e}, E8/{\mathrm{div} = (1, 2),\ e, e'}, UE8/{e'},
       D8/{\mathrm{div} = (2, 2),\ e', 2e + 2f + \alpha_1 + \alpha_2}}
-    {\node[cusp label, above=6mm] at (En\c) {$\v$};}
+    {\node[cusp label, above=6mm] at (En-\c) {$\v$};}
 \end{tikzpicture}

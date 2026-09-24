@@ -1,0 +1,18 @@
+% The shape of Scattone's diagram of F_{2d} for d of class N, an odd prime
+% [Sca87 §6]: a 0-cusp p_0 meeting the 1-cusps C_i over H/SL_2(Z), and 0-cusps
+% p_1, ..., p_{(N-1)/2} meeting the 1-cusps C_i^{(N)} over H/Gamma'(N), which
+% p_0 meets (N-1)/2 times.
+% Points: 0-cusps -P0, -P1, -P2, -P3 (p_{(N-1)/2}); 1-cusps -C1, ..., -C4 and
+% -D1, ..., -D4.
+\bbcolumn{0}{-C}{C_1}{C_2}{C_{m-1}}{C_m}
+\bbcolumn{5.5}{-D}{C_1^{(N)}}{C_2^{(N)}}{C_{n-1}^{(N)}}{C_n^{(N)}}
+\bbcusp{cusp0}{-P0}{2.75,0}{p_0}{}{}{}
+\foreach \k/\y/\lat in {1/2/p_1, 2/1/p_2, 3/-1/p_{(N-1)/2}}
+  {\bbcusp{cusp0}{-P\k}{9,\y}{\lat}{}{}{}}
+\node at (9,0) {$\vdots$};
+\node at (0,-3) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+\node at (5.5,-3) {$\mathbb{H}/\Gamma'(N)$};
+\foreach \k in {1,...,4} {
+  \bbincidences{-P0/-C\k/1, -P1/-D\k/1, -P2/-D\k/1, -P3/-D\k/1}
+  \draw[incidence] (-P0) -- node[cusp label, midway, above, sloped] {$\frac{N-1}{2}$}
+    (-D\k);}

@@ -1,0 +1,8 @@
+% F_ell, elliptic K3 surfaces: one 0-cusp -P [Sca87 §6]. 1-cusps named by the
+% root system of the boundary lattice (Scattone); the unimodular D_16 lattice
+% is D_16^+.
+% Points: 0-cusp -P; 1-cusps -E8E8, -D16p.
+\bbcusp{cusp1}{-E8E8}{0,0.7}{E_8^2}{}{}{}
+\bbcusp{cusp1}{-D16p}{0,-0.7}{D_{16}^+}{}{}{}
+\bbcusp{cusp0}{-P}{3.6,0}{U \oplus E_8^2}{above}{}{\eta}
+\bbincidences{-P/-E8E8/1, -P/-D16p/1}

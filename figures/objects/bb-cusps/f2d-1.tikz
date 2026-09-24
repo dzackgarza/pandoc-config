@@ -1,0 +1,7 @@
+% The shape of Scattone's diagram of F_{2d} for d of class N = 1 [Sca87 §6]:
+% a 0-cusp p_0 meeting the 1-cusps C_i over H/SL_2(Z).
+% Points: 0-cusp -P0; 1-cusps -C1, ..., -C4 (C_1, C_2, C_{n-1}, C_n).
+\bbcolumn{0}{-C}{C_1}{C_2}{C_{n-1}}{C_n}
+\bbcusp{cusp0}{-P0}{3,0}{p_0}{}{}{}
+\node at (0,-3) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+\foreach \k in {1,...,4} {\bbincidences{-P0/-C\k/1}}

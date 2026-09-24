@@ -1,0 +1,28 @@
+% F_{(2,2,0)}, the quartic hyperelliptic K3 surfaces, T = U+U(2)+E_8^2
+% [AE22 §10]. Two 0-cusps, told apart by divisibility; eight 1-cusps, E_8^2
+% and D_16^+ over both 0-cusps.
+% The divisibility pair of a 1-cusp is that of the plane <v_0, v_1> from the
+% 0-cusp drawn to its left: (2,1) for E_8^2 from U+E_8^2, (1,1) for D_8^2.
+% Eta names as in the dissertation text: eta~_1 = (18,2,0), eta~_2 = (18,0,0).
+% Lattice names: the (16,2,0) lattices have no standard name and carry Sterk's
+% names, the root system of their (-2)-roots and reflective (-4)-roots (C_2,
+% A_1(2) contain (-4)-roots), which determines the lattice in its genus.
+% Points: 0-cusps -UE8E8, -U2E8E8; 1-cusps -E8E8, -D16p, -D8D8, -E7E7C2,
+% -E8D8, -D12D4, -D16, -A15A1.
+\bbcusp{cusp0}{-UE8E8}{0,0}{U \oplus E_8^2}{above}
+  {\mathrm{div} = 2}{\tilde\eta_2}
+\bbcusp{cusp0}{-U2E8E8}{4.4,0}{U(2) \oplus E_8^2}{above}
+  {\mathrm{div} = 1}{\tilde\eta_1}
+\bbcusp{cusp1}{-E8E8}{2.2,1.1}{E_8^2}{above}{\mathrm{div} = (2, 1)}{}
+\bbcusp{cusp1}{-D16p}{2.2,-1.1}{D_{16}^+}{}{}{}
+\bbcusp{cusp1}{-D8D8}{7.4,3}{D_8^2}{above}{\mathrm{div} = (1, 1)}{}
+\foreach \n/\y/\lat in {E7E7C2/2/E_7^2C_2, E8D8/1/E_8D_8,
+    D12D4/-1/D_{12}D_4, D16/-2/D_{16}, A15A1/-3/A_{15}A_1(2)}
+  {\bbcusp{cusp1}{-\n}{7.4,\y}{\lat}{}{}{}}
+\bbincidences{-UE8E8/-E8E8/1, -UE8E8/-D16p/1, -U2E8E8/-E8E8/2, -U2E8E8/-D16p/2,
+  -U2E8E8/-D8D8/1, -U2E8E8/-E7E7C2/1, -U2E8E8/-E8D8/1, -U2E8E8/-D12D4/1,
+  -U2E8E8/-D16/1, -U2E8E8/-A15A1/1}
+\bbbrace{-0.8}{0.8}{-3}{(18,0,0)_1}
+\bbbrace{1.5}{2.9}{-3}{(16,0,0)_0}
+\bbbrace{3.4}{5.4}{-3}{(18,2,0)_1}
+\bbbrace{6.5}{8.3}{-3}{(16,2,0)_0}

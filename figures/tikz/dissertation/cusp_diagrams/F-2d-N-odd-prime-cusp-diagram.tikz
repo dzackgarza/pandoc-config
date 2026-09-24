@@ -1,4 +1,4 @@
 \begin{tikzpicture}
-  \pic {bb f2d=p};
+  \pic {object=bb-cusps/f2d-p};
   \node at (2.75,3) {\underline{$N \text{ an odd prime}$}};
 \end{tikzpicture}

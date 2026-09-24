@@ -1,4 +1,4 @@
 \begin{tikzpicture}
-  \pic {bb f2d=1};
+  \pic {object=bb-cusps/f2d-1};
   \node at (2.5,3) {\underline{$N=1$}};
 \end{tikzpicture}

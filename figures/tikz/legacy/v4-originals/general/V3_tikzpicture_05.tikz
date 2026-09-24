@@ -8,16 +8,16 @@
 % diagram of its cover (v vertical, r rotation, d diagonal, h horizontal,
 % id identity); 0-cusp 1 and its 1-cusps are highlighted.
 \begin{tikzpicture}
-  \pic (S) {bb fen2};
+  \pic (S) {object=bb-cusps/fen2};
   \foreach \n/\s in {2/v, 1/r, 3/d, 4/h, 5/id}
-    {\node[cusp label, above=3.5mm] at (S\n) {$\mathrm{\s}$};}
+    {\node[cusp label, above=3.5mm] at (S-\n) {$\mathrm{\s}$};}
   \foreach \n/\s in {13/{d, r}, 14/{h, r}, 15/{d, h, r}, 34/{d, h, r}, 35/d,
       45/{h, r}, 55/{d, r}}
-    {\node[cusp label, anchor=west] at ([xshift=9mm]S\n.east) {$\mathrm{\s}$};}
-  \node[cusp label, below=1mm] at (S12.south) {$\mathrm{r}$};
-  \node[cusp label, above=1mm] at (S245.north) {$\mathrm{h}$};
+    {\node[cusp label, anchor=west] at ([xshift=9mm]S-\n.east) {$\mathrm{\s}$};}
+  \node[cusp label, below=1mm] at (S-12.south) {$\mathrm{r}$};
+  \node[cusp label, above=1mm] at (S-245.north) {$\mathrm{h}$};
   \begin{scope}[on background layer]
     \foreach \c in {12, 13, 14, 15}
-      {\draw[cusp image] (S1.center) -- (S\c.center);}
+      {\draw[cusp image] (S-1.center) -- (S-\c.center);}
   \end{scope}
 \end{tikzpicture}

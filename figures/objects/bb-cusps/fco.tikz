@@ -1,0 +1,15 @@
+% Unpolarized Coble F_Co (writing/coble/cusp-correspondence),
+% T_Co = <2>+E_10(2). One 0-cusp v_0 = e' and one 1-cusp J = <e', 2h+a1+a2>,
+% divisibilities (2,2).
+% Computed with Sage (Gram matrices of catalogue.py TEn, TdP, Tco; vectors of
+% coble.py; 2026-09-24): the Coble plane <e', 2h+a1+a2> has divisibilities
+% (2,2) in T_Co and T_En and (2,1) in T_dP, quotients (9,9,1), (7,7,1) in T_Co
+% and (10,8,0), (8,6,0) in T_En; in T_dP its quotient is (16,0,0) with one
+% irreducible root system of 480 roots, D_{16}^+.
+% Points: 0-cusp -P; 1-cusp -C.
+\bbcusp{cusp0}{-P}{0,0}{\langle 2 \rangle \oplus E_8(2)}{above}
+  {\mathbb{D}^2,\ \mathrm{div} = 2}{}
+\bbcusp{cusp1}{-C}{2.9,0}{A_1^{\oplus 7}}{}{}{}
+\bbincidences{-P/-C/2}
+\bbbrace{-0.9}{0.9}{0}{(9,9,1)_1}
+\bbbrace{2.2}{3.6}{0}{(7,7,1)_0}

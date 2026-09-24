@@ -1,0 +1,14 @@
+% The shape of Scattone's diagram of F_{2d} for d of class N = 5 [Sca87 §6]:
+% a 0-cusp p_0 meeting the 1-cusps C_i over H/SL_2(Z), and 0-cusps p_1, p_2
+% meeting the 1-cusps C_i^{(5)} over H/Gamma'(5), which p_0 meets twice.
+% Points: 0-cusps -P0, -P1, -P2; 1-cusps -C1, ..., -C4 and -D1, ..., -D4.
+\bbcolumn{0}{-C}{C_1}{C_2}{C_{n-1}}{C_n}
+\bbcolumn{5}{-D}{C_1^{(5)}}{C_2^{(5)}}{C_{n-1}^{(5)}}{C_n^{(5)}}
+\bbcusp{cusp0}{-P0}{2.5,0}{p_0}{}{}{}
+\bbcusp{cusp0}{-P1}{8,1}{p_1}{}{}{}
+\bbcusp{cusp0}{-P2}{8,-1}{p_2}{}{}{}
+\node at (0,-3) {$\mathbb{H}/\operatorname{SL}_2(\mathbb{Z})$};
+\node at (5,-3) {$\mathbb{H}/\Gamma'(5)$};
+\foreach \k in {1,...,4} {
+  \bbincidences{-P0/-C\k/1, -P1/-D\k/1, -P2/-D\k/1}
+  \draw[incidence] (-P0) -- node[cusp label, midway, above, sloped] {$2$} (-D\k);}

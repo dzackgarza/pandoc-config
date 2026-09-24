@@ -1,8 +1,8 @@
 % The cusp map of F_{En,2} -> F_{(2,2,0)}: 0-cusp 2 goes to U+E_8^2, 0-cusps
 % 1, 3, 4, 5 to U(2)+E_8^2.
 \begin{tikzpicture}
-  \pic (S) {bb fen2};
-  \pic (K) at (0,-9) {bb f220};
+  \pic (S) {object=bb-cusps/fen2};
+  \pic (K) at (0,-9) {object=bb-cusps/f220};
   \node[anchor=east] (top title) at (-1.5,0) {$\bbcpt{\fent}$};
   \node[anchor=east] (bottom title) at (-1.5,-9) {$\bbcpt{\fttz}$};
   \draw[cusp map] (top title) -- (bottom title);
