@@ -39,12 +39,14 @@ DEFAULT_TEMPLATE := "research_draft.tex"
 PROJECT_BIB_SOURCE := env_var_or_default("PANDOC_BIB_SOURCE", GLOBAL_BIB_SOURCE)
 PROJECT_BUILD_DIR := env_var_or_default("PANDOC_BUILD_DIR", BUILD_DIR_PANDOC)
 
-# pandoc-crossref for compile-pandoc-project: "crossref" (default) or
-# "no-crossref". Crossref injects a preamble block that declares a
+# pandoc-crossref for compile-pandoc and compile-pandoc-project: "crossref"
+# (default) or "no-crossref". With crossref, @fig:/@tbl:/@eq:/@sec:/@lst:
+# resolve to numbered references; without it they reach biblatex as unknown
+# citation keys. Crossref injects a preamble block that declares a
 # codelisting float and redefines \footnote inside subfigures; in a document
 # that authors its own \label/\Cref and uses no @fig:/@tbl:/@eq: references,
 # that block is dead weight and clashes with the caption/sidenotes stack.
-PROJECT_CROSSREF := env_var_or_default("PANDOC_CROSSREF", "crossref")
+CROSSREF_MODE := env_var_or_default("PANDOC_CROSSREF", "crossref")
 
 # pandoc --top-level-division for the compile-pandoc family: "default"
 # (pandoc infers section/chapter from the document class), "section",
@@ -216,7 +218,7 @@ compile-tex main_file="main.tex" output_name="paper" bib_source=GLOBAL_BIB_SOURC
   cp "$ROOT/{{build_dir}}/${FILE%.tex}.pdf" "$ROOT/{{output_name}}-$(date +%d-%m-%y).pdf"
 
 # Compile Pandoc source to PDF via LaTeX
-compile-pandoc input_file="main.md" output_name="output" template=DEFAULT_TEMPLATE bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex "no-crossref" template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
+compile-pandoc input_file="main.md" output_name="output" template=DEFAULT_TEMPLATE bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex CROSSREF_MODE template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
 
 # Compile multiple ordered Pandoc sources into one project PDF.
 # Inputs are passed to pandoc verbatim, in the given order, and
@@ -244,7 +246,7 @@ compile-pandoc-project output_name template +input_files:
   if [ -z "$TEMPLATE" ] || [ "$TEMPLATE" = "-" ]; then
     TEMPLATE="{{DEFAULT_TEMPLATE}}"
   fi
-  just --justfile "{{source_file()}}" _compile-pandoc-tex "{{PROJECT_CROSSREF}}" "$TEMPLATE" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
+  just --justfile "{{source_file()}}" _compile-pandoc-tex "{{CROSSREF_MODE}}" "$TEMPLATE" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
   just --justfile "{{source_file()}}" _compile-pandoc-latexmk "{{output_name}}" "{{PROJECT_BUILD_DIR}}"
 
 # Shared pandoc stage: markdown -> build_dir/output.tex.
@@ -255,9 +257,7 @@ compile-pandoc-project output_name template +input_files:
 # before convert_amsthm_envs.lua: crossref rewrites the
 # @fig:/@tbl:/@eq:/@sec:/@lst: families and passes theorem divs and
 # @thm:-family citations through untouched, so the theorem filter still
-# receives its divs intact. compile-pandoc stays crossref-free: crossref
-# injects a header-includes block into LaTeX output, which would break
-# the byte-stable single-file surface.
+# receives its divs intact.
 # [positional-arguments] exposes the arguments as "$1".."$N" so the
 # variadic input list can be consumed as "${@:5}" with per-file quoting
 # (filenames with spaces stay single arguments).
@@ -279,6 +279,12 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   ROOT="{{invocation_directory()}}"
   mkdir -p "$ROOT/{{build_dir}}"
 
+  # A missing bibliography would reach biber as a dangling link, and every
+  # citation would come out undefined.
+  if [ ! -f "{{bib_source}}" ]; then
+    echo "❌ Bibliography {{bib_source}} does not exist (set ZOTERO_GLOBAL_BIB or PANDOC_BIB_SOURCE)." >&2
+    exit 1
+  fi
   # Symlink global bib for easy resolution
   ln -sf "{{bib_source}}" "$ROOT/global.bib"
 
@@ -316,6 +322,14 @@ _compile-pandoc-latexmk output_name build_dir:
   fi
   if [ $LATEXMK_RC -ne 0 ]; then
     echo "⚠️  latexmk exited $LATEXMK_RC but PDF was produced — check warnings above"
+  fi
+  # The log of the final LaTeX pass lists what is still unresolved.
+  UNDEFINED=$(grep -oE "(Citation|Reference) [\`'][^']+' on page [0-9]+ undefined" output.log \
+    | sed -E "s/ on page [0-9]+ undefined//" | sort -u || true)
+  if [ -n "$UNDEFINED" ]; then
+    echo "❌ Undefined citations or references (PDF left in {{build_dir}}/output.pdf):" >&2
+    echo "$UNDEFINED" >&2
+    exit 1
   fi
   cp output.pdf "$ROOT/{{output_name}}-$(date +%d-%m-%y).pdf"
 
@@ -463,8 +477,11 @@ readme-reference:
 _test-readme:
   python3 "{{source_directory()}}/bin/generate-readme-reference.py" --check
 
+_test-compile-pandoc:
+  bash "{{source_directory()}}/tests/test-compile-pandoc.sh"
+
 # Run all tests (macros, templates, tikz compilation, filter, poset layout, README reference)
-test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-posets _test-readme
+test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-posets _test-readme _test-compile-pandoc
 
 # Commit-tier gate entry point expected by the machine-wide ai-review-ci hook;
 # this repo's commit-tier QC is its own test suite.

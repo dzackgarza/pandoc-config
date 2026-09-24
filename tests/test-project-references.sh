@@ -129,8 +129,9 @@ check 'empty-key id produced no label (\label{thm:} absent)' \
 
 # --- 3. compile-pandoc attribute-style sample: byte-for-byte ---------
 # The baseline was generated with the pre-change filter at commit
-# 81792cc; this run uses compile-pandoc's tex stage (its exact defaults:
-# no-crossref, research_draft.tex, bib symlinked as global.bib).
+# 81792cc; this run uses the shared tex stage in its no-crossref mode (the
+# PANDOC_CROSSREF=no-crossref opt-out), research_draft.tex, and the bib
+# symlinked as global.bib.
 # Scope of the claim: the sample contains theorem divs with the legacy
 # title=/ref= attribute syntax and NO theorem-family citations, so this
 # proves byte-stability of the attribute-style sample only. Theorem
