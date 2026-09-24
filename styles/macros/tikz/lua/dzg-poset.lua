@@ -166,17 +166,24 @@ local function heights(ids, up, down, given, method, covers, width, height, sep)
   return h
 end
 
--- \posetfromjson: `options` are the figure's TikZ keys for the scope,
--- `method` the grading, the lengths in cm. Elements are keyed n1, n2, ...
--- internally (dot needs no quoting); the TikZ node of an element is named by
--- its "name", else its "id", which must then be a TikZ node name.
-function poset.emit(path, options, method, width, height, sep, distance)
-  local file = kpse.find_file(path) or path
-  local handle = assert(io.open(file, "r"), "dzg.poset: cannot open " .. path)
+-- \posetfromjson. `s` holds the figure's settings: path, options (the TikZ
+-- keys of the scope around the diagram), grading, the lengths width,
+-- height, sep, distance in cm, axis (vertical: grades bottom to top;
+-- horizontal: grades right to left, the top element leftmost), element and
+-- cover (the styles of the element nodes and the cover paths), labels (the
+-- JSON labels in the boxes, or empty boxes). Elements are
+-- keyed n1, n2, ... internally (dot needs no quoting); the TikZ node of an
+-- element is named by its "name", else its "id", which must then be a TikZ
+-- node name.
+function poset.emit(s)
+  local file = kpse.find_file(s.path) or s.path
+  local handle = assert(io.open(file, "r"), "dzg.poset: cannot open " .. s.path)
   local data = utilities.json.tolua(handle:read("*a"))
   handle:close()
   local links = data.links or data.edges
-  assert(data.nodes and links, "dzg.poset: " .. path .. " is not node-link JSON")
+  assert(data.nodes and links, "dzg.poset: " .. s.path .. " is not node-link JSON")
+  assert(s.axis == "vertical" or s.axis == "horizontal",
+    "dzg.poset: poset axis is vertical or horizontal, not `" .. s.axis .. "'")
 
   local keys, key_of, names, labels, given, up, down, covers = {}, {}, {}, {}, {}, {}, {}, {}
   for k, node in ipairs(data.nodes) do
@@ -196,13 +203,16 @@ function poset.emit(path, options, method, width, height, sep, distance)
     table.insert(down[upper], lower)
   end
 
-  local h = heights(keys, up, down, given, method, covers, width, height, sep)
+  -- dot spaces the elements of a grade across the axis of the grades.
+  local across, along = s.width, s.height
+  if s.axis == "horizontal" then across, along = s.height, s.width end
+  local h = heights(keys, up, down, given, s.grading, covers, across, along, s.sep)
   local bad = 0
   for _, c in ipairs(covers) do
     if h[c[2]] <= h[c[1]] then bad = bad + 1 end
   end
-  assert(bad == 0, "dzg.poset: the grading `" .. method .. "' draws " .. bad
-    .. " cover(s) of " .. path .. " level or downward")
+  assert(bad == 0, "dzg.poset: the grading `" .. s.grading .. "' draws " .. bad
+    .. " cover(s) of " .. s.path .. " level or downward")
 
   local values = {}
   for _, key in ipairs(keys) do values[#values + 1] = h[key] end
@@ -215,17 +225,19 @@ function poset.emit(path, options, method, width, height, sep, distance)
   local layer = {}
   for _, key in ipairs(keys) do layer[key] = layer_of[h[key]] end
 
-  local x = run_dot(keys, covers, layer, width, height, sep)
+  local x = run_dot(keys, covers, layer, across, along, s.sep)
   local top = values[1]
-  local out, list = { "\\begin{scope}[" .. options .. "]" }, {}
+  local out, list = { "\\begin{scope}[" .. s.options .. "]" }, {}
   for _, key in ipairs(keys) do
     list[#list + 1] = names[key]
-    out[#out + 1] = string.format("\\node[poset element] (%s) at (%.4fcm,%.4fcm) {%s};",
-      names[key], x[key], (h[key] - top) * distance, labels[key])
+    local a, b = x[key], (h[key] - top) * s.distance
+    if s.axis == "horizontal" then a, b = -b, -a end
+    out[#out + 1] = string.format("\\node[poset element, %s] (%s) at (%.4fcm,%.4fcm) {%s};",
+      s.element, names[key], a, b, s.labels and labels[key] or "")
   end
   out[#out + 1] = "\\begin{scope}[on edge layer]"
   for _, c in ipairs(covers) do
-    out[#out + 1] = string.format("\\draw[poset cover] (%s) -- (%s);", names[c[2]], names[c[1]])
+    out[#out + 1] = string.format("\\draw[%s] (%s) -- (%s);", s.cover, names[c[2]], names[c[1]])
   end
   out[#out + 1] = "\\end{scope}\\end{scope}"
   tex.sprint("\\gdef\\posetelements{" .. table.concat(list, ",") .. "}")

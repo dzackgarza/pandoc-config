@@ -2,7 +2,7 @@
 % genus-1 vertex, edge, genus-0 vertex with a loop, 2 nodes.
 % Stable graphs of genus 2 enumerated in Harris-Morrison, "Moduli of curves",
 % Sec. 3.C; the stratum is named by the divisor d of 24 of
-% objects/moduli/m2-strata.
+% objects/moduli/m2-strata.json.
 % Points: -v1, -v2 the vertices; -box the bounding box. Keys: genus labels.
 \begin{scope}[local bounding box=-box]
   \dualloop{0.45,0}{right}

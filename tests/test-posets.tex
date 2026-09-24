@@ -28,4 +28,13 @@
   \foreach \e in \posetelements \node[draw, circle, minimum size=5mm] at (S-\e) {};
 \end{tikzpicture}
 
+\section*{Strata of $\overline{M}_2$, horizontal, with objects at the elements}
+\begin{tikzpicture}
+  \posetfromjson[name prefix=G-, poset axis=horizontal, grade distance=4.6cm,
+    element width=2.4cm, element height=1.2cm, element labels=false,
+    cover style=degeneration]{objects/moduli/m2-strata.json}
+  \foreach \e in \posetelements \pic at (G-\e) {object=moduli/m2-graph-\e};
+  \draw[fold] (G-24) -- (G-3);
+\end{tikzpicture}
+
 \end{document}

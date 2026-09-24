@@ -140,12 +140,7 @@ passed in \verb|\dzgobjects| by the test recipe.
 
 \section*{Strata of $\overline{M}_2$}
 \begin{tikzpicture}[x=0.5cm, y=0.5cm]
-  \pic[strata render=curve] (C) {object=moduli/m2-strata};
-  \pic[strata render=graph, genus labels=none] (G) at (0,-6) {object=moduli/m2-strata};
-  \pic[strata render=name, strata layout=vertical] (P) at (20,0) {object=moduli/m2-strata};
-  \draw[degeneration] (G-12-v1) -- (P-12-box);
-  \foreach \d/\n/\row in \strataposetdata
-    \draw[dashed] (P-\d-box) -- ++(1,0);
+  \pic[genus labels=none] (C) {object=moduli/m2-curve-4};
   \pic (X) at (26,0) {object=moduli/m2-coxeter};
   \pic[genus labels=none] (V) at (26,-6) {object=moduli/m2-graph-6};
   \draw[degeneration] (X-c) -- (V-box);

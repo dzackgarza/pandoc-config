@@ -2,10 +2,12 @@
 % Moduli-space strata: constructors
 % =============================================================================
 % Building blocks for the strata of a moduli space of stable curves: dual
-% graphs, genus labels, and the poset of strata ordered by closure. The strata
-% themselves, their stable graphs and stable curves, are objects, one file
+% graphs and genus labels. The strata themselves, their stable graphs and
+% stable curves, are objects, one file
 % each, under figures/objects/moduli/, assembled from these constructors; the
-% strata of \overline{M}_2 are objects/moduli/m2-*.tikz.
+% strata of \overline{M}_2 are objects/moduli/m2-*.tikz, and their poset,
+% ordered by closure, is objects/moduli/m2-strata.json, drawn with
+% \posetfromjson (dzg-posets.tex).
 % \input by dzg-constructors.tex, so "@" is a letter here.
 %
 % Commands:
@@ -18,40 +20,17 @@
 %       the vertex covers the loop.
 %   \genuslabel{<placement>}{<x,y>}{<genus>}
 %       the genus of a component of a stable curve, at <x,y>.
-%   \strataposet{<object prefix>}{<name/nodes/row, ...>}{<a/b, ...>}
-%       the strata of a moduli space as a poset: stratum <name>, with <nodes>
-%       nodes (its codimension), at position (nodes, row) of the layout, and
-%       a degeneration arrow from a to b for each cover relation a/b
-%       (b lies in the closure of a). Stratum <name> is the object
-%       <object prefix><render>-<name> placed as -<name>, or with
-%       `strata render=name` a poset node labelled <name>; either way its
-%       bounding box is -<name>-box, so a stratum object names its bounding
-%       box -box. After the call \strataposetdata holds the strata list, for
-%       figures that loop over the strata.
 %
 % Keys:
 %   genus labels=all|none       every component and vertex carries its genus,
 %                               0 included (default all)
-%   strata render=<kind>|name   which object of each stratum \strataposet
-%                               places (graph, curve, ...; default graph), or
-%                               its name in a poset node
-%   strata layout=horizontal|vertical
-%                               nodes left to right (x = 4.6 nodes,
-%                               y = 1.35 row), or codimension top to bottom
-%                               (x = -2.5 row, y = -2 nodes)
 
 \newif\ifdzg@genuslabels
 \dzg@genuslabelstrue
-\def\dzg@m@render{graph}
-\def\dzg@m@layout{horizontal}
 \tikzset{
   genus labels/.is choice,
   genus labels/all/.code={\dzg@genuslabelstrue},
   genus labels/none/.code={\dzg@genuslabelsfalse},
-  strata render/.store in=\dzg@m@render,
-  strata layout/.is choice,
-  strata layout/horizontal/.code={\def\dzg@m@layout{horizontal}},
-  strata layout/vertical/.code={\def\dzg@m@layout{vertical}},
 }
 
 \newcommand\genuslabel[3]{%
@@ -66,32 +45,3 @@
   \draw[shift={(#1)}] (\csname dzg@m@loop@#2\endcsname\dualloopradius,0)
     circle (\dualloopradius);}
 
-% Position (\dzg@m@x, \dzg@m@y) of the stratum with <nodes> and <row>.
-\def\dzg@m@position#1#2{%
-  \csname dzg@m@position@\dzg@m@layout\endcsname{#1}{#2}}
-\def\dzg@m@position@horizontal#1#2{%
-  \pgfmathsetmacro\dzg@m@x{4.6*#1}\pgfmathsetmacro\dzg@m@y{1.35*#2}}
-\def\dzg@m@position@vertical#1#2{%
-  \pgfmathsetmacro\dzg@m@x{-2.5*#2}\pgfmathsetmacro\dzg@m@y{-2*#1}}
-
-% \dzg@m@stratum{<object prefix>}{<position>}{<render>}{<name>}
-\def\dzg@m@name{name}
-\def\dzg@m@stratum#1#2#3#4{%
-  \def\dzg@m@r{#3}%
-  \ifx\dzg@m@r\dzg@m@name
-    \node[poset node] (-#4-box) at (#2) {$#4$};
-  \else
-    \pic (-#4) at (#2) {object=#1#3-#4};
-  \fi}
-
-\newcommand\strataposet[3]{%
-  \gdef\strataposetdata{#2}%
-  \foreach \dzg@s/\dzg@n/\dzg@row in {#2} {
-    \dzg@m@position{\dzg@n}{\dzg@row}
-    \edef\dzg@m@next{\noexpand\dzg@m@stratum{#1}{\dzg@m@x,\dzg@m@y}%
-      {\dzg@m@render}{\dzg@s}}%
-    \dzg@m@next
-  }
-  \foreach \dzg@a/\dzg@b in {#3}
-    \draw[degeneration] (-\dzg@a-box) -- (-\dzg@b-box);
-}

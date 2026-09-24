@@ -1,9 +1,18 @@
-% Stratification poset of \overline{M}_2 (objects/moduli/m2-strata), drawn
-% twice in the same layout: the seven stable curves (top) and their stable
-% graphs (bottom). Arrows point from a stratum to a stratum in its closure,
-% one node added per step.
+% Stratification poset of \overline{M}_2 (objects/moduli/m2-strata.json, laid
+% out by \posetfromjson), drawn twice: the seven stable curves (top) and their
+% stable graphs (bottom). Arrows point from a stratum to a stratum in its
+% closure, one node added per step; codimension grows to the right.
 \begin{tikzpicture}
-  \pic[strata render=curve] (C) at (0,4.3) {object=moduli/m2-strata};
-  \draw[dashed] (-1.5,1.6) -- (15.3,1.6);
-  \pic[strata render=graph] (G) at (0,-1.1) {object=moduli/m2-strata};
+  \posetfromjson[name prefix=C-, poset axis=horizontal, grade distance=4.6cm,
+    element width=2.4cm, element height=1.2cm, element sep=1.5cm,
+    element labels=false, cover style=degeneration]{objects/moduli/m2-strata.json}
+  \foreach \e in \posetelements \pic at (C-\e) {object=moduli/m2-curve-\e};
+  \coordinate (separator) at ([yshift=-3mm]current bounding box.south);
+  \posetfromjson[name prefix=G-, yshift=-2.8cm, poset axis=horizontal,
+    grade distance=4.6cm, element width=2.4cm, element height=1.2cm,
+    element sep=1.5cm, element labels=false,
+    cover style=degeneration]{objects/moduli/m2-strata.json}
+  \foreach \e in \posetelements \pic at (G-\e) {object=moduli/m2-graph-\e};
+  \draw[dashed] (current bounding box.west |- separator)
+    -- (current bounding box.east |- separator);
 \end{tikzpicture}

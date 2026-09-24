@@ -3,7 +3,7 @@
 % component; a self-node is a loop of four points.
 % Stable graphs of genus 2 enumerated in Harris-Morrison, "Moduli of curves",
 % Sec. 3.C; the stratum is named by the divisor d of 24 of
-% objects/moduli/m2-strata.
+% objects/moduli/m2-strata.json.
 % Points: -box the bounding box. Keys: genus labels.
 \begin{scope}[local bounding box=-box]
   \draw[curve component] (-1,-0.45)
