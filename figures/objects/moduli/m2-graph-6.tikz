@@ -1,0 +1,11 @@
+% The stable graph of the stratum d = 6 of \overline{M}_2 (Deligne-Mumford):
+% one genus-0 vertex, two loops, 2 nodes.
+% Stable graphs of genus 2 enumerated in Harris-Morrison, "Moduli of curves",
+% Sec. 3.C; the stratum is named by the divisor d of 24 of
+% objects/moduli/m2-strata.
+% Points: -v1, -v2 the vertices; -box the bounding box. Keys: genus labels.
+\begin{scope}[local bounding box=-box]
+  \dualloop{0,0}{left}
+  \dualloop{0,0}{right}
+  \dualvertex[7pt]{-v1}{0,0}{0}{below}
+\end{scope}

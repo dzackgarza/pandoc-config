@@ -363,8 +363,9 @@ Go to these first, in this order, for the figure kinds this repository draws:
 
 ### Worked example
 
-`figures/tikz/m2_boundary_stable_curves_poset.tikz` draws every nodal curve
-as a Hobby spline. A self-node is four points around the loop; a node between
-two components is the shared point listed in both curves; the alpha curve
-lists its node point twice. The git history of that file shows the three
-hand-rolled attempts that preceded it and what each one got wrong.
+`figures/objects/moduli/m2-curve-*.tikz`, the stable curves that
+`figures/tikz/m2_boundary_stable_curves_poset.tikz` places, draw every nodal
+curve as a Hobby spline. A self-node is four points around the loop; a node
+between two components is the shared point listed in both curves; the alpha
+curve lists its node point twice. The git history of the figure file shows the
+three hand-rolled attempts that preceded it and what each one got wrong.

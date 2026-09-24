@@ -1,0 +1,12 @@
+% A stable curve of the stratum d = 12 of \overline{M}_2 (Deligne-Mumford):
+% one genus-1 vertex, one loop (Delta_0), 1 node. Hobby splines through the listed points, one path per
+% component; a self-node is a loop of four points.
+% Stable graphs of genus 2 enumerated in Harris-Morrison, "Moduli of curves",
+% Sec. 3.C; the stratum is named by the divisor d of 24 of
+% objects/moduli/m2-strata.
+% Points: -box the bounding box. Keys: genus labels.
+\begin{scope}[local bounding box=-box]
+  \draw[curve component] (-1,-0.45)
+    to[curve through={(0,0) .. (0.75,0.4) .. (1.1,0) .. (0.75,-0.4) .. (0,0)}] (-1,0.45);
+  \genuslabel{above right}{0.35,0.4}{1}
+\end{scope}

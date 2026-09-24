@@ -1,9 +1,9 @@
-% Stratification poset of \overline{M}_2 (dzg-moduli.tex), drawn twice in the
-% same layout: the seven stable curves (top) and their stable graphs (bottom).
-% Arrows point from a stratum to a stratum in its closure, one node added per
-% step.
+% Stratification poset of \overline{M}_2 (objects/moduli/m2-strata), drawn
+% twice in the same layout: the seven stable curves (top) and their stable
+% graphs (bottom). Arrows point from a stratum to a stratum in its closure,
+% one node added per step.
 \begin{tikzpicture}
-  \pic[m2 render=curve] (C) at (0,4.3) {m2 strata};
+  \pic[strata render=curve] (C) at (0,4.3) {object=moduli/m2-strata};
   \draw[dashed] (-1.5,1.6) -- (15.3,1.6);
-  \pic[m2 render=graph] (G) at (0,-1.1) {m2 strata};
+  \pic[strata render=graph] (G) at (0,-1.1) {object=moduli/m2-strata};
 \end{tikzpicture}
