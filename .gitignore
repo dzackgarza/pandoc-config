@@ -22,3 +22,6 @@ plans/*.png
 *.tmp
 *.orig
 *_textext.tex
+
+# Claude Code session worktrees (local agent state)
+.claude/worktrees/
