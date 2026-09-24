@@ -1,0 +1,22 @@
+% Constructors: building blocks that take the data of a mathematical object
+% and draw it with the dzg TikZ library vocabulary. The objects themselves are
+% figures, one file each, under figures/objects/<family>/, assembled from these
+% constructors; a figure places an object with \pic (<name>) {object=...} and
+% decorates it.
+% \input by tikzlibrarydzg.code.tex, so "@" is a letter here.
+
+% \pic (Q) at (x,y) [<keys>] {object=<family>/<name>}: the object in
+% figures/objects/<family>/<name>.tikz. Its points, named -<point> in the
+% file, are Q-<point>; keys such as `ade labels=none` or `ell={...}` reach it.
+% The picture's scale spaces the object's coordinates (transform shape) and
+% leaves its node sizes absolute (transform shape=false inside).
+\tikzset{pics/object/.style={/tikz/transform shape, code={%
+  \tikzset{transform shape=false}\input{objects/#1.tikz}}}}
+
+\input{constructors/dzg-polygons}
+\input{constructors/dzg-coxeter}
+\input{constructors/dzg-vinberg}
+\input{constructors/dzg-bb-cusps}
+\input{constructors/dzg-nikulin}
+\input{constructors/dzg-moduli}
+\input{constructors/dzg-spaces}

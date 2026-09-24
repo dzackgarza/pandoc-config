@@ -3,8 +3,7 @@
 % rectangle with sides (3,-3) and (2,2), its unit triangulation and the
 % charges at its corners.
 \begin{tikzpicture}[scale=1.2]
-  \pic[ias labels=multiplicities] (P)
-    {symington 18 2 0={3,0,0,0,2,0,0,0,3,0,0,0,2,0,0,0,0,0,0,0}};
+  \pic[ias labels=multiplicities, ell={3,0,0,0,2,0,0,0,3,0,0,0,2,0,0,0,0,0,0,0}] (P) {object=ias/symington-18-2-0};
   \begin{scope}[on background layer]
     \clip (P-p0) -- (P-p4) -- (P-p8) -- (P-p12) -- cycle;
     \draw[lattice grid] (-1, -4) grid (6, 3);

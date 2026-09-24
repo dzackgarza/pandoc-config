@@ -154,8 +154,9 @@ See subdirectory READMEs for detailed documentation.
 
 Every figure draws with the style vocabulary in
 `styles/macros/tikz/tikzlibrarydzg.code.tex`, which the preamble loads with
-`\usetikzlibrary{dzg}`. Named diagrams built from it live in
-`styles/macros/tikz/dzg-diagrams.tex`. Read the library file before drawing.
+`\usetikzlibrary{dzg}`. Constructors that draw an object from its data live in
+`styles/macros/tikz/constructors/`; the objects are figures in
+`figures/objects/` (rule 6). Read the library file before drawing.
 
 1. **One style per mathematical element.** Coxeter vertices are
    `vertex=white|black|doubled`, edges `coxeter edge=<m>` (3, 4, 5, 6,
@@ -183,14 +184,24 @@ Every figure draws with the style vocabulary in
    `[on background layer]`.
 5. **Sizes are absolute.** A picture's `scale` spaces coordinates and does
    not change glyph sizes, so the same element looks the same in every figure.
-6. **One definition per mathematical object.** Each Coxeter diagram, cusp
-   diagram, lattice polygon, integral-affine sphere, lattice table, or stratum
-   is defined once, as a pic in `styles/macros/tikz/diagrams/dzg-<family>.tex`,
-   with canonical vertex names and canonical labels (toggleable, rarely
-   switched). A figure under `figures/` imports the object and decorates it:
-   highlights, extra labels, arrows, overlays. A second drawing of the same
-   object anywhere — another tree, a legacy copy, inline TikZ in a document —
-   is a defect.
+6. **Constructors build; objects are figures.**
+   `styles/macros/tikz/constructors/dzg-<family>.tex` holds building blocks
+   only: commands and keys that take the data of an object (a vertex and edge
+   list, the vertices of a polygon, edge vectors and surgeries) and draw it.
+   No constructor names a particular object. Each mathematical object — a
+   Coxeter diagram, cusp diagram, lattice polygon, integral-affine sphere,
+   lattice table, or stratum — is one file,
+   `figures/objects/<family>/<name>.tikz`: drawing commands without a
+   `tikzpicture`, assembled from constructors, with its data source in the
+   leading comment, its points named `-<point>`, and its canonical labels
+   behind the constructors' label keys. `just render-figures` renders it alone
+   to `figures/rendered/objects/<family>/<name>.{pdf,svg}`. A figure that
+   decorates or combines objects places each with
+   `\pic (Q) at (x,y) [<keys>] {object=<family>/<name>};` and draws on
+   `Q-<point>`: highlights, extra labels, arrows, overlays. A document that
+   shows one object alone uses its render, or a `tikzpicture` holding the one
+   `\pic`. A second drawing of the same object anywhere — another file, a
+   legacy copy, inline TikZ in a document — is a defect.
 7. **Data comes from the mathematics.** When copies disagree, compute the
    correct data (Gram matrices, root norms, polygon rules, lattice invariants)
    with the research preamble (`~/research/src/dzack_research/preamble/`) or
@@ -328,7 +339,7 @@ Go to these first, in this order, for the figure kinds this repository draws:
 | Over/under crossings, breaking a path at intersections, path surgery, knot diagrams | `spath3` library, `knots` library | add to preamble | `texdoc spath3`, `texdoc knots` |
 | Braids, mapping-class pictures | `braids` library | add to preamble | `texdoc braids` |
 | Surfaces of genus g, cobordisms, pants decompositions, degenerations drawn as surfaces | `tqft` library | add to preamble | `texdoc tqft` |
-| Coxeter and Dynkin diagrams: finite, affine, folded, marked, with edge labels | `dynkin-diagrams` package | add to preamble; `styles/macros/tikz/diagrams.tex` still hand-rolls these and should migrate | `texdoc dynkin-diagrams` |
+| Coxeter and Dynkin diagrams: finite, affine, folded, marked, with edge labels | `dynkin-diagrams` package | add to preamble; `styles/macros/tikz/constructors/dzg-coxeter.tex` still hand-rolls these and should migrate | `texdoc dynkin-diagrams` |
 | Commutative diagrams | `tikz-cd`, `quiver` | preamble; `styles/quiver.sty` | `texdoc tikz-cd` |
 | Dual graphs, stable-graph posets, stratification Hasse diagrams drawn by hand placement | `graphs` library (node/edge syntax, `graphs.standard`) | add to preamble | `texdoc pgf`, Part V |
 | The same, with automatic layered or force-directed layout | `graphdrawing` library with `layered` / `force` | add to preamble; Lua-based, figures only (rule 7) | `texdoc pgf`, Part IV |

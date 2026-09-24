@@ -412,7 +412,8 @@ _test-macros:
   #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
-  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:"
+  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:$PANDOC_DIR/figures//:"
+  OBJECTS=$(cd "$PANDOC_DIR/figures/objects" && find . -name "*.tikz" | sed "s|^\./||; s|\.tikz$||" | sort | paste -sd,)
   cd "$PANDOC_DIR/tests"
   pdflatex -interaction=nonstopmode test-latex-macros.tex || true
   if [ -f test-latex-macros.pdf ]; then
@@ -427,9 +428,10 @@ _test-tikz:
   #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
-  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:"
+  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:$PANDOC_DIR/figures//:"
+  OBJECTS=$(cd "$PANDOC_DIR/figures/objects" && find . -name "*.tikz" | sed "s|^\./||; s|\.tikz$||" | sort | paste -sd,)
   cd "$PANDOC_DIR/tests"
-  pdflatex -interaction=nonstopmode test-tikz-macros.tex 2>&1 | tee /tmp/tikz-test.log
+  pdflatex -interaction=nonstopmode -jobname=test-tikz-macros "\\def\\dzgobjects{$OBJECTS}\\input{test-tikz-macros.tex}" 2>&1 | tee /tmp/tikz-test.log
   if grep -q '^!' /tmp/tikz-test.log; then
     echo "❌ Errors found:"
     grep '^!' /tmp/tikz-test.log

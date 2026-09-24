@@ -1,0 +1,4 @@
+% The toric ADE pair {}'A_{4}^{-} [Alexeev-Thompson, arXiv:1712.07932,
+% Table 4]: Q = conv{(2,2), (0,1), (0,0), (3,0)}, p* = (2,2) a vertex.
+\adepolygon{2/2}{0/1, 0/0, 3/0}
+\adetitle{${}'A_{4}^{-}$}

@@ -1,0 +1,9 @@
+% The fan of P^1 in N_R = R: sigma_0 = R_{>=0} = Cone(rho_0),
+% sigma_1 = R_{<=0} = Cone(rho_1), the normal fan of an interval
+% [CLS Example 2.4.10]. Points: -0, -rho0, -rho1, -sigma0, -sigma1.
+\node[distinguished point] (-0) at (0,0) {};
+\foreach \i/\s in {0/1, 1/-1} {
+  \coordinate (-rho\i) at (\s*\fanlength, 0);
+  \draw[fan ray] (-0) -- (-rho\i);
+  \coordinate (-sigma\i) at (\s*0.6*\fanlength, 0);
+  \iffanlabels \node[below, font=\small] at (-sigma\i) {$\sigma_{\i}$};\fi}

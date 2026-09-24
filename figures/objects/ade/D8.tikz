@@ -1,0 +1,4 @@
+% The toric ADE pair D_{8} [Alexeev-Thompson, arXiv:1712.07932,
+% Table 1]: Q = conv{(2,2), (0,2), (0,0), (6,0)}, p* = (2,2) a vertex.
+\adepolygon{2/2}{0/2, 0/0, 6/0}
+\adetitle{$D_{8}$}

@@ -1,0 +1,40 @@
+% Gamma(X_0) = B_3(l) at Sterk cusp 3, l = (2,0^15,2,4,6,4,0,4)
+% [AEGS Ex. 4.13, Fig. 13 left], drawn in the integral lattice of unit squares:
+%   R    the triangulated region: the six unit squares of [-1,2] x [-1,2]
+%        other than [0,1]^2 and the two off-diagonal corners, each cut along
+%        its diagonal of direction (1,-1);
+%   R/~  Gamma(X_0): R with its boundary glued to itself by the reflection
+%        (x,y) -> (y,x) in the line l_En (ab ~ db, ac ~ dc, fb ~ jb, ic ~ lc,
+%        ef ~ kj, ge ~ nk, hi ~ ml, gh ~ nm); 8 vertices, 18 edges, 12
+%        triangles, Euler characteristic 2;
+%   q o p r  the diamond B(l) = P u P^op cut open, P the half above
+%        l_dP: x + y = 1, with sides (3,-3), (2,2): the polygon of
+%        objects/ias/symington-18-2-0 at l = (2,0^15,2,4,6,4).
+% Singular points: b, c, j, l of charge 2 and n of charge 16.
+% `ias involutions` draws the fixed lines of i_En and i_dP.
+\foreach \n/\x/\y in {a/0/1, b/1/1, c/0/0, d/1/0, e/0/2, f/1/2, g/-1/2,
+    h/-1/1, i/-1/0, j/2/1, k/2/0, l/0/-1, m/1/-1, n/2/-1, o/1/4, p/4/1,
+    q/-3/0, r/0/-3}
+  \coordinate (-\n) at (\x,\y);
+\coordinate (-En1) at (-1.5,-1.5);
+\coordinate (-En2) at (2.5,2.5);
+\scoped[on background layer]
+  \foreach \x/\y in {-1/1, 0/1, -1/0, 1/0, 0/-1, 1/-1}
+    \fill[ias region] (\x,\y) rectangle ++(1,1);
+% The diamond and the lattice lines through R.
+\draw[ias edge, dashed] (-q) -- (-o) -- (-p) -- (-r) -- cycle
+  (-g) -- (-f)  (-o) -- (-d)  (-a) -- (-p)  (-q) -- (-d)  (-l) -- (-n)
+  (-g) -- (-i)  (-a) -- (-r)  (-j) -- (-n);
+% The triangulation of R.
+\draw[ias edge] (-e) -- (-a) -- (-h)  (-e) -- (-k)  (-h) -- (-m)
+  (-m) -- (-d) -- (-k)  (-g) -- (-a)  (-d) -- (-n);
+\foreach \p/\m in {b/2, c/2, j/2, l/2, n/16} {\iassingularity{-\p}{\m}}
+\ifiasinvolutions
+  \draw[fold axis] (-En1) -- (-En2);
+  \draw[fold axis, draw=dzg accent, solid, line width=1.4pt] (-g) -- (-a)  (-d) -- (-n);
+  \draw[fold axis, draw=dzg accent, line width=1.4pt] (-a) -- (-d);
+  \draw[<->, line width=1.2pt, draw=dzg singular] (2.95,3.05) -- (3.95,2.05)
+    node[right, text=dzg singular] {$\ien$};
+  \draw[<->, line width=1.2pt, draw=dzg accent] (2.55,-2.15) -- (3.65,-1.05)
+    node[right, text=dzg accent] {$\idp$};
+\fi

@@ -108,37 +108,31 @@ Every pic of diagrams/dzg-bb-cusps.tex, with each label scheme.
   \node[self intersection] at (8,1) {$-2$};
 \end{tikzpicture}
 
-Every pic in dzg-ias.tex, with each label scheme; the eta\_3 instance
-collapses vertices and merges two surgery points.
+The keys of the polygon constructors; the eta\_3 instance collapses vertices
+and merges two surgery points.
 
 \begin{tikzpicture}[scale=0.3]
-  \pic (A) {symington 18 2 0};
-  \pic[ias labels=multiplicities] at (16,0)
-    {symington 18 2 0={2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,4,6,4}};
-  \pic[ias labels=none] at (40,-40) {symington 18 0 0};
-  \pic[ias involutions] at (5,-20) {sterk3 ias};
-  \pic at (20,-20) {sterk3 kulikov};
+  \pic[ias labels=multiplicities, ell={2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,4,6,4}]
+    (A) {object=ias/symington-18-2-0};
+  \pic[ias labels=none] at (16,0) {object=ias/symington-18-0-0};
+  \pic[ias involutions] at (5,-20) {object=ias/sterk3-ias};
+  \draw[fold] (A-p16) -- (A-p18);
 \end{tikzpicture}
-
-\section*{ADE lattice polygons}
-Every variant of \texttt{ade polygon}, and both keys.
 
 \begin{tikzpicture}[scale=0.5]
-  \foreach \l/\r/\v [count=\k] in {A/0/pure, A/3/left-short, A/4/prime,
-      A/7/both-prime, D/5/pure, D/8/prime, E/8/pure, D/6/affine, E/7/affine} {
-    \pic at ({mod(\k-1,3)*10}, {-6*div(\k-1,3)}) {ade polygon={\l}{\r}{\v}};
-  }
-  \pic[ade labels=none, ade title=false] at (30,0) {ade polygon={E}{6}{pure}};
-\end{tikzpicture}
-
-\section*{Toric fans}
-\begin{tikzpicture}
-  \pic (P) {toric fan=P1};
-  \pic (F) at (8,0) {toric fan=F2};
-  \pic[fan labels=none, fan length=1] at (14,0) {toric fan=F2};
+  \pic[ade labels=none, ade title=false] (Q) {object=ade/minus-E6-minus};
+  \draw[fold] (Q-pstar) -- (Q-1);
+  \pic[fan labels=none, fan length=1] (F) at (10,0) {object=toric/fan-F2};
   \draw[polytope edge, dashed] (F-rho1) -- (F-rho2) -- (F-rho3) -- (F-rho4) -- cycle;
 \end{tikzpicture}
 
+\section*{Objects}
+Every file under figures/objects, placed through the object pic; the list is
+passed in \verb|\dzgobjects| by the test recipe.
+
+
+\foreach \o in \dzgobjects {\par\noindent\texttt{\o}\par
+  \begin{tikzpicture}[scale=0.4]\pic {object=\o};\end{tikzpicture}\par}
 \section*{Lattice polygons}
 \begin{tikzpicture}
   \draw[lattice grid] (-0.5,-0.5) grid (3.5,2.5);

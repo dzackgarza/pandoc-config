@@ -1,0 +1,9 @@
+% The fan of the Hirzebruch surface F_2, the normal fan of the lattice
+% quadrilateral P_{2,4} = conv{(0,0), (2,0), (4,1), (0,1)} [CLS Example
+% 2.3.16]: rays rho_1..rho_4 = (1,0), (0,1), (-1,2), (0,-1) counterclockwise,
+% sigma_i = Cone(rho_i, rho_{i+1}). Points: -0, -rho<i>, -sigma<i>.
+\fanrays{1/1/0/right, 2/0/1/above right, 3/-1/2/above left, 4/0/-1/below}
+\fancones{1/{0.35*\fanlength,0.35*\fanlength},
+  2/{-0.25*\fanlength,0.7*\fanlength},
+  3/{-0.4*\fanlength,-0.3*\fanlength},
+  4/{0.35*\fanlength,-0.3*\fanlength}}

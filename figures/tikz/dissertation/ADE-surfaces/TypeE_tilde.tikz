@@ -1,5 +1,5 @@
-% tilde E_7, tilde E_8^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
+% tilde E_7, tilde E_8^-, the objects in figures/objects/ade.
 \begin{tikzpicture}
-\pic at (0,0) {ade polygon={E}{7}{affine}};
-\pic at (7,0) {ade polygon={E}{8}{affine}};
+\pic at (0,0) {object=ade/tilde-E7};
+\pic at (7,0) {object=ade/tilde-E8-minus};
 \end{tikzpicture}

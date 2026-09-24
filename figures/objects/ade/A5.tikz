@@ -1,0 +1,4 @@
+% The toric ADE pair A_{5} [Alexeev-Thompson, arXiv:1712.07932,
+% Table 1]: Q = conv{(0,2), (0,0), (6,0)}, p* = (0,2) a vertex.
+\adepolygon{0/2}{0/0, 6/0}
+\adetitle{$A_{5}$}

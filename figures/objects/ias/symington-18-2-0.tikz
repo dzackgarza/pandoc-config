@@ -1,0 +1,28 @@
+% The Symington polygon P(l) of the 0-cusp (18,2,0)_1 = U(2) + E_8^2 of
+% F_{(2,2,0)} [AEGS §4.2, Fig. 11 right]: sixteen sides in the directions of
+% the moment polygon, and Symington surgeries with the roots 16..19 on the
+% sides 0, 4, 8, 12. l_i = lambda . alpha_i for the Vinberg roots alpha_i
+% (objects/coxeter/vinberg-18-2-0). The lines l_20, l_21 join the singular
+% points of opposite surgeries (l_20, l_21 are twice their lattice lengths).
+% Default instance: the template of the dissertation, l = (2,2,1,2)^4, (2)^4.
+% Points: -p0..-p15 the vertices, -p16..-p19 the surgery points.
+\setell{0}{2,2,1,2,2,2,1,2,2,2,1,2,2,2,1,2,2,2,2,2}
+\symingtonpolygon[first=0, last=15, closed]
+  {0/1/-1/s/16, 1/2/-1/h/0, 2/1/0/w/0, 3/2/1/h/0, 4/1/1/s/17, 5/1/2/h/0,
+   6/0/1/w/0, 7/-1/2/h/0, 8/-1/1/s/18, 9/-2/1/h/0, 10/-1/0/w/0, 11/-2/-1/h/0,
+   12/-1/-1/s/19, 13/-1/-2/h/0, 14/0/-1/w/0, 15/1/-2/h/0}
+  {0/16/1/0/a/16, 4/17/0/1/a/17, 8/18/-1/0/a/18, 12/19/0/-1/a/19}
+\pgfmathparse{min(\ellvalue{16},\ellvalue{18})}
+\ifdim\pgfmathresult pt>0pt
+  \draw[ias edge, dotted, draw=dzg singular] (-p16) -- (-p18);
+  \ifiaslabels
+    \path ($(-p16)!0.3!(-p18)$) node[ias label, text=dzg singular, right] {$\ell_{20}$};
+  \fi
+\fi
+\pgfmathparse{min(\ellvalue{17},\ellvalue{19})}
+\ifdim\pgfmathresult pt>0pt
+  \draw[ias edge, dotted, draw=dzg singular] (-p17) -- (-p19);
+  \ifiaslabels
+    \path ($(-p17)!0.3!(-p19)$) node[ias label, text=dzg singular, above] {$\ell_{21}$};
+  \fi
+\fi

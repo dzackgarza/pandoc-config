@@ -1,7 +1,7 @@
-% D_4, -E_6^-, -E_7, -E_8^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
+% D_4, -E_6^-, -E_7, -E_8^-, the objects in figures/objects/ade.
 \begin{tikzpicture}
-\pic at (0,0) {ade polygon={D}{4}{pure}};
-\pic at (5,0) {ade polygon={E}{6}{pure}};
-\pic at (11,0) {ade polygon={E}{7}{pure}};
-\pic at (18,0) {ade polygon={E}{8}{pure}};
+\pic at (0,0) {object=ade/D4};
+\pic at (5,0) {object=ade/minus-E6-minus};
+\pic at (11,0) {object=ade/minus-E7};
+\pic at (18,0) {object=ade/minus-E8-minus};
 \end{tikzpicture}

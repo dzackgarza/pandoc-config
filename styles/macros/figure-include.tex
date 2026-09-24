@@ -3,7 +3,8 @@
 % =============================================================================
 % \ctikzsvg[<includesvg options>]{<figure path relative to TEXINPUTS>}
 % Runs bin/render_figures.py on the figure (cached by content hash) and
-% includes figures/rendered/<basename>.svg, centred. Needs --shell-escape.
+% includes figures/rendered/<basename>.svg (rendered/objects/<family>/<basename>.svg
+% for an object), centred. Needs --shell-escape.
 \RequirePackage{svg}
 \RequirePackage{catchfile}
 
@@ -13,8 +14,12 @@
   \CatchFileEdef\abspath{|kpsewhich "#2"}{\endlinechar=-1 }%
   \immediate\write18{python3 /home/dzack/.pandoc/bin/render_figures.py \abspath}%
   \filename@parse{#2}%
+  % An object under figures/objects/<family>/ renders to
+  % rendered/objects/<family>/; every other figure to rendered/.
+  \@expandtwoargs\in@{objects/}{\filename@area}%
+  \ifin@\edef\dzg@svgdir{\filename@area}\else\def\dzg@svgdir{}\fi
   \begin{center}%
-    \includesvg[#1]{/home/dzack/.pandoc/figures/rendered/\filename@base}%
+    \includesvg[#1]{/home/dzack/.pandoc/figures/rendered/\dzg@svgdir\filename@base}%
   \end{center}%
   \endgroup
 }

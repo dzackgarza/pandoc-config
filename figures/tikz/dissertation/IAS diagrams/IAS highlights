@@ -2,7 +2,7 @@
 % (2,1,2,0,2,1,2,1,2,1,2,1,2,1,2,0,2,1,2), the smallest instance, with its
 % unit triangulation and each vertex labelled by its lattice coordinates.
 \begin{tikzpicture}[scale=0.8]
-  \pic[ias labels=none] (P) {symington 18 0 0={2,1,2,0,2,1,2,1,2,1,2,1,2,1,2,0,2,1,2}};
+  \pic[ias labels=none, ell={2,1,2,0,2,1,2,1,2,1,2,1,2,1,2,0,2,1,2}] (P) {object=ias/symington-18-0-0};
   \begin{scope}[on background layer]
     \clip (P-p2) \foreach \i in {3,...,19} { -- (P-p\i) } -- cycle;
     \draw[lattice grid] (-22, -1) grid (1, 21);

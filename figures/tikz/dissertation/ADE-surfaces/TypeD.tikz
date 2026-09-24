@@ -1,7 +1,7 @@
-% D_5^-, D_6, D_7^-, D_8: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
+% D_5^-, D_6, D_7^-, D_8, the objects in figures/objects/ade.
 \begin{tikzpicture}
-\pic at (0,0) {ade polygon={D}{5}{pure}};
-\pic at (6,0) {ade polygon={D}{6}{pure}};
-\pic at (13,0) {ade polygon={D}{7}{pure}};
-\pic at (21,0) {ade polygon={D}{8}{pure}};
+\pic at (0,0) {object=ade/D5-minus};
+\pic at (6,0) {object=ade/D6};
+\pic at (13,0) {object=ade/D7-minus};
+\pic at (21,0) {object=ade/D8};
 \end{tikzpicture}

@@ -1,0 +1,4 @@
+% The toric ADE pair {}^{-}A_{3}^{-} [Alexeev-Thompson, arXiv:1712.07932,
+% Table 1, row -A^-_{2n-3}, and Remark 3.9]: Q = conv{(0,2), (1,0), (5,0)}, p* = (0,2) a vertex.
+\adepolygon{0/2}{1/0, 5/0}
+\adetitle{${}^{-}A_{3}^{-}$}

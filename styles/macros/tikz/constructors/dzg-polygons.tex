@@ -1,0 +1,457 @@
+% =============================================================================
+% Lattice polygons: constructors
+% =============================================================================
+% Building blocks for lattice polygons, Symington polygons, integral-affine
+% singularities and toric fans. A constructor takes the data of one polygon
+% and draws it; the polygons themselves are objects, one file each, under
+% figures/objects/ (ade/, ias/, toric/), assembled from these constructors.
+% \input by dzg-constructors.tex, so "@" is a letter here.
+%
+% Commands:
+%   \adepolygon{<px>/<py>}{<x/y, ...>}
+%       the toric ADE pair (Y, C) of the lattice polygon Q with distinguished
+%       point p* and vertices v_1, ..., v_k after p* counterclockwise
+%       (Alexeev-Thompson, arXiv:1712.07932, Notation 3.7); see below.
+%   \adetitle{<math>}           the decorated Dynkin symbol under Q
+%   \symingtonpolygon[<keys>]{<sides>}{<surgeries>}
+%       a polygon given by edge vectors l_i d_i, with Symington surgeries;
+%       see below.
+%   \setell{<first index>}{<l_first, l_first+1, ...>}
+%       the values l_i the polygon is drawn at, unless the figure passes
+%       `ell={...}`.
+%   \iassingularity{<point>}{<charge>}   an integral-affine singular point
+%   \fanrays{<i/a/b/anchor, ...>}       rays rho_i = (a,b) of a complete fan
+%   \fancones{<i/coordinate, ...>}      the maximal cones sigma_i
+%   \dzgmonomial{<i>}{<j>}              x^i y^j
+%
+% Keys:
+%   ade labels=monomials|none   monomials, side lengths, p* (default monomials)
+%   ade title=true|false        the decorated symbol (default true)
+%   ade affine                  p* is interior to the side [v_k, v_1]
+%   ias labels=canonical|multiplicities|none
+%                               canonical: point names, edge vectors, charges;
+%                               multiplicities: charges alone
+%   ias involutions             draw the involutions an object records
+%   ell={l_first, ...}          the values l_i of a Symington polygon
+%   fan labels=canonical|none, fan length=<factor>
+%
+% Conditionals for objects: \ifiaslabels, \ifiasmultiplicities,
+% \ifiasinvolutions, \ifadelabels, \ifadetitle, \ifadeaffine, \iffanlabels.
+
+\newif\ifiaslabels \iaslabelstrue
+\newif\ifiasmultiplicities \iasmultiplicitiestrue
+\newif\ifiasinvolutions
+\newif\ifadelabels \adelabelstrue
+\newif\ifadetitle \adetitletrue
+\newif\ifadeaffine
+\newif\iffanlabels \fanlabelstrue
+\def\fanlength{2}
+\let\dzg@ell@given\relax
+\tikzset{
+  ias labels/.is choice,
+  ias labels/canonical/.code={\iaslabelstrue\iasmultiplicitiestrue},
+  ias labels/none/.code={\iaslabelsfalse\iasmultiplicitiesfalse},
+  ias labels/multiplicities/.code={\iaslabelsfalse\iasmultiplicitiestrue},
+  ias involutions/.is if=iasinvolutions,
+  % text of an edge vector or point name of an IAS
+  ias label/.style={font=\footnotesize, inner sep=2pt},
+  ade labels/.is choice,
+  ade labels/monomials/.code={\adelabelstrue},
+  ade labels/none/.code={\adelabelsfalse},
+  ade title/.is if=adetitle,
+  ade affine/.is if=adeaffine,
+  ell/.code={\def\dzg@ell@given{#1}},
+  fan labels/.is choice,
+  fan labels/canonical/.code={\fanlabelstrue},
+  fan labels/none/.code={\fanlabelsfalse},
+  fan length/.store in=\fanlength,
+}
+
+% x^i y^j, written 1, x, x^2, y, xy, ...
+\newcommand{\dzgmonomial}[2]{%
+  \ifnum#1=0 \ifnum#2=0 1\fi\else x\ifnum#1>1 ^{#1}\fi\fi
+  \ifnum#2>0 y\ifnum#2>1 ^{#2}\fi\fi}
+
+% \iassingularity{<point>}{<charge>}: the charge is printed when it is not 1
+% and multiplicities are shown.
+\newcommand\iassingularity[2]{%
+  \ifiasmultiplicities\ifnum#2>1
+    \node[ias singularity=#2] at (#1) {};%
+  \else\node[ias singularity] at (#1) {};\fi
+  \else\node[ias singularity] at (#1) {};\fi}
+
+% =============================================================================
+% Symington polygons
+% =============================================================================
+
+
+% Source of the construction: the (18,2,0)_1 and (18,0,0)_1 templates of the
+% dissertation, research/writing/dissertation/sections/2-part-moduli/
+% 5-chapter-ias-dlt/500-ias.md (B(lambda) = P(lambda) u P(lambda)^op), after
+% Symington 2003 and Alexeev-Engel-Garza-Schaffler 2023 §4.2. The barycentric
+% coordinates l_i = lambda . alpha_i of the Vinberg roots alpha_i fix the
+% sides: side i is
+%   v_i = l_i d_i            (kind w),
+%   v_i = (l_i / 2) d_i      (kind h),
+%   v_i = (l_i + l_j / 2) d_i  (kind s: a Symington surgery with root j),
+% with d_i the primitive direction of the side, counterclockwise. The surgery
+% cuts the segment of lattice length l_j / 2 starting at distance l_i / 2 along
+% the side and folds it to the singular point
+%   apex = (cut start or cut end) + (l_j / 2) u_j,
+% so the cut triangle is unimodular up to scale.
+%
+% Data:
+%   sides      <i>/<dx>/<dy>/<kind>/<j>   (j = 0 when the side has no surgery)
+%   surgeries  <i>/<j>/<ux>/<uy>/<anchor: a = cut start, b = cut end>/<apex>
+% Points: -p<i> the vertices, -p<apex> the singular points, -c<j>a and -c<j>b
+% the ends of the cut of surgery j.
+% Keys of \symingtonpolygon: first=<index of the first vertex>, last=<index of
+% the last vertex>, closed (the last side returns to p_first), charges={i/c,
+% ...}. Every vertex is an integral-affine singular point of charge 1 unless
+% `charges` says otherwise; vertices joined by sides of length 0 add up.
+% \dzg@ias@ell{<i>}: the value l_i the polygon is drawn at.
+\def\dzg@ias@ell#1{\csname dzg@ias@l@#1\endcsname}
+% \dzg@ias@setell{<first index>}{<l list>}
+\def\dzg@ias@setell#1#2{%
+  \foreach \dzg@v [count=\dzg@c from #1] in {#2}
+    {\expandafter\xdef\csname dzg@ias@l@\dzg@c\endcsname{\dzg@v}}}
+
+% \dzg@ias@sidelen{<i>}{<kind>}{<j>}: sets \dzg@len, the lattice length.
+\def\dzg@ias@sidelen#1#2#3{%
+  \if#2w\pgfmathsetmacro\dzg@len{\dzg@ias@ell{#1}}\fi
+  \if#2h\pgfmathsetmacro\dzg@len{\dzg@ias@ell{#1}/2}\fi
+  \if#2s\pgfmathsetmacro\dzg@len{\dzg@ias@ell{#1}+\dzg@ias@ell{#3}/2}\fi}
+
+% \dzg@ias@vector{<i>}{<kind>}{<j>}{<dx>}{<dy>}: the edge vector v_i.
+\def\dzg@ias@vector#1#2#3#4#5{%
+  \if#2w$v_{#1}=\ell_{#1}\cdot(#4,#5)$\fi
+  \if#2h$v_{#1}=\tfrac12\ell_{#1}\cdot(#4,#5)$\fi
+  \if#2s$v_{#1}=(\ell_{#1}+\tfrac12\ell_{#3})\cdot(#4,#5)$\fi}
+
+% \dzg@ias@symington{<first>}{<last vertex>}{<closed: 1|0>}{<sides>}{<surgeries>}
+%   {<charges i/c: the charge of vertex p_i where it is not 1>}
+\def\dzg@ias@symington#1#2#3#4#5#6{%
+  % Vertices, as numbers \dzg@ias@x@<i>, \dzg@ias@y@<i> and coordinates -p<i>.
+  \expandafter\xdef\csname dzg@ias@x@#1\endcsname{0}%
+  \expandafter\xdef\csname dzg@ias@y@#1\endcsname{0}%
+  \foreach \i/\dx/\dy/\kind/\j in #4 {%
+    \dzg@ias@sidelen{\i}{\kind}{\j}%
+    \expandafter\xdef\csname dzg@ias@len@\i\endcsname{\dzg@len}%
+    \pgfmathtruncatemacro\dzg@next{\i+1}%
+    \pgfmathsetmacro\dzg@x{\csname dzg@ias@x@\i\endcsname+\dzg@len*\dx}%
+    \pgfmathsetmacro\dzg@y{\csname dzg@ias@y@\i\endcsname+\dzg@len*\dy}%
+    \expandafter\xdef\csname dzg@ias@x@\dzg@next\endcsname{\dzg@x}%
+    \expandafter\xdef\csname dzg@ias@y@\dzg@next\endcsname{\dzg@y}}%
+  \pgfmathtruncatemacro\dzg@ias@n{#2-#1+1}%
+  \xdef\dzg@ias@cx{0}\xdef\dzg@ias@cy{0}%
+  \foreach \i in {#1,...,#2} {%
+    \coordinate (-p\i) at (\csname dzg@ias@x@\i\endcsname,\csname dzg@ias@y@\i\endcsname);
+    \pgfmathsetmacro\dzg@x{\dzg@ias@cx+\csname dzg@ias@x@\i\endcsname/\dzg@ias@n}%
+    \pgfmathsetmacro\dzg@y{\dzg@ias@cy+\csname dzg@ias@y@\i\endcsname/\dzg@ias@n}%
+    \xdef\dzg@ias@cx{\dzg@x}\xdef\dzg@ias@cy{\dzg@y}}%
+  % Surgeries: cut ends -c<j>a, -c<j>b and the singular point -p<apex>.
+  \foreach \i/\j/\ux/\uy/\anchor/\apex in #5 {%
+    \pgfmathtruncatemacro\dzg@next{\i+1}%
+    \ifnum\dzg@next>#2 \def\dzg@next{#1}\fi
+    \edef\dzg@px{\csname dzg@ias@x@\i\endcsname}\edef\dzg@py{\csname dzg@ias@y@\i\endcsname}%
+    \edef\dzg@qx{\csname dzg@ias@x@\dzg@next\endcsname}%
+    \edef\dzg@qy{\csname dzg@ias@y@\dzg@next\endcsname}%
+    \pgfmathsetmacro\dzg@s{\dzg@ias@ell{\i}/2/max(\csname dzg@ias@len@\i\endcsname,0.001)}%
+    \pgfmathsetmacro\dzg@t{(\dzg@ias@ell{\i}+\dzg@ias@ell{\j})/2/max(\csname dzg@ias@len@\i\endcsname,0.001)}%
+    % Direction of the side, the cut ends and the apex, as numbers.
+    \pgfmathsetmacro\dzg@dx{(\dzg@qx-\dzg@px)}\pgfmathsetmacro\dzg@dy{(\dzg@qy-\dzg@py)}%
+    \pgfmathsetmacro\dzg@ax{\dzg@px+\dzg@s*\dzg@dx}\pgfmathsetmacro\dzg@ay{\dzg@py+\dzg@s*\dzg@dy}%
+    \pgfmathsetmacro\dzg@bx{\dzg@px+\dzg@t*\dzg@dx}\pgfmathsetmacro\dzg@by{\dzg@py+\dzg@t*\dzg@dy}%
+    \if\anchor b\let\dzg@ox\dzg@bx\let\dzg@oy\dzg@by
+    \else\let\dzg@ox\dzg@ax\let\dzg@oy\dzg@ay\fi
+    \pgfmathsetmacro\dzg@x{\dzg@ox+\dzg@ias@ell{\j}/2*\ux}%
+    \pgfmathsetmacro\dzg@y{\dzg@oy+\dzg@ias@ell{\j}/2*\uy}%
+    \expandafter\xdef\csname dzg@ias@ax@\apex\endcsname{\dzg@x}%
+    \expandafter\xdef\csname dzg@ias@ay@\apex\endcsname{\dzg@y}%
+    \coordinate (-c\j a) at (\dzg@ax,\dzg@ay);
+    \coordinate (-c\j b) at (\dzg@bx,\dzg@by);
+    \coordinate (-p\apex) at (\dzg@x,\dzg@y);}%
+  \begin{scope}[on background layer]
+    \fill[ias region] (-p#1) \foreach \i in {#1,...,#2} { -- (-p\i) } -- cycle;
+    \foreach \i/\j/\ux/\uy/\anchor/\apex in #5 {%
+      \ifdim\dzg@ias@ell{\j}pt>0pt
+        \path[ias surgery] (-c\j a) -- (-p\apex) -- (-c\j b) -- cycle;\fi}
+  \end{scope}
+  % Sides, oriented counterclockwise; a surgery side is cut in three.
+  \foreach \i/\dx/\dy/\kind/\j in #4 {%
+    \pgfmathtruncatemacro\dzg@next{\i+1}%
+    \ifnum\dzg@next>#2 \def\dzg@next{#1}\fi
+    \ifdim\csname dzg@ias@len@\i\endcsname pt>0pt
+      \ifnum\j=0
+        \draw[fan ray] (-p\i) -- (-p\dzg@next);
+      \else
+        \ifdim\dzg@ias@ell{\i}pt>0pt \draw[fan ray, -] (-p\i) -- (-c\j a);\fi
+        \ifdim\dzg@ias@ell{\j}pt>0pt
+          \draw[fan ray, -, dashed, draw opacity=0.4] (-c\j a) -- (-c\j b);\fi
+        \ifdim\dzg@ias@ell{\i}pt>0pt \draw[fan ray] (-c\j b) -- (-p\dzg@next);\fi
+      \fi
+      \ifiaslabels
+        \pgfmathsetmacro\dzg@a{atan2(-\dx,\dy)+180}%
+        \path ($(-p\i)!0.5!(-p\dzg@next)$)
+          node[ias label, anchor=\dzg@a] {\dzg@ias@vector{\i}{\kind}{\j}{\dx}{\dy}};
+      \fi
+    \fi}%
+  % Surgery vectors v_j and their singular points.
+  \foreach \i/\j/\ux/\uy/\anchor/\apex in #5 {%
+    \ifdim\dzg@ias@ell{\j}pt>0pt
+      \draw[fan ray, draw=dzg singular] (-c\j\anchor) -- (-p\apex);
+      \ifiaslabels
+        % Past the singular point, in the direction of the vector.
+        \pgfmathsetmacro\dzg@a{atan2(-\uy,-\ux)}%
+        \path (-p\apex) node[ias label, text=dzg singular, anchor=\dzg@a,
+          inner sep=6pt] {$v_{\j}=\tfrac12\ell_{\j}\cdot(\ux,\uy)$};
+      \fi
+    \fi}%
+  % Singular points: each apex with the number of apexes at the same point,
+  % each vertex with the number of vertices at the same point (sides of length
+  % 0 collapse vertices) plus its extra multiplicity.
+  \foreach \i/\j/\ux/\uy/\anchor/\apex in #5 {%
+    \ifdim\dzg@ias@ell{\j}pt>0pt
+      \gdef\dzg@mult{0}\gdef\dzg@first{1}%
+      \foreach \k/\l/\vx/\vy/\b/\bapex in #5 {%
+        \ifdim\dzg@ias@ell{\l}pt>0pt
+          \pgfmathparse{abs(\csname dzg@ias@ax@\apex\endcsname
+              -\csname dzg@ias@ax@\bapex\endcsname)
+            +abs(\csname dzg@ias@ay@\apex\endcsname
+              -\csname dzg@ias@ay@\bapex\endcsname)<0.01 ? 1 : 0}%
+          \ifdim\pgfmathresult pt>0pt
+            \pgfmathtruncatemacro\dzg@m{\dzg@mult+1}\xdef\dzg@mult{\dzg@m}%
+            \ifnum\bapex<\apex \gdef\dzg@first{0}\fi
+          \fi
+        \fi}%
+      \ifnum\dzg@first=1 \iassingularity{-p\apex}{\dzg@mult}\fi
+    \fi}%
+  % Walk the vertices cyclically from one whose preceding side has positive
+  % length, so that a group of collapsed vertices is never split.
+  \gdef\dzg@start{#1}%
+  \ifnum#3=1
+    \gdef\dzg@found{0}%
+    \foreach \i in {#1,...,#2} {%
+      \pgfmathtruncatemacro\dzg@prev{\i==#1 ? #2 : \i-1}%
+      \ifnum\dzg@found=0 \ifdim\csname dzg@ias@len@\dzg@prev\endcsname pt>0pt
+        \xdef\dzg@start{\i}\gdef\dzg@found{1}\fi\fi}%
+  \fi
+  \gdef\dzg@mult{0}%
+  \pgfmathtruncatemacro\dzg@last{\dzg@ias@n-1}%
+  \foreach \k in {0,...,\dzg@last} {%
+    \pgfmathtruncatemacro\i{#1+mod(\dzg@start-#1+\k,\dzg@ias@n)}%
+    \gdef\dzg@charge{1}%
+    \foreach \e/\m in {#6} {\ifnum\e=\i \xdef\dzg@charge{\m}\fi}%
+    \pgfmathtruncatemacro\dzg@m{\dzg@mult+\dzg@charge}\xdef\dzg@mult{\dzg@m}%
+    \gdef\dzg@emit{0}%
+    \ifnum#3=0 \ifnum\i=#2 \gdef\dzg@emit{1}\fi\fi
+    \ifnum\dzg@emit=0 \ifnum\i<#2
+      \ifdim\csname dzg@ias@len@\i\endcsname pt>0pt \gdef\dzg@emit{1}\fi\fi\fi
+    \ifnum#3=1 \ifnum\i=#2
+      \ifdim\csname dzg@ias@len@\i\endcsname pt>0pt \gdef\dzg@emit{1}\fi\fi\fi
+    \ifnum\dzg@emit=1
+      \iassingularity{-p\i}{\dzg@mult}%
+      \ifiaslabels
+        \pgfmathsetmacro\dzg@a{atan2(\csname dzg@ias@y@\i\endcsname-\dzg@ias@cy,
+          \csname dzg@ias@x@\i\endcsname-\dzg@ias@cx)}%
+        % Inside the polygon, so that point names and edge vectors do not meet.
+        \path (-p\i) node[ias label, anchor=\dzg@a, inner sep=6pt] {$p_{\i}$};
+      \fi
+      \gdef\dzg@mult{0}%
+    \fi}}
+
+
+\pgfkeys{/dzg/symington/.cd, first/.store in=\dzg@sym@first,
+  last/.store in=\dzg@sym@last, closed/.code={\def\dzg@sym@closed{1}},
+  charges/.store in=\dzg@sym@charges}
+\newcommand\symingtonpolygon[3][]{%
+  \def\dzg@sym@first{0}\def\dzg@sym@last{0}\def\dzg@sym@closed{0}%
+  \def\dzg@sym@charges{-1/1}%
+  \pgfkeys{/dzg/symington/.cd, #1}%
+  \def\dzg@sym@sides{#2}\def\dzg@sym@surgeries{#3}%
+  \edef\dzg@next{\noexpand\dzg@ias@symington{\dzg@sym@first}{\dzg@sym@last}%
+    {\dzg@sym@closed}\noexpand\dzg@sym@sides\noexpand\dzg@sym@surgeries
+    {\dzg@sym@charges}}%
+  \dzg@next}
+
+% \setell{<first index>}{<default values>}: l_i from the figure's `ell`, else
+% the object's default instance. \ellvalue{<i>} is l_i.
+\newcommand\setell[2]{%
+  \ifx\dzg@ell@given\relax\dzg@ias@setell{#1}{#2}%
+  \else\edef\dzg@next{\noexpand\dzg@ias@setell{#1}{\dzg@ell@given}}\dzg@next\fi}
+\newcommand\ellvalue[1]{\dzg@ias@ell{#1}}
+
+% =============================================================================
+% ADE lattice polygons
+% =============================================================================
+% \adepolygon[ade affine]{<px>/<py>}{<x/y, ...>}: the lattice polygon Q with
+% boundary p* -> v_1 -> ... -> v_k -> p* counterclockwise, so that
+% C = [v_k, p*] + [p*, v_1] and C' = v_1 -> ... -> v_k (Alexeev-Thompson,
+% "ADE surfaces and their moduli", arXiv:1712.07932, Notation 3.7). With
+% `ade affine` the boundary is v_1 -> ... -> v_k -> v_1 and p* is interior to
+% the side [v_k, v_1], which is C. What it draws, all derived from Q and p*:
+% - the lattice [0,w]x[0,h] with points named -<i>-<j>, and Q filled;
+% - C as `long side` (even lattice length) or `short side` (odd), labelled
+%   with its lattice length; the other sides C' as `axis side`; the lattice
+%   points of C as `boundary point` in the accent colour, and p* (named
+%   -pstar) as `marked point`;
+% - the Dynkin diagram of AT Notation 3.7: a node at each lattice point of C'
+%   not on C, joined along the boundary, black at lattice length 2 from p* and
+%   white at length 1; at each corner node an internal node (`vertex=doubled`)
+%   at the corner plus the primitive vectors of its two sides. Nodes are named
+%   -1, -2, ... along the boundary, then the internal nodes;
+% - the monomial x^i y^j at every boundary lattice point but p*, and at every
+%   internal node, set outside Q (along the outward normal of the side, or the
+%   bisector of the two normals at a vertex) and, at an internal node, away
+%   from its corner.
+% The local bounding box of Q is -lp.
+
+% \dzg@ade@side{<x0>}{<y0>}{<x1>}{<y1>}: lattice length \dzg@g and primitive
+% step (\dzg@sx,\dzg@sy) of the segment.
+\def\dzg@ade@side#1#2#3#4{%
+  \pgfmathtruncatemacro\dzg@g{gcd(abs(#3-#1),abs(#4-#2))}%
+  \pgfmathtruncatemacro\dzg@sx{(#3-#1)/\dzg@g}%
+  \pgfmathtruncatemacro\dzg@sy{(#4-#2)/\dzg@g}}
+
+% \dzg@ade@monomial{<i>}{<j>}{<angle>}
+\def\dzg@ade@monomial#1#2#3{%
+  \ifadelabels
+    \path (#1,#2) node[label={[monomial]#3:$\dzgmonomial{#1}{#2}$}] {};%
+  \fi}
+
+\newcommand\adepolygon[3][]{%
+  \begingroup\tikzset{#1}\dzg@adepolygon#2\relax{#3}\endgroup}
+\def\dzg@adepolygon#1/#2\relax#3{%
+  \def\dzg@px{#1}\def\dzg@py{#2}\def\dzg@path{#3}%
+  \ifadeaffine \let\dzg@cycle\dzg@path
+  \else\edef\dzg@cycle{\dzg@px/\dzg@py, \dzg@path}\fi
+  % Bounding box, the path of Q, and v_1, v_k.
+  \gdef\dzg@w{0}\gdef\dzg@h{0}\gdef\dzg@Q{}%
+  \foreach \x/\y [count=\k] in \dzg@cycle {%
+    \xdef\dzg@N{\k}%
+    \pgfmathtruncatemacro\dzg@t{max(\dzg@w,\x)}\xdef\dzg@w{\dzg@t}%
+    \pgfmathtruncatemacro\dzg@t{max(\dzg@h,\y)}\xdef\dzg@h{\dzg@t}%
+    \xdef\dzg@Q{\dzg@Q(\x,\y) -- }}%
+  \foreach \x/\y [count=\k] in \dzg@path {%
+    \ifnum\k=1 \xdef\dzg@vfirst{\x/\y}\xdef\dzg@vfirstx{\x}\xdef\dzg@vfirsty{\y}\fi
+    \xdef\dzg@vlast{\x/\y}\xdef\dzg@vlastx{\x}\xdef\dzg@vlasty{\y}}%
+  \path[local bounding box=-lp] (0,0) rectangle (\dzg@w,\dzg@h);
+  \begin{scope}[on background layer]
+    \fill[polygon region] \dzg@Q cycle;
+    \draw[lattice grid] (0,0) grid (\dzg@w,\dzg@h);
+  \end{scope}
+  \foreach \x in {0,...,\dzg@w} \foreach \y in {0,...,\dzg@h}
+    \node[lattice point] (-\x-\y) at (\x,\y) {};
+  % Monomials: outward along the normal of each side at its interior points,
+  % along the bisector of the two outward normals at each vertex.
+  \edef\dzg@wrapped{\dzg@cycle, \dzg@cycle}%
+  \foreach \x/\y [count=\k, remember=\xa as \xb (initially 0),
+      remember=\ya as \yb (initially 0), remember=\x as \xa (initially 0),
+      remember=\y as \ya (initially 0)] in \dzg@wrapped {%
+    \pgfmathtruncatemacro\dzg@atvertex{\k>2 && \k<\dzg@N+3}%
+    \pgfmathtruncatemacro\dzg@atside{\k>1 && \k<\dzg@N+2}%
+    \ifnum\dzg@atvertex=1 % vertex (\xa,\ya) between (\xb,\yb) and (\x,\y)
+      \pgfmathsetmacro\dzg@nx{(\ya-\yb)/veclen(\xa-\xb,\ya-\yb)
+        + (\y-\ya)/veclen(\x-\xa,\y-\ya)}%
+      \pgfmathsetmacro\dzg@ny{(\xb-\xa)/veclen(\xa-\xb,\ya-\yb)
+        + (\xa-\x)/veclen(\x-\xa,\y-\ya)}%
+      \pgfmathsetmacro\dzg@angle{atan2(\dzg@ny,\dzg@nx)}%
+      \ifnum\xa=\dzg@px \ifnum\ya=\dzg@py \else
+        \dzg@ade@monomial{\xa}{\ya}{\dzg@angle}\fi
+      \else\dzg@ade@monomial{\xa}{\ya}{\dzg@angle}\fi
+    \fi
+    \ifnum\dzg@atside=1 % interior lattice points of side (\xa,\ya) -> (\x,\y)
+      \dzg@ade@side{\xa}{\ya}{\x}{\y}%
+      \pgfmathsetmacro\dzg@angle{atan2(-\dzg@sx,\dzg@sy)}%
+      \pgfmathtruncatemacro\dzg@last{\dzg@g-1}%
+      \ifnum\dzg@last>0
+        \foreach \t in {1,...,\dzg@last} {%
+          \pgfmathtruncatemacro\dzg@i{\xa+\t*\dzg@sx}%
+          \pgfmathtruncatemacro\dzg@j{\ya+\t*\dzg@sy}%
+          \ifnum\dzg@i=\dzg@px \ifnum\dzg@j=\dzg@py \else
+            \dzg@ade@monomial{\dzg@i}{\dzg@j}{\dzg@angle}\fi
+          \else\dzg@ade@monomial{\dzg@i}{\dzg@j}{\dzg@angle}\fi}%
+      \fi
+    \fi}%
+  % C: the sides through p*, and their lattice points.
+  \ifadeaffine
+    \edef\dzg@Csides{\dzg@vlast/\dzg@vfirst}%
+  \else
+    \edef\dzg@Csides{\dzg@vlast/\dzg@px/\dzg@py, \dzg@px/\dzg@py/\dzg@vfirst}%
+  \fi
+  \foreach \xa/\ya/\x/\y in \dzg@Csides {%
+    \dzg@ade@side{\xa}{\ya}{\x}{\y}%
+    \ifodd\dzg@g\def\dzg@class{short side}\else\def\dzg@class{long side}\fi
+    \scoped[on edge layer] \draw[\dzg@class] (\xa,\ya) -- (\x,\y);
+    \ifadelabels \path[side label=\dzg@g] (\xa,\ya) -- (\x,\y);\fi
+    \foreach \t in {0,...,\dzg@g}
+      \node[boundary point=dzg accent] at (\xa+\t*\dzg@sx,\ya+\t*\dzg@sy) {};}%
+  \coordinate (-pstar) at (\dzg@px,\dzg@py);
+  \ifadelabels \node[marked point=$p_\ast$] at (-pstar) {};
+  \else \node[marked point] at (-pstar) {};\fi
+  % C' and the Dynkin diagram along it.
+  \gdef\dzg@node{0}%
+  \foreach \x/\y [count=\k, remember=\x as \xa (initially 0),
+      remember=\y as \ya (initially 0)] in \dzg@path {%
+    \ifnum\k>1
+      \scoped[on edge layer] \draw[axis side] (\xa,\ya) -- (\x,\y);
+      \dzg@ade@side{\xa}{\ya}{\x}{\y}%
+      \foreach \t in {1,...,\dzg@g} {%
+        \pgfmathtruncatemacro\dzg@i{\xa+\t*\dzg@sx}%
+        \pgfmathtruncatemacro\dzg@j{\ya+\t*\dzg@sy}%
+        \edef\dzg@here{\dzg@i/\dzg@j}%
+        \ifx\dzg@here\dzg@vlast\else
+          \pgfmathtruncatemacro\dzg@n{\dzg@node+1}\xdef\dzg@node{\dzg@n}%
+          \pgfmathtruncatemacro\dzg@len{gcd(abs(\dzg@i-\dzg@px),abs(\dzg@j-\dzg@py))}%
+          \ifnum\dzg@len=2 \def\dzg@mark{black}\else\def\dzg@mark{white}\fi
+          \node[vertex=\dzg@mark] (-\dzg@n) at (\dzg@i,\dzg@j) {};
+          \ifnum\dzg@n>1
+            \scoped[on edge layer]
+              \draw[coxeter edge=3] (\dzg@i-\dzg@sx,\dzg@j-\dzg@sy) -- (\dzg@i,\dzg@j);
+          \fi
+        \fi}%
+    \fi}%
+  % Internal nodes at the corners of C'.
+  \foreach \x/\y [count=\k, remember=\xa as \xb (initially 0),
+      remember=\ya as \yb (initially 0), remember=\x as \xa (initially 0),
+      remember=\y as \ya (initially 0)] in \dzg@path {%
+    \ifnum\k>2 % corner (\xa,\ya)
+      \dzg@ade@side{\xa}{\ya}{\xb}{\yb}\let\dzg@ux\dzg@sx\let\dzg@uy\dzg@sy
+      \dzg@ade@side{\xa}{\ya}{\x}{\y}%
+      \pgfmathtruncatemacro\dzg@dx{\dzg@ux+\dzg@sx}%
+      \pgfmathtruncatemacro\dzg@dy{\dzg@uy+\dzg@sy}%
+      \pgfmathtruncatemacro\dzg@i{\xa+\dzg@dx}%
+      \pgfmathtruncatemacro\dzg@j{\ya+\dzg@dy}%
+      \pgfmathtruncatemacro\dzg@n{\dzg@node+1}\xdef\dzg@node{\dzg@n}%
+      \node[vertex=doubled] (-\dzg@n) at (\dzg@i,\dzg@j) {};
+      \scoped[on edge layer] \draw[coxeter edge=3] (\xa,\ya) -- (\dzg@i,\dzg@j);
+      \pgfmathsetmacro\dzg@angle{atan2(\dzg@dy,\dzg@dx)}%
+      \dzg@ade@monomial{\dzg@i}{\dzg@j}{\dzg@angle}%
+    \fi}}
+
+% \adetitle{<math>}: the decorated Dynkin symbol (AT Notations 3.8, 3.21) under
+% the polygon drawn last.
+\newcommand\adetitle[1]{%
+  \ifadetitle\node[polygon title, below=7mm of -lp.south] {#1};\fi}
+
+% =============================================================================
+% Complete fans of toric varieties
+% =============================================================================
+% \fanrays{<i/a/b/label anchor, ...>}: the rays from the origin -0 to -rho<i>,
+% the primitive generator (a,b) times \fanlength, labelled rho_i = (a,b).
+% \fancones{<i/coordinate, ...>}: the maximal cones sigma_i, labelled at
+% -sigma<i>. Both respect `fan labels`.
+\newcommand\fanrays[1]{%
+  \node[distinguished point] (-0) at (0,0) {};
+  \foreach \dzg@i/\dzg@a/\dzg@b/\dzg@p in {#1}{%
+    \coordinate (-rho\dzg@i) at (\fanlength*\dzg@a, \fanlength*\dzg@b);
+    \iffanlabels
+      \draw[fan ray] (-0) -- (-rho\dzg@i)
+        node[\dzg@p, font=\small] {$\rho_{\dzg@i} = (\dzg@a,\dzg@b)$};
+    \else
+      \draw[fan ray] (-0) -- (-rho\dzg@i);
+    \fi}}
+\newcommand\fancones[1]{%
+  \foreach \dzg@i/\dzg@c in {#1}{%
+    \coordinate (-sigma\dzg@i) at (\dzg@c);
+    \iffanlabels \node[font=\small] at (-sigma\dzg@i) {$\sigma_{\dzg@i}$};\fi}}

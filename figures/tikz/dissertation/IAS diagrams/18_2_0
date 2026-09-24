@@ -1,5 +1,0 @@
-% The template for the IAS^2 B(lambda) of the (18,2,0)_1 cusp: the Symington
-% polygon P(lambda) with its edge vectors v_i in the coordinates l_i.
-\begin{tikzpicture}[scale=1.8]
-  \pic {symington 18 2 0};
-\end{tikzpicture}

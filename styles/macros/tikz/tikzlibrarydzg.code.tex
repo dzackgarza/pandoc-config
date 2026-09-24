@@ -163,8 +163,8 @@
 % `label`. An incidence arrow runs from a 0-cusp to each 1-cusp whose closure
 % contains it (the cusp diagram of [AE22]: an edge F_1 -> F_2 when F_1 lies in
 % the closure of F_2). Nodes are filled so highlights drawn under them stop at
-% their borders. The cusp diagrams of named moduli spaces are pics in
-% diagrams/dzg-bb-cusps.tex.
+% their borders. The cusp diagrams of named moduli spaces are objects in
+% figures/objects/bb-cusps/.
 \tikzset{
   cusp0/.style={rounded rectangle, draw, fill=white, line width=0.6pt,
     minimum width=1.6cm, minimum height=6mm, inner xsep=3pt},
@@ -345,8 +345,8 @@
   disabledatascaling, tick label style={font=\tiny}}}
 
 % -----------------------------------------------------------------------------
-% Named diagrams built from the vocabulary above
-% -----------------------------------------------------------------------------
-\input{dzg-diagrams}
+% Constructors that draw mathematical objects from their data; the objects
+% are figures under figures/objects/, placed with \pic {object=<family>/<name>}.
+\input{dzg-constructors}
 
 \endinput

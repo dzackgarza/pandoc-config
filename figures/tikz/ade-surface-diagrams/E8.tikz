@@ -1,4 +1,0 @@
-% -E_8^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
-\begin{tikzpicture}
-\pic {ade polygon={E}{8}{pure}};
-\end{tikzpicture}

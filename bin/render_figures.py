@@ -7,6 +7,11 @@ import json
 import sys
 
 ROOT = pathlib.Path(__file__).parent.parent
+# Object fragments: one mathematical object per file, drawing commands only.
+OBJECTS = ROOT / "figures" / "objects"
+# The TikZ vocabulary and constructors every figure is drawn with; a change
+# there changes every render, so it is part of each figure's cache key.
+LIBRARY = [ROOT / "styles" / "macros" / "tikz", ROOT / "styles" / "preambles"]
 
 with open(os.path.join(ROOT, "templates", "standalone-tikz.tex"), 'r') as f:
     TEMPLATE = f.read()
@@ -16,10 +21,20 @@ def get_file_hash(filepath: str) -> str:
     h.update(os.path.abspath(filepath).encode('utf-8'))
     with open(filepath, 'rb') as f:
         h.update(f.read())
+    for library_dir in LIBRARY:
+        for library_file in sorted(library_dir.rglob("*.tex")):
+            h.update(library_file.read_bytes())
     return h.hexdigest()
 
 def render_tikz(filepath: str, output_dir: str, cache: dict, force: bool = False) -> bool:
     name = pathlib.Path(filepath).stem
+    source = pathlib.Path(filepath).resolve()
+    is_object = OBJECTS.resolve() in source.parents
+    if is_object:
+        # rendered/objects/<family>/<name>, mirroring figures/objects.
+        output_dir = os.path.join(
+            output_dir, "objects", str(source.parent.relative_to(OBJECTS.resolve())))
+        os.makedirs(output_dir, exist_ok=True)
     
     # Check cache
     try:
@@ -39,11 +54,8 @@ def render_tikz(filepath: str, output_dir: str, cache: dict, force: bool = False
     # Compile the file
     with open(filepath, 'r') as f:
         content = f.read()
-
-    # Determine if it's tikz or tikzcd
-    if 'tikzcd' in filepath:
-        # Wrap in shorthand or ensure environment is correct
-        pass
+    if is_object:
+        content = "\\begin{tikzpicture}\n" + content + "\n\\end{tikzpicture}"
 
     # The standalone template's insertion marker changed from "$body$" to the
     # QTikz-style "<>" (see templates/standalone-tikz.tex); support both so a
@@ -157,6 +169,9 @@ def main():
             for tex_file in sorted([*tikz_dir.glob("*.tex"), *tikz_dir.glob("*.tikz")]):
                 if not render_tikz(str(tex_file), str(output_dir), cache, force):
                     success = False
+        for object_file in sorted(OBJECTS.rglob("*.tikz")):
+            if not render_tikz(str(object_file), str(output_dir), cache, force):
+                success = False
 
         save_cache()
         if not success:

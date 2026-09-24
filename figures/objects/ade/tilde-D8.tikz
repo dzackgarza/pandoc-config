@@ -1,0 +1,4 @@
+% The toric ADE pair \widetilde{D}_{8} [Alexeev-Thompson, arXiv:1712.07932,
+% Table 1]: Q = conv{(0,2), (0,0), (4,0), (4,2)}, p* = (2,2) interior to the side [v_k, v_1].
+\adepolygon[ade affine]{2/2}{0/2, 0/0, 4/0, 4/2}
+\adetitle{$\widetilde{D}_{8}$}

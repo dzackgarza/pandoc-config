@@ -1,4 +1,4 @@
-% Fan of the Hirzebruch surface F2 (the canonical fan `toric fan=F2`), over the
+% Fan of the Hirzebruch surface F2 (the object figures/objects/toric/fan-F2), over the
 % lattice points of [-2,2]^2, with the dashed quadrilateral through the ray
 % endpoints.
 \documentclass[tikz,border=2pt]{standalone}
@@ -9,7 +9,7 @@
   \foreach \x in {-2,...,2}
     \foreach \y in {-2,...,2}
       \node[lattice point] at (\x,\y) {};
-  \pic (S) {toric fan=F2};
+  \pic (S) {object=toric/fan-F2};
   \draw[polytope edge, dashed] (S-rho1) -- (S-rho2) -- (S-rho3) -- (S-rho4) -- cycle;
   \node[below left] at (S-0) {$0$};
 \end{tikzpicture}

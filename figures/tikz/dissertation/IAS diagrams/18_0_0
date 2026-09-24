@@ -1,5 +1,0 @@
-% The IAS^2 of the (18,0,0)_1 cusp cut open along p_2 p_19: the Symington
-% polygon P(lambda) with its edge vectors v_i.
-\begin{tikzpicture}[scale=0.8]
-  \pic {symington 18 0 0};
-\end{tikzpicture}

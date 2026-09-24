@@ -1,7 +1,7 @@
-% 'A_3, 'A_4^-, 'A_5, 'A_6^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
+% 'A_3, 'A_4^-, 'A_5, 'A_6^-, the objects in figures/objects/ade.
 \begin{tikzpicture}
-\pic at (0,0) {ade polygon={A}{3}{prime}};
-\pic at (5,0) {ade polygon={A}{4}{prime}};
-\pic at (11,0) {ade polygon={A}{5}{prime}};
-\pic at (18,0) {ade polygon={A}{6}{prime}};
+\pic at (0,0) {object=ade/prime-A3};
+\pic at (5,0) {object=ade/prime-A4-minus};
+\pic at (11,0) {object=ade/prime-A5};
+\pic at (18,0) {object=ade/prime-A6-minus};
 \end{tikzpicture}

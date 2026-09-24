@@ -1,6 +1,0 @@
-% The Kulikov central fibre X_0 of B_3(l) at Sterk cusp 3 [AEGS Ex. 4.13, Fig. 13, middle]: the dual complex of
-% the triangulation of Gamma(X_0), with its self-intersection numbers.
-\begin{tikzpicture}[scale=1.4]
-  \pic {sterk3 kulikov};
-  \node[font=\huge] at (-2.2, 3.2) {$\mathcal{X}_0$};
-\end{tikzpicture}

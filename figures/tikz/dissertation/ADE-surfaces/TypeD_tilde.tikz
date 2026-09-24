@@ -1,6 +1,6 @@
-% tilde D_6, tilde D_8, tilde D_10: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
+% tilde D_6, tilde D_8, tilde D_10, the objects in figures/objects/ade.
 \begin{tikzpicture}
-\pic at (0,0) {ade polygon={D}{6}{affine}};
-\pic at (7,0) {ade polygon={D}{8}{affine}};
-\pic at (14,0) {ade polygon={D}{10}{affine}};
+\pic at (0,0) {object=ade/tilde-D6};
+\pic at (7,0) {object=ade/tilde-D8};
+\pic at (14,0) {object=ade/tilde-D10};
 \end{tikzpicture}

@@ -1,0 +1,50 @@
+% The Kulikov central fibre X_0 of B_3(l) at Sterk cusp 3,
+% l = (2,0^15,2,4,6,4,0,4) [AEGS Ex. 4.13, Fig. 13 middle]: the dual complex
+% of the triangulation of Gamma(X_0) (objects/ias/sterk3-ias, same
+% coordinates). One triple point -t<k> per triangle of R, one double curve per
+% edge of R/~. Double curves of the glued edges cross the hole [0,1]^2, the
+% corners at b and c, or run around R. Labels: the self-intersection of a
+% double curve in the component on each side; the unlabelled curves are
+% (-1,-1).
+\foreach \n/\x/\y in {a/0/1, b/1/1, c/0/0, d/1/0, e/0/2, f/1/2, g/-1/2,
+    h/-1/1, i/-1/0, j/2/1, k/2/0, l/0/-1, m/1/-1, n/2/-1}
+  \coordinate (-\n) at (\x,\y);
+\begin{scope}[on background layer]
+  \foreach \x/\y in {-1/1, 0/1, -1/0, 1/0, 0/-1, 1/-1} {
+    \fill[ias region] (\x,\y) rectangle ++(1,1);
+    \draw[lattice grid] (\x,\y) rectangle ++(1,1) (\x,\y+1) -- ++(1,-1);}
+\end{scope}
+\foreach \t/\u/\v/\w in {1/g/e/a, 2/g/h/a, 3/a/e/b, 4/e/f/b, 5/b/j/k, 6/b/d/k,
+    7/h/a/c, 8/h/i/c, 9/c/d/m, 10/c/l/m, 11/d/m/n, 12/d/k/n}
+  \coordinate (-t\t) at ($(-\u)!2/3!($(-\v)!0.5!(-\w)$)$);
+% Double curves of the interior edges and of the glued edges.
+\draw[double curve] (-t1) -- (-t2)  (-t1) -- (-t3) -- (-t4)  (-t2) -- (-t7)
+  -- (-t8)  (-t5) -- (-t6) -- (-t12) -- (-t11) -- (-t9) -- (-t10)
+  (-t3) -- (-t6)  (-t7) -- (-t9)  (-t4) -- (-t5)  (-t8) -- (-t10);
+% Double curves of ef ~ kj, ge ~ nk and of their images hi ~ ml, gh ~ nm
+% under the reflection (x,y) -> (1-y,1-x) in l_dP.
+\draw[double curve] (-t4) to[curve through={(0.55,2.45) (1.4,3.0) (2.5,2.6)
+    (3.0,1.4) (2.45,0.55)}] (-t5);
+\draw[double curve] (-t1) to[curve through={(-0.4,2.7) (0.8,3.8) (2.6,3.6)
+    (3.6,2.6) (3.8,0.8) (2.7,-0.4)}] (-t12);
+\draw[double curve] (-t8) to[curve through={(-1.45,0.45) (-2.0,-0.4) (-1.6,-1.5)
+    (-0.4,-2.0) (0.45,-1.45)}] (-t10);
+\draw[double curve] (-t2) to[curve through={(-1.7,1.4) (-2.8,0.2) (-2.6,-1.6)
+    (-1.6,-2.6) (0.2,-2.8) (1.4,-1.7)}] (-t11);
+\foreach \t in {1,...,12} \node[triple point] at (-t\t) {};
+\ifiaslabels
+  % Components: g on ge, n on nd, b on ab ~ db and fb ~ jb, c on ac ~ dc and
+  % ic ~ lc carry 0; the component across carries -2. Each entry: the curve
+  % -t<t> -> -t<t'>, the side of the 0 (90 left, -90 right), the position
+  % along the curve.
+  \foreach \t/\s/\side/\at in {1/2/-90/0.5, 12/11/90/0.5, 3/6/90/0.35,
+      4/5/-90/0.65, 7/9/-90/0.65, 8/10/90/0.35} {
+    \coordinate (-mid) at ($(-t\t)!\at!(-t\s)$);
+    \path ($(-mid)!0.22cm!\side:(-t\s)$) node[self intersection] {$0$}
+      ($(-mid)!-0.22cm!\side:(-t\s)$) node[self intersection] {$-2$};}
+  % Around R: 6 in the component inside the loop, -8 outside.
+  \path (2.4,2.3) node[self intersection] {$6$} (2.75,2.7) node[self intersection] {$-8$}
+    (3.05,2.9) node[self intersection] {$6$} (3.55,3.35) node[self intersection] {$-8$}
+    (-1.3,-1.4) node[self intersection] {$6$} (-1.7,-1.75) node[self intersection] {$-8$}
+    (-1.9,-2.05) node[self intersection] {$6$} (-2.35,-2.55) node[self intersection] {$-8$};
+\fi

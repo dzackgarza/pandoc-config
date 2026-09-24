@@ -118,8 +118,9 @@ The canonical LaTeX style definitions live in `styles/`:
   (Coxeter vertices and edges by weight, Baily-Borel cusps, IAS singularities, lattice
   polygons, poset and degeneration arrows, stable-curve components), the colours, and the
   layer list.
-- `styles/macros/tikz/dzg-diagrams.tex` -- named diagrams built from that vocabulary,
-  loaded by the library.
+- `styles/macros/tikz/constructors/` -- constructors that draw a mathematical object from
+  its data, loaded by the library. The objects themselves are figures, one file each, in
+  `figures/objects/<family>/`; a figure places one with `\pic {object=<family>/<name>}`.
 - `styles/vendor/` -- third-party packages kept verbatim.
 
 Figures use the library's style names and do not define their own styles, colours, or

@@ -1,7 +1,7 @@
-% D'_6, D'_8, D'_10, D'_12 (AT Table 4: even rank only): `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
+% D'_6, D'_8, D'_10, D'_12 (AT Table 4: even rank only), the objects in figures/objects/ade.
 \begin{tikzpicture}
-\pic at (0,0) {ade polygon={D}{6}{prime}};
-\pic at (6,0) {ade polygon={D}{8}{prime}};
-\pic at (13,0) {ade polygon={D}{10}{prime}};
-\pic at (22,0) {ade polygon={D}{12}{prime}};
+\pic at (0,0) {object=ade/D6-prime};
+\pic at (6,0) {object=ade/D8-prime};
+\pic at (13,0) {object=ade/D10-prime};
+\pic at (22,0) {object=ade/D12-prime};
 \end{tikzpicture}

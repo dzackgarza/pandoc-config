@@ -1,7 +1,7 @@
-% 'A'_5, 'A'_7, 'A'_9, 'A'_11 (AT Table 4: odd rank only): `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
+% 'A'_5, 'A'_7, 'A'_9, 'A'_11 (AT Table 4: odd rank only), the objects in figures/objects/ade.
 \begin{tikzpicture}
-\pic at (0,0) {ade polygon={A}{5}{both-prime}};
-\pic at (6,0) {ade polygon={A}{7}{both-prime}};
-\pic at (13,0) {ade polygon={A}{9}{both-prime}};
-\pic at (22,0) {ade polygon={A}{11}{both-prime}};
+\pic at (0,0) {object=ade/prime-A5-prime};
+\pic at (6,0) {object=ade/prime-A7-prime};
+\pic at (13,0) {object=ade/prime-A9-prime};
+\pic at (22,0) {object=ade/prime-A11-prime};
 \end{tikzpicture}

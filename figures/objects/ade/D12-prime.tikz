@@ -1,0 +1,4 @@
+% The toric ADE pair D_{12}' [Alexeev-Thompson, arXiv:1712.07932,
+% Table 4]: Q = conv{(2,2), (0,2), (0,0), (8,0), (6,1)}, p* = (2,2) a vertex.
+\adepolygon{2/2}{0/2, 0/0, 8/0, 6/1}
+\adetitle{$D_{12}'$}

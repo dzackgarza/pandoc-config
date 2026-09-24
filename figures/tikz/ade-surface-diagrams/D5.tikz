@@ -1,4 +1,0 @@
-% D_5^-: `ade polygon` in styles/macros/tikz/diagrams/dzg-ade.tex.
-\begin{tikzpicture}
-\pic {ade polygon={D}{5}{pure}};
-\end{tikzpicture}
