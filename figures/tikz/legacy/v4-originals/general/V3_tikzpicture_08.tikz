@@ -7,10 +7,10 @@
 % The rotation r of the Vinberg diagram of (18,2,0) and the labels of its
 % roots after identifying each r-orbit.
 \begin{tikzpicture}
-  \pic (L) [root labels=ell] {sterk cusp cover=1};
+  \pic (L) [root labels=ell] {object=coxeter/sterk-cusp-cover-1};
   \begin{scope}[shift={(6,0)}]
-    \pic (R) [root labels=none] {sterk cusp cover=1};
+    \pic (R) [root labels=none] {object=coxeter/sterk-cusp-cover-1};
     \foreach \n/\a/\t in {12/135/1, 11/90/2, 10/90/3, 9/90/4, 8/45/5, 7/0/6, 6/0/7, 5/0/7, 4/315/1, 3/270/2, 2/270/3, 1/270/4, 0/225/5, 15/180/6, 14/180/7, 13/180/8, 19/180/9, 18/0/10, 17/0/9, 16/180/10}
-      \path (R\n) node[label={[vertex label]\a:$\ell'_{\t}$}] {};
+      \path (R-\n) node[label={[vertex label]\a:$\ell'_{\t}$}] {};
   \end{scope}
 \end{tikzpicture}

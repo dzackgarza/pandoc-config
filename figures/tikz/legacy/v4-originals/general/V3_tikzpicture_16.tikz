@@ -1,9 +1,0 @@
-% TikZ Diagram from V4 Thesis
-% Source: writing/sources/enriques_paper/V3.tex
-% Type: tikzpicture
-% Category: general
-% Index: 16
-
-\begin{tikzpicture}
-  \pic {sterk cusp=4};
-\end{tikzpicture}

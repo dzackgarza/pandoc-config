@@ -1,5 +1,0 @@
-% The Coxeter diagram for F_2: the Vinberg diagram of its cusp lattice
-% (19,1,1)_1 = U + E_8^2 + A_1.
-\begin{tikzpicture}
-\pic {vinberg 19 1 1};
-\end{tikzpicture}

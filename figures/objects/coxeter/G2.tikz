@@ -1,0 +1,6 @@
+% The Coxeter diagram of G_2 = I_2(6) [Humphreys, Reflection Groups and Coxeter
+% Groups, §2.4], drawn with multiple edges: an edge of weight m is m-2 lines,
+% so the edge of weight 6 is a quadruple edge.
+\node[inner sep=0pt] {\tikzset{inner sep=.3333em}\begin{dynkinDiagram}[label, arrows=false, edge length=1.75cm]A{**}
+    \dynkinQuadrupleEdge 12
+  \end{dynkinDiagram}};

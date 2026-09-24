@@ -5,27 +5,27 @@
 % the J_2-orbit j/i of (18,0,0) vertices it comes from.
 \begin{tikzpicture}
   % Left: the (18,0,0) diagram with its symmetry.
-  \pic (K) [root labels=index] {sterk cusp cover=2};
+  \pic (K) [root labels=index] {object=coxeter/sterk-cusp-cover-2};
   \node at (3.6, 7.6) {$\bd_{0, 1}\bbcpt{ F_{(2,2,0)} }$};
 
   % Right, top: the folded diagram, the Enriques cusp eta_2.
-  \pic (E) [root labels=none] at (10, 4.5) {vinberg 10 8 0};
+  \pic (E) [root labels=none] at (10, 4.5) {object=coxeter/vinberg-10-8-0};
   \node at (14, 6.6) {$\bd_{0, 2}\bbcpt{ \fent }$};
   \foreach \v/\l in {1/{18/2}, 3/{17/3}, 4/{16/4}, 5/{15/5}, 6/{14/6},
                      7/{13/7}, 8/{12/8}, 9/{11/9}, 10/10}
-    \node[vertex label, below] at (E\v.south) {$\l$};
-  \node[vertex label, above] at (E2.north) {$19/1$};
+    \node[vertex label, below] at (E-\v.south) {$\l$};
+  \node[vertex label, above] at (E-2.north) {$19/1$};
   \scoped[on background layer]
-    \node[marked vertex, label={[text=dzg accent]above:$\delta$}] at (E7) {};
+    \node[marked vertex, label={[text=dzg accent]above:$\delta$}] at (E-7) {};
 
   % Right, bottom: the folded diagram restricted to delta^perp, the Coble
   % diagram (9,9,1)_1.
-  \pic (C) [root labels=none] at (10, 0) {vinberg 9 9 1};
+  \pic (C) [root labels=none] at (10, 0) {object=coxeter/vinberg-9-9-1};
   \node at (14, 2.1) {$\bd_{0, 2}\bbcpt{ F_{\Co, 2} }$};
   \foreach \v/\l in {1/{18/2}, 3/{17/3}, 4/{16/4}, 5/{15/5}, 6/{14/6},
                      7/{12/8}, 8/{11/9}, 9/10}
-    \node[vertex label, below] at (C\v.south) {$\l$};
-  \node[vertex label, above] at (C2.north) {$19/1$};
+    \node[vertex label, below] at (C-\v.south) {$\l$};
+  \node[vertex label, above] at (C-2.north) {$19/1$};
 
   \draw[->] (6, 7.4) to[bend left=20] node[above] {Fold} (9.6, 5.6);
   \draw[->] (19, 4) to[bend left=20]

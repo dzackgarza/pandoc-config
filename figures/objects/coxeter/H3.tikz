@@ -1,0 +1,6 @@
+% The Coxeter diagram of H_3 [Humphreys, Reflection Groups and Coxeter Groups,
+% §2.4], drawn with multiple edges: an edge of weight m is m-2 lines, so the
+% edge 1-2 of weight 5 is a triple edge.
+\node[inner sep=0pt] {\tikzset{inner sep=.3333em}\begin{dynkinDiagram}[label, arrows=false, edge length=.75cm]A{***}
+    \dynkinTripleEdge 12
+  \end{dynkinDiagram}};

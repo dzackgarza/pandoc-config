@@ -1,0 +1,16 @@
+% The Coxeter diagram of the 0-cusp eta_4 of F_{En,2} (Sterk 1991, diagram IV;
+% the dissertation numbers the cusps as Sterk does).
+% Roots: dzack_research.preamble.sterk, Sterk.sterk_roots()["Sterk_4"], the
+% folds of the (18,2,0) roots under J_4 (objects/coxeter/sterk-cusp-cover-4).
+% Root i is the (i+1)-th root there and is labelled r_i, as in
+% 900-five-cusps.md. Layout: _STERK_DIAGRAM_LAYOUTS["Sterk_4"], scaled by 1/4.
+% From the Gram matrix (white: norm -2; black: norm -4): 0, 8 have norm -2.
+% 1..7 simple chain, 2 -- 9 and 6 -- 10 simple; 0 -- 1, 7 -- 8 weight 4.
+% Roots -0..-10, labelled r_i.
+\coxeterlabels{r}
+\coxeterroots{0/white/{0,0}/180, 1/black/{0,1}/180, 2/black/{0,2}/135,
+  3/black/{1,2}/90, 4/black/{2,2}/90, 5/black/{3,2}/90, 6/black/{4,2}/45,
+  7/black/{4,1}/0, 8/white/{4,0}/0, 9/black/{1,1}/270, 10/black/{3,1}/270}
+\coxeterchain{3}{1}{7}
+\coxeteredges{3}{(-2) -- (-9) (-6) -- (-10)}
+\coxeteredges{4}{(-0) -- (-1) (-7) -- (-8)}

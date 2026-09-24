@@ -7,12 +7,12 @@
 % The Vinberg diagram of (18,2,0) with its eight odd boundary roots
 % highlighted, and Sterk's diagram V with its roots labelled l'_1..l'_12.
 \begin{tikzpicture}
-  \pic (L) [root labels=ell] {vinberg 18 2 0};
+  \pic (L) [root labels=ell] {object=coxeter/vinberg-18-2-0};
   \scoped[on background layer]
-    \foreach \n in {1,3,...,15} \draw[parabolic] (L\n.center) -- (L\n.center);
+    \foreach \n in {1,3,...,15} \draw[parabolic] (L-\n.center) -- (L-\n.center);
   \begin{scope}[shift={(6,4)}]
-    \pic (R) [root labels=none] {sterk cusp=5};
+    \pic (R) [root labels=none] {object=coxeter/sterk-cusp-5};
     \foreach \n/\a/\t in {0/135/1, 1/90/2, 2/45/3, 3/0/4, 4/315/5, 5/270/6, 6/225/7, 7/180/8, 8/45/9, 9/135/10, 10/225/11, 11/315/12}
-      \path (R\n) node[label={[vertex label]\a:$\ell'_{\t}$}] {};
+      \path (R-\n) node[label={[vertex label]\a:$\ell'_{\t}$}] {};
   \end{scope}
 \end{tikzpicture}

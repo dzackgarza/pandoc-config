@@ -7,9 +7,7 @@
 % The symmetry v of the Vinberg diagram of (18,0,0) and the diagram of its
 % quotient (10,8,0), with matching parabolic subdiagrams 2E~_8 and E~_8.
 \begin{tikzpicture}
-  \pic (K) [root labels=none] {sterk cusp cover=2};
-  \coxeterparabolic[K]{vinberg 18 0 0/2E8}
+  \pic (K) [root labels=none, maximal parabolic=2E8] {object=coxeter/sterk-cusp-cover-2};
   \draw[quotient map] (7.8,3) -- node[above] {$v$} (9.2,3);
-  \pic (S) at (10,2.5) {vinberg 10 8 0};
-  \coxeterparabolic[S]{vinberg 10 8 0/E8}
+  \pic (S) [maximal parabolic=E8] at (10,2.5) {object=coxeter/vinberg-10-8-0};
 \end{tikzpicture}

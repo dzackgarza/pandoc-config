@@ -25,44 +25,24 @@
   \draw[quotient map] (3,-4) -- (4.5,-4);
 \end{tikzpicture}
 
-\section*{Named diagrams}
-Every pic and command in dzg-diagrams.tex, with each label scheme.
+\section*{Coxeter constructors}
+The keys of the Coxeter constructors (label schemes, parity marks, maximal
+parabolics, mirror targets) on objects, and the generic pics.
 
 \begin{tikzpicture}[scale=0.4]
-  \foreach \n in {1,3,4,5}
-    \pic at (8*\n,0) {sterk cusp=\n};
-  \foreach \n in {1,...,5}
-    \pic[root labels=index] at (9*\n,-10) {sterk cusp cover=\n};
-  \pic[root labels=ell, parity marks=false] at (0,-20) {vinberg 18 2 0};
-  \pic[root labels=none] at (6,-20) {vinberg 18 0 0};
-  \pic at (0,-30) {dynkin folding={ply=2}{E{oooooo}}{}{F{**oo}}};
-  \pic at (10,-30) {root chain={black/4/3, black/4/4, white/2/}};
-  \pic (F) at (26,-20) {k3 F4};
-  \scoped[on background layer] \draw[parabolic] (F0.center) -- (F4.center);
+  \foreach \s [count=\k] in {alpha, r, ell, index, none}
+    \pic[root labels=\s] at (6*\k,0) {object=coxeter/vinberg-18-2-0};
+  \pic[root labels, parity marks=false] at (36,0) {object=coxeter/vinberg-18-2-0};
+  \pic[root labels=index] (K) at (0,-10) {object=coxeter/sterk-cusp-cover-3};
+  \scoped[on background layer] \draw[parabolic] (K-0.center) -- (K-20.center);
+  \pic (A) [maximal parabolic=B8] at (8,-10) {object=coxeter/vinberg-10-8-0};
+  \pic (V) [maximal parabolic=D16] at (20,-10) {object=coxeter/vinberg-18-0-0};
+  \pic (W) [maximal parabolic=E7+D10] at (30,-10) {object=coxeter/vinberg-19-1-1};
+  \pic[mirror targets=all] at (0,-22) {object=mirror-moves/coble};
+  \pic at (12,-22) {dynkin folding={ply=2}{E{oooooo}}{}{F{**oo}}};
+  \pic (R) at (24,-22) {root chain={black/4/3, black/4/4, white/2/}};
+  \draw[fold] (R-0) -- (R-2);
 \end{tikzpicture}
-
-\begin{tikzpicture}[scale=0.4]
-  \pic at (0,0) {coxeter E=8};
-  \pic at (12,0) {coxeter A=4};
-  \pic (A) at (0,-4) {vinberg 10 10 0};
-  \coxeterparabolic[A]{vinberg 10 10 0/E8}
-  \pic (B) at (12,-4) {vinberg 10 8 0};
-  \coxeterparabolic[B]{vinberg 10 8 0/B8}
-  \pic (C) at (0,-8) {vinberg 9 9 1};
-  \coxeterparabolic[C]{vinberg 9 9 1/B7}
-  \pic (D) at (12,-8) {vinberg 8 8 1};
-  \coxeterparabolic[D]{vinberg 8 8 1/B6}
-  \pic (V) at (24,-12) {vinberg 18 0 0};
-  \coxeterparabolic[V]{vinberg 18 0 0/D16}
-  \pic (U) at (24,-22) {vinberg 18 0 0};
-  \coxeterparabolic[U]{vinberg 18 0 0/2E8}
-  \pic at (0,-16) {mirror moves enriques};
-  \pic[mirror targets=all] at (12,-16) {mirror moves coble};
-  \pic (W) at (36,-12) {vinberg 19 1 1};
-  \coxeterparabolic[W]{vinberg 19 1 1/E7+D10}
-\end{tikzpicture}
-
-\coxeterHthree\quad \coxeterHfour\quad \coxeterGtwo\quad \coxeterGtwoAffine
 
 \coxeterpair\quad \coxeterpair[marks=black/doubled, edge=none, roots=f_1/f_2]\quad
 \coxeterpair[edge=dotted, weight=$h_1h_2$]\quad

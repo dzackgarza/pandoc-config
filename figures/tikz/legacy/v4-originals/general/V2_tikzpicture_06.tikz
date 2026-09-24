@@ -7,10 +7,10 @@
 % The Vinberg diagram of (18,2,0) with the coordinates l_i, and the labels
 % after identifying the orbits of the horizontal reflection h.
 \begin{tikzpicture}
-  \pic (L) [root labels=ell] {vinberg 18 2 0};
+  \pic (L) [root labels=ell] {object=coxeter/vinberg-18-2-0};
   \begin{scope}[shift={(7,0)}]
-    \pic (R) [root labels=none] {sterk cusp cover=4};
+    \pic (R) [root labels=none] {object=coxeter/sterk-cusp-cover-4};
     \foreach \n/\a/\t in {0/225/1, 1/270/2, 2/270/3, 3/270/4, 4/315/5, 5/0/6, 6/0/7, 7/0/6, 8/45/5, 9/90/4, 10/90/3, 11/90/2, 12/135/1, 13/180/8, 14/180/9, 15/180/8, 16/180/10, 18/0/9, 19/180/10, 17/0/9}
-      \path (R\n) node[label={[vertex label]\a:$\ell_{\t}$}] {};
+      \path (R-\n) node[label={[vertex label]\a:$\ell_{\t}$}] {};
   \end{scope}
 \end{tikzpicture}

@@ -1,0 +1,22 @@
+% The Coxeter diagram of the 0-cusp eta_5 of F_{En,2} (Sterk 1991, diagram V;
+% the dissertation numbers the cusps as Sterk does).
+% Roots: dzack_research.preamble.sterk, Sterk.sterk_roots()["Sterk_5"], the
+% folds of the (18,2,0) roots under J_5 (objects/coxeter/sterk-cusp-cover-5).
+% Root i is the (i+1)-th root there and is labelled r_i, as in
+% 900-five-cusps.md. Layout: _STERK_DIAGRAM_LAYOUTS["Sterk_5"], scaled by 1/5.
+% From the Gram matrix (white: norm -2; black: norm -4): 8..11 have norm -2,
+% the rest -4. 0..7 a cycle of simple edges; the corners 0, 2, 4, 6 are joined
+% to 8, 9, 10, 11 with weight 4; 12 is joined to 8, 10 and 13 to 9, 11 with
+% weight 4; 12 -- 13 bold.
+% Roots -0..-13, labelled r_i.
+\coxeterlabels{r}
+\coxeterroots{0/black/{0,0}/135, 1/black/{2,0}/90, 2/black/{4,0}/45,
+  3/black/{4,-2}/0, 4/black/{4,-4}/315, 5/black/{2,-4}/270,
+  6/black/{0,-4}/225, 7/black/{0,-2}/180, 8/white/{0.8,-0.8}/45,
+  9/white/{3.2,-0.8}/135, 10/white/{3.2,-3.2}/225, 11/white/{0.8,-3.2}/315,
+  12/black/{1.6,-1.6}/45, 13/black/{1.6,-2.4}/225}
+\coxeterchain{3}{0}{7}
+\coxeteredges{3}{(-7) -- (-0)}
+\coxeteredges{4}{(-0) -- (-8) (-2) -- (-9) (-4) -- (-10) (-6) -- (-11)
+  (-8) -- (-12) -- (-10) (-9) -- (-13) -- (-11)}
+\coxeteredges{infinity}{(-12) -- (-13)}

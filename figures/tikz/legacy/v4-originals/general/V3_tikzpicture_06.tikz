@@ -8,18 +8,18 @@
 % Sterk diagram of its quotient (right).
 \begin{tikzpicture}
   \begin{scope}[shift={(0,0)}]
-    \pic[root labels=index] {sterk cusp cover=1};
+    \pic[root labels=index] {object=coxeter/sterk-cusp-cover-1};
     \draw[quotient map] (4.8,2) -- node[above] {$\mathrm{r}$} (6.2,2);
-    \pic at (7,4) {sterk cusp=1};
+    \pic at (7,4) {object=coxeter/sterk-cusp-1};
   \end{scope}
   \begin{scope}[shift={(0,-8)}]
-    \pic[root labels=index] {sterk cusp cover=3};
+    \pic[root labels=index] {object=coxeter/sterk-cusp-cover-3};
     \draw[quotient map] (4.8,2) -- node[above] {$\mathrm{d}$} (6.2,2);
-    \pic at (7,0) {sterk cusp=3};
+    \pic at (7,0) {object=coxeter/sterk-cusp-3};
   \end{scope}
   \begin{scope}[shift={(0,-16)}]
-    \pic[root labels=index] {sterk cusp cover=4};
+    \pic[root labels=index] {object=coxeter/sterk-cusp-cover-4};
     \draw[quotient map] (4.8,2) -- node[above] {$\mathrm{h}$} (6.2,2);
-    \pic at (7,0) {sterk cusp=4};
+    \pic at (7,0) {object=coxeter/sterk-cusp-4};
   \end{scope}
 \end{tikzpicture}

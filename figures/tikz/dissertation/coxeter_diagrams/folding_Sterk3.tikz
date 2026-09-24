@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-\pic[root labels=index] {sterk cusp cover=3};
+\pic[root labels=index] {object=coxeter/sterk-cusp-cover-3};
 \draw[quotient map] (4.6,2) -- (6,2);
-\pic at (7,0) {sterk cusp=3};
+\pic at (7,0) {object=coxeter/sterk-cusp-3};
 \end{tikzpicture}

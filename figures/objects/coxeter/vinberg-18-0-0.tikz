@@ -1,0 +1,31 @@
+% The Vinberg diagram of II_{1,17} = (18,0,0)_1 = U + E_8^2 [Vinberg 1972], the
+% boundary lattice at a 0-cusp of F_{(2,2,0)}.
+% Numbering and layout: AEGS25 Fig. 5 and Sec. 3.5, which the dissertation
+% (475-our-cusps.md, 900-five-cusps.md) follows.
+% Roots: dzack_research.preamble.sterk, Sterk.roots_18_0_0 (w1..w19), in
+% TdP = U + U(2) + E_8 + E_8 (catalogue.TdP). From their Gram matrix:
+% alpha_2..alpha_18 is a chain of simple edges (alpha_k = w_{k-1}), with
+% alpha_1 = w18 joined to alpha_4 and alpha_19 = w19 joined to alpha_16. All
+% nineteen roots have norm -2 (white).
+% Even roots (vertex=even): the even boundary roots of AEGS25 Sec. 3.5, the
+% even i on the chain.
+% Layout: an equilateral triangle of side 7.2 with left corner alpha_16 at the
+% origin, apex alpha_10 and right corner alpha_4; the chain runs 18, 17, 16
+% along the base, up the left side to 10, down the right side to 4, and along
+% the base to 2.
+% Maximal parabolic subdiagrams (`maximal parabolic=<name>`), the two of
+% II_{1,17} [Vinberg 1972]: 2E8 = 2E~_8, D16 = D~_16.
+% Roots -1..-19, labelled alpha_i.
+\coxeterlabels{alpha}
+\coxeterroots{
+  2/even/{4.8,0}/270, 3/white/{6,0}/270, 4/even/{7.2,0}/315,
+  5/white/{6.6,1.039}/0, 6/even/{6,2.078}/0, 7/white/{5.4,3.118}/0,
+  8/even/{4.8,4.157}/0, 9/white/{4.2,5.196}/0, 10/even/{3.6,6.235}/90,
+  11/white/{3,5.196}/180, 12/even/{2.4,4.157}/180,
+  13/white/{1.8,3.118}/180, 14/even/{1.2,2.078}/180,
+  15/white/{0.6,1.039}/180, 16/even/{0,0}/225, 17/white/{1.2,0}/270,
+  18/even/{2.4,0}/270, 1/white/{5.988,0.7}/180, 19/white/{1.212,0.7}/0}
+\coxeterchain{3}{2}{18}
+\coxeteredges{3}{(-4) -- (-1) (-16) -- (-19)}
+\coxeterparabolic{2E8}{{2,3,4,5,6,7,8,9},{1,4},{11,12,13,14,15,16,17,18},{16,19}}
+\coxeterparabolic{D16}{{3,4,5,6,7,8,9,10,11,12,13,14,15,16,17},{1,4},{16,19}}

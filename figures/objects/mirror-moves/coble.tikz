@@ -1,0 +1,31 @@
+% The mirror moves (Alexeev-Engel 2022, Thm. 5.10) of the Coble lattice
+% S_Co = (11,11,1)_1. Source: coble/cusp-correspondence/
+% cusp-diagrams-by-moduli-space.md and cusp-diagram-calculations.md.
+% A lattice is a vertex marked as in Nikulin's table: white for delta = 0,
+% black for delta = 1. Columns are the stages S, T = S^perp, \bar T,
+% \bar{\bar T}; an arrow is a move, styled by its type.
+% The valid moves are the path -p1 -> -p2 -> -p3 -> -p4: the complement, then
+% two U(2) moves to the 0-cusp lattice (9,9,1)_1 and the 1-cusp lattice
+% (7,7,1)_0 = A_1^7. `mirror targets=all` adds the other targets the moves
+% produce (-q1..-q4 and their targets -q1-1..-q2-3), which are not lattices of
+% valid cusps, and sets the valid lattices in dzg accent and the invalid ones
+% in dzg singular.
+\foreach \p/\x/\l in {p1/0/{(11,11,1)_1}, p2/2/{(11,11,1)_2},
+    p3/4/{(9,9,1)_1}, p4/6/{(7,7,1)_0}}
+  {\latticevertex[][text=\mirrorvalidcolor]{\p}{black}{\x, 0}{\l}{\mirrorvalidlabel}}
+\ifmirroralltargets\mirrorstages{3.6}\else\mirrorstages{1}\fi
+\draw[mirror move=complement] (-p1) -- (-p2);
+\draw[mirror move=U(2)] (-p2) -- node[vertex label, midway, above] {$U(2)$} (-p3);
+\draw[mirror move=U(2)] (-p3) -- node[vertex label, midway, above] {$U(2)$} (-p4);
+\ifmirroralltargets
+  \foreach \p/\m/\x/\y/\l/\from in {
+      q1/black/4/2.4/{(9,11,1)_1}/p2, q2/white/4/-2.4/{(9,9,0)_1}/p2,
+      q3/black/6/0.8/{(7,9,1)_0}/p3, q4/white/6/-0.8/{(7,7,0)_0}/p3} {
+    \latticevertex[inactive][text=dzg singular]{\p}{\m}{\x, \y}{\l}{below}
+    \draw[inactive, mirror move=U] (-\from) -- (-\p);}
+  % Targets of moves from the invalid lattices q1 and q2.
+  \foreach \q/\y in {q1/2.4, q2/-2.4}
+    \foreach \d [count=\k] in {0.6, 0, -0.6} {
+      \node[inactive, vertex=white] (-\q-\k) at (6, \y+\d) {};
+      \draw[inactive, mirror move=U] (-\q) -- (-\q-\k);}
+\fi

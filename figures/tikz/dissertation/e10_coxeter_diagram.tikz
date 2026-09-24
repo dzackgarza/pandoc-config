@@ -1,4 +1,0 @@
-% The Coxeter diagram of (10,10,0)_1 = E_10(2).
-\begin{tikzpicture}
-  \pic {vinberg 10 10 0};
-\end{tikzpicture}
