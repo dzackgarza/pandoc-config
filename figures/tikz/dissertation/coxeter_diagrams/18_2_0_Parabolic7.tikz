@@ -1,8 +1,8 @@
 \begin{tikzpicture}
-\pic (r) {vinberg 18 2 0};
-\node[above=of r10] {\Large $D_{16}$};
+\pic (r) {object=coxeter/vinberg-18-2-0};
+\node[above=of r-10] {\Large $D_{16}$};
 \scoped[on background layer]
   \draw[parabolic]
-    (r13.center) -- (r12.center) -- (r8.center) -- (r4.center) -- (r0.center) -- (r16.center) -- (r20.center)
-    (r12.center) -- (r19.center);
+    (r-13.center) -- (r-12.center) -- (r-8.center) -- (r-4.center) -- (r-0.center) -- (r-16.center) -- (r-20.center)
+    (r-12.center) -- (r-19.center);
 \end{tikzpicture}

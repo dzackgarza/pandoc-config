@@ -1,10 +1,10 @@
 \begin{tikzpicture}
-\pic (r) {vinberg 18 2 0};
-\node[above=of r10] {\Large $E_8^2$};
+\pic (r) {object=coxeter/vinberg-18-2-0};
+\node[above=of r-10] {\Large $E_8^2$};
 \scoped[on background layer]
   \draw[parabolic]
-    (r2.center) -- (r0.center) -- (r12.center) -- (r19.center)
-    (r0.center) -- (r16.center)
-    (r10.center) -- (r8.center) -- (r4.center) -- (r17.center)
-    (r8.center) -- (r18.center);
+    (r-2.center) -- (r-0.center) -- (r-12.center) -- (r-19.center)
+    (r-0.center) -- (r-16.center)
+    (r-10.center) -- (r-8.center) -- (r-4.center) -- (r-17.center)
+    (r-8.center) -- (r-18.center);
 \end{tikzpicture}

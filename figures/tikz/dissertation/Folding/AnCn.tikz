@@ -1,3 +1,0 @@
-\begin{tikzpicture}
-\pic {dynkin folding={ply=2}{A{ooo.ooooooo.ooo}}{}{C{ooo.ooo*}}};
-\end{tikzpicture}

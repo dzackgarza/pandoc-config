@@ -6,7 +6,7 @@
 
 % Sterk's diagram V; N and S mark its two barbell roots r_13 and r_12.
 \begin{tikzpicture}
-  \pic {sterk cusp=5};
-  \node[left=0.1cm of 13] {$N$};
-  \node[right=0.1cm of 12] {$S$};
+  \pic {object=coxeter/sterk-cusp-5};
+  \node[left=0.1cm of -13] {$N$};
+  \node[right=0.1cm of -12] {$S$};
 \end{tikzpicture}

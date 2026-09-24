@@ -1,231 +1,59 @@
 % =============================================================================
-% Coxeter diagrams of hyperbolic lattices (Vinberg diagrams) and their subdiagrams
+% Vinberg diagrams and mirror moves: constructors
 % =============================================================================
-% Built on the vertex, edge and label machinery of dzg-coxeter.tex (\dzg@vertex,
-% \dzg@edges, `root labels`). Vertices are nodes named by their index, so
-%   \pic (A) at (0,-3) {vinberg 10 8 0};
-% names the vertices A1, ..., A10. The canonical labels of these pics are the
-% vertex indices (`root labels=index`); \pic[root labels=none] {vinberg 10 8 0}
-% hides them.
-% White: root of square -2; black: root of square -4 (the Coble and Enriques
-% convention, coble/appendix-reference/coxeter-and-dynkin-diagrams.md).
+% Built on the root, edge and label constructors of dzg-coxeter.tex. The
+% objects are figures under figures/objects/coxeter/ (Coxeter and Vinberg
+% diagrams) and figures/objects/mirror-moves/ (mirror-move posets).
+% \input by dzg-constructors.tex, so "@" is a letter here.
 %
-% Published names:
-%   coxeter E=<n>        E_n in Bourbaki numbering, white (the root lattice E_n)
-%   coxeter A=<n>        A_n, the chain 1..n, white (the root lattice A_n)
-%   vinberg 10 10 0      (10,10,0)_1 = E_10(2)
-%   vinberg 10 8 0       (10,8,0)_1 = U + E_8(2). Also the Vinberg diagram of
-%                        (10,10,1)_1 = U(2) + A_1^8, and the Coxeter diagram
-%                        of the 0-cusp eta_2 of F_{En,2} (Sterk's diagram II)
-%   vinberg 9 9 1        (9,9,1)_1 = <2> + E_8(2) = G_{(9,9,1)_1}
-%   vinberg 8 8 1        (8,8,1)_1 = U(2) + A_1^6
-%   vinberg 19 1 1       (19,1,1)_1 = U + E_8^2 + A_1, the lattice of the
-%                        0-cusp of F_2 (degree-2 K3 surfaces)
-%   \coxeterparabolic[<pic name>]{<object>/<subdiagram>}
-%                        highlight a maximal parabolic subdiagram of a pic
-%   mirror moves enriques, mirror moves coble
-%                        the mirror-move posets of S_En and S_Co
+% Commands:
+%   \coxeterEdiagram{<n>}{<mark>}
+%       the tree T_{2,3,n-3} with every root marked <mark>, in Bourbaki's
+%       numbering of E_n: the chain 1,3,4,...,n on the x-axis (root k >= 3
+%       at x = k-2, root 1 at 0), root 2 above root 4, labels below.
+%   \latticevertex[<node options>][<label options>]{<name>}{<mark>}
+%       {<coordinate>}{<lattice>}{<label direction>}
+%       a lattice in a mirror-move poset: the node -<name>, a vertex marked as
+%       in Nikulin's table (white for delta = 0, black for delta = 1),
+%       labelled $<lattice>$.
+%   \mirrorstages{<y>}
+%       the column heads S, T = S^perp, \bar T, \bar{\bar T} at x = 0, 2, 4, 6,
+%       nodes -stage0, -stage2, -stage4, -stage6.
+% An arrow is a move, styled by its type: `mirror move=complement|U|U(2)`.
 %
-% Computed data. Each E-type diagram below is the output of Vinberg's algorithm on
-% the lattice of the 2-elementary table in the research preamble
-% (dzack_research.preamble.catalogue._TWO_ELEMENTARY_RECIPES), run with the
-% engine the preamble registers for "vinberg_root_enumeration" (vinal,
-% Bogachev-Perepechko); every search completed. Edge weights are read from
-% the root Gram matrix, cos(pi/m) = |h_i.h_j| / sqrt(h_i^2 h_j^2), and the
-% maximal parabolic subdiagrams are all vertex sets on which minus the Gram
-% matrix is positive semidefinite with one kernel direction per component
-% and rank rk(L) - 2.
-%   (10,10,0): ten roots of square -4 forming T_{2,3,7} = E_10;
-%              one maximal parabolic, E~_8 = {1..9}.
-%   (10,8,0), (10,10,1): nine roots of square -4 forming T_{2,3,6} and one
-%              root of square -2 joined to the end of the long arm with
-%              weight 4; maximal parabolics E~_8 = {1..9}, B~_8 = {2..10}.
-%   (9,9,1):   eight roots of square -4 forming E_8 and one root of square
-%              -2 joined to the end of the long arm with weight 4; one
-%              maximal parabolic, B~_7 = {2..9}.
-%   (8,8,1):   E_7 of square -4 and one root of square -2 at the end of the
-%              long arm with weight 4; one maximal parabolic, B~_6 = {2..8}.
+% Keys:
+%   mirror targets=valid|all   draw only the moves to lattices of valid cusps
+%                              (valid) or every target of every move (all).
+% Read by objects:
+%   \ifmirroralltargets        true under `mirror targets=all`
+%   \mirrorvalidcolor          text colour of a valid lattice: dzg accent
+%                              under `mirror targets=all`, the current colour
+%                              otherwise
+%   \mirrorvalidlabel          label direction of a valid lattice: below left
+%                              under `mirror targets=all`, below otherwise
 
-% \dzg@Echain{<n>}{<mark>}: vertices 1..n of E_n in Bourbaki numbering, the
-% chain 1,3,4,...,n on the x-axis (vertex k >= 3 at x = k-2, vertex 1 at 0)
-% and vertex 2 above vertex 4.
-\def\dzg@Echain#1#2{%
-  \dzg@vertex{1}{#2}{0,0}{below}%
-  \dzg@vertex{2}{#2}{2,1}{above}%
+\newcommand\coxeterEdiagram[2]{%
+  \coxeterroot{1}{#2}{0,0}{below}%
+  \coxeterroot{2}{#2}{2,1}{above}%
   \foreach \dzg@k in {3,...,#1}{%
     \pgfmathtruncatemacro\dzg@x{\dzg@k-2}%
-    \dzg@vertex{\dzg@k}{#2}{\dzg@x,0}{below}}%
-  \dzg@edges{3}{(1) -- (3) (2) -- (4)}%
-  \dzg@chain{3}{3}{#1}}
+    \coxeterroot{\dzg@k}{#2}{\dzg@x,0}{below}}%
+  \coxeteredges{3}{(-1) -- (-3) (-2) -- (-4)}%
+  \coxeterchain{3}{3}{#1}}
 
-% \dzg@Echainwhite{<n>}: E_{n-1} of square -4 and the root n of square -2
-% joined to the end n-1 of the long arm by a weight-4 edge.
-\def\dzg@Echainwhite#1{%
-  \pgfmathtruncatemacro\dzg@m{#1-1}%
-  \dzg@Echain{\dzg@m}{black}%
-  \pgfmathtruncatemacro\dzg@x{#1-2}%
-  \dzg@vertex{#1}{white}{\dzg@x,0}{below}%
-  \dzg@edges{4}{(\dzg@m) -- (#1)}}
+\NewDocumentCommand\latticevertex{O{} O{} m m m m m}{%
+  \node[#1, vertex=#4, label={[vertex label, #2]#7:$#6$}] (-#3) at (#5) {};}
 
-% \dzg@vinbergpic{<name>}{<body>}
-\def\dzg@vinbergpic#1#2{%
-  \tikzset{pics/#1/.style={/tikz/transform shape, code={%
-    \tikzset{transform shape=false}\dzg@canonicallabels{index}#2}}}}
-\dzg@vinbergpic{vinberg 10 10 0}{\dzg@Echain{10}{black}}
-\dzg@vinbergpic{vinberg 10 8 0}{\dzg@Echainwhite{10}}
-\dzg@vinbergpic{vinberg 9 9 1}{\dzg@Echainwhite{9}}
-\dzg@vinbergpic{vinberg 8 8 1}{\dzg@Echainwhite{8}}
-\tikzset{pics/coxeter E/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}\dzg@canonicallabels{index}\dzg@Echain{#1}{white}}}}
-% A_n: the chain 1..n on the x-axis, white (the root lattice A_n).
-\tikzset{pics/coxeter A/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}\dzg@canonicallabels{index}%
-  \foreach \dzg@k in {1,...,#1}{%
-    \pgfmathtruncatemacro\dzg@x{\dzg@k-1}%
-    \dzg@vertex{\dzg@k}{white}{\dzg@x,0}{below}}%
-  \ifnum#1>1 \dzg@chain{3}{1}{#1}\fi}}}
-
-% -----------------------------------------------------------------------------
-% Maximal parabolic subdiagrams
-% -----------------------------------------------------------------------------
-% \coxeterparabolic[<pic name>]{<object>/<subdiagram>} strokes the parabolic
-% highlight through the vertex centres of each listed chain, on the
-% background layer. The vertex sets are the computed ones above; for
-% vinberg 18 0 0 (dzg-coxeter.tex: the chain 2..18, 1 at 4, 19 at 16) they
-% are the two maximal parabolics of II_{1,17}, 2E~_8 and D~_16 (Vinberg 1972).
-\@namedef{dzg@parabolic@vinberg 10 10 0/E8}{{1,3,4,5,6,7,8,9},{2,4}}
-\@namedef{dzg@parabolic@vinberg 10 8 0/E8}{{1,3,4,5,6,7,8,9},{2,4}}
-\@namedef{dzg@parabolic@vinberg 10 8 0/B8}{{3,4,5,6,7,8,9,10},{2,4}}
-\@namedef{dzg@parabolic@vinberg 9 9 1/B7}{{3,4,5,6,7,8,9},{2,4}}
-\@namedef{dzg@parabolic@vinberg 8 8 1/B6}{{3,4,5,6,7,8},{2,4}}
-\@namedef{dzg@parabolic@vinberg 18 0 0/2E8}{{2,3,4,5,6,7,8,9},{1,4},{11,12,13,14,15,16,17,18},{16,19}}
-\@namedef{dzg@parabolic@vinberg 18 0 0/D16}{{3,4,5,6,7,8,9,10,11,12,13,14,15,16,17},{1,4},{16,19}}
-
-\newcommand{\coxeterparabolic}[2][]{%
-  \scoped[on background layer]{%
-    \edef\dzg@chains{\csname dzg@parabolic@#2\endcsname}%
-    \foreach \dzg@c in \dzg@chains {%
-      \foreach \dzg@v [count=\dzg@k] in \dzg@c {%
-        \ifnum\dzg@k=1 \xdef\dzg@path{(#1\dzg@v.center) -- (#1\dzg@v.center)}%
-        \else\xdef\dzg@path{\dzg@path -- (#1\dzg@v.center)}\fi}%
-      \draw[parabolic] \dzg@path;}}}
-
-% -----------------------------------------------------------------------------
-% Mirror moves (Alexeev-Engel 2022, Thm. 5.10)
-% -----------------------------------------------------------------------------
-% A lattice is a vertex marked as in Nikulin's table: white for delta = 0,
-% black for delta = 1. Columns are the stages S, T = S^perp, \bar T, \bar{\bar T};
-% an arrow is a move, styled by its type (`mirror move=complement|U|U(2)`).
-% Source: coble/cusp-correspondence/cusp-diagrams-by-moduli-space.md and
-% cusp-diagram-calculations.md.
-
-% \dzg@lattice{<name>}{<mark>}{<coordinate>}{<lattice>}{<label direction>}
-\def\dzg@lattice#1#2#3#4#5{%
-  \node[vertex=#2, label={[vertex label]#5:$#4$}] (#1) at (#3) {};}
-\def\dzg@stages#1{%
+\newcommand\mirrorstages[1]{%
   \foreach \dzg@x/\dzg@s in {0/S, 2/T, 4/\bar T, 6/\bar{\bar T}}
-    \node (stage\dzg@x) at (\dzg@x, #1) {$\dzg@s$};}
+    \node (-stage\dzg@x) at (\dzg@x, #1) {$\dzg@s$};}
 
-% S_En = (10,10,0)_1. p1 = S, p2 = T, p3 and p4 the moves from T, p5 and p6
-% the 1-cusp lattices.
-\tikzset{pics/mirror moves enriques/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}%
-  \dzg@lattice{p1}{white}{0,0}{(10,10,0)_1}{above left}%
-  \dzg@lattice{p2}{white}{2,0}{(12,10,0)_2}{above left}%
-  \dzg@lattice{p3}{white}{4,2}{(10,10,0)_1}{above left}%
-  \dzg@lattice{p4}{white}{4,-2}{(10,8,0)_1}{below left}%
-  \dzg@lattice{p5}{white}{6,0}{(8,8,0)_0}{above right}%
-  \dzg@lattice{p6}{white}{6,-2}{(8,6,0)_0}{above right}%
-  \dzg@stages{3}%
-  \draw[mirror move=complement] (p1) -- (p2);
-  \draw[mirror move=U] (p2) -- node[vertex label, midway, above left] {$U$} (p3);
-  \draw[mirror move=U(2)] (p2) -- node[vertex label, midway, below left] {$U(2)$} (p4);
-  \draw[mirror move=U(2)] (p3) -- node[vertex label, midway, above right] {$U(2)$} (p5);
-  \draw[mirror move=U] (p4) -- node[vertex label, midway, below right] {$U$} (p5);
-  \draw[mirror move=U(2)] (p4) -- node[vertex label, midway, below] {$U(2)$} (p6);}}}
-
-% S_Co = (11,11,1)_1. The valid moves are the path p1 -> p2 -> p3 -> p4:
-% the complement, then two U(2) moves to the 0-cusp lattice (9,9,1)_1 and
-% the 1-cusp lattice (7,7,1)_0 = A_1^7. `mirror targets=all` adds the other
-% targets the moves produce, which are not lattices of valid cusps, and sets
-% the valid lattices in dzg accent and the invalid ones in dzg singular.
-\newif\ifdzg@alltargets
+\newif\ifmirroralltargets
 \tikzset{
   mirror targets/.is choice,
-  mirror targets/valid/.code={\dzg@alltargetsfalse},
-  mirror targets/all/.code={\dzg@alltargetstrue},
-  pics/mirror moves coble/.style={/tikz/transform shape, code={%
-    \tikzset{transform shape=false}%
-    \ifdzg@alltargets
-      \def\dzg@valid{dzg accent}\def\dzg@where{below left}%
-    \else
-      \def\dzg@valid{.}\def\dzg@where{below}%
-    \fi
-    \foreach \dzg@p/\dzg@x/\dzg@l in {p1/0/{(11,11,1)_1}, p2/2/{(11,11,1)_2},
-        p3/4/{(9,9,1)_1}, p4/6/{(7,7,1)_0}}
-      \node[vertex=black, label={[vertex label, text=\dzg@valid]\dzg@where:$\dzg@l$}]
-        (\dzg@p) at (\dzg@x, 0) {};
-    \ifdzg@alltargets\dzg@stages{3.6}\else\dzg@stages{1}\fi
-    \draw[mirror move=complement] (p1) -- (p2);
-    \draw[mirror move=U(2)] (p2) -- node[vertex label, midway, above] {$U(2)$} (p3);
-    \draw[mirror move=U(2)] (p3) -- node[vertex label, midway, above] {$U(2)$} (p4);
-    \ifdzg@alltargets
-      \foreach \dzg@p/\dzg@m/\dzg@x/\dzg@y/\dzg@l/\dzg@from in {
-          q1/black/4/2.4/{(9,11,1)_1}/p2, q2/white/4/-2.4/{(9,9,0)_1}/p2,
-          q3/black/6/0.8/{(7,9,1)_0}/p3, q4/white/6/-0.8/{(7,7,0)_0}/p3} {
-        \node[inactive, vertex=\dzg@m,
-          label={[vertex label, text=dzg singular]below:$\dzg@l$}]
-          (\dzg@p) at (\dzg@x, \dzg@y) {};
-        \draw[inactive, mirror move=U] (\dzg@from) -- (\dzg@p);}
-      % Targets of moves from the invalid lattices q1 and q2.
-      \foreach \dzg@q/\dzg@y in {q1/2.4, q2/-2.4}
-        \foreach \dzg@d [count=\dzg@k] in {0.6, 0, -0.6} {
-          \node[inactive, vertex=white] (\dzg@q-\dzg@k) at (6, \dzg@y+\dzg@d) {};
-          \draw[inactive, mirror move=U] (\dzg@q) -- (\dzg@q-\dzg@k);}
-    \fi}},
+  mirror targets/valid/.code={\mirroralltargetsfalse
+    \def\mirrorvalidcolor{.}\def\mirrorvalidlabel{below}},
+  mirror targets/all/.code={\mirroralltargetstrue
+    \def\mirrorvalidcolor{dzg accent}\def\mirrorvalidlabel{below left}},
   mirror targets=valid,
 }
-
-% -----------------------------------------------------------------------------
-% (19,1,1)_1 = U + E_8^2 + A_1
-% -----------------------------------------------------------------------------
-% The 18-cycle 1..18 of roots alternating double circled (odd) and single
-% circled (even), as in Alexeev-Engel-Kasprzyk-Shepherd-Barron-Zhang (AKSZ23,
-% coble/papers/AKSZ23/2el.tex, Fig. coxeter2: the double circled roots are
-% (-2)-curves fixed by the involution); leaves 19, 20, 21 at 1, 7, 13; the
-% triangle 22, 23, 24 of dotted edges; bold edges 4-22, 10-23, 16-24, 19-23,
-% 20-24, 21-22. All 24 roots have square -2.
-% Checked: with pairings 1 (simple) and 2 (bold), the Gram matrix of roots
-% 1..21 has rank 19 and signature (1,18); roots 22, 23, 24 are determined by
-% their pairings with 1..21, have square -2 and pairwise pairing 6
-% (ultraparallel, dotted), and the 24 roots span an even lattice of rank 19
-% and determinant -2, which is (19,1,1) by Nikulin's uniqueness. The maximal
-% parabolic subdiagrams (rank 17) are ten, in four types: A~_17 (the cycle),
-% A~_1 + D~_16, A~_1 + 2E~_8 and E~_7 + D~_10; the pic's parabolics are one
-% of each. (vinal's Vinberg search on this lattice did not finish in 25 min.)
-% The degree-2 K3 moduli F_2 has T = U^2 + E_8^2 + <-2> and one 0-cusp e, with
-% e^perp/e = (19,1,1)_1, so this is also the Coxeter diagram of F_2 [Sca87 §6,
-% AET19]. The bold edges force equal norms on their ends, so all 24 roots have
-% one norm; with norm -2 the roots span a lattice of rank 19, signature (1,18)
-% and determinant 2, which is (19,1,1).
-\tikzset{pics/vinberg 19 1 1/.style={/tikz/transform shape, code={%
-  \tikzset{transform shape=false}\dzg@canonicallabels{index}%
-  \dzg@vertices{1/doubled/{-3,0}/below left, 2/white/{-1.75,2.25}/left,
-    3/doubled/{-0.75,4.25}/left, 4/white/{0.25,6}/left,
-    5/doubled/{1,7.5}/left, 6/white/{2,9.5}/left, 7/doubled/{3,11.25}/above,
-    8/white/{4,9.5}/right, 9/doubled/{5,7.5}/right, 10/white/{5.75,6}/right,
-    11/doubled/{6.75,4.25}/right, 12/white/{7.75,2.25}/right,
-    13/doubled/{9,0}/below right, 14/white/{7,0}/below, 15/doubled/{5,0}/below,
-    16/white/{3,0}/below, 17/doubled/{1,0}/below, 18/white/{-1,0}/below,
-    19/white/{0,2}/above, 20/white/{3,8}/right, 21/white/{6,2}/above,
-    22/white/{1.75,5}/left, 23/white/{4.25,5}/right, 24/white/{3,2.5}/below right}%
-  \dzg@chain{3}{1}{18}%
-  \dzg@edges{3}{(18) -- (1) (1) -- (19) (7) -- (20) (13) -- (21)}%
-  \dzg@edges{dotted}{(22) -- (23) -- (24) -- (22)}%
-  \dzg@edges{infinity}{(4) -- (22) (10) -- (23) (16) -- (24) (19) -- (23)
-    (20) -- (24) (21) -- (22)}}}}
-
-\@namedef{dzg@parabolic@vinberg 19 1 1/A17}{{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,1}}
-\@namedef{dzg@parabolic@vinberg 19 1 1/A1+D16}{{18,1,2,3,4,5,6,7,8,9,10,11,12,13,14},{1,19},{13,21},{16,24}}
-\@namedef{dzg@parabolic@vinberg 19 1 1/A1+2E8}{{17,18,1,2,3,4,5,6},{1,19},{15,14,13,12,11,10,9,8},{13,21},{20,24}}
-\@namedef{dzg@parabolic@vinberg 19 1 1/E7+D10}{{2,1,18,17,16,15,14,13,12},{1,19},{13,21},{4,5,6,7,8,9,10},{7,20}}

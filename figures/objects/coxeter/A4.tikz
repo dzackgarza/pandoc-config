@@ -1,0 +1,7 @@
+% The Coxeter diagram of the root lattice A_4 [Bourbaki, Groupes et algebres
+% de Lie IV-VI, Planche I]: the chain 1..4 of roots of square -2 (white).
+% Roots -1..-4, labelled by their index.
+\coxeterlabels{index}
+\coxeterroots{1/white/{0,0}/below, 2/white/{1,0}/below, 3/white/{2,0}/below,
+  4/white/{3,0}/below}
+\coxeterchain{3}{1}{4}

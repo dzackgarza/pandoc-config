@@ -5,6 +5,6 @@
 % Index: 3
 
 \begin{tikzpicture}
-  \pic[root labels=index] {vinberg 18 2 0};
-  \pic[root labels=none] at (6,0) {vinberg 18 0 0};
+  \pic[root labels=index] {object=coxeter/vinberg-18-2-0};
+  \pic[root labels=none] at (6,0) {object=coxeter/vinberg-18-0-0};
 \end{tikzpicture}

@@ -1,0 +1,24 @@
+% The Vinberg diagram of (18,2,0)_1 = U(2) + E_8^2, the boundary lattice at a
+% 0-cusp of F_{(2,2,0)}.
+% Numbering and layout: AEGS25 Fig. 5 and Sec. 3.5, which the dissertation
+% (475-our-cusps.md, 900-five-cusps.md) follows.
+% Roots: dzack_research.preamble.sterk, Sterk.roots_18_2_0 (v1..v22), in
+% TdP = U + U(2) + E_8 + E_8 (catalogue.TdP). Their Gram matrix gives every
+% edge weight and vertex mark below: alpha_i = v_{i+1}. alpha_0..alpha_15 is a
+% 16-cycle of simple edges; alpha_16..alpha_19 are joined by simple edges to
+% the corners alpha_0, alpha_4, alpha_8, alpha_12 (v1.v17 = 1, norms -2, so
+% m = 3); alpha_20 is joined to alpha_16, alpha_18 and alpha_21 to alpha_17,
+% alpha_19 with weight 4 (inner product 2, norms -2, -4); alpha_20 alpha_21 is
+% bold (inner product 4, norms -4, -4). alpha_0..alpha_19 have norm -2
+% (white), alpha_20, alpha_21 norm -4 and divisibility 2 (black).
+% Even roots (vertex=even): the even boundary roots of AEGS25 Sec. 3.5, the
+% even i on the 16-cycle (the corners are even), a datum the Kulikov and KSBA
+% models track.
+% Roots -0..-21, labelled alpha_i.
+\coxeterlabels{alpha}
+\coxetersquare{4}{4}{0}{sw}{even}{white}
+\coxeterroots{16/white/{1,1}/180, 17/white/{3,1}/0, 18/white/{3,3}/0,
+  19/white/{1,3}/180, 20/black/{2,2.5}/90, 21/black/{2,1.5}/270}
+\coxeteredges{3}{(-0) -- (-16) (-4) -- (-17) (-8) -- (-18) (-12) -- (-19)}
+\coxeteredges{4}{(-16) -- (-20) -- (-18) (-17) -- (-21) -- (-19)}
+\coxeteredges{infinity}{(-20) -- (-21)}

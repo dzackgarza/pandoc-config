@@ -1,0 +1,10 @@
+% The K3 cusp diagram covering the Coxeter diagram of the 0-cusp eta_4 of
+% F_{En,2} (objects/coxeter/sterk-cusp-4): the (18,2,0)_1 diagram with the
+% involution J_4 whose folding gives it (475-our-cusps.md; the involutions of
+% dzack_research.preamble.sterk, Sterk.sterk_roots()):
+%   J_4 = the horizontal reflection fixing alpha_6, alpha_14.
+% Blue arrows are diagram symmetries.
+% Roots: those of objects/coxeter/vinberg-18-2-0, named -<i>.
+\pic {object=coxeter/vinberg-18-2-0};
+\draw[fold axis] (-0.3,2) -- (4.3,2);
+\draw[fold] (2.6,0.9) -- (2.6,3.1);

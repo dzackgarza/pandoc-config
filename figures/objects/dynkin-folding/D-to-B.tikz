@@ -1,0 +1,6 @@
+% The folding D_{n+1} -> B_n by the reflection of D_{n+1} swapping its two
+% short arms (the group S_2): the classical foldings of simply-laced Dynkin
+% diagrams, table in the dissertation,
+% 1-part-combinatorial/2-chapter-lattice-theory/700-folding.md.
+% Nodes -unfolded and -folded are the two diagrams.
+\pic {dynkin folding={ply=2}{D{oo.oooo}}{}{B{oo.oo*}}};

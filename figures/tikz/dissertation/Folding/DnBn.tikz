@@ -1,3 +1,0 @@
-\begin{tikzpicture}
-\pic {dynkin folding={ply=2}{D{oo.oooo}}{}{B{oo.oo*}}};
-\end{tikzpicture}

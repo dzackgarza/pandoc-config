@@ -1,4 +1,0 @@
-% The Vinberg diagram of II_{1,17} = (18,0,0)_1 = U + E_8^2 (Vinberg 1972).
-\begin{tikzpicture}
-\pic {vinberg 18 0 0};
-\end{tikzpicture}

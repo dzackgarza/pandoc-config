@@ -1,0 +1,17 @@
+% The Vinberg diagram of (10,10,0)_1 = E_10(2): ten roots of square -4 (black)
+% forming T_{2,3,7} = E_10, in Bourbaki's numbering.
+% Computed: the output of Vinberg's algorithm on the lattice of the
+% 2-elementary table in the research preamble
+% (dzack_research.preamble.catalogue._TWO_ELEMENTARY_RECIPES), run with the
+% engine the preamble registers for "vinberg_root_enumeration" (vinal,
+% Bogachev-Perepechko); the search completed. Edge weights are read from the
+% root Gram matrix, cos(pi/m) = |h_i.h_j| / sqrt(h_i^2 h_j^2), and the maximal
+% parabolic subdiagrams are all vertex sets on which minus the Gram matrix is
+% positive semidefinite with one kernel direction per component and rank
+% rk(L) - 2.
+% Maximal parabolic subdiagrams (`maximal parabolic=<name>`): one,
+% E8 = E~_8 = {1..9}.
+% Roots -1..-10, labelled by their index.
+\coxeterlabels{index}
+\coxeterEdiagram{10}{black}
+\coxeterparabolic{E8}{{1,3,4,5,6,7,8,9},{2,4}}

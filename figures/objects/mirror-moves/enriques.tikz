@@ -1,0 +1,21 @@
+% The mirror moves (Alexeev-Engel 2022, Thm. 5.10) of the Enriques lattice
+% S_En = (10,10,0)_1. Source: coble/cusp-correspondence/
+% cusp-diagrams-by-moduli-space.md and cusp-diagram-calculations.md.
+% A lattice is a vertex marked as in Nikulin's table: white for delta = 0,
+% black for delta = 1. Columns are the stages S, T = S^perp, \bar T,
+% \bar{\bar T}; an arrow is a move, styled by its type.
+% Lattices: -p1 = S, -p2 = T, -p3 and -p4 the moves from T, -p5 and -p6 the
+% 1-cusp lattices.
+\latticevertex{p1}{white}{0,0}{(10,10,0)_1}{above left}
+\latticevertex{p2}{white}{2,0}{(12,10,0)_2}{above left}
+\latticevertex{p3}{white}{4,2}{(10,10,0)_1}{above left}
+\latticevertex{p4}{white}{4,-2}{(10,8,0)_1}{below left}
+\latticevertex{p5}{white}{6,0}{(8,8,0)_0}{above right}
+\latticevertex{p6}{white}{6,-2}{(8,6,0)_0}{above right}
+\mirrorstages{3}
+\draw[mirror move=complement] (-p1) -- (-p2);
+\draw[mirror move=U] (-p2) -- node[vertex label, midway, above left] {$U$} (-p3);
+\draw[mirror move=U(2)] (-p2) -- node[vertex label, midway, below left] {$U(2)$} (-p4);
+\draw[mirror move=U(2)] (-p3) -- node[vertex label, midway, above right] {$U(2)$} (-p5);
+\draw[mirror move=U] (-p4) -- node[vertex label, midway, below right] {$U$} (-p5);
+\draw[mirror move=U(2)] (-p4) -- node[vertex label, midway, below] {$U(2)$} (-p6);

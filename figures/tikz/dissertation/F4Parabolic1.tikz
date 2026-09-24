@@ -1,7 +1,7 @@
 \begin{tikzpicture}
-\pic[root labels] (r) {k3 F4};
+\pic[root labels] (r) {object=coxeter/k3-F4};
 \scoped[on background layer]
   \draw[parabolic]
-    (r0.center) -- (r4.center) -- (r8.center) -- (r12.center) -- (r0.center);
+    (r-0.center) -- (r-4.center) -- (r-8.center) -- (r-12.center) -- (r-0.center);
 \node at (3,5.25) {\Large $A_1E_8^2$};
 \end{tikzpicture}

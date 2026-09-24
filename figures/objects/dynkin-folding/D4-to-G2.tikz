@@ -1,0 +1,5 @@
+% The folding D_4 -> G_2 by the rotation of D_4 by 2 pi / 3 (the group S_3):
+% the classical foldings of simply-laced Dynkin diagrams, table in the
+% dissertation, 1-part-combinatorial/2-chapter-lattice-theory/700-folding.md.
+% Nodes -unfolded and -folded are the two diagrams.
+\pic {dynkin folding={ply=3}{D{oooo}}{edge length=0.5cm}{G{2}}};

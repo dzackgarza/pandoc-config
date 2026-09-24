@@ -6,9 +6,9 @@
 
 \begin{document}
 \begin{tikzpicture}[scale=1.8]
-  \pic[root labels=none] (E) {coxeter E=8};
+  \pic[root labels=none] (E) {object=coxeter/E8};
   \foreach \v/\l in {1/7, 3/6, 4/5, 5/4, 6/3, 7/2, 8/1}
-    \node[vertex label, below] at (E\v.south) {$\l$};
-  \node[vertex label, right] at (E2.east) {$8$};
+    \node[vertex label, below] at (E-\v.south) {$\l$};
+  \node[vertex label, right] at (E-2.east) {$8$};
 \end{tikzpicture}
 \end{document}

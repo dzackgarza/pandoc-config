@@ -1,0 +1,10 @@
+% The K3 cusp diagram covering the Coxeter diagram of the 0-cusp eta_5 of
+% F_{En,2} (objects/coxeter/sterk-cusp-5): the (18,2,0)_1 diagram with the
+% involution J_5 whose folding gives it (475-our-cusps.md; the involutions of
+% dzack_research.preamble.sterk, Sterk.sterk_roots()):
+%   J_5 = the product of the reflections in the odd boundary roots alpha_1,
+%   alpha_3, ..., alpha_15.
+% Crossed vertices are reflections.
+% Roots: those of objects/coxeter/vinberg-18-2-0, named -<i>.
+\pic {object=coxeter/vinberg-18-2-0};
+\foreach \k in {1,3,...,15} \node[reflected root] at (-\k) {};

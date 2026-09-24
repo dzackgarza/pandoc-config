@@ -1,7 +1,7 @@
 % The mirror moves of S_En = (10,10,0)_1, with the stages S, T, \bar T,
 % \bar{\bar T} separated into columns.
 \begin{tikzpicture}
-  \pic {mirror moves enriques};
+  \pic {object=mirror-moves/enriques};
   \scoped[on background layer]
     \foreach \x in {1, 3, 5}
       \draw[dzg grid, dashed] (\x, 3.25) -- (\x, -2.6);

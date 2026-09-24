@@ -5,6 +5,6 @@
 % Index: 2
 
 \begin{tikzpicture}
-  \pic[root labels=none] {coxeter A=4};
+  \pic[root labels=none] {object=coxeter/A4};
   \node[below=0.5cm] at (1.5,0) {$A_4$ surface};
 \end{tikzpicture}

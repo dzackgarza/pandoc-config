@@ -1,4 +1,0 @@
-% The Coxeter diagram of the lattice F_4 (canonical diagram k3 F4).
-\begin{tikzpicture}
-  \pic[root labels=r] {k3 F4};
-\end{tikzpicture}

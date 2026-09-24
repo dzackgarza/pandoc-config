@@ -7,10 +7,10 @@
 % The symmetry v of the Vinberg diagram of (18,0,0) and the labels of its
 % roots after identifying each v-orbit.
 \begin{tikzpicture}
-  \pic (L) [root labels=ell] {sterk cusp cover=2};
+  \pic (L) [root labels=ell] {object=coxeter/sterk-cusp-cover-2};
   \begin{scope}[shift={(9,0)}]
-    \pic (R) [root labels=none] {sterk cusp cover=2};
+    \pic (R) [root labels=none] {object=coxeter/sterk-cusp-cover-2};
     \foreach \n/\a/\t in {2/270/1, 3/270/2, 4/315/3, 5/0/4, 6/0/5, 7/0/6, 8/0/7, 9/0/8, 10/90/8, 11/180/8, 12/180/7, 13/180/6, 14/180/5, 15/180/4, 16/225/3, 17/270/2, 18/270/1, 1/180/10, 19/0/10}
-      \path (R\n) node[label={[vertex label]\a:$\ell'_{\t}$}] {};
+      \path (R-\n) node[label={[vertex label]\a:$\ell'_{\t}$}] {};
   \end{scope}
 \end{tikzpicture}

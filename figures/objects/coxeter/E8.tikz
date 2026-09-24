@@ -1,0 +1,6 @@
+% The Coxeter diagram of the root lattice E_8, in Bourbaki's numbering
+% [Bourbaki, Groupes et algebres de Lie IV-VI, Planche VII]: roots of square
+% -2 (white).
+% Roots -1..-8, labelled by their index.
+\coxeterlabels{index}
+\coxeterEdiagram{8}{white}
