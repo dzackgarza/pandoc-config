@@ -1,6 +1,0 @@
-% The rectangle [-R,R] x i[-b,0], over which f(z) e^{-2 pi i z xi} is
-% integrated to move the Fourier integral of f in F_a to the line Im z = -b
-% (Complex Analysis notes, 2020-03-06).
-\begin{tikzpicture}
-  \pic {strip rectangle contour};
-\end{tikzpicture}

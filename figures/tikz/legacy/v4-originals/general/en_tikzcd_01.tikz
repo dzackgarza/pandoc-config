@@ -1,8 +1,0 @@
-% TikZ Diagram from V4 Thesis
-% Source: writing/sources/en.tex; also enriques_paper/en-revised-Oct05.tex,
-%   en-revised-Oct12-Phil.tex, en-revised-Oct12b-Phil.tex
-% Type: tikzcd
-% Category: general
-% Index: 1
-
-\kleinquotients[pairs]

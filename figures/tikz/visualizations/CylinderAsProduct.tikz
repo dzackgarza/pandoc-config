@@ -1,6 +1,6 @@
 % The cylinder S^1 x I with its boundary S^1 x {0,1} singled out.
 \begin{tikzpicture}[scale=\textwidth/10cm]
-  \pic (C) {cylinder};
+  \pic (C) {object=spaces/cylinder};
   \draw[distinguished curve, dzg singular] (C-ul) arc (180:-180:3 and 0.75);
   \draw[distinguished curve, dzg singular] (C-ll) arc (180:360:3 and 0.75);
   \draw[distinguished curve, dzg singular, dashed] (C-ll) arc (180:0:3 and 0.75);

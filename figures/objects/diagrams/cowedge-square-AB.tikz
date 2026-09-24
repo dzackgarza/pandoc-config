@@ -1,0 +1,9 @@
+% The cowedge condition for a bifunctor F: C^op x C -> D, a morphism f: A -> B
+% and a cowedge h: F => X (dinaturality to a constant), identities written as
+% objects. The version with objects c, d: cowedge-square.
+% Points: -diagram, the tikz-cd diagram.
+\node[inner sep=0pt] (-diagram) {\begin{tikzcd}[ampersand replacement=\&]
+  F(B,A) \arrow[r, "{F(B,f)}"] \arrow[d, swap, "{F(f,A)}"]
+    \& F(B,B) \arrow[d, "h_B"] \\
+  F(A,A) \arrow[r, swap, "h_A"] \& X
+\end{tikzcd}};

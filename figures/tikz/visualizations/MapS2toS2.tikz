@@ -1,6 +1,6 @@
 \begin{tikzpicture}[scale=\textwidth/5cm]
-  \pic at (-4,0) {sphere=2};
-  \pic at (0,0) {sphere=2};
+  \pic at (-4,0) {object=spaces/sphere-2};
+  \pic at (0,0) {object=spaces/sphere-2};
   \draw[map arrow] (-4,1.2) to[curve through={(-3.44,1.49) (-2.11,1.08)}] (-1,.5);
   \node at (-3,1.5) {$f$};
 \end{tikzpicture}

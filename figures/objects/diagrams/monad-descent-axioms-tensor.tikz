@@ -1,0 +1,22 @@
+% The axioms of a descent datum (x, rho, delta) for the monad A (x) - of an
+% algebra A: (1) rho is an A-module action (associativity), (2) its unit law,
+% (3) delta is a morphism of A-modules, (4) coassociativity of delta,
+% (5) the counit law rho . delta = id; five numbered commuting regions.
+% The version for a monad M: monad-descent-axioms.
+% Points: -diagram, the tikz-cd diagram.
+\node[inner sep=0pt] (-diagram) {\begin{tikzcd}[ampersand replacement=\&, row sep=3.5em, column sep=4.5em]
+  A\otimes A\otimes x \arrow[r, "1\otimes\varrho"] \arrow[d, swap, "\mu\otimes 1"]
+    \& A\otimes x \arrow[r, "1\otimes\delta"] \arrow[d, "\varrho"]
+    \& A\otimes A\otimes x \arrow[d, "\mu\otimes 1"] \\
+  A\otimes x \arrow[r, "\varrho"]
+    \& x \arrow[r, "\delta"] \arrow[d, "\delta"]
+    \& A\otimes x \arrow[d, "1\otimes\eta\otimes 1"] \\
+  x \arrow[u, "\eta\otimes 1"] \arrow[ru, Rightarrow, no head]
+    \& A\otimes x \arrow[l, "\varrho"] \arrow[r, swap, "1\otimes\delta"]
+    \& A\otimes A\otimes x
+  \arrow[from=1-1, to=2-2, phantom, "\mbox{\textcircled{\scriptsize 1}}"]
+  \arrow[from=2-1, to=2-2, phantom, "\mbox{\textcircled{\scriptsize 2}}", pos=0.3, shift right=1.2em]
+  \arrow[from=1-2, to=2-3, phantom, "\mbox{\textcircled{\scriptsize 3}}"]
+  \arrow[from=2-2, to=3-3, phantom, "\mbox{\textcircled{\scriptsize 4}}"]
+  \arrow[from=3-1, to=3-2, phantom, "\mbox{\textcircled{\scriptsize 5}}", pos=0.7, shift left=1.2em]
+\end{tikzcd}};

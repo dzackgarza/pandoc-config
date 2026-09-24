@@ -179,17 +179,19 @@ passed in \verb|\dzgobjects| by the test recipe.
 \end{tikzpicture}
 
 \section*{Spaces, contours and spectral sequences}
-Every pic and command in diagrams/dzg-spaces.tex, with each label scheme.
+Every constructor and key in constructors/dzg-spaces.tex: the space objects
+without labels and decorated on their named points, the axes of C, and ss pages
+in both conventions.
 
 \begin{tikzpicture}[scale=0.5]
-  \foreach \n in {0,1,2} \pic at (3*\n,0) {sphere=\n};
-  \foreach \n in {1,2,3} \pic[space labels=none] at (3*\n+7,0) {ball=\n};
-  \pic (C) at (4,-6) {cylinder};
-  \pic (T) at (14,-6) {torus};
-  \pic at (22,-6) {coffee cup};
-  \pic[scale=0.5] at (26,-8) {torus fundamental square};
-  \pic at (0,-14) {quarter disc contour};
-  \pic at (9,-13) {strip rectangle contour};
+  \foreach \n in {1,2,3} \pic[space labels=none] at (3*\n,0) {object=spaces/ball-\n};
+  \pic[space labels=none] (T) at (16,0) {object=spaces/torus};
+  \draw[distinguished curve] (T-longitude) ellipse (3 and 1);
+  \pic[scale=0.5, space labels=none] (S) at (22,-2) {object=spaces/torus-fundamental-square};
+  \draw[lattice grid] (S-00) -- (S-11);
+  \pic[space labels=none] (R) at (0,-8) {object=contours/strip-rectangle};
+  \draw[branch cut] (R-mRb) -- (R-Rb);
+  \begin{scope}[shift={(9,-8)}]\complexaxes{-1}{2}{-1}{2}\end{scope}
   \pic (E) at (16,-16) [ss homological, ss p={0,...,3}, ss q={0,1},
     ss q labels={0,n-1}] {ss page};
   \ssentry{E}{2}{0}{$H_2(B)$}
@@ -197,17 +199,5 @@ Every pic and command in diagrams/dzg-spaces.tex, with each label scheme.
   \pic (F) at (0,-24) [ss p={-1,...,1}, ss q={-1,...,1}, ss ticks=false] {ss page};
   \ssdifferential[ss unlabelled]{F}{2}{-1}{1}
 \end{tikzpicture}
-
-\begin{tikzpicture}[scale=0.5]
-  \mobiusband[width=4cm]
-\end{tikzpicture}
-
-\kleinquotients\quad \kleinquotients[pairs]
-
-\enriquescorrespondence\quad \enriquescorrespondence[E][properties]
-
-\cowedgesquare\quad \cowedgesquare[AB]
-
-\monaddescentaxioms\quad \monaddescentaxioms[tensor]
 
 \end{document}

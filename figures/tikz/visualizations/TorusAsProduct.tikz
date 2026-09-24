@@ -1,7 +1,7 @@
 % The torus with its two factor circles, a longitude and a meridian; the back
 % half of the meridian dashed.
 \begin{tikzpicture}[scale=\textwidth/10cm]
-  \pic[space labels=none] (T) {torus};
+  \pic[space labels=none] (T) {object=spaces/torus};
   \draw[distinguished curve] (T-longitude) ellipse (3 and 1);
   \draw[distinguished curve] (T-meridian) arc (90:270:0.5 and 0.85);
   \draw[distinguished curve, dashed] (T-meridian) arc (90:-90:0.5 and 0.85);

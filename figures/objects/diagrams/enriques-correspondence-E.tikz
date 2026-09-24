@@ -1,0 +1,12 @@
+% The correspondence between the moduli of degree 2 polarized Enriques
+% surfaces E_2, unpolarized Enriques surfaces E_\emptyset, and degree 4
+% hyperelliptic K3 surfaces F_{4,h.e.}: phi_1 forgets the polarization and is
+% finite, phi_2 is finite-to-one; in the notation of V2 and V3.
+% Source: writing/sources/enriques_paper/V3.tex (indices 0 and 2); also
+% enriques_paper/V2.tex (indices 0 and 2), introduction. The version with the
+% notation of main.tex: enriques-correspondence.
+% Points: -diagram, the tikz-cd diagram.
+\node[inner sep=0pt] (-diagram) {\begin{tikzcd}[ampersand replacement=\&]
+  \& E_2 \arrow[dl, swap, "\phi_1"] \arrow[dr, "\phi_2"] \\
+  E_\emptyset \&\& F_{4, h.e.}
+\end{tikzcd}};

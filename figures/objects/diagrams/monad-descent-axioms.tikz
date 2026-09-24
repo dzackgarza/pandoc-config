@@ -1,0 +1,23 @@
+% The axioms of a descent datum (x, rho, delta) for a monad (M, mu, eta):
+% (1) rho is an M-module action (associativity), (2) its unit law,
+% (3) delta is a morphism of M-modules, (4) coassociativity of delta,
+% (5) the counit law rho . delta = id; five numbered commuting regions.
+% The version for the monad A (x) - of an algebra A:
+% monad-descent-axioms-tensor.
+% Points: -diagram, the tikz-cd diagram.
+\node[inner sep=0pt] (-diagram) {\begin{tikzcd}[ampersand replacement=\&, row sep=3.5em, column sep=4.5em]
+  M^2(x) \arrow[r, "M(\varrho)"] \arrow[d, swap, "\mu_x"]
+    \& M(x) \arrow[r, "M(\delta)"] \arrow[d, "\varrho"]
+    \& M^2(x) \arrow[d, "\mu_x"] \\
+  M(x) \arrow[r, "\varrho"]
+    \& x \arrow[r, "\delta"] \arrow[d, "\delta"]
+    \& M(x) \arrow[d, "M(\eta_x)"] \\
+  x \arrow[u, "\eta_x"] \arrow[ru, Rightarrow, no head]
+    \& M(x) \arrow[l, "\varrho"] \arrow[r, swap, "M(\delta)"]
+    \& M^2(x)
+  \arrow[from=1-1, to=2-2, phantom, "\mbox{\textcircled{\scriptsize 1}}"]
+  \arrow[from=2-1, to=2-2, phantom, "\mbox{\textcircled{\scriptsize 2}}", pos=0.3, shift right=1.2em]
+  \arrow[from=1-2, to=2-3, phantom, "\mbox{\textcircled{\scriptsize 3}}"]
+  \arrow[from=2-2, to=3-3, phantom, "\mbox{\textcircled{\scriptsize 4}}"]
+  \arrow[from=3-1, to=3-2, phantom, "\mbox{\textcircled{\scriptsize 5}}", pos=0.7, shift left=1.2em]
+\end{tikzcd}};

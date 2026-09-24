@@ -1,0 +1,8 @@
+% The closed ball B^1 = [-1,1] with its boundary sphere S^0, drawn in
+% dzg singular.
+% Points: -center; -left and -right, the boundary points.
+\draw[distinguished curve] (-1,0) -- (1,0);
+\coordinate (-center) at (0,0);
+\node[point, dzg singular] (-left) at (-1,0) {};
+\node[point, dzg singular] (-right) at (1,0) {};
+\spacelabel{0,-1.4}{$B^1$}

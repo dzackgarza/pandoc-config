@@ -3,7 +3,7 @@
 % drawn on the unit circle), and the branch cut of log z along the negative
 % imaginary axis, which keeps log z holomorphic on the closed sector.
 \begin{tikzpicture}
-  \pic {quarter disc contour};
+  \pic {object=contours/quarter-disc};
   \draw[branch cut] (0,0) -- (0,-1.2);
   \node[point, label={[font=\small]above:$r_1 = -1$}] at (180:1) {};
   \node[point, label={[font=\small]right:$r_2 = e^{i\pi/3}$}] at (60:1) {};

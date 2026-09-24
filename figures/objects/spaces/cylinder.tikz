@@ -1,0 +1,14 @@
+% The cylinder S^1 x I: radius 3, height 4, centred at the origin.
+% Points: -ll, -lr, -ul, -ur (ends of the two boundary circles' long axes),
+% -bottom and -top (centres of the boundary circles).
+\coordinate (-ll) at (-3,-2); \coordinate (-lr) at (3,-2);
+\coordinate (-ul) at (-3,2);  \coordinate (-ur) at (3,2);
+\coordinate (-bottom) at (0,-2); \coordinate (-top) at (0,2);
+\shade[shading angle=90, opacity=0.2]
+  (-3,-2) arc (-180:-60:3 and 0.75) -- +(0,4) arc (-60:-180:3 and 0.75) -- cycle;
+\shade[shading angle=270, opacity=0.2]
+  (3,-2) arc (0:-60:3 and 0.75) -- +(0,4) arc (-60:0:3 and 0.75) -- cycle;
+\draw (-3,-2) arc (-180:0:3 and 0.75) -- (3,2) arc (0:-180:3 and 0.75) -- cycle;
+\draw[shade, shading angle=30, opacity=0.9] (-3,2) arc (-180:180:3 and 0.75);
+\draw[dashed] (-3,-2) arc (180:0:3 and 0.75);
+\spacelabel{0,-3.5}{$S^1 \times I$}

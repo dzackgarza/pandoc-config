@@ -1,8 +1,0 @@
-% TikZ Diagram from V4 Thesis
-% Source: writing/sources/enriques_paper/V3.tex (indices 0 and 2);
-%   also enriques_paper/V2.tex (indices 0 and 2)
-% Type: tikzcd
-% Category: general
-% Index: 0
-
-\enriquescorrespondence[E][names]

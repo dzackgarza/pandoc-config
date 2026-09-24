@@ -1,0 +1,9 @@
+% The closed ball B^3, radius 1 about the origin, with its boundary sphere S^2
+% drawn in dzg singular with the front halves of its equator and a meridian.
+% Points: -center.
+\coordinate (-center) at (0,0);
+\shade[ball color=dzg accent, opacity=0.9] (0,0) circle (1);
+\draw[dzg singular] (0,0) circle (1);
+\draw[dzg singular] (-1,0) arc (180:360:1 and 0.5);
+\draw[dzg singular] (0,1) arc (90:270:0.5 and 1);
+\spacelabel{0,-1.4}{$B^3$}

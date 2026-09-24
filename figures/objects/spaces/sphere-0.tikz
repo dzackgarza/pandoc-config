@@ -1,0 +1,6 @@
+% The 0-sphere S^0 = {-1,1}, radius 1 about the origin.
+% Points: -center; -left and -right, the two points.
+\coordinate (-center) at (0,0);
+\node[point, black] (-left) at (-1,0) {};
+\node[point, black] (-right) at (1,0) {};
+\spacelabel{0,-1.4}{$S^0$}
