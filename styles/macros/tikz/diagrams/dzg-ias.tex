@@ -257,7 +257,9 @@
 
 % (18,0,0)_1: the polygon cut open along p_19 p_2, sides 2..18, surgeries with
 % the roots 1 and 19 on the sides 4 and 16, singular points p_1 and p_20.
-% The cut ends p_2 and p_19 carry multiplicity 4.
+% The corners p_2 and p_19 carry charge 2: the I_2 singularity of [ABE22,
+% Fig. 4] splits into two I_1 that collide with the corners [AEGS, §4.2,
+% Fig. 12].
 % Default: the instance of the dissertation figure, l_1..l_19 =
 % (2,2,2,2,2,1,2,1,2,1,2,1,2,1,2,2,2,2,2).
 \def\dzg@ias@sides@b{2/0/1/w/0, 3/-1/4/h/0, 4/-1/3/s/1, 5/-2/5/h/0,
@@ -268,7 +270,7 @@
 \tikzset{pics/symington 18 0 0/.style={/tikz/transform shape, code={%
   \tikzset{transform shape=false}%
   \dzg@ias@setell{1}{#1}%
-  \dzg@ias@symington{2}{19}{0}{\dzg@ias@sides@b}{\dzg@ias@surg@b}{2/3, 19/3}%
+  \dzg@ias@symington{2}{19}{0}{\dzg@ias@sides@b}{\dzg@ias@surg@b}{2/1, 19/1}%
   \draw[ias boundary, dashed, draw=dzg muted] (-p2) -- (-p19);}},
   pics/symington 18 0 0/.default={2,2,2,2,2,1,2,1,2,1,2,1,2,1,2,2,2,2,2}}
 
