@@ -13,8 +13,9 @@
 %
 %   symington 18 2 0={l_0,...,l_19}   Symington polygon P(lambda) of (18,2,0)_1
 %   symington 18 0 0={l_1,...,l_19}   Symington polygon P(lambda) of (18,0,0)_1
-%   sterk2 ias                        IAS^2 Gamma(X_0) of the F_{En,2} example
-%   sterk2 kulikov                    its Kulikov central fibre X_0
+%   sterk3 ias                        Gamma(X_0) of B_3(l) at Sterk cusp 3,
+%                                     l = (2,0^15,2,4,6,4,0,4) [AEGS Ex. 4.13, Fig. 13]
+%   sterk3 kulikov                    its Kulikov central fibre X_0
 %
 % Keys:
 %   ias labels=canonical|multiplicities|none
@@ -23,7 +24,7 @@
 %                               multiplicity 1) and self-intersection numbers;
 %                               multiplicities: those alone
 %                               (default canonical)
-%   ias involutions             sterk2 ias: the fixed lines of i_En and i_dP
+%   ias involutions             sterk3 ias: the fixed lines of i_En and i_dP
 %                               and the two involution arrows
 
 \newif\ifdzg@ias@labels
@@ -295,7 +296,7 @@
 % Lower-left corners of the six unit squares of R.
 \def\dzg@ias@sterksquares{-1/1, 0/1, -1/0, 1/0, 0/-1, 1/-1}
 
-\tikzset{pics/sterk2 ias/.style={/tikz/transform shape, code={%
+\tikzset{pics/sterk3 ias/.style={/tikz/transform shape, code={%
   \tikzset{transform shape=false}%
   \foreach \n/\x/\y in \dzg@ias@sterkpoints \coordinate (-\n) at (\x,\y);
   \coordinate (-En1) at (-1.5,-1.5);
@@ -336,7 +337,7 @@
     \path ($(-mid)!0.22cm!#3:(-t#2)$) node[self intersection] {$#4$}
       ($(-mid)!-0.22cm!#3:(-t#2)$) node[self intersection] {$#5$};
   \fi}
-\tikzset{pics/sterk2 kulikov/.style={/tikz/transform shape, code={%
+\tikzset{pics/sterk3 kulikov/.style={/tikz/transform shape, code={%
   \tikzset{transform shape=false}%
   \foreach \n/\x/\y in \dzg@ias@sterkpoints \coordinate (-\n) at (\x,\y);
   \begin{scope}[on background layer]

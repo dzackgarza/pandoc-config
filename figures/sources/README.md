@@ -8,7 +8,7 @@ files an author opens to change a picture.
 | file | tool | renders to |
 | --- | --- | --- |
 | `triangulated_sphere.blend` | Blender | the triangulated-sphere figures (`triangulated_sphere_fan`) |
-| `Sterk2-ias-bigger.ggb` | GeoGebra | the Sterk-2 integral affine structure |
+| `Sterk3-ias-bigger.ggb` | GeoGebra | the integral affine structure B_3(ℓ) at Sterk cusp 3, ℓ = (2,0^15,2,4,6,4,0,4) [AEGS, Ex. 4.13, Fig. 13] |
 | `sterk_ias_export.svg`, `sterk_ias_export_v2.svg` | Inkscape/GeoGebra export | intermediate exports of the same IAS |
 
 Consolidated from `research/writing/Coble Paper Draft`, where they were the only
