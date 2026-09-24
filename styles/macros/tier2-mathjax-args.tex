@@ -447,7 +447,7 @@
 \newcommand{\thecone}[1]{\mathfrak{#1}}
 \newcommand{\theposet}[1]{\mathcal{#1}}
 \newcommand{\modulistack}[1]{\mathcal{#1}}
-\providecommand{\RN}[1]{\textup{\uppercase\expandafter{\romannumeral#1}}}
+\AtBeginDocument{\providecommand{\RN}[1]{\textup{\uppercase\expandafter{\romannumeral#1}}}}
 \newcommand{\torcptf}[2]{\overline{#1}^{#2}}
 
 % ================================================================================

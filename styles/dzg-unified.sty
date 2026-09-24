@@ -25,6 +25,12 @@
 \RequirePackage[export]{adjustbox}
 \RequirePackage{caption}
 \RequirePackage{subcaption}
+% pandoc-crossref's header runs \@ifpackageloaded{subfig}{}{\usepackage{subfig}}
+% and emits subfig's \subfloat for subfigures. subfig and subcaption cannot be
+% loaded together (\sf@counterlist is undefined at \begin{document}), and
+% subcaption already provides a subfig-compatible \subfloat (subcaption.sty,
+% "\subfloat" emulation). Recording subfig as loaded keeps crossref from loading it.
+\expandafter\def\csname ver@subfig.sty\endcsname{subcaption provides \subfloat}
 \RequirePackage{epstopdf}
 \RequirePackage{svg}
 
