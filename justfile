@@ -412,8 +412,7 @@ _test-macros:
   #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
-  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:$PANDOC_DIR/figures//:"
-  OBJECTS=$(cd "$PANDOC_DIR/figures/objects" && find . -name "*.tikz" | sed "s|^\./||; s|\.tikz$||" | sort | paste -sd,)
+  export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:"
   cd "$PANDOC_DIR/tests"
   pdflatex -interaction=nonstopmode test-latex-macros.tex || true
   if [ -f test-latex-macros.pdf ]; then
@@ -456,8 +455,16 @@ _test-posets:
     || { grep -A4 '^!\|dzg-poset.lua:[0-9]*:' test-posets.log; exit 1; }
   echo "✅ Poset test compiled: test-posets.pdf"
 
-# Run all tests (macros, templates, tikz compilation, filter, poset layout)
-test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-posets
+# Regenerate the reference section of README.md (every macro, environment and figure object)
+readme-reference:
+  python3 "{{source_directory()}}/bin/generate-readme-reference.py"
+
+# Fail when the README reference no longer matches the sources
+_test-readme:
+  python3 "{{source_directory()}}/bin/generate-readme-reference.py" --check
+
+# Run all tests (macros, templates, tikz compilation, filter, poset layout, README reference)
+test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-posets _test-readme
 
 # Commit-tier gate entry point expected by the machine-wide ai-review-ci hook;
 # this repo's commit-tier QC is its own test suite.
