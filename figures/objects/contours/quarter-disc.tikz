@@ -1,0 +1,12 @@
+% The boundary of the sector {|z| <= R, 0 <= arg z <= pi/2} in C, R = 3,
+% counterclockwise: [0,R], the arc, [iR,0]; with coordinate axes and the
+% label C. Labels R, iR, Gamma.
+% Points: -0, -R, -iR.
+\coordinate (-0) at (0,0); \coordinate (-R) at (3,0); \coordinate (-iR) at (0,3);
+\complexaxes{-2}{3.8}{-1.2}{3.8}
+\draw[contour={0.17,0.5,0.84}] (0,0) -- (3,0) arc (0:90:3) -- cycle;
+\ifspacelabels
+  \node[font=\small, below] at (3,0) {$R$};
+  \node[font=\small, left] at (0,3) {$iR$};
+  \node[font=\small] at (45:3.35) {$\Gamma$};
+\fi

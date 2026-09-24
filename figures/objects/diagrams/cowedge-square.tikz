@@ -1,0 +1,9 @@
+% The cowedge condition for a bifunctor F: C^op x C -> D, a morphism g: c -> d
+% and a cowedge zeta: F => X (dinaturality to a constant) (Definition 1.1.16).
+% The version with objects A, B: cowedge-square-AB.
+% Points: -diagram, the tikz-cd diagram.
+\node[inner sep=0pt] (-diagram) {\begin{tikzcd}[ampersand replacement=\&]
+  F(d,c) \arrow[r, "{F(1_d,g)}"] \arrow[d, swap, "{F(g,1_c)}"]
+    \& F(d,d) \arrow[d, "\zeta_d"] \\
+  F(c,c) \arrow[r, swap, "\zeta_c"] \& X
+\end{tikzcd}};

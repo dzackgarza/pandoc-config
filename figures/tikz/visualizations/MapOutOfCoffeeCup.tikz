@@ -1,5 +1,5 @@
 \begin{tikzpicture}[scale=\textwidth/10cm]
-  \pic {coffee cup};
+  \pic {object=spaces/coffee-cup};
   \node at (0,-1.7) {$X = $ A Coffee Cup};
   \draw[map arrow] (1.5,-.5) to[curve through={(2.04,-0.5) (2.86,-0.17)}] (4.2,-.5);
   \node at (3,0) {$f: X \to Y$};

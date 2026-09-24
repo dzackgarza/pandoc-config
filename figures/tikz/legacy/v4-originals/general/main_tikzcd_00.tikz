@@ -1,8 +1,0 @@
-% TikZ Diagram from V4 Thesis
-% Source: writing/sources/enriques_paper/main.tex (twice);
-%   also diss/archive/unused_sections/9999_Appendix.md (diagram #0)
-% Type: tikzcd
-% Category: general
-% Index: 0
-
-\enriquescorrespondence[F][properties]

@@ -1,0 +1,5 @@
+% The unit circle S^1, radius 1 about the origin.
+% Points: -center.
+\coordinate (-center) at (0,0);
+\draw[black] (0,0) circle (1);
+\spacelabel{0,-1.4}{$S^1$}

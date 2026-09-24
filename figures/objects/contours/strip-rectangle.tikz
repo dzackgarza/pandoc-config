@@ -1,0 +1,16 @@
+% The boundary of the rectangle [-R,R] x i[-b,0] in C, counterclockwise,
+% R = 2.5, b = 1.5; with coordinate axes and the label C. The rectangle over
+% which f(z) e^{-2 pi i z xi} is integrated to move the Fourier integral of f
+% in F_a to the line Im z = -b (Complex Analysis notes, 2020-03-06).
+% Points: -R, -mR, -Rb (R - ib), -mRb (-R - ib).
+\coordinate (-R) at (2.5,0); \coordinate (-mR) at (-2.5,0);
+\coordinate (-Rb) at (2.5,-1.5); \coordinate (-mRb) at (-2.5,-1.5);
+\complexaxes{-3.5}{3.5}{-2.5}{1.5}
+\draw[contour={0.19,0.44,0.69,0.94}] (2.5,0) -- (-2.5,0) -- (-2.5,-1.5)
+  -- (2.5,-1.5) -- cycle;
+\ifspacelabels
+  \node[font=\small, above right] at (2.5,0) {$R$};
+  \node[font=\small, above left] at (-2.5,0) {$-R$};
+  \node[font=\small, below right] at (2.5,-1.5) {$R - ib$};
+  \node[font=\small, below left] at (-2.5,-1.5) {$-R - ib$};
+\fi

@@ -1,0 +1,10 @@
+% The torus T^2: outer radii 4 and 2, centred at the origin.
+% Points: -longitude (centre of the core circle, radii 3 and 1) and -meridian
+% (top of a meridian circle, radii 0.5 and 0.85, through the front).
+\coordinate (-longitude) at (0,0.5);
+\coordinate (-meridian) at (-1,-0.25);
+\draw (4,0) arc (0:360:4 and 2);
+\draw (2,0.5) arc (0:-180:2 and 0.8);
+\draw (0,0.5) arc (90:150:2 and 0.8);
+\draw (0,0.5) arc (90:30:2 and 0.8);
+\spacelabel{0,-3}{$T^2$}

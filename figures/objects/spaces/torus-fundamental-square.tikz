@@ -1,0 +1,18 @@
+% The fundamental square of the torus, word a b a^{-1} b^{-1}: the square
+% [0,6]^2 with the horizontal sides glued (a, one arrow tip) and the vertical
+% sides glued (b, two arrow tips). The region is filled on the background
+% layer, so decorations drawn [on background layer] after it lie inside it.
+% Points: -00, -10, -01, -11 (the corners).
+\coordinate (-00) at (0,0); \coordinate (-10) at (6,0);
+\coordinate (-01) at (0,6); \coordinate (-11) at (6,6);
+\scoped[on background layer] \fill[polygon region] (0,0) rectangle (6,6);
+\draw[glued edge=1, dzg singular] (0,0) -- (6,0);
+\draw[glued edge=1, dzg singular] (0,6) -- (6,6);
+\draw[glued edge=2, dzg accent] (0,0) -- (0,6);
+\draw[glued edge=2, dzg accent] (6,0) -- (6,6);
+\ifspacelabels
+  \node[below=4pt, dzg singular] at (3,0) {$a$};
+  \node[above=4pt, dzg singular] at (3,6) {$a$};
+  \node[left=6pt, dzg accent] at (0,3) {$b$};
+  \node[right=6pt, dzg accent] at (6,3) {$b$};
+\fi

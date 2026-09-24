@@ -1,0 +1,7 @@
+% The closed ball B^2, radius 1 about the origin, with its boundary sphere S^1
+% drawn in dzg singular.
+% Points: -center.
+\draw[pattern=horizontal lines, pattern color=dzg accent] (0,0) circle (1);
+\coordinate (-center) at (0,0);
+\draw[dzg singular] (0,0) circle (1);
+\spacelabel{0,-1.4}{$B^2$}

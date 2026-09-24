@@ -1,5 +1,5 @@
 % The Moebius band, the nontrivial I-bundle over S^1, with its core circle.
 \begin{tikzpicture}
-  \mobiusband
+  \pic {object=spaces/mobius-band};
   \node[below] at (current bounding box.south) {$M = S^1 \mathbin{\tilde\times} I$};
 \end{tikzpicture}

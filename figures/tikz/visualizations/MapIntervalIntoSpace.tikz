@@ -1,6 +1,6 @@
 \begin{tikzpicture}[scale=\textwidth/10cm]
   % the interval B^1 and its boundary S^0
-  \pic at (-2,0) {ball=1};
+  \pic at (-2,0) {object=spaces/ball-1};
 
   % the space X, two paths f, g from p to q, and a homotopy between them
   \coordinate (p) at (0,0);

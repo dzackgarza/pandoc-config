@@ -1,0 +1,21 @@
+% A coffee cup, rim centred at the origin (rim radii 1 and 1/2). No label:
+% figures say what it stands for.
+% Points: -rim, -handle.
+\coordinate (-rim) at (0,0);
+\coordinate (-handle) at (10:1.25);
+\begin{scope}[shift=(10:7/8), rotate=-30, yslant=1/2, xslant=-1/8]
+  \shade[top color=dzg muted, bottom color=dzg grid]
+    (0,0) arc (130:-100:3/8 and 1/2) -- ++(0,1/4) arc (-100:130:1/8 and 1/4) -- cycle;
+  \shade[top color=dzg blob, bottom color=dzg muted]
+    (0,0) arc (130:-100:3/8 and 1/2) -- ++(0,1/32) arc (-100:130:1/4 and 1/3) -- cycle;
+\end{scope}
+\fill[dzg muted, path fading=fade out] (0,-1) ellipse [x radius=3/4, y radius=1/2];
+\shade[left color=dzg muted, right color=dzg grid] (-1,0) arc (180:360:1 and 5/4);
+\shade[bottom color=dzg muted, top color=dzg grid, opacity=1/2]
+  (-1,0) arc (180:360:1 and 5/4);
+\shade[left color=dzg blob, right color=dzg grid]
+  (0,0) ellipse [x radius=1, y radius=1/2];
+\shade[left color=dzg grid, right color=dzg blob]
+  (0,0) ellipse [x radius=1-1/16, y radius=1/2-1/16];
+\shade[bottom color=dzg muted, top color=dzg blob, opacity=1/2]
+  (0,0) ellipse [x radius=1-1/16, y radius=1/2-1/16];
