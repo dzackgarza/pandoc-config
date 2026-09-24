@@ -5,7 +5,6 @@
   \draw[parabolic]
     (r-2.center) -- (r-0.center) -- (r-12.center) -- (r-11.center)
     (r-0.center) -- (r-16.center)
-    (r-9.center) -- (r-8.center) -- (r-4.center) -- (r-3.center)
-    (r-18.center) -- (r-8.center)
-    (r-17.center) -- (r-4.center);
+    (r-9.center) -- (r-8.center) -- (r-4.center) -- (r-17.center) -- (r-21.center)
+    (r-18.center) -- (r-8.center);
 \end{tikzpicture}
