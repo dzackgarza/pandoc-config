@@ -154,11 +154,11 @@ local function run_latex_and_convert(tex_source, tmp_prefix, hash, doc_dir, figu
     inputs_env = 'TEXINPUTS="' .. styles_dir .. ':' .. figures_inputs .. '::" '
   end
 
-  -- Discard lualatex's stdout+stderr: a pandoc filter's stdout is its output
+  -- Capture lualatex's stdout+stderr in the private scratch directory: a pandoc filter's stdout is its output
   -- channel and must stay clean. The compile log would otherwise prepend to the
   -- rendered document, breaking a downstream `pandoc -f latex` re-parse of the
   -- output (the figure renders, but the log corrupts the stream). Diagnostics on
-  -- failure come from the .log file via emit_figure_compile_error, not this stream.
+  -- failure come from the .log file or this command transcript, never stdout.
   local latex_command_log = tmp .. "/lualatex-command.log"
   local cmd1 = inputs_env .. "lualatex --shell-escape -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " >" .. latex_command_log .. " 2>&1"
   local ok1, _, latex_exit = os.execute(cmd1)
