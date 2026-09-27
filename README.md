@@ -197,13 +197,13 @@ absolute: a picture's `scale` spaces coordinates and leaves node sizes alone.
 so vertices cover their ends; highlights go on the background layer.
 
 **Colours**: `dzg accent` (rays, maps), `dzg singular` (singular points,
-surgeries), `dzg highlight` (parabolic subdiagrams, emphasis), `dzg region`
+surgeries), `dzg highlight` (subdiagram highlights, emphasis), `dzg region`
 (filled regions), `dzg grid`, `dzg muted`, `dzg blob` (moduli schematics),
 `dzg elliptic`, `dzg parabolic` (subdiagram types).
 
 | Family | Styles |
 | --- | --- |
-| Coxeter, Dynkin, Vinberg | `vertex=white\|black\|doubled\|even`, `vertex label`, `coxeter edge=3\|4\|5\|6\|infinity\|dotted`, `coxeter edge label=<m>` (m >= 7), `parabolic`, `fold`, `fold axis`, `inactive`, `marked vertex`, `reflected root`, `quotient map`, `subdiagram cell=elliptic\|parabolic\|other` |
+| Coxeter, Dynkin, Vinberg | `vertex=white\|black\|doubled\|even`, `vertex label`, `coxeter edge=3\|4\|5\|6\|infinity\|dotted`, `coxeter edge label=<m>` (m >= 7), `subdiagram highlight`, `fold`, `fold axis`, `inactive`, `marked vertex`, `reflected root`, `quotient map`, `subdiagram cell=elliptic\|parabolic\|other` |
 | Baily-Borel cusps | `cusp0` (rounded box), `cusp1` (box), `cusp label`, `incidence`, `cusp brace`, `cusp map`, `cusp image`, `doubled mark` |
 | IAS, fans, Kulikov models | `ias region`, `ias boundary`, `ias edge`, `ias singularity=<multiplicity>`, `ias surgery`, `fan ray`, `kulikov component`, `double curve`, `nontoric blowup`, `exceptional curve`, `triple point`, `self intersection` |
 | Lattice polygons | `lattice grid`, `lattice point`, `polygon region`, `long side`, `short side`, `axis side`, `boundary point=<fill>`, `marked point=<label>`, `side label=<text>`, `monomial`, `polygon title`, `polytope edge`, `distinguished point`, `coordinate axis`, `hatched region` |
@@ -235,7 +235,7 @@ leading comment. A figure places it and draws on its named points:
 - `\pic (Q) at (x,y) [<keys>] {object=<family>/<name>}` inputs the file. Its
   points, named `-<point>` in the file, become `Q-<point>`.
 - Keys in the pic options reach the object: label schemes, `ell={...}`,
-  `maximal parabolic=<name>`, and so on.
+  and so on.
 - The picture's `scale` spaces the object's coordinates; node sizes stay
   absolute.
 - A document that shows one object alone uses its render,
@@ -253,18 +253,21 @@ of. No constructor names a particular object.
 - `\coxeterlabels{<scheme>}`: the object's canonical label scheme.
 - `\coxeterroot{<i>}{<mark>}{<coordinate>}{<label direction>}`: one root.
 - `\coxeterroots{<i>/<mark>/<coordinate>/<dir>, ...}`: several roots.
-- `\coxeteredges{<weight>}{<path through -<i> names>}`: edges of one weight.
+- `\coxeteredge[<label>]{<weight>}{<i>}{<j>}`: one weighted edge.
+- `\coxeteredges{<weight>}{<i>/<j>, ...}`: weighted edges from root pairs.
 - `\coxeterchain{<weight>}{<first>}{<last>}`: the edges i -- i+1.
 - `\coxetersquare{<side>}{<edges per side>}{<first>}{sw|nw}{<corner mark>}{<mark between>}`:
   a cycle of simple edges around a square.
-- `\coxeterparabolic{<name>}{{<i>,...}, ...}`: a maximal parabolic subdiagram,
-  stored in the object and highlighted when the figure passes
-  `maximal parabolic=<name>`.
+- `subdiagram={<i>,<j>,...}` on a pic: select root handles in the figure.
+  The constructors highlight the selected roots and the ambient edges whose
+  endpoints are both selected. A disconnected selection works without paths.
+  Use `root labels=index` to display the handles. Manual drawing uses the
+  `subdiagram highlight` style on the background layer.
 - `\coxeterpair[<keys>]`, `\coxetervertex{<mark>}`: legends.
 - Pics `dynkin folding={<opts>}{<diagram>}{<opts>}{<diagram>}` and
   `root chain={<mark>/<norm label>/<weight>, ...}`.
 - Keys: `root labels=alpha|r|ell|index|none`, `parity marks=true|false`,
-  `maximal parabolic=<name>`.
+  `subdiagram={<i>,<j>,...}`.
 
 **Vinberg diagrams and mirror moves** (`dzg-vinberg.tex`).
 - `\coxeterEdiagram{<n>}{<mark>}`: the tree T_{2,3,n-3}, numbered as in Bourbaki.

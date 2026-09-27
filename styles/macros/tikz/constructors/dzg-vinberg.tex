@@ -38,7 +38,7 @@
   \foreach \dzg@k in {3,...,#1}{%
     \pgfmathtruncatemacro\dzg@x{\dzg@k-2}%
     \coxeterroot{\dzg@k}{#2}{\dzg@x,0}{below}}%
-  \coxeteredges{3}{(-1) -- (-3) (-2) -- (-4)}%
+  \coxeteredges{3}{1/3,2/4}%
   \coxeterchain{3}{3}{#1}}
 
 \NewDocumentCommand\latticevertex{O{} O{} m m m m m}{%

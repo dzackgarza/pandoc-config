@@ -22,12 +22,9 @@
 \coxeterroot{20}{white}{$(-10-11)!2/3!(-1-2)$}{below left}
 \coxeterroot{22}{white}{$(-9-10)!1/3!(-2-3)$}{above right}
 \coxeterroot{21}{white}{$(-9-10)!2/3!(-2-3)$}{below right}
-\coxeteredges{3}{(-0) -- (-16) (-4) -- (-17) (-8) -- (-18) (-12) -- (-19)
-  (-16) -- (-23) (-16) -- (-21) (-17) -- (-20) (-17) -- (-22)
-  (-18) -- (-23) (-18) -- (-21) (-19) -- (-22) (-19) -- (-20)}
-\coxeteredges{infinity}{
-  (-23) -- node[vertex label, midway, right] {$\infty$} (-20)
-  (-22) -- node[vertex label, midway, left] {$\infty$} (-21)}
+\coxeteredges{3}{0/16,4/17,8/18,12/19,16/23,16/21,17/20,17/22,18/23,18/21,19/22,19/20}
+\coxeteredge[node[vertex label, midway, right] {$\infty$}]{infinity}{23}{20}
+\coxeteredge[node[vertex label, midway, left] {$\infty$}]{infinity}{22}{21}
 % Maximal parabolic subdiagrams (rank 17), one per type up to the symmetries
 % of the diagram, computed from the Gram matrix (roots of square -2, pairing 1
 % on a simple edge, 2 on a bold edge): every set of pairwise orthogonal
@@ -36,9 +33,3 @@
 % A_11 E_6, D_9 E_8, A_3 E_7^2 have determinant 4, 64, 16, 36, 4, 16, each a
 % square multiple of 4, as the boundary lattice of rank 17 and discriminant
 % Z/4 requires.
-\coxeterparabolic{D17}{{15,0,1,2,3,4,5,6,7,8,9,10,11,12,19,20},{0,16},{19,22}}
-\coxeterparabolic{A15A1A1}{{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0},{20,23},{21,22}}
-\coxeterparabolic{D12D5}{{15,0,1,2,3,4,5,6,7,8,9},{0,16},{8,18},{11,12,13},{12,19,20},{19,22}}
-\coxeterparabolic{A11E6}{{0,1,2,3,4,5,6,7,8,18,21,16,0},{10,11,12,13,14},{12,19,20}}
-\coxeterparabolic{D9E8}{{15,0,1,2,3,4,17,20},{0,16},{17,22},{6,7,8,9,10,11,12,13},{8,18}}
-\coxeterparabolic{A3E7E7}{{3,2,1,0,15,14,13},{0,16},{5,6,7,8,9,10,11},{8,18},{17,20,19,22,17}}

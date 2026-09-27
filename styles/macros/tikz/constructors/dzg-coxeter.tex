@@ -3,12 +3,12 @@
 % =============================================================================
 % Building blocks that draw a Coxeter diagram from its data: roots (vertices)
 % with their marks and positions, edges with their Coxeter weights, chains,
-% cycles and maximal parabolic subdiagrams. The diagrams themselves are
+% cycles. The diagrams themselves are
 % objects, one file each, under figures/objects/coxeter/, assembled from these
 % constructors; a figure places one with
 %   \pic (A) at (6,0) [<keys>] {object=coxeter/sterk-cusp-1};
 % and draws on its roots A-0, A-1, ...:
-%   \scoped[on background layer] \draw[parabolic] (A-0.center) -- (A-8.center);
+%   \pic (A) [subdiagram={0,8}] {object=coxeter/sterk-cusp-1};
 % \input by dzg-constructors.tex, so "@" is a letter here.
 %
 % Commands (the root <i> is the node -<i>, labelled by the label scheme):
@@ -20,8 +20,9 @@
 %   \coxeterroots{<i>/<mark>/<coordinate>/<label direction>, ...}
 %       several roots. Brace a coordinate that contains a comma; place a calc
 %       coordinate with \coxeterroot, since \foreach keeps the braces.
-%   \coxeteredges{<Coxeter weight>}{<path through -<i> names>}
-%       edges of one weight (a `coxeter edge` value), on the edge layer.
+%   \coxeteredge[<TikZ edge label>]{<weight>}{<i>}{<j>}
+%   \coxeteredges{<weight>}{<i>/<j>, ...}
+%       incidences of the diagram, on the edge layer.
 %   \coxeterchain{<Coxeter weight>}{<first>}{<last>}
 %       the edges i -- i+1 for first <= i < last.
 %   \coxetersquare{<side>}{<edges per side>}{<first>}{<sw|nw>}
@@ -30,10 +31,6 @@
 %       <first> at the south-west corner counterclockwise (sw) or at the
 %       north-west corner clockwise (nw), labelled outward.
 %   \coxeterEdiagram{<n>}{<mark>}   (dzg-vinberg.tex)
-%   \coxeterparabolic{<name>}{{<i>,<j>,...}, {...}, ...}
-%       a maximal parabolic subdiagram of the object: the highlight stroked
-%       through the root centres of each chain, drawn when the figure passes
-%       `maximal parabolic=<name>`. The vertex sets are data of the object.
 %   \coxeterpair[<keys>], \coxetervertex{<mark>}   table legends
 %
 % Pics:
@@ -44,7 +41,7 @@
 %   root labels=alpha|r|ell|index|none   the label scheme (see below); a bare
 %                                        `root labels` selects the canonical one
 %   parity marks=true|false              even roots doubled, or white
-%   maximal parabolic=<name>             highlight that parabolic subdiagram
+%   subdiagram={<i>,<j>,...}              highlight the induced subdiagram
 %   vertex=even                          an even boundary root (AEGS25
 %                                        Sec. 3.5): doubled under `parity
 %                                        marks`, white otherwise
@@ -62,7 +59,13 @@
 \dzg@paritymarkstrue
 \def\dzg@unset{unset}
 \def\dzg@labelscheme{unset}
-\def\dzg@parabolic{}
+\ExplSyntaxOn
+\clist_new:N \l_dzg_subdiagram_clist
+\cs_generate_variant:Nn \clist_if_in:NnTF { NeTF }
+\NewDocumentCommand\dzgsetsubdiagram{m}{\clist_set:Nn \l_dzg_subdiagram_clist {#1}}
+\NewDocumentCommand\dzgselectedrootTF{mmm}{%
+  \clist_if_in:NeTF \l_dzg_subdiagram_clist {#1} {#2} {#3}}
+\ExplSyntaxOff
 \tikzset{
   root labels/.is choice,
   root labels/canonical/.code={\dzg@rootlabelstrue\def\dzg@labelscheme{unset}},
@@ -73,9 +76,9 @@
   root labels/none/.code={\dzg@rootlabelsfalse\def\dzg@labelscheme{none}},
   root labels/.default=canonical,
   parity marks/.is if=dzg@paritymarks,
+  subdiagram/.code={\dzgsetsubdiagram{#1}},
   vertex/even/.code={%
     \ifdzg@paritymarks\pgfkeysalso{vertex/doubled}\else\pgfkeysalso{vertex/white}\fi},
-  maximal parabolic/.code={\def\dzg@parabolic{#1}},
 }
 \def\dzg@label@alpha#1{$\alpha_{#1}$}
 \def\dzg@label@r#1{$r_{#1}$}
@@ -92,12 +95,23 @@
     \node[vertex=#2, label={[vertex label]#4:\dzg@rootlabel{#1}}] (-#1) at (#3) {};%
   \else
     \node[vertex=#2] (-#1) at (#3) {};%
-  \fi}
+  \fi
+  \dzgselectedrootTF{#1}{%
+    \scoped[on background layer] \draw[subdiagram highlight]
+      (-#1.center) -- (-#1.center);}{}}
 
 \newcommand\coxeterroots[1]{%
   \foreach \dzg@i/\dzg@m/\dzg@p/\dzg@a in {#1}{\coxeterroot{\dzg@i}{\dzg@m}{\dzg@p}{\dzg@a}}}
 
-\newcommand\coxeteredges[2]{\scoped[on edge layer] \draw[coxeter edge=#1] #2;}
+\NewDocumentCommand\coxeteredge{O{} m m m}{%
+  \scoped[on edge layer] \draw[coxeter edge=#2]
+    (-#3.center) -- #1 (-#4.center);
+  \dzgselectedrootTF{#3}{\dzgselectedrootTF{#4}{%
+    \scoped[on background layer] \draw[subdiagram highlight]
+      (-#3.center) -- (-#4.center);} {}} {}}
+
+\newcommand\coxeteredges[2]{%
+  \foreach \dzg@u/\dzg@v in {#2}{\coxeteredge{#1}{\dzg@u}{\dzg@v}}}
 
 % A path \foreach through node names restarts every segment at the first node,
 % so each edge is its own path.
@@ -105,7 +119,7 @@
   \pgfmathtruncatemacro\dzg@stop{#3-1}%
   \foreach \dzg@k in {#2,...,\dzg@stop}{%
     \pgfmathtruncatemacro\dzg@n{\dzg@k+1}%
-    \coxeteredges{#1}{(-\dzg@k) -- (-\dzg@n)}}}
+    \coxeteredge{#1}{\dzg@k}{\dzg@n}}}
 
 \newcommand\coxetersquare[6]{%
   \def\dzg@L{#1}%
@@ -119,7 +133,7 @@
     \ifodd\dzg@t\def\dzg@m{#6}\else\def\dzg@m{#5}\fi
     \coxeterroot{\dzg@k}{\dzg@m}{\dzg@p}{\dzg@a}}%
   \coxeterchain{3}{#3}{\dzg@last}%
-  \coxeteredges{3}{(-\dzg@last) -- (-#3)}}
+  \coxeteredge{3}{\dzg@last}{#3}}
 % Position \dzg@p and outward label direction \dzg@a of the root at step
 % \dzg@t along side \dzg@s.
 \def\dzg@square@corner#1#2{\ifnum\dzg@t=0 \def\dzg@a{#1}\else\def\dzg@a{#2}\fi}
@@ -136,19 +150,6 @@
   \or\edef\dzg@p{\dzg@L,\dzg@v}\dzg@square@corner{45}{0}%
   \or\edef\dzg@p{\dzg@v,0}\dzg@square@corner{315}{270}%
   \or\edef\dzg@p{0,\dzg@u}\dzg@square@corner{225}{180}%
-  \fi}
-
-% Each chain is its own stroke, starting with a zero-length segment so that a
-% chain of one root is a dot.
-\newcommand\coxeterparabolic[2]{%
-  \def\dzg@name{#1}%
-  \ifx\dzg@name\dzg@parabolic
-    \scoped[on background layer]{%
-      \foreach \dzg@c in {#2} {%
-        \foreach \dzg@v [count=\dzg@k] in \dzg@c {%
-          \ifnum\dzg@k=1 \xdef\dzg@path{(-\dzg@v.center) -- (-\dzg@v.center)}%
-          \else\xdef\dzg@path{\dzg@path -- (-\dzg@v.center)}\fi}%
-        \draw[parabolic] \dzg@path;}}%
   \fi}
 
 % -----------------------------------------------------------------------------

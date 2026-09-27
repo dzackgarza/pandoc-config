@@ -12,7 +12,7 @@
 % Families:
 %   colours ........ dzg accent, dzg singular, dzg highlight, dzg region, ...
 %   Coxeter ........ vertex=white|black|doubled, coxeter edge=3|4|5|6|infinity|
-%                    dotted, coxeter edge label, parabolic, vertex label,
+%                    dotted, coxeter edge label, subdiagram highlight, vertex label,
 %                    inactive, marked vertex, subdiagram cell=elliptic|
 %                    parabolic|other, fold, fold axis, reflected root,
 %                    quotient map
@@ -70,7 +70,7 @@
 % -----------------------------------------------------------------------------
 \colorlet{dzg accent}{blue!70!black}      % rays, maps, distinguished curves
 \colorlet{dzg singular}{red!75!black}     % singular points, surgeries
-\colorlet{dzg highlight}{cyan!30}         % parabolic subdiagrams, emphasis
+\colorlet{dzg highlight}{cyan!30}         % subdiagram highlights, emphasis
 \colorlet{dzg region}{cyan!8}             % filled regions of polygons and IAS
 \colorlet{dzg grid}{gray!40}              % coordinate and lattice grids
 \colorlet{dzg muted}{black!45}            % secondary strokes and points
@@ -118,13 +118,14 @@
     decoration={markings, mark=at position 0.5 with
       {\node[above, font=\scriptsize, inner sep=1.5pt] {$#1$};}}}},
   %
-  % A parabolic subdiagram is highlighted by stroking its edges, and a zero-
+  % A subdiagram is highlighted by stroking its edges, and a zero-
   % length segment at each isolated vertex, under the diagram. Use the node
   % centres so the stroke is one unbroken path:
   %   \scoped[on background layer]
-  %     \draw[parabolic] (a.center)--(b.center)--(c.center) (d.center)--(d.center);
-  parabolic/.style={draw=dzg highlight, line width=12pt, line cap=round,
+  %     \draw[subdiagram highlight] (a.center)--(b.center)--(c.center);
+  subdiagram highlight/.style={draw=dzg highlight, line width=12pt, line cap=round,
     line join=round},
+  parabolic/.style={subdiagram highlight},
   % A fold of a diagram onto its quotient.
   fold/.style={dzg singular, dashed, line width=1pt, <->},
   % Vertices and edges of an ambient diagram that lie outside the subdiagram
@@ -181,7 +182,7 @@
   % parabolic subdiagram: stroke its incidences between node centres under
   % the diagram,
   %   \scoped[on background layer] \draw[cusp image] (a.center)--(b.center);
-  cusp image/.style={parabolic, line width=7pt},
+  cusp image/.style={subdiagram highlight, line width=7pt},
   % A doubled cusp or incidence; the document states what the doubling marks.
   doubled mark/.style={double, double distance=1.3pt, line width=0.4pt},
 }

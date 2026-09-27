@@ -1,5 +1,5 @@
 % The maximal parabolic subdiagram D_9E_8 of the Coxeter diagram for F_4 (objects/coxeter/k3-F4).
 \begin{tikzpicture}
-\pic[root labels, maximal parabolic=D9E8] (r) {object=coxeter/k3-F4};
+\pic[root labels, subdiagram={0,1,2,3,4,6,7,8,9,10,11,12,13,15,16,17,18,20,22}] (r) {object=coxeter/k3-F4};
 \node at (3,5.25) {\Large $D_9E_8$};
 \end{tikzpicture}

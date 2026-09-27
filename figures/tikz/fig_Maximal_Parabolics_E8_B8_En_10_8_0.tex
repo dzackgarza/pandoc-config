@@ -1,8 +1,8 @@
 % The two maximal parabolic subdiagrams \tilde E_8(2) and \tilde B_8(2) of
 % G_{(10,8,0)_1}.
 \begin{tikzpicture}
-  \pic (A) [maximal parabolic=E8] {object=coxeter/vinberg-10-8-0};
+  \pic (A) [subdiagram={1,2,3,4,5,6,7,8,9}] {object=coxeter/vinberg-10-8-0};
   \node at (6, 1) {$\tilde E_8(2) \subset (10, 8, 0)_1$};
-  \pic (B) [maximal parabolic=B8] at (0, -2.5) {object=coxeter/vinberg-10-8-0};
+  \pic (B) [subdiagram={2,3,4,5,6,7,8,9,10}] at (0, -2.5) {object=coxeter/vinberg-10-8-0};
   \node at (6, -1.5) {$\tilde B_8(2) \subset (10, 8, 0)_1$};
 \end{tikzpicture}

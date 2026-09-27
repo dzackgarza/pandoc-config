@@ -1,6 +1,6 @@
 % A maximal parabolic subdiagram of the Coxeter diagram for F_2, the Vinberg
 % diagram of (19,1,1)_1: A_1 + D~_16.
 \begin{tikzpicture}
-\pic[maximal parabolic=A1+D16] {object=coxeter/vinberg-19-1-1};
+\pic[subdiagram={1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,21,24}] {object=coxeter/vinberg-19-1-1};
 \node at (-1.5,10) {\Huge $A_1D_{16}$};
 \end{tikzpicture}

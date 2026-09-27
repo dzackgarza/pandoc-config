@@ -1,5 +1,5 @@
 % The maximal parabolic subdiagram A_3E_7^2 of the Coxeter diagram for F_4 (objects/coxeter/k3-F4).
 \begin{tikzpicture}
-\pic[root labels, maximal parabolic=A3E7E7] (r) {object=coxeter/k3-F4};
+\pic[root labels, subdiagram={0,1,2,3,5,6,7,8,9,10,11,13,14,15,16,17,18,19,20,22}] (r) {object=coxeter/k3-F4};
 \node at (3,5.25) {\Large $A_3E_7^2$};
 \end{tikzpicture}

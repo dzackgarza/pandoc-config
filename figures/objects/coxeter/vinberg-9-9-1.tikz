@@ -10,11 +10,9 @@
 % parabolic subdiagrams are all vertex sets on which minus the Gram matrix is
 % positive semidefinite with one kernel direction per component and rank
 % rk(L) - 2.
-% Maximal parabolic subdiagrams (`maximal parabolic=<name>`): one,
-% B7 = B~_7 = {2..9}.
+% Maximal parabolic vertex set: B~_7 = {2..9}.
 % Roots -1..-9, labelled by their index.
 \coxeterlabels{index}
 \coxeterEdiagram{8}{black}
 \coxeterroot{9}{white}{7,0}{below}
-\coxeteredges{4}{(-8) -- (-9)}
-\coxeterparabolic{B7}{{3,4,5,6,7,8,9},{2,4}}
+\coxeteredges{4}{8/9}

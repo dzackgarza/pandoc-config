@@ -12,5 +12,5 @@
   3/black/{1,2}/90, 4/black/{2,2}/90, 5/black/{3,2}/90, 6/black/{4,2}/45,
   7/black/{4,1}/0, 8/white/{4,0}/0, 9/black/{1,1}/270, 10/black/{3,1}/270}
 \coxeterchain{3}{1}{7}
-\coxeteredges{3}{(-2) -- (-9) (-6) -- (-10)}
-\coxeteredges{4}{(-0) -- (-1) (-7) -- (-8)}
+\coxeteredges{3}{2/9,6/10}
+\coxeteredges{4}{0/1,7/8}
