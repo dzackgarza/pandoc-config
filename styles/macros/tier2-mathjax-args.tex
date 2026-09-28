@@ -370,7 +370,21 @@
 \newcommand{\realize}[1]{{ \abs{#1} }}
 
 % Category operations
-\newcommand{\opcat}[1]{{ {#1}\op }}
+\newcommand{\opcat}[1]{{ {#1}^{\operatorname{op}} }}
+
+% Unary operations on an object: each macro takes the object it acts on.
+\newcommand{\dualof}[1]{{ {#1}^{\vee} }}
+\newcommand{\doubledualof}[1]{{ {#1}^{\vee\vee} }}
+\newcommand{\inverseof}[1]{{ {#1}^{-1} }}
+\newcommand{\unitsof}[1]{{ {#1}^{\times} }}
+\newcommand{\nonzeroof}[1]{{ {#1}^{\bullet} }}
+\newcommand{\interiorof}[1]{{ {#1}^{\circ} }}
+\newcommand{\sepclosure}[1]{{ {#1}^{\operatorname{sep}} }}
+\newcommand{\tiltof}[1]{{ {#1}^{\flat} }}
+\newcommand{\plusconstruction}[1]{{ {#1}^{+} }}
+\newcommand{\completionat}[2]{{ {#1}^{\wedge}_{#2} }}
+\newcommand{\procompletion}[1]{{ {#1}^{\wedge_{\scriptscriptstyle \pro}} }}
+\newcommand{\isoclasses}[1]{{ {#1}_{/\sim} }}
 
 % Gluing
 \newcommand{\glue}[1]{{ \Disjoint_{#1} }}

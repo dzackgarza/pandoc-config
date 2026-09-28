@@ -1126,7 +1126,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\KM` | 0 | `\K^{\scriptstyle\mathrm{M}}` |
 | `\KMimp` | 0 | `\hat{\K}^{\scriptscriptstyle \mathrm{M}}` |
 | `\KMW` | 0 | `\K^{\scriptscriptstyle \mathrm{MW}}` |
-| `\ksep` | 0 | `{ k\sep }` |
+| `\ksep` | 0 | `\sepclosure{k}` |
 | `\lderive` | 0 | `\leftderive` |
 | `\leftderive` | 0 | `{\mathbf{L}}` |
 | `\liealgk` | 0 | `{ \liealg_{/k} }` |
@@ -1825,7 +1825,19 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\relspec` | 0 | `\ul{ \operatorname{Spec}}` |
 | `\nerve` | 1 | `{ \mathcal{N}({#1}) }` |
 | `\realize` | 1 | `{ \abs{#1} }` |
-| `\opcat` | 1 | `{ {#1}\op }` |
+| `\opcat` | 1 | `{ {#1}^{\operatorname{op}} }` |
+| `\dualof` | 1 | `{ {#1}^{\vee} }` |
+| `\doubledualof` | 1 | `{ {#1}^{\vee\vee} }` |
+| `\inverseof` | 1 | `{ {#1}^{-1} }` |
+| `\unitsof` | 1 | `{ {#1}^{\times} }` |
+| `\nonzeroof` | 1 | `{ {#1}^{\bullet} }` |
+| `\interiorof` | 1 | `{ {#1}^{\circ} }` |
+| `\sepclosure` | 1 | `{ {#1}^{\operatorname{sep}} }` |
+| `\tiltof` | 1 | `{ {#1}^{\flat} }` |
+| `\plusconstruction` | 1 | `{ {#1}^{+} }` |
+| `\completionat` | 2 | `{ {#1}^{\wedge}_{#2} }` |
+| `\procompletion` | 1 | `{ {#1}^{\wedge_{\scriptscriptstyle \pro}} }` |
+| `\isoclasses` | 1 | `{ {#1}_{/\sim} }` |
 | `\glue` | 1 | `{ \Disjoint_{#1} }` |
 | `\normcomplex` | 1 | `{\norm{\complex{#1}}}` |
 | `\Extalgebra` | 0 | `\cocomplex{\bigwedge}` |
@@ -2242,6 +2254,8 @@ No macro or environment definitions.
 | `pf` | `Proof` |
 | `definition` | `Definition` |
 | `construction` | `Construction` |
+| `notation` | `Notation` |
+| `convention` | `Convention` |
 | `goal` | `Goal` |
 | `assumption` | `Assumption` |
 | `problem` | `Problem` |
