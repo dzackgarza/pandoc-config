@@ -10,7 +10,7 @@
 # zettlr-pandoc/test/fixtures/reference-workspace/ProjectA/ files
 # (Theorems.md verbatim; Halphen_Surfaces.md with its cross-file lemma
 # key aligned to lem:kodaira:embedding, a bare @thm:torelli reference,
-# and prefixed/suffixed/suppressed citation shapes added so authored
+# and prefixed/suffixed/suppressed/mixed citation shapes added so authored
 # citation text is exercised).
 #
 # Assertions run on the intermediate .tex, plus one plain-branch
@@ -45,10 +45,11 @@ check() {
 # of that list in this repo's tests: if either repo adds, removes, or
 # renames a prefix without updating the other, this assertion trips.
 echo "[1/9] theorem prefix registry matches zettlr-pandoc"
-EXPECTED_PREFIXES="ass clm conj cor def ex exr lem obs prob prop qst rmk thm warn"
+EXPECTED_PREFIXES="ass clm conj cons conv cor def ex exr lem not obs prob prop qst rmk thm warn"
+# `not` is a Lua keyword, so the table spells it `["not"]=true`.
 ACTUAL_PREFIXES=$(sed -n '/^local ref_prefixes = {/,/^}/p' \
     "$REPO/filters/convert_amsthm_envs.lua" \
-  | grep -o '[a-z]\+=true' | sed 's/=true$//' | sort | xargs)
+  | grep -oE '(\["?)?[a-z]+("?\])?=true' | sed -E 's/^\["?//; s/"?\]?=true$//' | sort | xargs)
 check "filter ref_prefixes == THEOREM_DIV_PREFIXES keys ($EXPECTED_PREFIXES)" \
   test "$ACTUAL_PREFIXES" = "$EXPECTED_PREFIXES"
 
@@ -96,6 +97,8 @@ check 'suppressed citation [-@thm:torelli] emits number-only \ref{thm:torelli}' 
   grep -F '\ref{thm:torelli}' "$TEX"
 check 'cluster items keep per-item text (see \cref{thm:torelli}; \cref{lem:kodaira:embedding}, part (ii))' \
   flat_grep "$TEX" 'see \cref{thm:torelli}; \cref{lem:kodaira:embedding}, part (ii)'
+check 'mixed cluster @lem:kodaira:embedding [@Ols04, Lem. 7.1] keeps both references' \
+  flat_grep "$TEX" '\cref{lem:kodaira:embedding} \autocite[Lem. 7.1]{Ols04}'
 
 # --- 1b. filenames containing spaces stay single arguments -----------
 # Zettlr Project documents can have spaces in their names; the public

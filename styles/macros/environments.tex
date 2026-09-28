@@ -180,6 +180,32 @@
 }
 \newtheorem{construction}[theorem]{Construction}
 
+\tcolorboxenvironment{notation}{
+  colback=defn_color,
+  boxrule=0pt,
+  boxsep=0pt,
+  opacityfill=0.15,
+  breakable,
+  enhanced jigsaw,
+  borderline west={4pt}{0pt}{defn_color},
+  fonttitle={\large\bfseries},
+  attach title to upper={},
+}
+\newtheorem{notation}[theorem]{Notation}
+
+\tcolorboxenvironment{convention}{
+  colback=defn_color,
+  boxrule=0pt,
+  boxsep=0pt,
+  opacityfill=0.15,
+  breakable,
+  enhanced jigsaw,
+  borderline west={4pt}{0pt}{defn_color},
+  fonttitle={\large\bfseries},
+  attach title to upper={},
+}
+\newtheorem{convention}[theorem]{Convention}
+
 \tcolorboxenvironment{goal}{
   colback=defn_color,
   boxrule=0pt,

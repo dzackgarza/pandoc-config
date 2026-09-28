@@ -5,7 +5,7 @@ require "utilities"
 
 -- In markdown, changes
 --
--- :::{.theorem title="abcde" ref=:thm:123"}
+-- :::{.theorem title="abcde" ref="thm:123"}
 -- ...
 -- :::
 --
@@ -45,9 +45,14 @@ require "utilities"
 -- carrying text or suppression render individually, with segments
 -- joined by "; " mirroring the authored cluster delimiter.
 --
--- Citation clusters containing any non-theorem-family key (e.g.
--- [@Ols04, Lem. 7.1]) are passed through untouched for bibliography
--- processing. Proof divs are never labeled, even when an id is authored.
+-- Citation clusters with no theorem-family key (e.g. [@Ols04, Lem. 7.1])
+-- are passed through untouched for bibliography processing. In a mixed
+-- cluster, each maximal run of bibliography items stays one Cite, set off
+-- by a space:
+--
+-- @def:key [@MH73, I §3.1] -->  \cref{def:key} \autocite[I §3.1]{MH73}
+--
+-- Proof divs are never labeled, even when an id is authored.
 --
 -- Div labeling is DELIBERATELY more permissive than citation rewriting:
 -- any authored non-empty id that does not end in ':' becomes a \label
@@ -66,11 +71,14 @@ require "utilities"
 -- templates) and by research_paper.tex directly.
 
 -- Theorem-family citation prefixes (each must be followed by ':' and a
--- nonempty key to count as a reference).
+-- nonempty key to count as a reference). Mirrors THEOREM_FAMILY_METADATA in
+-- zettlr-pandoc source/common/util/pandoc-quick-reference.ts. The Quarto
+-- book filter ~/research/writing/.book/_extensions/local/amsthm-refs makes
+-- the same citations resolve in HTML and mirrors this table.
 local ref_prefixes = {
   thm=true, lem=true, prop=true, cor=true, def=true, rmk=true, ex=true,
   conj=true, clm=true, obs=true, qst=true, prob=true, ass=true,
-  warn=true, exr=true
+  warn=true, exr=true, cons=true, ["not"]=true, conv=true
 }
 
 local function is_latex_output()
@@ -94,17 +102,17 @@ function Cite(el)
   if not is_latex_output() then
     return nil
   end
+  local has_theorem_key = false
   local all_plain = true
   for _, citation in ipairs(el.citations) do
-    if not is_theorem_key(citation.id) then
-      -- Mixed or bibliography cluster: leave the whole Cite untouched.
-      return nil
-    end
-    if not is_plain(citation) then
+    if is_theorem_key(citation.id) then
+      has_theorem_key = true
+      all_plain = all_plain and is_plain(citation)
+    else
       all_plain = false
     end
   end
-  if #el.citations == 0 then
+  if not has_theorem_key then
     return nil
   end
 
@@ -118,31 +126,47 @@ function Cite(el)
 
   -- Faithful rendering: preserve each item's authored prefix/suffix and
   -- mode. Maximal runs of plain items still merge into one \cref so
-  -- cleveref's native conjunction survives; segments join with "; ".
+  -- cleveref's native conjunction survives; theorem segments join with
+  -- "; ". Maximal runs of bibliography items stay one Cite for the
+  -- natbib/biblatex writer, set off by a space.
   local out = pandoc.Inlines{}
   local run = {}
-  local first_segment = true
-  local function separator()
-    if first_segment then
-      first_segment = false
-    else
+  local bibliography_run = {}
+  local previous = nil
+  local function separator(kind)
+    if previous == "theorem" and kind == "theorem" then
       out:insert(pandoc.Str(";"))
       out:insert(pandoc.Space())
+    elseif previous ~= nil then
+      out:insert(pandoc.Space())
     end
+    previous = kind
   end
   local function flush_run()
     if #run > 0 then
-      separator()
+      separator("theorem")
       out:insert(pandoc.RawInline('latex', "\\cref{" .. table.concat(run, ",") .. "}"))
       run = {}
     end
   end
+  local function flush_bibliography_run()
+    if #bibliography_run > 0 then
+      separator("bibliography")
+      out:insert(pandoc.Cite({}, bibliography_run))
+      bibliography_run = {}
+    end
+  end
   for _, citation in ipairs(el.citations) do
-    if is_plain(citation) then
+    if not is_theorem_key(citation.id) then
+      flush_run()
+      table.insert(bibliography_run, citation)
+    elseif is_plain(citation) then
+      flush_bibliography_run()
       table.insert(run, citation.id)
     else
       flush_run()
-      separator()
+      flush_bibliography_run()
+      separator("theorem")
       for _, inline in ipairs(citation.prefix) do
         out:insert(inline)
       end
@@ -157,6 +181,7 @@ function Cite(el)
     end
   end
   flush_run()
+  flush_bibliography_run()
   return out
 end
 
@@ -165,7 +190,8 @@ function Div(el)
     theorem=true, lemma=true, proposition=true, corollary=true,
     proof=true, remark=true, definition=true, example=true,
     conjecture=true, claim=true, observation=true, question=true,
-    problem=true, assumption=true, warning=true, exercise=true
+    problem=true, assumption=true, warning=true, exercise=true,
+    construction=true, notation=true, convention=true
   }
   
   local env = el.classes[1]

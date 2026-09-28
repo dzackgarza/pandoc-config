@@ -21,3 +21,4 @@ The reduction step is [see @thm:torelli], the refinement is
 [@thm:torelli, part (ii)], and Torelli's theorem [-@thm:torelli] gives the
 bare numeric form. Both directions follow from
 [see @thm:torelli; @lem:kodaira:embedding, part (ii)].
+The pencil is the one of @lem:kodaira:embedding [@Ols04, Lem. 7.1].
