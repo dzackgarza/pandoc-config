@@ -488,8 +488,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\OP` | 0 | `{\mathbb{OP}}` |
 | `\SpSp` | 0 | `{\mathbb{S}}` |
 | `\CCpadic` | 0 | `{ \CC_p }` |
-| `\CCstar` | 0 | `{\CC\units }` |
-| `\cstar` | 0 | `{\CC\units }` |
+| `\CCstar` | 0 | `\unitsof{\CC}` |
+| `\cstar` | 0 | `\unitsof{\CC}` |
 | `\FFbar` | 0 | `{\bar\FF}` |
 | `\FFp` | 0 | `{\FF_p}` |
 | `\FFpn` | 0 | `{\FF_{p^n}}` |
@@ -932,7 +932,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Obs` | 0 | `\operatorname{Obs}` |
 | `\OFrame` | 0 | `\operatorname{OFrame}` |
 | `\OGr` | 0 | `{\operatorname{OGr}}` |
-| `\op` | 0 | `^{\operatorname{op}}` |
 | `\Op` | 0 | `{\operatorname{Op}}` |
 | `\ord` | 0 | `{\operatorname{Ord}}` |
 | `\Ord` | 0 | `{ \mathrm{Ord} }` |
@@ -995,7 +994,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\sech` | 0 | `{ \mathrm{sech} }` |
 | `\selfmap` | 0 | `{\circlearrowleft}` |
 | `\Sel` | 0 | `\operatorname{Sel}` |
-| `\sep` | 0 | `{ {}^{ \operatorname{sep} } }` |
 | `\SF` | 0 | `\operatorname{SF}` |
 | `\SGr` | 0 | `{\operatorname{SGr}}` |
 | `\sgn` | 0 | `\operatorname{sgn}` |
@@ -1101,7 +1099,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\coind` | 0 | `\operatorname{coInd}` |
 | `\D` | 0 | `{ \mathsf{D} }` |
 | `\dtensor` | 0 | `\overset{\mathbb{L}}{ \otimes}` |
-| `\dual` | 0 | `{}^{ \vee }` |
 | `\dualnumbers` | 0 | `{ [\eps] / \eps^2 }` |
 | `\E` | 0 | `{\mathbf{E}}` |
 | `\Extprod` | 0 | `\bigwedge\nolimits` |
@@ -1143,18 +1140,15 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\mgn` | 0 | `{ \mathcal{M}_{g, n} }` |
 | `\Mell` | 0 | `{ \mathcal{M}_{\mathrm{ell}} }` |
 | `\mH` | 0 | `{ \mathsf{H} }` |
-| `\modiso` | 0 | `{_{\scriptstyle / \sim} }` |
 | `\ms` | 0 | `\xrightarrow{\sim}` |
 | `\mveq` | 0 | `{\mapsvia{\sim}}` |
 | `\mviso` | 0 | `{\mapsvia{\sim}}` |
-| `\nonzero` | 0 | `^{\bullet}` |
 | `\OX` | 0 | `{\mathcal{O}_X}` |
 | `\Presh` | 0 | `\presh` |
 | `\Prod` | 0 | `\displaystyle\prod` |
 | `\primetop` | 0 | `{\scriptscriptstyle \mathrm{prime-to-}p}` |
 | `\ptd` | 0 | `{\scriptstyle { \ast } }` |
 | `\qiso` | 0 | `\homotopic` |
-| `\quillenplus` | 0 | `{ {}^{+} }` |
 | `\rderive` | 0 | `\rightderive` |
 | `\resprod` | 0 | `\prod^{\res}` |
 | `\restensor` | 0 | `\bigotimes^{\res}` |
@@ -1168,7 +1162,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Tensor` | 0 | `\bigotimes` |
 | `\tensor` | 0 | `\otimes` |
 | `\tgn` | 0 | `{ \mathcal{T}_{g, n} }` |
-| `\tilt` | 0 | `{}^{ \flat }` |
 | `\TM` | 0 | `{\T M}` |
 | `\Totprod` | 0 | `\Tot^{\Pi}` |
 | `\Totsum` | 0 | `\Tot^{\oplus}` |
@@ -1245,10 +1238,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\colim` | 0 | `\operatorname*{colim}` |
 | `\injectsfrom` | 0 | `\hookleftarrow` |
 | `\injresolve` | 0 | `\leftleftarrows` |
-| `\interior` | 0 | `^\circ` |
 | `\intersect` | 0 | `\cap` |
 | `\into` | 0 | `\to` |
-| `\inv` | 0 | `^{-1}` |
 | `\inverselim` | 0 | `\varprojlim` |
 | `\iscontainedin` | 0 | `\supseteq` |
 | `\isomorphic` | 0 | `{ \, \mapsvia{\sim}\, }` |
@@ -1283,7 +1274,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\uniformlyconverges` | 0 | `\rightrightarrows` |
 | `\union` | 0 | `\cup` |
 | `\unioninfty` | 0 | `{\union\ts{\infty}}` |
-| `\units` | 0 | `^{\times}` |
 | `\up` | 0 | `\uparrow` |
 | `\wait` | 0 | `{-}` |
 | `\wedgeprod` | 0 | `\vee` |
@@ -1597,7 +1587,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\relevant` | 0 | `\mathrm{rel}` |
 | `\rcop` | 0 | `\mathrm{rc}` |
 | `\opop` | 0 | `\mathrm{op}` |
-| `\opp` | 0 | `^{\mathrm{op}}` |
 | `\liek` | 0 | `\mathfrak{k}` |
 | `\liev` | 0 | `\mathfrak{v}` |
 | `\tiling` | 0 | `\mathcal{T}` |
@@ -1655,9 +1644,9 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\inner` | 2 | `{\left\langle {#1},~{#2} \right\rangle}` |
 | `\inp` | 2 | `{\left\langle {#1},~{#2} \right\rangle}` |
 | `\invert` | 1 | `{ \left[ { \scriptstyle \frac{1}{#1} } \right] }` |
-| `\localize` | 1 | `\left[ { \scriptstyle { {#1}\inv} } \right]` |
+| `\localize` | 1 | `\left[ { \scriptstyle \inverseof{#1} } \right]` |
 | `\plocalize` | 1 | `\primelocalize{#1}` |
-| `\primelocalize` | 1 | `\left[ { \scriptstyle { { ({#1}^c) }\inv} } \right]` |
+| `\primelocalize` | 1 | `\left[ { \scriptstyle \inverseof{({#1}^c)} } \right]` |
 | `\fls` | 1 | `(\hspace{-0.25em}( #1 )\hspace{-0.22em})` |
 | `\laurent` | 1 | `\fls{#1}` |
 | `\laurentseries` | 1 | `\fls{#1}` |
@@ -1678,8 +1667,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\sheafify` | 1 | `\left( #1 \right)^{\scriptscriptstyle \mathrm{sh}}` |
 | `\complete` | 1 | `{ {}_{ \hat{#1} } }` |
 | `\takecompletion` | 1 | `{ \overbrace{#1}^{\widehat{\hspace{4em}}} }` |
-| `\pcomplete` | 0 | `{ {}^{ \wedge }_{p} }` |
-| `\procomplete` | 0 | `{}^{ \wedge_{\scriptscriptstyle \pro }}` |
 | `\kv` | 0 | `{ k_{\hat{v}} }` |
 | `\Lv` | 0 | `{ L_{\hat{v}} }` |
 | `\coslice` | 1 | `_{{#1/}}` |
@@ -1826,6 +1813,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\nerve` | 1 | `{ \mathcal{N}({#1}) }` |
 | `\realize` | 1 | `{ \abs{#1} }` |
 | `\opcat` | 1 | `{ {#1}^{\operatorname{op}} }` |
+| `\oppositeof` | 1 | `{ {#1}^{\mathrm{op}} }` |
 | `\dualof` | 1 | `{ {#1}^{\vee} }` |
 | `\doubledualof` | 1 | `{ {#1}^{\vee\vee} }` |
 | `\inverseof` | 1 | `{ {#1}^{-1} }` |

@@ -27,8 +27,8 @@
   "OP": "{\\mathbb{OP}}",
   "SpSp": "{\\mathbb{S}}",
   "CCpadic": "{ \\CC_p }",
-  "CCstar": "{\\CC\\units }",
-  "cstar": "{\\CC\\units }",
+  "CCstar": "\\unitsof{\\CC}",
+  "cstar": "\\unitsof{\\CC}",
   "FFbar": "{\\bar\\FF}",
   "FFp": "{\\FF_p}",
   "FFpn": "{\\FF_{p^n}}",
@@ -471,7 +471,6 @@
   "Obs": "\\operatorname{Obs}",
   "OFrame": "\\operatorname{OFrame}",
   "OGr": "{\\operatorname{OGr}}",
-  "op": "^{\\operatorname{op}}",
   "Op": "{\\operatorname{Op}}",
   "ord": "{\\operatorname{Ord}}",
   "Ord": "{ \\mathrm{Ord} }",
@@ -534,7 +533,6 @@
   "sech": "{ \\mathrm{sech} }",
   "selfmap": "{\\circlearrowleft}",
   "Sel": "\\operatorname{Sel}",
-  "sep": "{ {}^{ \\operatorname{sep} } }",
   "SF": "\\operatorname{SF}",
   "SGr": "{\\operatorname{SGr}}",
   "sgn": "\\operatorname{sgn}",
@@ -640,7 +638,6 @@
   "coind": "\\operatorname{coInd}",
   "D": "{ \\mathsf{D} }",
   "dtensor": "\\overset{\\mathbb{L}}{ \\otimes}",
-  "dual": "{}^{ \\vee }",
   "dualnumbers": "{ [\\eps] / \\eps^2 }",
   "E": "{\\mathbf{E}}",
   "Extprod": "\\bigwedge\\nolimits",
@@ -682,18 +679,15 @@
   "mgn": "{ \\mathcal{M}_{g, n} }",
   "Mell": "{ \\mathcal{M}_{\\mathrm{ell}} }",
   "mH": "{ \\mathsf{H} }",
-  "modiso": "{_{\\scriptstyle / \\sim} }",
   "ms": "\\xrightarrow{\\sim}",
   "mveq": "{\\mapsvia{\\sim}}",
   "mviso": "{\\mapsvia{\\sim}}",
-  "nonzero": "^{\\bullet}",
   "OX": "{\\mathcal{O}_X}",
   "Presh": "\\presh",
   "Prod": "\\displaystyle\\prod",
   "primetop": "{\\scriptscriptstyle \\mathrm{prime-to-}p}",
   "ptd": "{\\scriptstyle { \\ast } }",
   "qiso": "\\homotopic",
-  "quillenplus": "{ {}^{+} }",
   "rderive": "\\rightderive",
   "resprod": "\\prod^{\\res}",
   "restensor": "\\bigotimes^{\\res}",
@@ -707,7 +701,6 @@
   "Tensor": "\\bigotimes",
   "tensor": "\\otimes",
   "tgn": "{ \\mathcal{T}_{g, n} }",
-  "tilt": "{}^{ \\flat }",
   "TM": "{\\T M}",
   "Totprod": "\\Tot^{\\Pi}",
   "Totsum": "\\Tot^{\\oplus}",
@@ -784,10 +777,8 @@
   "colim": "\\operatorname*{colim}",
   "injectsfrom": "\\hookleftarrow",
   "injresolve": "\\leftleftarrows",
-  "interior": "^\\circ",
   "intersect": "\\cap",
   "into": "\\to",
-  "inv": "^{-1}",
   "inverselim": "\\varprojlim",
   "iscontainedin": "\\supseteq",
   "isomorphic": "{ \\, \\mapsvia{\\sim}\\, }",
@@ -822,7 +813,6 @@
   "uniformlyconverges": "\\rightrightarrows",
   "union": "\\cup",
   "unioninfty": "{\\union\\ts{\\infty}}",
-  "units": "^{\\times}",
   "up": "\\uparrow",
   "wait": "{-}",
   "wedgeprod": "\\vee",
@@ -1136,7 +1126,6 @@
   "relevant": "\\mathrm{rel}",
   "rcop": "\\mathrm{rc}",
   "opop": "\\mathrm{op}",
-  "opp": "^{\\mathrm{op}}",
   "liek": "\\mathfrak{k}",
   "liev": "\\mathfrak{v}",
   "tiling": "\\mathcal{T}",
@@ -1292,7 +1281,7 @@
     1
   ],
   "localize": [
-    "\\left[ { \\scriptstyle { {#1}\\inv}  } \\right]",
+    "\\left[ { \\scriptstyle \\inverseof{#1} } \\right]",
     1
   ],
   "plocalize": [
@@ -1300,7 +1289,7 @@
     1
   ],
   "primelocalize": [
-    "\\left[ { \\scriptstyle { { ({#1}^c) }\\inv}  } \\right]",
+    "\\left[ { \\scriptstyle \\inverseof{({#1}^c)} } \\right]",
     1
   ],
   "fls": [
@@ -1383,8 +1372,6 @@
     "{ \\overbrace{#1}^{\\widehat{\\hspace{4em}}}  }",
     1
   ],
-  "pcomplete": "{ {}^{ \\wedge }_{p} }",
-  "procomplete": "{}^{ \\wedge_{\\scriptscriptstyle \\pro }}",
   "kv": "{ k_{\\hat{v}} }",
   "Lv": "{ L_{\\hat{v}} }",
   "coslice": [
@@ -1889,6 +1876,10 @@
   ],
   "opcat": [
     "{ {#1}^{\\operatorname{op}} }",
+    1
+  ],
+  "oppositeof": [
+    "{ {#1}^{\\mathrm{op}} }",
     1
   ],
   "dualof": [

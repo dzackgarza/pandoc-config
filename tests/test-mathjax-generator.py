@@ -84,6 +84,7 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "decfiltration", ["{#1}_{\\bullet}", 1])
     # Unary operations take the object they act on as their argument.
     assert_macro(macros, "opcat", ["{ {#1}^{\\operatorname{op}} }", 1])
+    assert_macro(macros, "oppositeof", ["{ {#1}^{\\mathrm{op}} }", 1])
     assert_macro(macros, "dualof", ["{ {#1}^{\\vee} }", 1])
     assert_macro(macros, "doubledualof", ["{ {#1}^{\\vee\\vee} }", 1])
     assert_macro(macros, "inverseof", ["{ {#1}^{-1} }", 1])
@@ -115,7 +116,7 @@ def test_dzg_mathjax_style_compiles_domain_macros() -> None:
                     r"\documentclass{article}",
                     r"\usepackage{dzg-mathjax}",
                     r"\begin{document}",
-                    r"$\Set\quad\tmf\quad\Suspendpinf\quad\modsleft{R}\quad x\coloneqq\qty{y}\quad\fiberprod{X}{S}{Y}\quad\lktt{2d}\quad\GSpaces\quad\disjointpower{X}{n}\quad\prodpower{X}{n}\quad\smashpower{X}{n}\quad\wedgepower{X}{n}\quad\tensorpowerk{M}{n}\quad\fiberpower{X}{S}{n}\quad\incfiltration{F}\quad\decfiltration{F}\quad\opcat{\cC}\quad\doubledualof{V}\quad\inverseof{x}\quad\unitsof{R}\quad\nonzeroof{R}\quad\interiorof{X}\quad\sepclosure{k}\quad\ksep\quad\tiltof{K}\quad\plusconstruction{X}\quad\completionat{X}{p}\quad\procompletion{G}\quad\isoclasses{X}\quad\dualof{V^{2}}$",
+                    r"$\Set\quad\tmf\quad\Suspendpinf\quad\modsleft{R}\quad x\coloneqq\qty{y}\quad\fiberprod{X}{S}{Y}\quad\lktt{2d}\quad\GSpaces\quad\disjointpower{X}{n}\quad\prodpower{X}{n}\quad\smashpower{X}{n}\quad\wedgepower{X}{n}\quad\tensorpowerk{M}{n}\quad\fiberpower{X}{S}{n}\quad\incfiltration{F}\quad\decfiltration{F}\quad\opcat{\cC}\quad\oppositeof{P}\quad\CCstar\quad\localize{f}\quad\doubledualof{V}\quad\inverseof{x}\quad\unitsof{R}\quad\nonzeroof{R}\quad\interiorof{X}\quad\sepclosure{k}\quad\ksep\quad\tiltof{K}\quad\plusconstruction{X}\quad\completionat{X}{p}\quad\procompletion{G}\quad\isoclasses{X}\quad\dualof{V^{2}}$",
                     r"\end{document}",
                 ]
             )

@@ -93,35 +93,34 @@ is a coordinated migration, not a safe arity-only edit.
 
 ## Postfix semantic operators
 
-A zero-argument postfix macro such as `V\dual` names a symbol, not the operation.
-Each operation now has a one-argument operator in `tier2-mathjax-args.tex` that takes
-the object it acts on. New authored text uses the operator. The postfix form is
-deleted after its call sites are migrated.
+A zero-argument postfix macro such as `V\dual` named a symbol, not the operation.
+Each operation is now a one-argument operator in `tier2-mathjax-args.tex` that takes
+the object it acts on, and the postfix forms are deleted.
 
-Call-site counts are occurrences in `*.md` and `*.tex` under `~/notes`,
-`~/gitclones` (excluding this repository), and `~/research`, excluding `archive/`
-directories, on 2026-09-28. Duplicated source layers count separately.
+The migration rewrote authored call sites in `~/notes`, `~/research`,
+`~/gitclones/new-qual-site` and `~/gitclones/dzackgarza-site-v2026` on 2026-09-29.
+The operand is the preceding TeX math atom. Sites with no single atom were edited by
+hand. Files with a local preamble keep their local postfix definitions, next to the
+matching operator definitions.
 
-| Postfix form | Operator | Meaning | Call sites |
+| Postfix form | Operator | Meaning | Sites migrated |
 | --- | --- | --- | ---: |
-| `\mathcal{C}\op` | `\opcat{\mathcal{C}}` | opposite category | 486 |
-| `V\dual` | `\dualof{V}` | dual | 5465 |
+| `\mathcal{C}\op` | `\opcat{\mathcal{C}}` | opposite category | 294 |
+| `P\opp` | `\oppositeof{P}` | image under the ambient involution | 6 |
+| `V\dual` | `\dualof{V}` | dual | 5181 |
 | — | `\doubledualof{V}` | double dual | — |
-| `x\inv` | `\inverseof{x}` | inverse | 7741 |
-| `R\units` | `\unitsof{R}` | group of units | 3255 |
-| `R\nonzero` | `\nonzeroof{R}` | nonzero elements | 114 |
-| `X\interior` | `\interiorof{X}` | interior | 96 |
-| `k\sep` | `\sepclosure{k}` | separable closure | 382 |
-| `K\tilt` | `\tiltof{K}` | tilt of a perfectoid field | 60 |
-| `X\quillenplus` | `\plusconstruction{X}` | Quillen plus construction | 43 |
-| `X\pcomplete` | `\completionat{X}{p}` | completion at `p` | 48 |
-| `G\procomplete` | `\procompletion{G}` | pro-completion | 6 |
-| `X\modiso` | `\isoclasses{X}` | isomorphism classes | few |
+| `x\inv` | `\inverseof{x}` | inverse | 5183 |
+| `R\units` | `\unitsof{R}` | group of units | 2818 |
+| `R\nonzero` | `\nonzeroof{R}` | nonzero elements | 28 |
+| `X\interior` | `\interiorof{X}` | interior | 32 |
+| `k\sep` | `\sepclosure{k}` | separable closure | 289 |
+| `K\tilt` | `\tiltof{K}` | tilt of a perfectoid field | 20 |
+| `X\quillenplus` | `\plusconstruction{X}` | Quillen plus construction | 3 |
+| `X\pcomplete` | `\completionat{X}{p}` | completion at `p` | 2 |
+| `G\procomplete` | `\procompletion{G}` | pro-completion | 3 |
+| `X\modiso` | `\isoclasses{X}` | isomorphism classes | 120 |
 
-`\opp` (`^{\mathrm{op}}`, 11 call sites) and `\uopp` (`^{\rm opp}`) are not the
-opposite category in their authored uses. In the dissertation notes, `P^\opp` is the
-image of the polygon `P` under the involution `\iota` of `\IAS^2`. Those call sites
-need an operator for that involution, not `\opcat`.
+`\uopp` (`^{\rm opp}`) occurs only in a third-party paper source.
 
 Unresolved: the zero-use functor decorations `\lshriek` (`{}_{!}`) and `\pushf`
 (`{}^{*}`, a pullback despite its name), and the dissertation superscript and

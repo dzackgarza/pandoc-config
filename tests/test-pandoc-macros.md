@@ -140,7 +140,7 @@ We have the following situation:
 
 The arrows going up are **face maps** (or **coface maps**), and the others are
 **degeneracy** maps.
-If $\mathcal{C}$ is a category, then $s\mathcal{C} \da \Fun(\Delta\op, \mathcal{C})$ is
+If $\mathcal{C}$ is a category, then $s\mathcal{C} \da \Fun(\opcat{\Delta}, \mathcal{C})$ is
 the category of simplicial objects of $\mathcal{C}$. :::
 
 # Conclusion

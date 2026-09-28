@@ -71,9 +71,9 @@
 
 % Inversion and localization
 \newcommand{\invert}[1]{{ \left[ { \scriptstyle \frac{1}{#1} } \right] }}
-\newcommand{\localize}[1]{ \left[ { \scriptstyle { {#1}\inv}  } \right] }
+\newcommand{\localize}[1]{ \left[ { \scriptstyle \inverseof{#1} } \right] }
 \newcommand{\plocalize}[1]{\primelocalize{#1}}
-\newcommand{\primelocalize}[1]{ \left[ { \scriptstyle { { ({#1}^c) }\inv}  } \right]}
+\newcommand{\primelocalize}[1]{ \left[ { \scriptstyle \inverseof{({#1}^c)} } \right]}
 
 % Laurent series
 \newcommand\fls[1]{(\hspace{-0.25em}( #1 )\hspace{-0.22em}) }
@@ -118,8 +118,6 @@
 \newcommand{\sheafify}[1]{ \left( #1 \right)^{\scriptscriptstyle \mathrm{sh}} }
 \newcommand{\complete}[1]{{ {}_{ \hat{#1} } }}
 \newcommand{\takecompletion}[1]{{ \overbrace{#1}^{\widehat{\hspace{4em}}}  }}
-\newcommand{\pcomplete}{{ {}^{ \wedge }_{p} }}
-\newcommand{\procomplete}{ {}^{ \wedge_{\scriptscriptstyle \pro }} }
 \newcommand{\kv}{{ k_{\hat{v}} }}
 \newcommand{\Lv}{{ L_{\hat{v}} }}
 
@@ -371,6 +369,8 @@
 
 % Category operations
 \newcommand{\opcat}[1]{{ {#1}^{\operatorname{op}} }}
+% The opposite of an object under the ambient involution (e.g. a polygon and its image).
+\newcommand{\oppositeof}[1]{{ {#1}^{\mathrm{op}} }}
 
 % Unary operations on an object: each macro takes the object it acts on.
 \newcommand{\dualof}[1]{{ {#1}^{\vee} }}

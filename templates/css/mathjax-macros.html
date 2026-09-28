@@ -32,8 +32,8 @@
 \newcommand{\OP}{{\mathbb{OP}}}
 \newcommand{\SpSp}{{\mathbb{S}}}
 \newcommand{\CCpadic}{{ \CC_p }}
-\newcommand{\CCstar}{{\CC\units }}
-\newcommand{\cstar}{{\CC\units }}
+\newcommand{\CCstar}{\unitsof{\CC}}
+\newcommand{\cstar}{\unitsof{\CC}}
 \newcommand{\FFbar}{{\bar\FF}}
 \newcommand{\FFp}{{\FF_p}}
 \newcommand{\FFpn}{{\FF_{p^n}}}
@@ -476,7 +476,6 @@
 \newcommand{\Obs}{\operatorname{Obs}}
 \newcommand{\OFrame}{\operatorname{OFrame}}
 \newcommand{\OGr}{{\operatorname{OGr}}}
-\newcommand{\op}{^{\operatorname{op}}}
 \newcommand{\Op}{{\operatorname{Op}}}
 \newcommand{\ord}{{\operatorname{Ord}}}
 \newcommand{\Ord}{{ \mathrm{Ord} }}
@@ -539,7 +538,6 @@
 \newcommand{\sech}{{ \mathrm{sech} }}
 \newcommand{\selfmap}{{\circlearrowleft}}
 \newcommand{\Sel}{\operatorname{Sel}}
-\newcommand{\sep}{{ {}^{ \operatorname{sep} } }}
 \newcommand{\SF}{\operatorname{SF}}
 \newcommand{\SGr}{{\operatorname{SGr}}}
 \newcommand{\sgn}{\operatorname{sgn}}
@@ -645,7 +643,6 @@
 \newcommand{\coind}{\operatorname{coInd}}
 \newcommand{\D}{{ \mathsf{D} }}
 \newcommand{\dtensor}{\overset{\mathbb{L}}{ \otimes}}
-\newcommand{\dual}{{}^{ \vee }}
 \newcommand{\dualnumbers}{{ [\eps] / \eps^2 }}
 \newcommand{\E}{{\mathbf{E}}}
 \newcommand{\Extprod}{\bigwedge\nolimits}
@@ -687,18 +684,15 @@
 \newcommand{\mgn}{{ \mathcal{M}_{g, n} }}
 \newcommand{\Mell}{{ \mathcal{M}_{\mathrm{ell}} }}
 \newcommand{\mH}{{ \mathsf{H} }}
-\newcommand{\modiso}{{_{\scriptstyle / \sim} }}
 \newcommand{\ms}{\xrightarrow{\sim}}
 \newcommand{\mveq}{{\mapsvia{\sim}}}
 \newcommand{\mviso}{{\mapsvia{\sim}}}
-\newcommand{\nonzero}{^{\bullet}}
 \newcommand{\OX}{{\mathcal{O}_X}}
 \newcommand{\Presh}{\presh}
 \newcommand{\Prod}{\displaystyle\prod}
 \newcommand{\primetop}{{\scriptscriptstyle \mathrm{prime-to-}p}}
 \newcommand{\ptd}{{\scriptstyle { \ast } }}
 \newcommand{\qiso}{\homotopic}
-\newcommand{\quillenplus}{{ {}^{+} }}
 \newcommand{\rderive}{\rightderive}
 \newcommand{\resprod}{\prod^{\res}}
 \newcommand{\restensor}{\bigotimes^{\res}}
@@ -712,7 +706,6 @@
 \newcommand{\Tensor}{\bigotimes}
 \newcommand{\tensor}{\otimes}
 \newcommand{\tgn}{{ \mathcal{T}_{g, n} }}
-\newcommand{\tilt}{{}^{ \flat }}
 \newcommand{\TM}{{\T M}}
 \newcommand{\Totprod}{\Tot^{\Pi}}
 \newcommand{\Totsum}{\Tot^{\oplus}}
@@ -789,10 +782,8 @@
 \newcommand{\colim}{\operatorname*{colim}}
 \newcommand{\injectsfrom}{\hookleftarrow}
 \newcommand{\injresolve}{\leftleftarrows}
-\newcommand{\interior}{^\circ}
 \newcommand{\intersect}{\cap}
 \newcommand{\into}{\to}
-\newcommand{\inv}{^{-1}}
 \newcommand{\inverselim}{\varprojlim}
 \newcommand{\iscontainedin}{\supseteq}
 \newcommand{\isomorphic}{{ \, \mapsvia{\sim}\, }}
@@ -827,7 +818,6 @@
 \newcommand{\uniformlyconverges}{\rightrightarrows}
 \newcommand{\union}{\cup}
 \newcommand{\unioninfty}{{\union\ts{\infty}}}
-\newcommand{\units}{^{\times}}
 \newcommand{\up}{\uparrow}
 \newcommand{\wait}{{-}}
 \newcommand{\wedgeprod}{\vee}
@@ -1141,7 +1131,6 @@
 \newcommand{\relevant}{\mathrm{rel}}
 \newcommand{\rcop}{\mathrm{rc}}
 \newcommand{\opop}{\mathrm{op}}
-\newcommand{\opp}{^{\mathrm{op}}}
 \newcommand{\liek}{\mathfrak{k}}
 \newcommand{\liev}{\mathfrak{v}}
 \newcommand{\tiling}{\mathcal{T}}
@@ -1194,9 +1183,9 @@
 \newcommand{\inner}[2]{{\left\langle {#1},~{#2} \right\rangle}}
 \newcommand{\inp}[2]{{\left\langle {#1},~{#2} \right\rangle}}
 \newcommand{\invert}[1]{{ \left[ { \scriptstyle \frac{1}{#1} } \right] }}
-\newcommand{\localize}[1]{\left[ { \scriptstyle { {#1}\inv}  } \right]}
+\newcommand{\localize}[1]{\left[ { \scriptstyle \inverseof{#1} } \right]}
 \newcommand{\plocalize}[1]{\primelocalize{#1}}
-\newcommand{\primelocalize}[1]{\left[ { \scriptstyle { { ({#1}^c) }\inv}  } \right]}
+\newcommand{\primelocalize}[1]{\left[ { \scriptstyle \inverseof{({#1}^c)} } \right]}
 \newcommand{\fls}[1]{(\hspace{-0.25em}( #1 )\hspace{-0.22em})}
 \newcommand{\laurent}[1]{\fls{#1}}
 \newcommand{\laurentseries}[1]{\fls{#1}}
@@ -1217,8 +1206,6 @@
 \newcommand{\sheafify}[1]{\left( #1 \right)^{\scriptscriptstyle \mathrm{sh}}}
 \newcommand{\complete}[1]{{ {}_{ \hat{#1} } }}
 \newcommand{\takecompletion}[1]{{ \overbrace{#1}^{\widehat{\hspace{4em}}}  }}
-\newcommand{\pcomplete}{{ {}^{ \wedge }_{p} }}
-\newcommand{\procomplete}{{}^{ \wedge_{\scriptscriptstyle \pro }}}
 \newcommand{\kv}{{ k_{\hat{v}} }}
 \newcommand{\Lv}{{ L_{\hat{v}} }}
 \newcommand{\coslice}[1]{_{{#1/}}}
@@ -1365,6 +1352,7 @@
 \newcommand{\nerve}[1]{{ \mathcal{N}({#1}) }}
 \newcommand{\realize}[1]{{ \abs{#1} }}
 \newcommand{\opcat}[1]{{ {#1}^{\operatorname{op}} }}
+\newcommand{\oppositeof}[1]{{ {#1}^{\mathrm{op}} }}
 \newcommand{\dualof}[1]{{ {#1}^{\vee} }}
 \newcommand{\doubledualof}[1]{{ {#1}^{\vee\vee} }}
 \newcommand{\inverseof}[1]{{ {#1}^{-1} }}
