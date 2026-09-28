@@ -1925,6 +1925,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\testplusalignment` | 0 | `$A_2^+ \plA_3$ $A^+_0 \plA_0 A_0^+$ $D_0^+ \plD_3$ $D^+_0 \plD_0 D_0^+$ $E_0^+ \plE_3$ $E^+_0 \plE_0 E_0^+$` |
 | `\ccy` | 0 | `\rowcolor{black!8}` |
 | `\mapsfrom` | 0 | `\mathrel{\reflectbox{\ensuremath{\mapsto}}}` |
+| `\envlist` | 0 | `\leavevmode\vspace{-1.00\baselineskip}` |
 | `\one` | 0 | `\mathbbm{1}` |
 | `\contradiction` | 0 | `\mathord{\lightning}` |
 | `\dzg` | 1 | `\@ifundefined{todo}{#1}{\todo[color=blue!40]{#1}}` |
