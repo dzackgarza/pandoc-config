@@ -746,6 +746,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\chr` | 0 | `\operatorname{ch}` |
 | `\cl` | 0 | `{ \operatorname{cl}}` |
 | `\Cl` | 0 | `\operatorname{Cl}` |
+| `\CaCl` | 0 | `\operatorname{CaCl}` |
+| `\kxnz` | 0 | `k[x_0, \cdots, x_{n}]` |
 | `\codom` | 0 | `\operatorname{codom}` |
 | `\codim` | 0 | `\operatorname{codim}` |
 | `\coev` | 0 | `\operatorname{coev}` |
@@ -1203,6 +1205,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Disjoint` | 0 | `\bigsqcup` |
 | `\divergence` | 0 | `{ \nabla\cdot }` |
 | `\divides` | 0 | `\mathrel{\|}` |
+| `\notdivides` | 0 | `\nmid` |
 | `\dV` | 0 | `\,dV` |
 | `\dalpha` | 0 | `\,d\alpha` |
 | `\dA` | 0 | `\,dA` |
@@ -1237,6 +1240,9 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\increasesto` | 0 | `\nearrow` |
 | `\injects` | 0 | `\hookrightarrow` |
 | `\injectivelim` | 0 | `\varinjlim` |
+| `\directlim` | 0 | `\varinjlim` |
+| `\cocolim` | 0 | `\varprojlim` |
+| `\colim` | 0 | `\operatorname*{colim}` |
 | `\injectsfrom` | 0 | `\hookleftarrow` |
 | `\injresolve` | 0 | `\leftleftarrows` |
 | `\interior` | 0 | `^\circ` |
@@ -1919,6 +1925,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\testplusalignment` | 0 | `$A_2^+ \plA_3$ $A^+_0 \plA_0 A_0^+$ $D_0^+ \plD_3$ $D^+_0 \plD_0 D_0^+$ $E_0^+ \plE_3$ $E^+_0 \plE_0 E_0^+$` |
 | `\ccy` | 0 | `\rowcolor{black!8}` |
 | `\mapsfrom` | 0 | `\mathrel{\reflectbox{\ensuremath{\mapsto}}}` |
+| `\one` | 0 | `\mathbbm{1}` |
+| `\contradiction` | 0 | `\mathord{\lightning}` |
 | `\dzg` | 1 | `\@ifundefined{todo}{#1}{\todo[color=blue!40]{#1}}` |
 | `\dzginline` | 1 | `\@ifundefined{todo}{#1}{\todo[inline,color=blue!40]{#1}}` |
 
