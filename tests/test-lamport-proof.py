@@ -173,6 +173,50 @@ def test_a_step_needs_an_identifier_only_when_referenced() -> None:
     assert latex.stdout.count(r"\begin{step+}{") == 2
 
 
+NO_QED = """
+::: {.pf}
+::: {.pf-step}
+First claim.
+:::
+::: {.pf-step}
+The goal.
+
+:::: {.pf-proof}
+::: {.pf-step}
+Inner first.
+:::
+::: {.pf-step}
+Inner last.
+:::
+::::
+:::
+:::
+"""
+
+
+def test_the_last_step_of_each_level_is_the_qed_step() -> None:
+    result = render(NO_QED, "html")
+    assert result.returncode == 0, result.stderr
+    assert 'class="pf-number">1.</span>' in result.stdout
+    assert 'class="pf-number">2. QED</span>' in result.stdout
+    assert 'class="pf-number">2.1.</span>' in result.stdout
+    assert 'class="pf-number">2.2. QED</span>' in result.stdout
+
+
+def test_a_qed_step_before_another_step_fails() -> None:
+    early = """
+::: {.pf}
+::: {.pf-qed}
+Done.
+:::
+::: {.pf-step}
+More.
+:::
+:::
+"""
+    assert render(early, "html").returncode != 0
+
+
 if __name__ == "__main__":
     test_html_numbers_nested_steps_and_references()
     test_latex_uses_nested_pf2_structure()
@@ -181,4 +225,6 @@ if __name__ == "__main__":
     test_duplicate_step_labels_fail_at_filter_boundary()
     test_unknown_step_reference_fails_at_filter_boundary()
     test_a_step_needs_an_identifier_only_when_referenced()
+    test_the_last_step_of_each_level_is_the_qed_step()
+    test_a_qed_step_before_another_step_fails()
     print("Lamport proof filter tests passed")

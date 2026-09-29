@@ -22,10 +22,12 @@
 -- of standard LaTeX.
 --
 -- Write prose proofs by keeping each claim and its justification in separate
--- blocks. Use `.pf-step` for a claim, `.pf-proof` for its prose justification,
--- and `.pf-qed` when a branch is complete. Add an ID only to steps that later
--- need a reference. The filter then supplies stable numbers without putting
--- numbers in the source text.
+-- blocks. Use `.pf-step` for a claim and `.pf-proof` for its prose
+-- justification. The last step of each level proves that level's goal, and the
+-- HTML writer labels it QED. Use `.pf-qed` only for a last step that has no
+-- claim of its own. Add an ID only to steps that later need a reference. The
+-- filter then supplies stable numbers without putting numbers in the source
+-- text.
 --
 -- Example source:
 --   ::: {.pf #odd-sum numbering=short}
@@ -158,8 +160,13 @@ local function annotate_container(container, parent_path, is_root)
   container.attributes["data-pf-level"] = tostring(level)
   local step_index = 0
 
+  local qed_seen = false
   for _, child in ipairs(container.content) do
     if is_step(child) then
+      if qed_seen then
+        proof_error("a pf-qed step must be the last step of its level")
+      end
+      qed_seen = has_class(child, "pf-qed")
       step_index = step_index + 1
       local number = join_path(parent_path, step_index)
       set_number(child, number, level)
@@ -379,13 +386,15 @@ local function render_root(root)
   return pandoc.RawBlock("latex", table.concat(output, "\n"))
 end
 
-local function add_html_number(step)
+-- The last step of a level proves that level's goal, so it is the QED step
+-- whether or not the source marks it `.pf-qed`.
+local function add_html_number(step, is_last)
   local text = step.attributes["data-pf-number"]
   if text == nil then
     proof_error("internal numbering invariant failed")
   end
   local label = text .. "."
-  if has_class(step, "pf-qed") then
+  if is_last then
     label = label .. " QED"
   end
   local number = pandoc.Span({ pandoc.Str(label) }, { class = "pf-number" })
@@ -399,9 +408,15 @@ local function add_html_number(step)
 end
 
 local function add_html_numbers(container)
+  local last
   for _, block in ipairs(container.content) do
     if is_step(block) then
-      add_html_number(block)
+      last = block
+    end
+  end
+  for _, block in ipairs(container.content) do
+    if is_step(block) then
+      add_html_number(block, block == last)
       for _, child in ipairs(block.content) do
         if is_proof(child) then
           add_html_numbers(child)
