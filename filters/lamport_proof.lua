@@ -15,7 +15,7 @@
 --   ::: {.pf-step #label} statement :::
 --   :::: {.pf-proof} nested steps or proof prose ::::
 --   :::
--- Step IDs are Lamport labels. A Markdown link such as
+-- Step IDs are Lamport labels and are optional. A Markdown link such as
 -- [step](#label){.pf-ref} becomes the assigned hierarchical step number.
 -- The LaTeX branch emits pf2.sty commands; the consuming template must load a
 -- compatible Lamport-proof implementation because the commands are not part
@@ -81,6 +81,7 @@ local special_step_classes = {
 }
 
 local labels = {}
+local generated_labels = 0
 
 local function has_class(element, class)
   for _, candidate in ipairs(element.classes or {}) do
@@ -164,14 +165,18 @@ local function annotate_container(container, parent_path, is_root)
       set_number(child, number, level)
 
       if has_class(child, "pf-step") then
+        -- An identifier is optional: a step carries one only when a
+        -- pf-ref names it.
         local label = child.identifier
-        if not valid_label(label) then
-          proof_error("every pf-step needs a label-safe identifier")
+        if label ~= "" then
+          if not valid_label(label) then
+            proof_error("step identifier is not label-safe: " .. label)
+          end
+          if labels[label] ~= nil then
+            proof_error("duplicate step label: " .. label)
+          end
+          labels[label] = { number = number, element = child }
         end
-        if labels[label] ~= nil then
-          proof_error("duplicate step label: " .. label)
-        end
-        labels[label] = { number = number, element = child }
         special_step_kind(child)
       elseif child.identifier ~= "" then
         proof_error("pf-qed steps cannot have identifiers")
@@ -350,7 +355,14 @@ render_step = function(step)
     return table.concat(output, "\n")
   end
 
-  return "\\begin{step+}{" .. step.identifier .. "}\n"
+  -- pf2.sty's step+ takes a label argument; an unreferenced step gets a
+  -- generated one that no pf-ref can name.
+  local label = step.identifier
+  if label == "" then
+    generated_labels = generated_labels + 1
+    label = "pf-generated-" .. generated_labels
+  end
+  return "\\begin{step+}{" .. label .. "}\n"
     .. table.concat(body, "\n")
     .. "\n\\end{step+}"
 end
@@ -433,6 +445,7 @@ end
 
 function Pandoc(document)
   labels = {}
+  generated_labels = 0
   local roots = {}
   collect_roots(document.blocks, roots)
   for _, root in ipairs(roots) do

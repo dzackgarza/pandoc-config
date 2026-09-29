@@ -146,6 +146,33 @@ See [the missing step](#missing){.pf-ref}.
     assert result.returncode != 0
 
 
+UNLABELED = """
+::: {.pf}
+::: {.pf-step}
+First claim.
+:::
+::: {.pf-step #named}
+Second claim.
+:::
+::: {.pf-qed}
+By [the second](#named){.pf-ref}.
+:::
+:::
+"""
+
+
+def test_a_step_needs_an_identifier_only_when_referenced() -> None:
+    html = render(UNLABELED, "html")
+    assert html.returncode == 0, html.stderr
+    assert 'class="pf-number">1.</span>' in html.stdout
+    assert 'class="pf-number">2.</span>' in html.stdout
+    assert '>2<' in html.stdout
+    latex = render(UNLABELED, "latex")
+    assert latex.returncode == 0, latex.stderr
+    assert r"\begin{step+}{named}" in latex.stdout
+    assert latex.stdout.count(r"\begin{step+}{") == 2
+
+
 if __name__ == "__main__":
     test_html_numbers_nested_steps_and_references()
     test_latex_uses_nested_pf2_structure()
@@ -153,4 +180,5 @@ if __name__ == "__main__":
     test_long_numbering_and_case_steps_use_pf2_keywords()
     test_duplicate_step_labels_fail_at_filter_boundary()
     test_unknown_step_reference_fails_at_filter_boundary()
+    test_a_step_needs_an_identifier_only_when_referenced()
     print("Lamport proof filter tests passed")
