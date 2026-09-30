@@ -59,7 +59,7 @@ $$\|z-x\| \leq \|z-y\| + \|y-x\|.$$
 
 \item	A linear transformation $T:\R^n\lra\R^n$ is \textdf{norm preserving} if
 $$\|T(x)\|=\|x\|,$$ for all $x\in\R^n$, and \textdf{inner product preserving} if
-$$\ip{Tx}{Ty} = \ip xy,$$ for all $x,y\in\R^n$.
+$$\inner{Tx}{Ty} = \inner xy,$$ for all $x,y\in\R^n$.
 \begin{enumerate}
 	\item	Prove that $T$  is norm preserving if and only if it is inner
 	product preserving.
@@ -72,12 +72,12 @@ $$\ip{Tx}{Ty} = \ip xy,$$ for all $x,y\in\R^n$.
 number $M$ such that $\|T(h)\|\leq M\|h\|$ for all $h\in\R^m$.  Hint: Estimate
 $\|T(h)\|$ in terms of $\|h\|$ and the entries in the matrix for $T$.
 
-\item	If $x,y\in\R^n$, and $z,w\in\R^m$, show that $\ds\ip{(x,z)}{(y,w)} = \ip xy
-+ \ip zw$, and $\ds\|(x,z)\| = \sqrt{\|x\|^2 + \|z\|^2}$.  Note that $(x,z)$ and
+\item	If $x,y\in\R^n$, and $z,w\in\R^m$, show that $\ds\inner{(x,z)}{(y,w)} = \inner xy
++ \inner zw$, and $\ds\|(x,z)\| = \sqrt{\|x\|^2 + \|z\|^2}$.  Note that $(x,z)$ and
 $(y,w)$ denote points in $\R^{n+m}$.
 
 \item	If $x,y\in\R^n$, then $x$ and $y$ are called \textdf{perpendicular} (or
-\textdf{orthogonal}), and we write $x\perp y$, if $\ip xy = 0$.  If $x\perp y$,
+\textdf{orthogonal}), and we write $x\perp y$, if $\inner xy = 0$.  If $x\perp y$,
 prove that $\|x+y\|^2 = \|x\|^2 + \|y\|^2$.
 
 \end{enumerate}

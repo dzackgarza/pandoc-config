@@ -35,7 +35,7 @@ in `styles/macros/`.
   silently changing its arity.
 - Ignored-argument definitions `\addbase[1]`, `\diagonal[1]`, and `\Diagonal[1]`
   still require individual semantic recovery.
-- Slice/coslice suffix fragments (`\slice`, `\coslice`, `\liesover`, `\liesabove`)
+- Slice/coslice suffix fragments (`\slice`, `\coslice`, `\liesover`)
   should be checked against authored usage to determine whether they are intended
   typography helpers or collapsed object/category constructors.
 
@@ -81,8 +81,8 @@ The same ambient-object-outside-the-macro defect occurs in the ring-construction
 Current authored forms include `R\adjoin{x}`, `R\localize{S}`, and
 `A(X)\invert{f}`. The complete semantic APIs should be of the form
 `\adjoin{R}{x}`, `\localize{R}{S}`, and `\invert{R}{f}`. The power-series and
-Laurent-series aliases (`\fps`, `\formalpowerseries`, `\powerseries`, `\fls`,
-`\laurent`, `\laurentseries`, `\functionfield`) need the same ambient-ring/field
+Laurent-series aliases (`\fps`, `\formalpowerseries`, `\fls`,
+`\laurentseries`, `\functionfield`) need the same ambient-ring/field
 argument when promoted as public constructors. `\kx{n}` and `\freezmod{x}` are useful
 counterexamples: they already include the ambient ring in the expansion and therefore
 represent complete objects.

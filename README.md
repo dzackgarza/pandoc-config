@@ -483,19 +483,15 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\UU` | 0 | `\mathbb{U}` |
 | `\VV` | 0 | `{\mathbf{V}}` |
 | `\ZZ` | 0 | `{\mathbf{Z}}` |
-| `\bbm` | 0 | `{\mathbb{M}}` |
 | `\GGr` | 0 | `{\mathbb{Gr}}` |
 | `\OP` | 0 | `{\mathbb{OP}}` |
 | `\SpSp` | 0 | `{\mathbb{S}}` |
 | `\CCpadic` | 0 | `{ \CC_p }` |
 | `\CCstar` | 0 | `\unitsof{\CC}` |
-| `\cstar` | 0 | `\unitsof{\CC}` |
 | `\FFbar` | 0 | `{\bar\FF}` |
 | `\FFp` | 0 | `{\FF_p}` |
 | `\FFpn` | 0 | `{\FF_{p^n}}` |
-| `\Fp` | 0 | `{\FF_p}` |
 | `\Fpbar` | 0 | `\bar{\FF_p}` |
-| `\Fpn` | 0 | `{\FF_{p^n} }` |
 | `\fq` | 0 | `{\FF_{q}}` |
 | `\fqbar` | 0 | `\bar{\FF_{q}}` |
 | `\fqr` | 0 | `{\FF_{q^r}}` |
@@ -504,7 +500,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\QQbar` | 0 | `{ \bar{ \mathbf{Q} } }` |
 | `\QQladic` | 0 | `{ \QQ_\ell }` |
 | `\QQpadic` | 0 | `{ \QQ_{\hat p} }` |
-| `\Qbar` | 0 | `{ \bar{ \mathbf{Q} } }` |
 | `\ZZbar` | 0 | `{ \bar{ \ZZ } }` |
 | `\ZZelladic` | 0 | `{ \ZZ_\ell }` |
 | `\ZZG` | 0 | `{\ZZ G}` |
@@ -521,11 +516,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\znz` | 0 | `\ZZ/n\ZZ` |
 | `\zpz` | 0 | `\ZZ/p\ZZ` |
 | `\Banach` | 0 | `\mathcal{B}` |
-| `\cA` | 0 | `{\mathcal{A}}` |
-| `\cF` | 0 | `{\mathcal{F}}` |
-| `\cG` | 0 | `{\mathcal{G}}` |
-| `\cM` | 0 | `{\mathcal{M}}` |
-| `\cX` | 0 | `{\mathcal{X}}` |
 | `\Hsh` | 0 | `{ \mathcal{H} }` |
 | `\mca` | 0 | `{\mathcal{A}}` |
 | `\mcb` | 0 | `{\mathcal{B}}` |
@@ -543,6 +533,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\mcn` | 0 | `{\mathcal{N}}` |
 | `\mco` | 0 | `{\mathcal{O}}` |
 | `\mcp` | 0 | `{\mathcal{P}}` |
+| `\mcq` | 0 | `{\mathcal{Q}}` |
 | `\mcr` | 0 | `{\mathcal{R}}` |
 | `\mcs` | 0 | `{\mathcal{S}}` |
 | `\mct` | 0 | `{\mathcal{T}}` |
@@ -551,13 +542,10 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\mcv` | 0 | `{\mathcal{V}}` |
 | `\mcw` | 0 | `{\mathcal{W}}` |
 | `\mcx` | 0 | `{\mathcal{X}}` |
-| `\mcX` | 0 | `{\mathcal{X}}` |
 | `\mcy` | 0 | `{\mathcal{Y}}` |
 | `\mcz` | 0 | `{\mathcal{Z}}` |
-| `\MM` | 0 | `{\mathcal{M}}` |
 | `\OO` | 0 | `{\mathcal{O}}` |
 | `\Path` | 0 | `\mathcal{P}` |
-| `\gl` | 0 | `{\mathfrak{gl}}` |
 | `\liea` | 0 | `{\mathfrak{a}}` |
 | `\lieb` | 0 | `{\mathfrak{b}}` |
 | `\lied` | 0 | `{\mathfrak{d}}` |
@@ -589,7 +577,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\mfF` | 0 | `{\mathfrak{F}}` |
 | `\mfg` | 0 | `{\mathfrak{g}}` |
 | `\mfh` | 0 | `{\mathfrak{h}}` |
-| `\mfi` | 0 | `{\mathfrak{I}}` |
 | `\mfk` | 0 | `{\mathfrak{k}}` |
 | `\mfm` | 0 | `{\mathfrak{m}}` |
 | `\mfn` | 0 | `{\mathfrak{n}}` |
@@ -601,9 +588,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\mfS` | 0 | `{\mathfrak{S}}` |
 | `\mfu` | 0 | `{\mathfrak{u}}` |
 | `\mfv` | 0 | `{\mathfrak{v}}` |
-| `\mfx` | 0 | `{\mathfrak{X}}` |
 | `\mfX` | 0 | `{\mathfrak{X}}` |
-| `\mfy` | 0 | `{\mathfrak{Y}}` |
 | `\mm` | 0 | `{\mathfrak{m}}` |
 | `\bigo` | 0 | `{ \mathsf{O}}` |
 | `\Gal` | 0 | `{ \mathsf{Gal}}` |
@@ -706,9 +691,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\AJ` | 0 | `\operatorname{AJ}` |
 | `\Alb` | 0 | `\operatorname{Alb}` |
 | `\Amp` | 0 | `{\operatorname{Amp}}` |
-| `\ann` | 0 | `\operatorname{Ann}` |
 | `\Ann` | 0 | `\operatorname{Ann}` |
-| `\annd` | 0 | `{\operatorname{ and }}` |
 | `\AO` | 0 | `\operatorname{AO}` |
 | `\arccot` | 0 | `\operatorname{arccot}` |
 | `\arccsc` | 0 | `\operatorname{arccsc}` |
@@ -717,9 +700,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Arg` | 0 | `\operatorname{Arg}` |
 | `\ASL` | 0 | `\operatorname{ASL}` |
 | `\Aut` | 0 | `\operatorname{Aut}` |
-| `\aut` | 0 | `\operatorname{Aut}` |
 | `\Ball` | 0 | `{B}` |
-| `\barz` | 0 | `\bar{z}` |
 | `\Base` | 0 | `{ \operatorname{Base}}` |
 | `\bb` | 0 | `\operatorname{BB}` |
 | `\bd` | 0 | `{\del}` |
@@ -738,12 +719,11 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\CH` | 0 | `{\operatorname{CH}}` |
 | `\ch` | 0 | `\operatorname{ch}` |
 | `\character` | 0 | `\operatorname{ch}` |
-| `\characteristic` | 0 | `\operatorname{ch}` |
+| `\characteristic` | 0 | `\operatorname{char}` |
 | `\charpoly` | 0 | `{\mathrm{charpoly}}` |
 | `\chern` | 0 | `{\mathrm{ch}}` |
 | `\chp` | 0 | `\operatorname{ch. p}` |
 | `\Chow` | 0 | `{\operatorname{Ch}}` |
-| `\chr` | 0 | `\operatorname{ch}` |
 | `\cl` | 0 | `{ \operatorname{cl}}` |
 | `\Cl` | 0 | `\operatorname{Cl}` |
 | `\CaCl` | 0 | `\operatorname{CaCl}` |
@@ -756,7 +736,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\coim` | 0 | `\operatorname{coim}` |
 | `\coinfl` | 0 | `\operatorname{coinf}` |
 | `\coinv` | 0 | `{\operatorname{coinv}}` |
-| `\cok` | 0 | `\operatorname{coker}` |
 | `\coker` | 0 | `\operatorname{coker}` |
 | `\colspace` | 0 | `\operatorname{colspace}` |
 | `\compact` | 0 | `\operatorname{cpt}` |
@@ -765,7 +744,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Conf` | 0 | `{\mathrm{Conf}}` |
 | `\Conj` | 0 | `{\mathrm{Conj}}` |
 | `\const` | 0 | `{\operatorname{const.}}` |
-| `\Convv` | 0 | `\operatorname{Conv}` |
 | `\cores` | 0 | `\operatorname{coRes}` |
 | `\corank` | 0 | `\operatorname{corank}` |
 | `\covol` | 0 | `\operatorname{coVol}` |
@@ -779,7 +757,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\curl` | 0 | `\operatorname{curl}` |
 | `\Curv` | 0 | `\operatorname{Curv}` |
 | `\Cyl` | 0 | `{ \mathrm{Cyl} }` |
-| `\da` | 0 | `\coloneqq` |
 | `\Deck` | 0 | `\operatorname{Deck}` |
 | `\ddim` | 0 | `\operatorname{ddim}` |
 | `\Def` | 0 | `\operatorname{Def}` |
@@ -792,7 +769,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\diag` | 0 | `\operatorname{diag}` |
 | `\diam` | 0 | `{\operatorname{diam}}` |
 | `\Diff` | 0 | `\operatorname{Diff}` |
-| `\diff` | 0 | `\operatorname{Diff}` |
 | `\Diffeo` | 0 | `{\operatorname{Diffeo}}` |
 | `\disc` | 0 | `{\operatorname{disc}}` |
 | `\discriminant` | 0 | `{\Delta}` |
@@ -808,7 +784,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Eff` | 0 | `\operatorname{Eff}` |
 | `\Emb` | 0 | `{\operatorname{Emb}}` |
 | `\En` | 0 | `{\operatorname{En}}` |
-| `\End` | 0 | `\operatorname{End}` |
 | `\Endo` | 0 | `{ \operatorname{End} }` |
 | `\eo` | 0 | `{\operatorname{eo}}` |
 | `\essdim` | 0 | `\operatorname{essdim}` |
@@ -818,7 +793,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\ev` | 0 | `\operatorname{ev}` |
 | `\exist` | 0 | `{\exists}` |
 | `\Exists` | 0 | `\operatorname{\exists}` |
-| `\ext` | 0 | `\operatorname{Ext}` |
 | `\Ext` | 0 | `\operatorname{Ext}` |
 | `\EZ` | 0 | `\operatorname{EZ}` |
 | `\F` | 0 | `{\operatorname{F}}` |
@@ -838,13 +812,11 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Frame` | 0 | `\operatorname{Frame}` |
 | `\Frob` | 0 | `\operatorname{Frob}` |
 | `\gal` | 0 | `{ \operatorname{Gal}}` |
-| `\gen` | 0 | `{\operatorname{gen}}` |
 | `\gendim` | 0 | `\operatorname{gendim}` |
 | `\generic` | 0 | `{\mathrm{gen}}` |
 | `\genus` | 0 | `{\operatorname{gen}}` |
 | `\GF` | 0 | `{\mathbf{GF}}` |
 | `\GL` | 0 | `\operatorname{GL}` |
-| `\Gl` | 0 | `\operatorname{GL}` |
 | `\gp` | 0 | `{\operatorname{gp} }` |
 | `\Gr` | 0 | `{\operatorname{Gr}}` |
 | `\grad` | 0 | `\operatorname{grad}` |
@@ -860,7 +832,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\height` | 0 | `\operatorname{ht}` |
 | `\HF` | 0 | `\operatorname{HF}` |
 | `\HFK` | 0 | `\operatorname{HFK}` |
-| `\hilb` | 0 | `\operatorname{Hilb}` |
 | `\Hilb` | 0 | `\operatorname{Hilb}` |
 | `\hilbdim` | 0 | `\operatorname{hilbdim}` |
 | `\Hol` | 0 | `\operatorname{Hol}` |
@@ -883,7 +854,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Jac` | 0 | `\operatorname{Jac}` |
 | `\jan` | 0 | `\operatorname{Jan}` |
 | `\JCF` | 0 | `\operatorname{JCF}` |
-| `\Kah` | 0 | `{ \operatorname{Kähler} }` |
 | `\Kahler` | 0 | `\operatorname{Kähler}` |
 | `\Kl` | 0 | `\operatorname{Kl}` |
 | `\ko` | 0 | `{\operatorname{ko}}` |
@@ -898,8 +868,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Li` | 0 | `\mathrm{Li}` |
 | `\lk` | 0 | `\operatorname{lk}` |
 | `\Log` | 0 | `\operatorname{Log}` |
-| `\Map` | 0 | `\operatorname{Maps}` |
-| `\maps` | 0 | `\operatorname{Maps}` |
 | `\Maps` | 0 | `\operatorname{Maps}` |
 | `\mat` | 0 | `\operatorname{mat}` |
 | `\Mat` | 0 | `\operatorname{Mat}` |
@@ -933,18 +901,15 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\OFrame` | 0 | `\operatorname{OFrame}` |
 | `\OGr` | 0 | `{\operatorname{OGr}}` |
 | `\Op` | 0 | `{\operatorname{Op}}` |
-| `\ord` | 0 | `{\operatorname{Ord}}` |
 | `\Ord` | 0 | `{ \mathrm{Ord} }` |
 | `\order` | 0 | `{\operatorname{Ord}}` |
 | `\oriented` | 0 | `{ \operatorname{oriented} }` |
 | `\Orth` | 0 | `{\operatorname{O}}` |
-| `\orr` | 0 | `{\operatorname{ or }}` |
 | `\Out` | 0 | `\operatorname{Out}` |
 | `\per` | 0 | `\operatorname{per}` |
 | `\period` | 0 | `\operatorname{period}` |
 | `\PGL` | 0 | `\operatorname{PGL}` |
 | `\PHS` | 0 | `\operatorname{PHS}` |
-| `\pic` | 0 | `{\operatorname{Pic}}` |
 | `\Pic` | 0 | `\operatorname{Pic}` |
 | `\Pin` | 0 | `{\operatorname{Pin}}` |
 | `\Pl` | 0 | `\operatorname{Pl}` |
@@ -954,7 +919,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\prim` | 0 | `{\operatorname{prim}}` |
 | `\prin` | 0 | `\operatorname{prin}` |
 | `\Prin` | 0 | `\operatorname{Prin}` |
-| `\proj` | 0 | `\operatorname{proj}` |
 | `\Proj` | 0 | `\operatorname{Proj}` |
 | `\projection` | 0 | `\operatorname{proj}` |
 | `\PSL` | 0 | `{\operatorname{PSL}}` |
@@ -983,11 +947,9 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\RHom` | 0 | `\operatorname{\mathbb{R}Hom}` |
 | `\Ric` | 0 | `\operatorname{Ric}` |
 | `\rc` | 0 | `{\operatorname{rc}}` |
-| `\rk` | 0 | `{\operatorname{rank}}` |
 | `\rot` | 0 | `\operatorname{rot}` |
 | `\rowspace` | 0 | `\operatorname{rowspace}` |
 | `\RP` | 0 | `{\mathbf{RP}}` |
-| `\rref` | 0 | `\operatorname{RREF}` |
 | `\RREF` | 0 | `\operatorname{RREF}` |
 | `\Sat` | 0 | `\operatorname{Sat}` |
 | `\Sec` | 0 | `\operatorname{Sec}` |
@@ -999,7 +961,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\sgn` | 0 | `\operatorname{sgn}` |
 | `\SHerm` | 0 | `{\operatorname{SHerm}}` |
 | `\Sieg` | 0 | `{\mathrm{Sieg}}` |
-| `\sig` | 0 | `\operatorname{sig}` |
 | `\sign` | 0 | `\operatorname{sign}` |
 | `\signature` | 0 | `\operatorname{sig}` |
 | `\Sim` | 0 | `\operatorname{Sim}` |
@@ -1015,8 +976,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\soc` | 0 | `\operatorname{Soc}` |
 | `\spanof` | 0 | `\operatorname{span}` |
 | `\Spc` | 0 | `\operatorname{Spc}` |
-| `\spc` | 0 | `\operatorname{Spc}` |
-| `\spec` | 0 | `\operatorname{Spec}` |
 | `\Spec` | 0 | `\operatorname{Spec}` |
 | `\Spf` | 0 | `\operatorname{Spf}` |
 | `\Spin` | 0 | `{\operatorname{Spin}}` |
@@ -1024,7 +983,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Sq` | 0 | `\operatorname{Sq}` |
 | `\sq` | 0 | `\square` |
 | `\SSym` | 0 | `{\operatorname{SSym}}` |
-| `\stab` | 0 | `{\operatorname{Stab}}` |
 | `\Stab` | 0 | `{\operatorname{Stab}}` |
 | `\Star` | 0 | `\operatorname{Star}` |
 | `\Sub` | 0 | `{\mathrm{Sub}}` |
@@ -1034,12 +992,10 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\supp` | 0 | `\operatorname{supp}` |
 | `\Supp` | 0 | `{\operatorname{Supp}}` |
 | `\Sw` | 0 | `{\mathrm{Sw}}` |
-| `\syl` | 0 | `{\operatorname{Syl}}` |
 | `\Syl` | 0 | `{\operatorname{Syl}}` |
 | `\Sym` | 0 | `\operatorname{Sym}` |
 | `\sym` | 0 | `\operatorname{Sym}^*` |
 | `\Symalg` | 0 | `\sym` |
-| `\symalg` | 0 | `\sym` |
 | `\Symb` | 0 | `\operatorname{Symb}` |
 | `\Symbil` | 0 | `\operatorname{SymBil}` |
 | `\Symp` | 0 | `{\operatorname{Sp}}` |
@@ -1051,7 +1007,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\THC` | 0 | `{\operatorname{THC}}` |
 | `\thinrank` | 0 | `T_n\dash\operatorname{rank}` |
 | `\Todd` | 0 | `\operatorname{Td}` |
-| `\tor` | 0 | `\operatorname{Tor}` |
 | `\Tor` | 0 | `\operatorname{Tor}` |
 | `\tors` | 0 | `{\operatorname{tors}}` |
 | `\Tot` | 0 | `{ \operatorname{Tot} }` |
@@ -1089,7 +1044,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\ZHB` | 0 | `\operatorname{ZHB}` |
 | `\Ag` | 0 | `{\mathcal{A}_g}` |
 | `\agbar` | 0 | `\bar{\Ag}` |
-| `\Af` | 0 | `{\mathbf{A}}` |
 | `\Ahat` | 0 | `\hat{ \operatorname{A}}_g` |
 | `\B` | 0 | `{\mathbf{B}}` |
 | `\bmgn` | 0 | `{ \bar{\mathcal{M}}_{g, n} }` |
@@ -1098,14 +1052,10 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\cechH` | 0 | `{\check{H}}` |
 | `\coind` | 0 | `\operatorname{coInd}` |
 | `\D` | 0 | `{ \mathsf{D} }` |
-| `\dtensor` | 0 | `\overset{\mathbb{L}}{ \otimes}` |
 | `\dualnumbers` | 0 | `{ [\eps] / \eps^2 }` |
 | `\E` | 0 | `{\mathbf{E}}` |
-| `\Extprod` | 0 | `\bigwedge\nolimits` |
-| `\Extpower` | 0 | `\bigwedge\nolimits` |
 | `\fracId` | 0 | `{ \ddot{\Id} }` |
 | `\G` | 0 | `{\mathsf{G}}` |
-| `\Hc` | 0 | `{\check{H}}` |
 | `\hocolim` | 0 | `\operatorname{hocolim}` |
 | `\HZ` | 0 | `{H\ZZ}` |
 | `\I` | 0 | `\mathrm{I}` |
@@ -1135,13 +1085,9 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Mg` | 0 | `{\mathcal{M}_g}` |
 | `\mg` | 0 | `{ \mathcal{M}_{g} }` |
 | `\Mgbar` | 0 | `\bar{\Mg}` |
-| `\mgbar` | 0 | `\bar{\Mg}` |
 | `\Mgn` | 0 | `{ \mathcal{M}_{g, n} }` |
-| `\mgn` | 0 | `{ \mathcal{M}_{g, n} }` |
 | `\Mell` | 0 | `{ \mathcal{M}_{\mathrm{ell}} }` |
 | `\mH` | 0 | `{ \mathsf{H} }` |
-| `\ms` | 0 | `\xrightarrow{\sim}` |
-| `\mveq` | 0 | `{\mapsvia{\sim}}` |
 | `\mviso` | 0 | `{\mapsvia{\sim}}` |
 | `\OX` | 0 | `{\mathcal{O}_X}` |
 | `\Presh` | 0 | `\presh` |
@@ -1181,17 +1127,12 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\actsonl` | 0 | `\curvearrowleft` |
 | `\asymptotic` | 0 | `\ll` |
 | `\capprod` | 0 | `\frown` |
-| `\capp` | 0 | `\frown` |
-| `\cocovers` | 0 | `\leftleftarrows` |
-| `\containedin` | 0 | `\subseteq` |
-| `\contains` | 0 | `\supseteq` |
 | `\containing` | 0 | `\supseteq` |
 | `\convolve` | 0 | `\ast` |
 | `\coveredby` | 0 | `\leftleftarrows` |
 | `\covers` | 0 | `\rightrightarrows` |
 | `\covariant` | 0 | `\nabla` |
 | `\cupprod` | 0 | `\smile` |
-| `\cupp` | 0 | `\smile` |
 | `\dash` | 0 | `{\hbox{-}}` |
 | `\decreasesto` | 0 | `\searrow` |
 | `\disjoint` | 0 | `{\amalg}` |
@@ -1233,19 +1174,15 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\increasesto` | 0 | `\nearrow` |
 | `\injects` | 0 | `\hookrightarrow` |
 | `\injectivelim` | 0 | `\varinjlim` |
-| `\directlim` | 0 | `\varinjlim` |
-| `\cocolim` | 0 | `\varprojlim` |
 | `\colim` | 0 | `\operatorname*{colim}` |
 | `\injectsfrom` | 0 | `\hookleftarrow` |
 | `\injresolve` | 0 | `\leftleftarrows` |
 | `\intersect` | 0 | `\cap` |
 | `\into` | 0 | `\to` |
-| `\inverselim` | 0 | `\varprojlim` |
 | `\iscontainedin` | 0 | `\subseteq` |
 | `\isomorphic` | 0 | `{ \, \mapsvia{\sim}\, }` |
 | `\join` | 0 | `{ \ast }` |
 | `\laplacian` | 0 | `\Delta` |
-| `\Laplacian` | 0 | `\Delta` |
 | `\mapbackforth` | 0 | `\operatorname*{\rightleftharpoons}` |
 | `\mapstofrom` | 0 | `\rightleftharpoons` |
 | `\modmod` | 0 | `\gitquot` |
@@ -1262,43 +1199,21 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\projresolve` | 0 | `\rightrightarrows` |
 | `\proportional` | 0 | `\propto` |
 | `\qed` | 0 | `\hfill\ensuremath{\blacksquare}` |
-| `\rational` | 0 | `\torational` |
+| `\rational` | 0 | `\rationalmap` |
 | `\rationalmap` | 0 | `\dashrightarrow` |
 | `\semidirect` | 0 | `\rtimes` |
 | `\st` | 0 | `{~\mathrel{\Big\vert}~}` |
 | `\suchthat` | 0 | `\st` |
 | `\surjects` | 0 | `\twoheadrightarrow` |
 | `\too` | 0 | `\longrightarrow` |
-| `\torational` | 0 | `\dashrightarrow` |
 | `\transverse` | 0 | `\pitchfork` |
 | `\uniformlyconverges` | 0 | `\rightrightarrows` |
 | `\union` | 0 | `\cup` |
-| `\unioninfty` | 0 | `{\union\ts{\infty}}` |
+| `\unioninfty` | 0 | `{\union\theset{\infty}}` |
 | `\up` | 0 | `\uparrow` |
 | `\wait` | 0 | `{-}` |
 | `\wedgeprod` | 0 | `\vee` |
 | `\wreath` | 0 | `\wr` |
-| `\cB` | 0 | `{\mathcal{B}}` |
-| `\cC` | 0 | `{\mathcal{C}}` |
-| `\cD` | 0 | `{\mathcal{D}}` |
-| `\cE` | 0 | `{\mathcal{E}}` |
-| `\cH` | 0 | `{\mathcal{H}}` |
-| `\cI` | 0 | `{\mathcal{I}}` |
-| `\cJ` | 0 | `{\mathcal{J}}` |
-| `\cK` | 0 | `{\mathcal{K}}` |
-| `\cL` | 0 | `{\mathcal{L}}` |
-| `\cN` | 0 | `{\mathcal{N}}` |
-| `\cO` | 0 | `{\mathcal{O}}` |
-| `\cP` | 0 | `{\mathcal{P}}` |
-| `\cQ` | 0 | `{\mathcal{Q}}` |
-| `\cR` | 0 | `{\mathcal{R}}` |
-| `\cS` | 0 | `{\mathcal{S}}` |
-| `\cT` | 0 | `{\mathcal{T}}` |
-| `\cU` | 0 | `{\mathcal{U}}` |
-| `\cV` | 0 | `{\mathcal{V}}` |
-| `\cW` | 0 | `{\mathcal{W}}` |
-| `\cY` | 0 | `{\mathcal{Y}}` |
-| `\cZ` | 0 | `{\mathcal{Z}}` |
 | `\bA` | 0 | `{\mathbb{A}}` |
 | `\bB` | 0 | `{\mathbb{B}}` |
 | `\bC` | 0 | `{\mathbb{C}}` |
@@ -1325,32 +1240,28 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\bX` | 0 | `{\mathbb{X}}` |
 | `\bY` | 0 | `{\mathbb{Y}}` |
 | `\bZ` | 0 | `{\mathbb{Z}}` |
-| `\fA` | 0 | `{\mathfrak{A}}` |
-| `\fB` | 0 | `{\mathfrak{B}}` |
-| `\fC` | 0 | `{\mathfrak{C}}` |
-| `\fD` | 0 | `{\mathfrak{D}}` |
-| `\fE` | 0 | `{\mathfrak{E}}` |
-| `\fF` | 0 | `{\mathfrak{F}}` |
-| `\fG` | 0 | `{\mathfrak{G}}` |
-| `\fH` | 0 | `{\mathfrak{H}}` |
-| `\fI` | 0 | `{\mathfrak{I}}` |
-| `\fJ` | 0 | `{\mathfrak{J}}` |
-| `\fK` | 0 | `{\mathfrak{K}}` |
-| `\fL` | 0 | `{\mathfrak{L}}` |
-| `\fM` | 0 | `{\mathfrak{M}}` |
-| `\fN` | 0 | `{\mathfrak{N}}` |
-| `\fO` | 0 | `{\mathfrak{O}}` |
-| `\fP` | 0 | `{\mathfrak{P}}` |
-| `\fQ` | 0 | `{\mathfrak{Q}}` |
-| `\fR` | 0 | `{\mathfrak{R}}` |
-| `\fS` | 0 | `{\mathfrak{S}}` |
-| `\fT` | 0 | `{\mathfrak{T}}` |
-| `\fU` | 0 | `{\mathfrak{U}}` |
-| `\fV` | 0 | `{\mathfrak{V}}` |
-| `\fW` | 0 | `{\mathfrak{W}}` |
-| `\fX` | 0 | `{\mathfrak{X}}` |
-| `\fY` | 0 | `{\mathfrak{Y}}` |
-| `\fZ` | 0 | `{\mathfrak{Z}}` |
+| `\mfA` | 0 | `{\mathfrak{A}}` |
+| `\mfB` | 0 | `{\mathfrak{B}}` |
+| `\mfD` | 0 | `{\mathfrak{D}}` |
+| `\mfE` | 0 | `{\mathfrak{E}}` |
+| `\mfG` | 0 | `{\mathfrak{G}}` |
+| `\mfH` | 0 | `{\mathfrak{H}}` |
+| `\mfI` | 0 | `{\mathfrak{I}}` |
+| `\mfJ` | 0 | `{\mathfrak{J}}` |
+| `\mfK` | 0 | `{\mathfrak{K}}` |
+| `\mfL` | 0 | `{\mathfrak{L}}` |
+| `\mfM` | 0 | `{\mathfrak{M}}` |
+| `\mfN` | 0 | `{\mathfrak{N}}` |
+| `\mfO` | 0 | `{\mathfrak{O}}` |
+| `\mfP` | 0 | `{\mathfrak{P}}` |
+| `\mfQ` | 0 | `{\mathfrak{Q}}` |
+| `\mfR` | 0 | `{\mathfrak{R}}` |
+| `\mfT` | 0 | `{\mathfrak{T}}` |
+| `\mfU` | 0 | `{\mathfrak{U}}` |
+| `\mfV` | 0 | `{\mathfrak{V}}` |
+| `\mfW` | 0 | `{\mathfrak{W}}` |
+| `\mfY` | 0 | `{\mathfrak{Y}}` |
+| `\mfZ` | 0 | `{\mathfrak{Z}}` |
 | `\hA` | 0 | `{\widehat{A}}` |
 | `\hB` | 0 | `{\widehat{B}}` |
 | `\hC` | 0 | `{\widehat{C}}` |
@@ -1467,14 +1378,11 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\liasminus` | 0 | `\lias^-` |
 | `\rhok` | 0 | `\rho_{\mathrm{K3}}` |
 | `\rhoias` | 0 | `\rho_{\mathrm{IAS}}` |
-| `\uslc` | 0 | `^{\mathrm{KSBA}}` |
 | `\utor` | 0 | `^{\mathrm{tor}}` |
-| `\di` | 0 | `\operatorname{div}` |
 | `\dnor` | 0 | `_{\mathrm{nor}}` |
 | `\fco` | 0 | `F_{\Co}` |
 | `\fell` | 0 | `F_{ \mathrm{ell} }` |
 | `\fen` | 0 | `F_{\En}` |
-| `\fent` | 0 | `F_{\En, 2}` |
 | `\fentwo` | 0 | `F_{\En,2}` |
 | `\ftd` | 0 | `F_{2d}` |
 | `\fttz` | 0 | `F_{(2,2,0)}` |
@@ -1511,9 +1419,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Projm` | 0 | `\operatorname{Projm}` |
 | `\Specm` | 0 | `\operatorname{Specm}` |
 | `\Ver` | 0 | `\operatorname{Ver}` |
-| `\Vol` | 0 | `\operatorname{Vol}` |
 | `\isoto` | 0 | `\xrightarrow{\sim}` |
-| `\acts` | 0 | `\curvearrowright` |
 | `\wh` | 0 | `\widehat` |
 | `\la` | 0 | `\langle` |
 | `\ra` | 0 | `\rangle` |
@@ -1525,13 +1431,12 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\ubb` | 0 | `^{\rm BB}` |
 | `\dto` | 0 | `\Rightarrow` |
 | `\fign` | 0 | `Fig.~\ref{fig:discforms}` |
-| `\fignb` | 0 | `Fig.~\ref{fig:discforms}` |
 | `\hoV` | 0 | `\widehat{\overline V}` |
 | `\hoD` | 0 | `\widehat{\overline D}` |
 | `\ooT` | 0 | `\overline{\overline T}` |
 | `\ias` | 0 | `\operatorname{IAS}^2` |
 | `\lge` | 0 | `_{\ge0}` |
-| `\ocC` | 0 | `\overline{\cC}` |
+| `\ocC` | 0 | `\overline{\mcc}` |
 | `\lred` | 0 | `_{\rm red}` |
 | `\mr` | 0 | `\bar r` |
 | `\ma` | 0 | `\bar a` |
@@ -1539,7 +1444,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\mk` | 0 | `\bar k` |
 | `\me` | 0 | `\hat e` |
 | `\miota` | 0 | `\hat \iota` |
-| `\hiota` | 0 | `\hat \iota` |
 | `\oPic` | 0 | `\overline{\Pic}` |
 | `\ucox` | 0 | `^{\rm cox}` |
 | `\lir` | 0 | `_{\rm ir}` |
@@ -1556,13 +1460,13 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\virr` | 0 | `V\dirr` |
 | `\wref` | 0 | `W\dref` |
 | `\chref` | 0 | `\ch\dref` |
-| `\fref` | 0 | `\fF\dref` |
-| `\fram` | 0 | `\fF\dram` |
+| `\fref` | 0 | `\mfF\dref` |
+| `\fram` | 0 | `\mfF\dram` |
 | `\relpart` | 0 | `\operatorname{rel}` |
 | `\irrpart` | 0 | `\operatorname{irr}` |
-| `\fcref` | 0 | `\fC\dref` |
-| `\fgen` | 0 | `\fF_{\rm gen}` |
-| `\fsfref` | 0 | `\fF_S^{\fref}` |
+| `\fcref` | 0 | `\mfC\dref` |
+| `\fgen` | 0 | `\mfF_{\rm gen}` |
+| `\fsfref` | 0 | `\mfF_S^{\fref}` |
 | `\ofsfref` | 0 | `\oF_S^{\fref}` |
 | `\upar` | 0 | `^{\rm par}` |
 | `\dleft` | 0 | `{}_{\rm left}` |
@@ -1581,7 +1485,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\OStab` | 0 | `\Orth^*` |
 | `\ZZtwoadic` | 0 | `\ZZ_{\hat 2}` |
 | `\cox` | 0 | `\Cox` |
-| `\genop` | 0 | `\mathrm{gen}` |
 | `\irrelevant` | 0 | `\mathrm{irr}` |
 | `\relevant` | 0 | `\mathrm{rel}` |
 | `\rcop` | 0 | `\mathrm{rc}` |
@@ -1590,7 +1493,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\liev` | 0 | `\mathfrak{v}` |
 | `\tiling` | 0 | `\mathcal{T}` |
 | `\weylgroup` | 0 | `\mathcal{W}` |
-| `\mcH` | 0 | `\mathcal{H}` |
 | `\diverge` | 0 | `\uparrow` |
 | `\uksba` | 0 | `^{\mathrm{KSBA}}` |
 | `\uktriv` | 0 | `^{K\text{-}\mathrm{triv}}` |
@@ -1617,11 +1519,10 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\adjoin` | 1 | `{ \left[ \scriptstyle {#1} \right] }` |
 | `\polynomialring` | 1 | `{ \left[ {#1} \right] }` |
 | `\bracket` | 1 | `\left\langle #1 \right\rangle` |
-| `\gens` | 1 | `\left\langle{#1}\right\rangle` |
 | `\generators` | 1 | `\left\langle{#1}\right\rangle` |
 | `\sqgens` | 1 | `\left[ {#1} \right]` |
 | `\freeon` | 1 | `\left[ {#1} \right]` |
-| `\dgens` | 1 | `\gens{\gens{ #1 }}` |
+| `\dgens` | 1 | `\generators{\generators{ #1 }}` |
 | `\ceiling` | 1 | `{\left\lceil #1 \right\rceil}` |
 | `\floor` | 1 | `{\left\lfloor #1 \right\rfloor}` |
 | `\bicomplex` | 1 | `{ {#1}_{\scriptscriptstyle \bullet, \bullet}}` |
@@ -1630,27 +1531,21 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\complex` | 1 | `{ {#1}_{\scriptscriptstyle \bullet}}` |
 | `\decfiltration` | 1 | `{#1}_{\bullet}` |
 | `\incfiltration` | 1 | `{#1}^{\bullet}` |
-| `\conj` | 1 | `{\overline{{#1}}}` |
 | `\ctz` | 1 | `\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \,` |
 | `\fps` | 1 | `{\llbracket #1 \rrbracket }` |
 | `\formalpowerseries` | 1 | `\fps{#1}` |
-| `\formalseries` | 1 | `\fps{#1}` |
 | `\functionfield` | 1 | `{ \left( {#1} \right) }` |
-| `\powerseries` | 1 | `\fps{#1}` |
 | `\rff` | 1 | `\functionfield{#1}` |
 | `\htyclass` | 1 | `{ \left[ {#1} \right] }` |
 | `\ideal` | 1 | `\mathcal{#1}` |
 | `\inner` | 2 | `{\left\langle {#1},~{#2} \right\rangle}` |
-| `\inp` | 2 | `{\left\langle {#1},~{#2} \right\rangle}` |
 | `\invert` | 1 | `{ \left[ { \scriptstyle \frac{1}{#1} } \right] }` |
 | `\localize` | 1 | `\left[ { \scriptstyle \inverseof{#1} } \right]` |
 | `\plocalize` | 1 | `\primelocalize{#1}` |
 | `\primelocalize` | 1 | `\left[ { \scriptstyle \inverseof{({#1}^c)} } \right]` |
 | `\fls` | 1 | `(\hspace{-0.25em}( #1 )\hspace{-0.22em})` |
-| `\laurent` | 1 | `\fls{#1}` |
 | `\laurentseries` | 1 | `\fls{#1}` |
 | `\embedsvia` | 1 | `\xhookrightarrow{#1}` |
-| `\fromvia` | 1 | `\xleftarrow{#1}` |
 | `\open` | 1 | `\overset{\circ}{#1}` |
 | `\poisbrack` | 2 | `{\left\{ {#1},~{#2} \right\} }` |
 | `\dcoset` | 3 | `{#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}\mkern-3mu\diagup\mkern-3mu{#3}` |
@@ -1670,14 +1565,13 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\kv` | 0 | `{ k_{\hat{v}} }` |
 | `\Lv` | 0 | `{ L_{\hat{v}} }` |
 | `\coslice` | 1 | `_{{#1/}}` |
-| `\liesabove` | 1 | `{ {}_{/ {#1}} }` |
 | `\liesover` | 1 | `{ {}_{/ {#1}} }` |
 | `\slice` | 1 | `_{/ {#1}}` |
 | `\symb` | 2 | `{ \qty{ #1 \over #2 } }` |
 | `\tl` | 2 | `{ #1_1, \cdots, #1_{#2} }` |
-| `\tlset` | 2 | `\ts{ {#1}_{1}, \cdots, {#1}_{#2} }` |
+| `\tlset` | 2 | `\theset{ {#1}_{1}, \cdots, {#1}_{#2} }` |
 | `\tlz` | 2 | `{ #1_0, \cdots, #1_{#2} }` |
-| `\tsl` | 3 | `\ts{ {#1}_{#2}, \cdots, {#1}_{#3} }` |
+| `\tsl` | 3 | `\theset{ {#1}_{#2}, \cdots, {#1}_{#3} }` |
 | `\fourier` | 1 | `\widehat{#1}` |
 | `\cartpower` | 1 | `{ {}^{ \scriptscriptstyle\times^{#1} } }` |
 | `\disjointpower` | 2 | `{#1}^{\scriptscriptstyle\coprod^{#2}}` |
@@ -1694,7 +1588,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\wedgepower` | 2 | `{#1}^{\scriptscriptstyle\smashprod^{#2}}` |
 | `\twistleft` | 2 | `{ {}^{#1} #2 }` |
 | `\twistright` | 2 | `{ #2 {}^{#1} }` |
-| `\Globsec` | 1 | `{\Gamma\qty{#1} }` |
 | `\globsec` | 1 | `{\Gamma\qty{#1} }` |
 | `\addbase` | 1 | `{ {}_{pt} }` |
 | `\catspan` | 3 | `\roof{#1}{#2}{#3}` |
@@ -1733,16 +1626,14 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\congas` | 1 | `\underset{#1}{\cong}` |
 | `\congbecause` | 1 | `\overset{#1}{\cong}` |
 | `\equalsbecause` | 1 | `\overset{#1}{=}` |
-| `\isoas` | 1 | `\underset{#1}{\cong}` |
 | `\pwiso` | 0 | `\underset{\mathrm{pw}}{\cong}` |
 | `\lshriek` | 0 | `{}_{!}` |
 | `\pushf` | 0 | `{}^{*}` |
 | `\cofinal` | 0 | `\mathsf{\emptyset}` |
-| `\final` | 0 | `\ts{\pt}` |
+| `\final` | 0 | `\theset{\pt}` |
 | `\freezmod` | 1 | `\ZZ\left[ {#1} \right]` |
 | `\conjugate` | 1 | `{\overline{{#1}}}` |
 | `\closure` | 1 | `\overline{#1}` |
-| `\ol` | 1 | `\overline{#1}` |
 | `\univcover` | 1 | `\overline{#1}` |
 | `\bar` | 1 | `\overline{#1}` |
 | `\hat` | 1 | `\widehat{#1}` |
@@ -1758,15 +1649,11 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\dd` | 2 | `{\frac{\partial #1}{\partial #2}\,}` |
 | `\evalfrom` | 0 | `\Big\|` |
 | `\restrictionof` | 2 | `{\left.{{#1}} \right\|_{{#2}} }` |
-| `\ro` | 2 | `{ \left.{{#1}} \right\|_{{#2}} }` |
-| `\ip` | 2 | `{\left\langle {#1},~{#2} \right\rangle}` |
 | `\ddt` | 0 | `\tfrac{\dif}{\dif t}` |
 | `\ddx` | 0 | `\tfrac{\dif}{\dif x}` |
 | `\logd` | 0 | `{ \del^{\scriptsize \log} }` |
 | `\theset` | 1 | `\left\{{#1}\right\}` |
 | `\thevector` | 1 | `{\left[ {#1} \right]}` |
-| `\ts` | 1 | `\left\{{#1}\right\}` |
-| `\tv` | 1 | `{\left[ {#1} \right]}` |
 | `\mltext` | 1 | `\left\{\begin{array}{c}#1\end{array}\right\}` |
 | `\Suchthat` | 0 | `\middle\vert` |
 | `\multinomial` | 1 | `\left(\!\!{#1}\!\!\right)` |
@@ -1778,7 +1665,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\stirling` | 2 | `\genfrac\{\}{0pt}{}{#1}{#2}` |
 | `\thecat` | 1 | `\mathbf{#1}` |
 | `\constantsheaf` | 1 | `\underline{#1}` |
-| `\ul` | 1 | `\underline{#1}` |
 | `\vecc` | 2 | `\textcolor{#1}{\textbf{#2}}` |
 | `\places` | 1 | `\mathrm{Pl}\qty{#1}` |
 | `\ZZlocal` | 1 | `{ \ZZ_{\hat{#1}} }` |
@@ -1793,7 +1679,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\qsymb` | 2 | `{ \left( {#1} \over {#2} \right) }` |
 | `\kx` | 1 | `k[x_1, \cdots, x_{#1}]` |
 | `\lktt` | 1 | `{L_{\mathrm{K3}, #1}}` |
-| `\fractional` | 1 | `\theset{#1}` |
 | `\fractionalpart` | 1 | `\theset{#1}` |
 | `\integerpart` | 1 | `\left[ {#1}\right]` |
 | `\zadjoin` | 1 | `\ZZ\left[ {#1} \right]` |
@@ -1801,15 +1686,13 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\mapsvia` | 1 | `\xrightarrow{#1}` |
 | `\mapsfromvia` | 1 | `\xleftarrow{#1}` |
 | `\mapstovia` | 1 | `\xmapsto{#1}` |
-| `\tovia` | 1 | `\xrightarrow{#1}` |
-| `\birational` | 0 | `\overset{\sim}{\torational}` |
-| `\birationaliso` | 0 | `\overset{\sim}{\torational}` |
-| `\sbirational` | 0 | `\overset{\sim_{ \stab} }{\torational}` |
+| `\birationaliso` | 0 | `\overset{\sim}{\rationalmap}` |
+| `\sbirational` | 0 | `\overset{\sim_{ \Stab} }{\rationalmap}` |
 | `\isovia` | 1 | `\underset{#1}{\iso}` |
 | `\isoin` | 1 | `\overset{#1}{\iso}` |
 | `\injectsvia` | 1 | `\xhookrightarrow{#1}` |
 | `\injectsfromvia` | 1 | `\xhookleftarrow{#1}` |
-| `\relspec` | 0 | `\ul{ \operatorname{Spec}}` |
+| `\relspec` | 0 | `\underline{ \operatorname{Spec}}` |
 | `\nerve` | 1 | `{ \mathcal{N}({#1}) }` |
 | `\realize` | 1 | `{ \abs{#1} }` |
 | `\opcat` | 1 | `{ {#1}^{\operatorname{op}} }` |
@@ -1944,13 +1827,9 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | Macro | Args | Expansion |
 | --- | --- | --- |
 | `\Sets` | 0 | `{\mathsf{Set}}` |
-| `\Set` | 0 | `{\mathsf{Set}}` |
-| `\sets` | 0 | `{\mathsf{Set}}` |
-| `\set` | 0 | `{\mathsf{Set}}` |
 | `\Poset` | 0 | `\mathsf{Poset}` |
 | `\Groups` | 0 | `{\mathsf{Group}}` |
 | `\Grp` | 0 | `{\mathsf{Grp}}` |
-| `\cC` | 0 | `{\mathsf{C}}` |
 | `\Ar` | 0 | `{\mathsf{Ar}}` |
 | `\Mot` | 0 | `{\mathsf{Mot}}` |
 | `\SW` | 0 | `{\mathsf{SW}}` |
@@ -1969,7 +1848,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Ch` | 0 | `\mathsf{Ch}` |
 | `\Coh` | 0 | `{\mathsf{Coh}}` |
 | `\Comm` | 0 | `\mathsf{Comm}` |
-| `\Cor` | 0 | `\mathsf{Cor}` |
 | `\Corr` | 0 | `\mathsf{Cor}` |
 | `\Fin` | 0 | `{\mathsf{Fin}}` |
 | `\Free` | 0 | `\mathsf{Free}` |
@@ -1981,7 +1859,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Db` | 0 | `\mathsf{D}^b` |
 | `\db` | 0 | `\Db` |
 | `\Const` | 0 | `\mathsf{Const}` |
-| `\Cx` | 0 | `\mathsf{Ch}` |
 | `\Stable` | 0 | `\mathsf{Stab}` |
 | `\Vect` | 0 | `{ \mathsf{Vect}}` |
 | `\kvect` | 0 | `{ \mathsf{Vect}\slice{k}}` |
@@ -1998,7 +1875,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Art` | 0 | `\mathsf{Art}` |
 | `\Global` | 0 | `\mathsf{Global}` |
 | `\Ring` | 0 | `\mathsf{Ring}` |
-| `\Mon` | 0 | `\mathsf{Mon}` |
 | `\CMon` | 0 | `\mathsf{CMon}` |
 | `\CRing` | 0 | `\mathsf{CRing}` |
 | `\DedekindDomain` | 0 | `\mathsf{DedekindDom}` |
@@ -2064,7 +1940,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Algebroid` | 0 | `{\mathsf{Algd}}` |
 | `\Loc` | 0 | `\mathsf{Loc}` |
 | `\Locsys` | 0 | `\mathsf{LocSys}` |
-| `\Ringedspace` | 0 | `\mathsf{RingSp}` |
 | `\RingedSpace` | 0 | `\mathsf{RingSp}` |
 | `\LRS` | 0 | `\Loc\RingedSpace` |
 | `\IndCoh` | 0 | `{\mathsf{IndCoh}}` |
@@ -2074,12 +1949,10 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\dcoh` | 0 | `\DCoh` |
 | `\QCoh` | 0 | `{\mathsf{QCoh}}` |
 | `\qcoh` | 0 | `\QCoh` |
-| `\Ind` | 0 | `{\mathsf{Ind}}` |
-| `\ind` | 0 | `\Ind` |
+| `\ind` | 0 | `\Indcat` |
 | `\Pro` | 0 | `\mathsf{pro}` |
 | `\pro` | 0 | `\Pro` |
 | `\Cov` | 0 | `{\mathsf{Cov}}` |
-| `\sch` | 0 | `{\mathsf{Sch}}` |
 | `\presh` | 0 | `\underset{ \mathsf{pre}} {\mathsf{Sh}}` |
 | `\prest` | 0 | `{\underset{ \mathsf{pre}} {\mathsf{St}} }` |
 | `\Descent` | 0 | `{\mathsf{Descent}}` |
@@ -2090,15 +1963,11 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Sch` | 0 | `{\mathsf{Sch}}` |
 | `\Schf` | 0 | `{\mathsf{Schf}}` |
 | `\Sh` | 0 | `{\mathsf{Sh}}` |
-| `\St` | 0 | `{\mathsf{St}}` |
 | `\Stacks` | 0 | `{\mathsf{St}}` |
 | `\Var` | 0 | `{\mathsf{Var}}` |
 | `\Vark` | 0 | `{ \Var_{/k}}` |
-| `\kvar` | 0 | `{ \Var_{/k}}` |
 | `\Open` | 0 | `{\mathsf{Open}}` |
 | `\CW` | 0 | `{\mathsf{CW}}` |
-| `\sset` | 0 | `{\mathsf{sSet}}` |
-| `\sSet` | 0 | `{\mathsf{sSet}}` |
 | `\ssets` | 0 | `\mathsf{sSet}` |
 | `\hoTop` | 0 | `{\mathsf{hoTop}}` |
 | `\hoType` | 0 | `{\mathsf{hoType}}` |
@@ -2158,7 +2027,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\torsors` | 1 | `{\mathsf{#1}\dash\mathsf{Torsors}}` |
 | `\torsorsright` | 1 | `\mathsf{Torsors}\dash\mathsf{#1}` |
 | `\torsorsleft` | 1 | `\mathsf{#1}\dash\mathsf{Torsors}` |
-| `\bimod` | 2 | `({#1}, {#2})\dash\mathsf{biMod}` |
 | `\bimods` | 2 | `({#1}, {#2})\dash\mathsf{biMod}` |
 | `\modsleft` | 1 | `{}_{#1}\Mod` |
 | `\modsright` | 1 | `\Mod_{#1}` |
@@ -2166,8 +2034,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\stmods` | 1 | `{\mathsf{#1}\dash\mathsf{stMod}}` |
 | `\grmods` | 1 | `{\mathsf{#1}\dash\mathsf{grMod}}` |
 | `\comods` | 1 | `{\mathsf{#1}\dash\mathsf{coMod}}` |
-| `\gsetsleft` | 1 | `{}_{#1}\Set` |
-| `\gsetsright` | 1 | `\Set_{#1}` |
+| `\gsetsleft` | 1 | `{}_{#1}\Sets` |
+| `\gsetsright` | 1 | `\Sets_{#1}` |
 | `\gset` | 1 | `\gsetsleft{#1}` |
 | `\gsets` | 1 | `\gset{#1}` |
 | `\VectBundlerk` | 1 | `{ \Bun\qty{\GL_{#1}}}` |
@@ -2201,9 +2069,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\MO` | 0 | `{\operatorname{MO}}` |
 | `\MSO` | 0 | `{\operatorname{MSO}}` |
 | `\MSpin` | 0 | `{\operatorname{MSpin}}` |
-| `\MSp` | 0 | `{\operatorname{MSpin}}` |
 | `\MString` | 0 | `{\operatorname{MString}}` |
-| `\MStr` | 0 | `{\operatorname{MString}}` |
 | `\MU` | 0 | `{\operatorname{MU}}` |
 | `\KO` | 0 | `{\operatorname{KO}}` |
 | `\KU` | 0 | `{\operatorname{KU}}` |
@@ -2311,7 +2177,7 @@ No macro or environment definitions.
 | `\BBfan` | 0 | `\Sigma^{\BB}` |
 | `\DD` | 0 | `\mathbf{D}` |
 | `\Sch` | 0 | `\operatorname{Sch}` |
-| `\Set` | 0 | `\operatorname{\mathsf{Sets}}` |
+| `\Sets` | 0 | `\operatorname{\mathsf{Sets}}` |
 | `\Sp` | 0 | `\operatorname{Sp}` |
 | `\bbcpt` | 1 | `\cpt{#1}^{ \BB }` |
 | `\bd` | 0 | `\partial` |

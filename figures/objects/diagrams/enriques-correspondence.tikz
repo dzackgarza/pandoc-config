@@ -8,6 +8,6 @@
 % the notation of V2 and V3: enriques-correspondence-E.
 % Points: -diagram, the tikz-cd diagram.
 \node[inner sep=0pt] (-diagram) {\begin{tikzcd}[ampersand replacement=\&]
-  \& \fent \arrow[dl, swap, "\text{Finite}"] \arrow[dr, "\text{Finite-to-one}"] \\
+  \& \fentwo \arrow[dl, swap, "\text{Finite}"] \arrow[dr, "\text{Finite-to-one}"] \\
   \fen \&\& \fttz
 \end{tikzcd}};

@@ -25,11 +25,10 @@
 
 % Brackets and generators
 \newcommand{\bracket}[1]{ \left\langle #1 \right\rangle }
-\newcommand{\gens}[1]{\left\langle{#1}\right\rangle}
 \newcommand{\generators}[1]{\left\langle{#1}\right\rangle}
 \newcommand{\sqgens}[1]{\left[ {#1} \right]}
 \newcommand{\freeon}[1]{ \left[ {#1} \right]  }
-\newcommand{\dgens}[1]{\gens{\gens{ #1 }}}
+\newcommand{\dgens}[1]{\generators{\generators{ #1 }}}
 
 % Ceiling and floor
 \newcommand{\ceiling}[1]{{\left\lceil #1 \right\rceil}}
@@ -46,7 +45,6 @@
 \newcommand{\incfiltration}[1]{{#1}^{\bullet}}
 
 % Conjugation
-\newcommand{\conj}[1]{{\overline{{#1}}}}
 
 % Convergence
 \newcommand{\ctz}[1]{\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \, }
@@ -54,9 +52,7 @@
 % Function fields and formal series
 \newcommand{\fps}[1]{{\llbracket #1 \rrbracket  }}
 \newcommand{\formalpowerseries}[1]{ \fps{#1} }
-\newcommand{\formalseries}[1]{ \fps{#1} }
 \newcommand{\functionfield}[1]{ { \left( {#1} \right) } }
-\newcommand{\powerseries}[1]{ \fps{#1} }
 \newcommand{\rff}[1]{ \functionfield{#1} }
 
 % Homotopy classes
@@ -67,7 +63,6 @@
 
 % Inner products
 \newcommand{\inner}[2]{{\left\langle {#1},~{#2} \right\rangle}}
-\newcommand{\inp}[2]{{\left\langle {#1},~{#2} \right\rangle}}
 
 % Inversion and localization
 \newcommand{\invert}[1]{{ \left[ { \scriptstyle \frac{1}{#1} } \right] }}
@@ -77,12 +72,10 @@
 
 % Laurent series
 \newcommand\fls[1]{(\hspace{-0.25em}( #1 )\hspace{-0.22em}) }
-\newcommand\laurent[1]{\fls{#1}}
 \newcommand\laurentseries[1]{\fls{#1}}
 
 % Morphisms
 \newcommand{\embedsvia}[1]{\xhookrightarrow{#1}}
-\newcommand{\fromvia}[1]{\xleftarrow{#1}}
 
 % Open sets
 \newcommand{\open}[1]{\overset{\circ}{#1}}
@@ -127,7 +120,6 @@
 
 % Slices and fibers
 \newcommand{\coslice}[1]{_{{#1/}}}
-\newcommand{\liesabove}[1]{{ {}_{/ {#1}} }}
 \newcommand{\liesover}[1]{{ {}_{/ {#1}} }}
 \newcommand{\slice}[1]{_{/ {#1}}}
 
@@ -136,9 +128,9 @@
 
 % Tensor lists
 \newcommand\tl[2]{{ #1_1, \cdots, #1_{#2} }}
-\newcommand\tlset[2]{ \ts{ {#1}_{1}, \cdots, {#1}_{#2} } }
+\newcommand\tlset[2]{ \theset{ {#1}_{1}, \cdots, {#1}_{#2} } }
 \newcommand\tlz[2]{{ #1_0, \cdots, #1_{#2} }}
-\newcommand\tsl[3]{ \ts{ {#1}_{#2}, \cdots, {#1}_{#3} } }
+\newcommand\tsl[3]{ \theset{ {#1}_{#2}, \cdots, {#1}_{#3} } }
 
 % Transforms and powers
 \newcommand{\fourier}[1]{\widehat{#1}}
@@ -161,7 +153,6 @@
 \newcommand{\twistright}[2]{{ #2 {}^{#1} }}
 
 % Section and global sections
-\newcommand{\Globsec}[1]{{\Gamma\qty{#1} }}
 \newcommand{\globsec}[1]{{\Gamma\qty{#1} }}
 
 % Miscellaneous
@@ -208,7 +199,6 @@
 \newcommand{\congas}[1]{\underset{#1}{\cong}}
 \newcommand{\congbecause}[1]{\overset{#1}{\cong}}
 \newcommand{\equalsbecause}[1]{\overset{#1}{=}}
-\newcommand{\isoas}[1]{\underset{#1}{\cong}}
 \newcommand{\pwiso}{\underset{\mathrm{pw}}{\cong}}
 
 % Prefixes and suffixes
@@ -217,7 +207,7 @@
 
 % Terminal and initial objects
 \newcommand{\cofinal}{\mathsf{\emptyset} }
-\newcommand{\final}{\ts{\pt}}
+\newcommand{\final}{\theset{\pt}}
 
 % Ring freezing
 \newcommand{\freezmod}[1]{\ZZ\left[ {#1} \right] }
@@ -228,7 +218,6 @@
 % Conjugation and closures
 \newcommand{\conjugate}[1]{{\overline{{#1}}}}
 \newcommand{\closure}[1]{\overline{#1}}
-\newcommand{\ol}[1]{\overline{#1}}
 \newcommand{\univcover}[1]{\overline{#1}}
 \renewcommand{\bar}[1]{\overline{#1}}
 \renewcommand{\hat}[1]{\widehat{#1}}
@@ -256,10 +245,8 @@
 % Evaluation and restriction
 \newcommand{\evalfrom}{\Big|}
 \newcommand{\restrictionof}[2]{ {\left.{{#1}} \right|_{{#2}} }}
-\newcommand{\ro}[2]{{ \left.{{#1}} \right|_{{#2}} }}
 
 % Inner products and brackets
-\newcommand{\ip}[2]{{\left\langle {#1},~{#2} \right\rangle}}
 
 % Kernel symbols and spacing
 \newcommand{\ddt}{\tfrac{\dif}{\dif t}}
@@ -269,8 +256,6 @@
 % Lists and tuples
 \newcommand{\theset}[1]{\left\{{#1}\right\}}
 \newcommand{\thevector}[1]{{\left[ {#1} \right]}}
-\newcommand{\ts}[1]{\left\{{#1}\right\}}
-\newcommand{\tv}[1]{{\left[ {#1} \right]}}
 
 % Matrix and vector helpers
 \newcommand{\mltext}[1]{\left\{\begin{array}{c}#1\end{array}\right\}}
@@ -300,7 +285,6 @@
 % Category theory notations
 \newcommand{\thecat}[1]{\mathbf{#1}}
 \newcommand{\constantsheaf}[1]{\underline{#1}}
-\newcommand{\ul}[1]{\underline{#1}}
 
 % Colored text for vectors
 \newcommand{\vecc}[2]{\textcolor{#1}{\textbf{#2}}}
@@ -339,7 +323,6 @@
 \newcommand{\lktt}[1]{ {L_{\mathrm{K3}, #1}} }
 
 % Fractional ideals and parts
-\newcommand{\fractional}[1]{\theset{#1}}
 \newcommand{\fractionalpart}[1]{\theset{#1}}
 \newcommand{\integerpart}[1]{\left[ {#1}\right] }
 \newcommand{\zadjoin}[1]{\ZZ\left[ {#1} \right]}
@@ -349,12 +332,10 @@
 \newcommand{\mapsvia}[1]{\xrightarrow{#1}}
 \newcommand{\mapsfromvia}[1]{\xleftarrow{#1}}
 \newcommand{\mapstovia}[1]{\xmapsto{#1}}
-\newcommand{\tovia}[1]{\xrightarrow{#1}}
 
 % Birational and stable birational
-\newcommand{\birational}{\overset{\sim}{\torational}}
-\newcommand{\birationaliso}{\overset{\sim}{\torational}}
-\newcommand{\sbirational}{\overset{\sim_{ \stab} }{\torational}}
+\newcommand{\birationaliso}{\overset{\sim}{\rationalmap}}
+\newcommand{\sbirational}{\overset{\sim_{ \Stab} }{\rationalmap}}
 
 % Isomorphism with labels
 \newcommand{\isovia}[1]{\underset{#1}{\iso}}
@@ -365,7 +346,7 @@
 \newcommand{\injectsfromvia}[1]{\xhookleftarrow{#1}}
 
 % Relative spectrum
-\newcommand{\relspec}{\ul{ \operatorname{Spec}} }
+\newcommand{\relspec}{\underline{ \operatorname{Spec}} }
 
 % Nerves and realizations
 \newcommand{\nerve}[1]{{ \mathcal{N}({#1}) }}
@@ -473,4 +454,3 @@
 % ================================================================================
 
 % ----- Commands with Arguments -----
-\newcommand{\ov}[1][1]{\overline{#1}}

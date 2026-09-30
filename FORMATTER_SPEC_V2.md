@@ -170,7 +170,7 @@ Accepted and preserved from fixture:
 
 ```markdown
 \[  
-\mathcal{S}_{\leq 0} \da \ts{\text{Discrete spaces}}
+\mathcal{S}_{\leq 0} \definedas \theset{\text{Discrete spaces}}
 .\]
 ```
 
@@ -210,7 +210,7 @@ Fixture `001_noop_algebraic_spaces`:
 [[algebraic space|Algebraic spaces]], e.g. $\PP^n$.
 Think of these as [étale sheaves](étale sheaves) of sets (think functor of points), identified as discrete spaces:
 \[  
-\mathcal{S}_{\leq 0} \da \ts{\text{Discrete spaces}}
+\mathcal{S}_{\leq 0} \definedas \theset{\text{Discrete spaces}}
 .\]
 Every component is contractible, so there are no higher homotopy groups and we think of these as 0-truncated spaces.
 :::

@@ -128,6 +128,23 @@ When migrating or consolidating macros:
 Known inherited fragment-style APIs and their call-site migration status are tracked in
 `MACRO-SEMANTICS-AUDIT.md`. Read that ledger before changing an existing macro signature.
 
+## Macro Vocabulary: one name per meaning
+
+Each mathematical meaning has exactly one macro. Two names with one meaning are
+drift: keep the longer, more semantic name and delete the other. Mathcal letters
+are `\mc<letter>` and fraktur letters are `\mf<Letter>`.
+
+Short spellings belong to the editor, not to the macro set.
+`styles/shortcuts.json` maps each retired alias to its canonical name, for
+quicktex-style expansion and autocomplete. A new short form goes there, never
+into `styles/macros/`.
+
+Different meanings that share notation are intended. `\closure` and
+`\univcover` both render an overline, and `\discriminant` and `\laplacian`
+both render Δ: the macro records which object the author means. Semantic names
+also stay separate from typographic ones (`\lieg` versus `\mfg`, `\OO` versus
+`\mco`).
+
 ## Macro Tier System
 
 Macros in `styles/macros/` organized by MathJax compatibility:

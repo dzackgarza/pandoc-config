@@ -4,13 +4,9 @@
 
 % Basic Categories
 \newcommand{\Sets}{{\mathsf{Set}}}
-\newcommand{\Set}{{\mathsf{Set}}}
-\newcommand{\sets}{{\mathsf{Set}}}
-\newcommand{\set}{{\mathsf{Set}}}
 \newcommand{\Poset}{\mathsf{Poset}}
 \newcommand{\Groups}{{\mathsf{Group}}}
 \newcommand{\Grp}{{\mathsf{Grp}}}
-\providecommand{\cC}{{\mathsf{C}}}
 \newcommand{\Ar}{{\mathsf{Ar}}}
 \newcommand{\Mot}{{\mathsf{Mot}}}
 \newcommand{\SW}{{\mathsf{SW}}}
@@ -31,7 +27,6 @@
 \newcommand{\Ch}{\mathsf{Ch}}
 \newcommand{\Coh}{{\mathsf{Coh}}}
 \newcommand{\Comm}{\mathsf{Comm}}
-\newcommand{\Cor}{\mathsf{Cor}}
 \newcommand{\Corr}{\mathsf{Cor}}
 \newcommand{\Fin}{{\mathsf{Fin}}}
 \newcommand{\Free}{\mathsf{Free}}
@@ -43,7 +38,6 @@
 \newcommand{\Db}{ \mathsf{D}^b }
 \newcommand{\db}{\Db}
 \newcommand{\Const}{\mathsf{Const}}
-\newcommand{\Cx}{\mathsf{Ch}}
 \newcommand{\Stable}{\mathsf{Stab}}
 \newcommand{\Vect}{{ \mathsf{Vect}}}
 \newcommand{\kvect}{{ \mathsf{Vect}\slice{k}}}
@@ -62,7 +56,6 @@
 \newcommand{\Art}{\mathsf{Art}}
 \newcommand{\Global}{\mathsf{Global}}
 \newcommand{\Ring}{\mathsf{Ring}}
-\newcommand{\Mon}{\mathsf{Mon}}
 \newcommand{\CMon}{\mathsf{CMon}}
 \newcommand{\CRing}{\mathsf{CRing}}
 \newcommand{\DedekindDomain}{\mathsf{DedekindDom}}
@@ -136,7 +129,6 @@
 % Schemes and Sheaves
 \newcommand{\Loc}{\mathsf{Loc}}
 \newcommand{\Locsys}{\mathsf{LocSys}}
-\newcommand{\Ringedspace}{\mathsf{RingSp}}
 \newcommand{\RingedSpace}{\mathsf{RingSp}}
 \newcommand{\LRS}{\Loc\RingedSpace}
 \newcommand{\IndCoh}{{\mathsf{IndCoh}}}
@@ -146,12 +138,10 @@
 \newcommand{\dcoh}{\DCoh}
 \newcommand{\QCoh}{{\mathsf{QCoh}}}
 \newcommand{\qcoh}{\QCoh}
-\newcommand{\Ind}{{\mathsf{Ind}}}
-\newcommand{\ind}{\Ind}
+\newcommand{\ind}{\Indcat}
 \newcommand{\Pro}{\mathsf{pro}}
 \newcommand{\pro}{\Pro}
 \newcommand{\Cov}{{\mathsf{Cov}}}
-\newcommand{\sch}{{\mathsf{Sch}}}
 \newcommand{\presh}{ \underset{ \mathsf{pre}} {\mathsf{Sh}}}
 \newcommand{\prest}{ {\underset{ \mathsf{pre}} {\mathsf{St}} }}
 \newcommand{\Descent}{{\mathsf{Descent}}}
@@ -162,17 +152,13 @@
 \newcommand{\Sch}{{\mathsf{Sch}}}
 \newcommand{\Schf}{{\mathsf{Schf}}}
 \newcommand{\Sh}{{\mathsf{Sh}}}
-\newcommand{\St}{{\mathsf{St}}}
 \newcommand{\Stacks}{{\mathsf{St}}}
 \newcommand{\Var}{{\mathsf{Var}}}
 \newcommand{\Vark}{{ \Var_{/k}}}
-\newcommand{\kvar}{{ \Var_{/k}}}
 \newcommand{\Open}{{\mathsf{Open}}}
 
 % Homotopy
 \newcommand{\CW}{{\mathsf{CW}}}
-\newcommand{\sset}{{\mathsf{sSet}}}
-\newcommand{\sSet}{{\mathsf{sSet}}}
 \newcommand{\ssets}{\mathsf{sSet}}
 \newcommand{\hoTop}{{\mathsf{hoTop}}}
 \newcommand{\hoType}{{\mathsf{hoType}}}
@@ -249,7 +235,6 @@
 \newcommand{\torsors}[1]{{\mathsf{#1}\dash\mathsf{Torsors}}}
 \newcommand{\torsorsright}[1]{\mathsf{Torsors}\dash\mathsf{#1}}
 \newcommand{\torsorsleft}[1]{\mathsf{#1}\dash\mathsf{Torsors}}
-\newcommand{\bimod}[2]{({#1}, {#2})\dash\mathsf{biMod}}
 \newcommand{\bimods}[2]{({#1}, {#2})\dash\mathsf{biMod}}
 
 % Modules
@@ -261,8 +246,8 @@
 \newcommand{\comods}[1]{{\mathsf{#1}\dash\mathsf{coMod}}}
 
 % G-sets
-\newcommand{\gsetsleft}[1]{ {}_{#1}\Set}
-\newcommand{\gsetsright}[1]{ \Set_{#1}}
+\newcommand{\gsetsleft}[1]{ {}_{#1}\Sets}
+\newcommand{\gsetsright}[1]{ \Sets_{#1}}
 \newcommand{\gset}[1]{\gsetsleft{#1}}
 \newcommand{\gsets}[1]{\gset{#1}}
 

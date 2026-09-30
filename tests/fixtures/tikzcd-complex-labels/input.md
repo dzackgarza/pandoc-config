@@ -6,7 +6,7 @@ Complex commutative diagram with math in labels:
     \ar[r, "F"]
 & \mathcal{C}
 \\
-  \Ind(\mathrm{CAlg}_k^{\text{poly}})
+  \Indcat(\mathrm{CAlg}_k^{\text{poly}})
     \ar[d, hook, "\text{Constant diagrams}"']
     \ar[ur, "\exists \tilde F"']
 &

@@ -3,7 +3,7 @@
   \coordinate (0) at (0, -5.2);
   \draw[ias boundary] (-4, 3.2) ellipse (4 and 0.9);
   \draw[ias boundary] (-4, 3.2) -- (0) -- (4, 3.2);
-  \node[right] at (4.2, 2.8) {$\cC$};
+  \node[right] at (4.2, 2.8) {$\mcc$};
 
   % A fundamental chamber P, the cone over it, and several reflected images.
   \foreach \x in {-3.8, -2.2, -0.2, 2.7, 3.9}

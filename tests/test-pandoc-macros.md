@@ -9,7 +9,7 @@ date: \today
 
 Basic number systems work: $\ZZ, \QQ, \RR, \CC, \FF, \HH, \NN$.
 
-Field extensions: $\FFp, \FFpn, \Fp, \Fpn, \QQbar, \ZZpadic$.
+Field extensions: $\FFp, \FFpn, \QQbar, \ZZpadic$.
 
 ## Calligraphic Letters
 
@@ -17,7 +17,7 @@ Categories: $\mca, \mcb, \mcc, \mcd, \mce$ and $\mcTop, \Path$.
 
 ## Operators
 
-Functors: $\Hom, \Aut, \End, \Ext, \Tor$.
+Functors: $\Hom, \Aut, \Endo, \Ext, \Tor$.
 
 Geometry: $\Pic, \Spec, \Proj, \Div$.
 
@@ -29,7 +29,7 @@ Galois theory: $\Gal, \Frob$.
 
 Absolute value: $\abs{x}$, norm: $\norm{v}$, inner product: $\inner{u}{v}$.
 
-Generators: $\gens{a, b, c}$, brackets: $\bracket{x, y}$.
+Generators: $\generators{a, b, c}$, brackets: $\bracket{x, y}$.
 
 Floor and ceiling: $\floor{3.7} = 3$, $\ceiling{3.2} = 4$.
 
@@ -41,7 +41,7 @@ Quotients: $\quotright{G}{H}$, localizations: $\localize{S}$.
 
 ## Function Fields
 
-Rational function field: $\functionfield{x}$, Laurent series: $\laurent{t}$.
+Rational function field: $\functionfield{x}$, Laurent series: $\laurentseries{t}$.
 
 ## Complexes
 
@@ -53,9 +53,9 @@ Bicomplex: $\bicomplex{K}$.
 
 ## Basic Categories
 
-Categories: $\Set, \Grp, \Ring, \Mod, \Top, \Vect$.
+Categories: $\Sets, \Grp, \Ring, \Mod, \Top, \Vect$.
 
-Functors: $\Hom_{\mcc}(X, Y)$, $\Aut(G)$, $\End(V)$.
+Functors: $\Hom_{\mcc}(X, Y)$, $\Aut(G)$, $\Endo(V)$.
 
 ## Limits and Colimits
 
@@ -136,11 +136,11 @@ We have the following situation:
 \begin{tikzcd} \left[0\right] \ar[r, shift right=2.0ex] \ar[r] \ar[r, shift left=2.0ex]
 & \left[1\right] \ar[l] \ar[r, shift right=2.0ex] \ar[r] \ar[r, shift left=2.0ex] &
 \left[2\right] \ar[l, shift right=1.00ex] \ar[l, shift left=1.00ex] & \cdots \\
-\ts{0} & \ts{0\to 1} & \ts{0\to 1\to 2} & \cdots \end{tikzcd}
+\theset{0} & \theset{0\to 1} & \theset{0\to 1\to 2} & \cdots \end{tikzcd}
 
 The arrows going up are **face maps** (or **coface maps**), and the others are
 **degeneracy** maps.
-If $\mathcal{C}$ is a category, then $s\mathcal{C} \da \Fun(\opcat{\Delta}, \mathcal{C})$ is
+If $\mathcal{C}$ is a category, then $s\mathcal{C} \definedas \Fun(\opcat{\Delta}, \mathcal{C})$ is
 the category of simplicial objects of $\mathcal{C}$. :::
 
 # Conclusion

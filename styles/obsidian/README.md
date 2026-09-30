@@ -27,14 +27,14 @@ Create a test note with:
 
 **Tier 1 macros (simple shortcuts):**
 - Number systems: $\ZZ, \QQ, \RR, \CC$
-- Calligraphic: $\cA, \cB, \cC$
+- Calligraphic: $\mca, \mcb, \mcc$
 
 **Tier 2 and domain macros:**
-- Generators: $\gens{a, b, c}$
+- Generators: $\generators{a, b, c}$
 - Absolute value: $\abs{x}$
 - Norm: $\norm{v}$
 - Inner product: $\inner{u}{v}$
-- Categories: $\Set, \calg, \modsleft{R}$
+- Categories: $\Sets, \calg, \modsleft{R}$
 - Spectra: $\tmf, \MO, \KU$
 ```
 
@@ -44,13 +44,13 @@ All macros should render correctly.
 
 ### Tier 1 (Simple, no arguments)
 - Number systems: `\ZZ`, `\QQ`, `\RR`, `\CC`, `\FF`, `\PP`, etc.
-- Categories: `\Set`, `\Grp`, `\Ring`, `\Mod`, etc.
-- Operators: `\Hom`, `\Aut`, `\End`, `\Ext`, `\Tor`, etc.
+- Categories: `\Sets`, `\Grp`, `\Ring`, `\Mod`, etc.
+- Operators: `\Hom`, `\Aut`, `\Endo`, `\Ext`, `\Tor`, etc.
 
 See `styles/macros/tier1-mathjax-simple.tex` for full list.
 
 ### Tier 2 (With arguments, MathJax-safe)
-- Delimiters: `\abs{x}`, `\norm{v}`, `\gens{a,b}`, `\bracket{x}`
+- Delimiters: `\abs{x}`, `\norm{v}`, `\generators{a,b}`, `\bracket{x}`
 - Brackets: `\ceiling{x}`, `\floor{x}`
 - Inner products: `\inner{u}{v}`
 - Complexes: `\complex{C}`, `\cocomplex{C}`
@@ -59,7 +59,7 @@ See `styles/macros/tier1-mathjax-simple.tex` for full list.
 See `styles/macros/tier2-mathjax-args.tex` for full list.
 
 ### Domain Sources
-- Category theory: `\Set`, `\calg`, `\modsleft{R}`, `\gset{G}`
+- Category theory: `\Sets`, `\calg`, `\modsleft{R}`, `\gset{G}`
 - Spectral sequences and spectra: `\tmf`, `\MO`, `\KU`, `\Suspendpinf`
 
 See `styles/macros/categories.tex` and `styles/macros/spectral.tex` for full lists.
