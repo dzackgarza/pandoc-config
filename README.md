@@ -1477,12 +1477,11 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\fent` | 0 | `F_{\En, 2}` |
 | `\fentwo` | 0 | `F_{\En,2}` |
 | `\ftd` | 0 | `F_{2d}` |
-| `\fken` | 0 | `F_{(2,2,0)}` |
 | `\fttz` | 0 | `F_{(2,2,0)}` |
 | `\ofco` | 0 | `\overline{F}_{\Co}` |
 | `\ofen` | 0 | `\overline{F}_{\En}` |
 | `\ofentwo` | 0 | `\overline{F}_{\En,2}` |
-| `\ofken` | 0 | `\overline{F}_{(2,2,0)}` |
+| `\ofttz` | 0 | `\overline{F}_{(2,2,0)}` |
 | `\ten` | 0 | `T_{\En}` |
 | `\tdp` | 0 | `T_{\dP}` |
 | `\sdp` | 0 | `S_{\dP}` |
