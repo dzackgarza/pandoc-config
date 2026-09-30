@@ -924,7 +924,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\nil` | 0 | `{\operatorname{nil}}` |
 | `\Norm` | 0 | `\operatorname{Nm}` |
 | `\NS` | 0 | `{\operatorname{NS}}` |
-| `\nullity` | 0 | `\operatorname{nullspace}` |
+| `\nullity` | 0 | `\operatorname{nullity}` |
 | `\nullspace` | 0 | `\operatorname{nullspace}` |
 | `\Num` | 0 | `\operatorname{Num}` |
 | `\Ob` | 0 | `{\operatorname{Ob}}` |
@@ -956,7 +956,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Prin` | 0 | `\operatorname{Prin}` |
 | `\proj` | 0 | `\operatorname{proj}` |
 | `\Proj` | 0 | `\operatorname{Proj}` |
-| `\projection` | 0 | `\operatorname{Proj}` |
+| `\projection` | 0 | `\operatorname{proj}` |
 | `\PSL` | 0 | `{\operatorname{PSL}}` |
 | `\PSU` | 0 | `{\operatorname{PSU}}` |
 | `\pt` | 0 | `{\operatorname{pt}}` |
@@ -1241,7 +1241,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\intersect` | 0 | `\cap` |
 | `\into` | 0 | `\to` |
 | `\inverselim` | 0 | `\varprojlim` |
-| `\iscontainedin` | 0 | `\supseteq` |
+| `\iscontainedin` | 0 | `\subseteq` |
 | `\isomorphic` | 0 | `{ \, \mapsvia{\sim}\, }` |
 | `\join` | 0 | `{ \ast }` |
 | `\laplacian` | 0 | `\Delta` |
