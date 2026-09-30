@@ -1210,6 +1210,7 @@ export const macros = {
   "dcosetl": ["{#1}\\mkern-3mu\\diagdown\\mkern-3mu{}^{#2}", 2],
   "dcosetr": ["{#1}\\mkern-3mu\\diagup\\mkern-3mu{#2}", 2],
   "leftquotient": ["{#1}\\mkern-3mu\\diagdown\\mkern-3mu{}^{#2}", 2],
+  "gitquot": "\\mathbin{/\\!/}",
   "jacobsonrad": ["{J ({#1}) }", 1],
   "nilrad": ["{\\sqrt{0_{#1}} }", 1],
   "Restriction": ["\\mathrm{Res}^{#1}_{#2}", 2],

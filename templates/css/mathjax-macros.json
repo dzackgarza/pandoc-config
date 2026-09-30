@@ -1335,6 +1335,7 @@
     "{#1}\\mkern-3mu\\diagdown\\mkern-3mu{}^{#2}",
     2
   ],
+  "gitquot": "\\mathbin{/\\!/}",
   "jacobsonrad": [
     "{J ({#1}) }",
     1

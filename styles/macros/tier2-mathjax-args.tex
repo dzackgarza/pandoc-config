@@ -105,6 +105,10 @@
 \providecommand{\leftquotient}[2]{%
   {#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}}
 
+% GIT quotient /\!/, MathJax-safe (no \mkern). Full-fidelity
+% \mkern-6mu version in tier3-tex-complex.tex overrides this in LaTeX.
+\providecommand{\gitquot}{\mathbin{/\!/}}
+
 \newcommand{\jacobsonrad}[1]{{J ({#1}) }}
 \newcommand{\nilrad}[1]{{\sqrt{0_{#1}} }}
 

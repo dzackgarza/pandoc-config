@@ -69,7 +69,8 @@
 \newcommand{\BGL}{ \mathbf{B}\mkern-3mu \operatorname{GL}}
 
 % Git quotient with \mkern
-\newcommand{\gitquot}{{ \mathbin{/\mkern-6mu/}}}
+% Overrides MathJax-safe fallback in tier2-mathjax-args.tex
+\renewcommand{\gitquot}{{ \mathbin{/\mkern-6mu/}}}
 
 % Surjection arrow with \mkern
 \newcommand{\surjectsvia}[2][]{ \xrightarrow[#1]{#2} { \mathrel{\mkern-16mu}\rightarrow }\, }

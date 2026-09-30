@@ -1657,6 +1657,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\dcosetl` | 2 | `{#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}` |
 | `\dcosetr` | 2 | `{#1}\mkern-3mu\diagup\mkern-3mu{#2}` |
 | `\leftquotient` | 2 | `{#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}` |
+| `\gitquot` | 0 | `\mathbin{/\!/}` |
 | `\jacobsonrad` | 1 | `{J ({#1}) }` |
 | `\nilrad` | 1 | `{\sqrt{0_{#1}} }` |
 | `\Restriction` | 2 | `\mathrm{Res}^{#1}_{#2}` |
