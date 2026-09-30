@@ -292,9 +292,13 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   # \(...\) and \[...\] are math in these documents (the Zettlr editor and
   # Flowmark's lint dialect read them so); plain `markdown` reads them as
   # escaped brackets, hence +tex_math_single_backslash.
+  # [[target|label]] wikilinks are Links for wikilinks.lua, which applies
+  # the resolutions the editor names in PANDOC_WIKILINKS; it runs before
+  # include.lua adds the headings of transcluded files.
   cd "$ROOT"
   pandoc "${@:5}" \
-      --from=markdown+tex_math_single_backslash \
+      --from=markdown+tex_math_single_backslash+wikilinks_title_after_pipe \
+      --lua-filter="{{source_directory()}}/filters/wikilinks.lua" \
       --lua-filter="{{source_directory()}}/filters/include.lua" \
       "${CROSSREF_ARGS[@]}" \
       --lua-filter="{{source_directory()}}/filters/convert_amsthm_envs.lua" \
@@ -485,7 +489,7 @@ _test-compile-pandoc:
   bash "{{source_directory()}}/tests/test-compile-pandoc.sh"
 
 # Run all tests (macros, templates, tikz compilation, filter, poset layout, README reference)
-test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-posets _test-readme _test-compile-pandoc
+test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-readme _test-compile-pandoc
 
 # Commit-tier gate entry point expected by the machine-wide ai-review-ci hook;
 # this repo's commit-tier QC is its own test suite.
@@ -515,6 +519,10 @@ _test-tikz-filter:
 # Test Lamport-style proof parsing, numbering, references, and LaTeX output
 _test-lamport-proof:
   python3 "{{source_directory()}}/tests/test-lamport-proof.py"
+
+# Test that wikilinks become links to the headings the editor resolved
+_test-wikilinks:
+  python3 "{{source_directory()}}/tests/test-wikilinks.py"
 
 
 # Generate every MathJax projection from the canonical macro manifest.
