@@ -303,6 +303,31 @@ local function resolve_inputs(text, base_dir, depth)
   end)
 end
 
+-- The kind of figure a block's \input{} names: "tikzcd" or "tikzpic", or nil when
+-- it names no figure. A .tikz or .tikzcd file is a figure by its extension. Any
+-- other file (fig_x.tex) is a figure when, after its leading comment lines, its
+-- body opens a tikzpicture or tikzcd environment.
+local function figure_input(text)
+  local filename = text:match("\\input%s-{%s*(.-)%s*}")
+  if not filename then return nil end
+  if filename:match("%.tikzcd$") then return "tikzcd" end
+  if filename:match("%.tikz$") then return "tikzpic" end
+  local doc_dir = (os.getenv("PANDOC_DOC_PATH") or ""):match("(.+)[/\\]") or "."
+  local figures_source = os.getenv("FIGURES_SOURCE_DIR") or (pandoc_dir .. "/figures")
+  local full_path = find_input_file(filename, doc_dir, figures_source)
+  if not full_path then return nil end
+  local file = assert(io.open(full_path, "r"))
+  local body = file:read("*a")
+  file:close()
+  while body:match("^%s*%%") do
+    body = body:gsub("^%s*%%[^\n]*", "", 1)
+  end
+  body = body:gsub("^%s*", "")
+  if starts_with("\\begin{tikzcd}", body) then return "tikzcd" end
+  if starts_with("\\begin{tikzpicture}", body) then return "tikzpic" end
+  return nil
+end
+
 -- Compile a tikz snippet (e.g. \begin{tikzcd}...) by wrapping it in the
 -- config-declared per-figure template (Phase D / D-3 / P92) at its `<>` marker.
 -- Returns (svg_path, pdf_path) or (nil, nil) on failure.
@@ -444,12 +469,12 @@ if FORMAT:match 'latex' or FORMAT:match 'pdf' or FORMAT:match 'markdown' then
   function RawBlock(el)
     local is_tikzcd = starts_with('\\begin{tikzcd}', el.text)
     local is_tikzpic = starts_with('\\begin{tikzpicture}', el.text)
-    local is_tikz = el.text:match("\\input%s-{%s*(.-%.tikz)%s*}") or el.text:match("\\input%s-{%s*(.-%.tikzcd)%s*}")
+    local is_tikz = figure_input(el.text)
     if not is_tikzcd and not is_tikzpic and not is_tikz then
       return el
     end
 
-    local is_cd = is_tikzcd or (is_tikz and is_tikz:match("%.tikzcd$") ~= nil)
+    local is_cd = is_tikzcd or is_tikz == "tikzcd"
     log("RawBlock: processing " .. (is_cd and "tikzcd" or "tikzpicture") .. " block, length=" .. #el.text)
     local _, pdf_path = compile_tikz(el.text)
     if not pdf_path then
@@ -493,7 +518,7 @@ if FORMAT:match 'html' then
     local is_tikzcd = starts_with('\\begin{tikzcd}', el.text)
     local is_tikzpic = starts_with('\\begin{tikzpicture}', el.text)
     local is_pdftex = el.text:match("\\input%s-{(.-%.pdf_tex)}")
-    local is_tikz = el.text:match("\\input%s-{%s*(.-%.tikz)%s*}") or el.text:match("\\input%s-{%s*(.-%.tikzcd)%s*}")
+    local is_tikz = figure_input(el.text)
     if not is_tikzcd and not is_tikzpic and not is_pdftex and not is_tikz then
       return el
     end
@@ -517,7 +542,7 @@ if FORMAT:match 'html' then
     if is_pdftex then
       css_class = "pdftex"
     elseif is_tikz then
-      css_class = is_tikz:match("%.tikzcd$") and "tikzcd" or "tikzpic"
+      css_class = is_tikz
     elseif not is_tikzcd then
       css_class = "tikzpic"
     end
