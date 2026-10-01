@@ -442,7 +442,7 @@ local function namespace_svg_ids(svg_tag, prefix)
   return result
 end
 
-local function make_html_output(svg_path, css_class)
+local function svg_markup(svg_path)
   local f = io.open(svg_path, "r")
   assert(f, "tikzcd.lua: SVG file missing after compilation: " .. svg_path)
   local svg_content = f:read("*a")
@@ -455,11 +455,13 @@ local function make_html_output(svg_path, css_class)
 
   -- Namespace IDs using a short hash to prevent cross-SVG collisions
   local hash = pandoc.sha1(svg_tag):sub(1, 8)
-  svg_tag = namespace_svg_ids(svg_tag, hash)
+  return namespace_svg_ids(svg_tag, hash)
+end
 
+local function make_html_output(svg_path, css_class)
   local html = '<div style="text-align:center;">'
     .. '<span class="' .. css_class .. ' pandoc-preview-editable" data-edit-kind="' .. css_class .. '">'
-    .. svg_tag
+    .. svg_markup(svg_path)
     .. '</span>'
     .. '</div>'
   return pandoc.Para(pandoc.RawInline('html', html))
@@ -562,6 +564,18 @@ if FORMAT:match 'html' then
       end
     end
     return el
+  end
+
+  -- A Dynkin diagram written inline (\dynkin from the dynkin-diagrams package,
+  -- e.g. in a table cell) renders as an inline SVG. LaTeX output needs no
+  -- handler: the document preamble loads dynkin-diagrams.
+  function RawInline(el)
+    if not (el.format == 'tex' or el.format == 'latex') or not starts_with('\\dynkin', el.text) then
+      return el
+    end
+    local svg_path, _ = compile_tikz(el.text)
+    assert(svg_path, "tikzcd.lua: compilation failed for inline Dynkin diagram")
+    return pandoc.RawInline('html', '<span class="dynkin">' .. svg_markup(svg_path) .. '</span>')
   end
 
   function CodeBlock(el)
