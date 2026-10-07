@@ -94,6 +94,10 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "spinornorm", ["\\operatorname{sn}\\qty{#1}", 1])
     assert_macro(macros, "cyclicgroup", ["C_{#1}", 1])
     assert_macro(macros, "perpin", ["#2^{\\perp_{#1}}", 2])
+    if "orthcomp" in macros:
+        fail("orthogonal-complement fragment removed", repr(macros["orthcomp"]))
+    else:
+        check("orthogonal-complement fragment removed")
     assert_macro(
         macros,
         "discriminantkernel",
