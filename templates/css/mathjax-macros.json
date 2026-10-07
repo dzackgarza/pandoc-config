@@ -1799,6 +1799,10 @@
     "#1^{\\perp #2}",
     2
   ],
+  "perpin": [
+    "#2^{\\perp_{#1}}",
+    2
+  ],
   "signature": [
     "\\operatorname{sign}\\qty{#1}",
     1

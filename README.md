@@ -1728,6 +1728,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\righttriplearrows` | 0 | `\operatorname{{\; \tikz{ \foreach \y in {0, 0.1, 0.2} { \draw [-stealth] (0, \y) -- +(0.5, 0);}} \; }}` |
 | `\bdlattice` | 2 | `\overline{#1}_{ #2 }` |
 | `\orthcomp` | 2 | `#1^{\perp #2}` |
+| `\perpin` | 2 | `#2^{\perp_{#1}}` |
 | `\signature` | 1 | `\operatorname{sign}\qty{#1}` |
 | `\spinornorm` | 1 | `\operatorname{sn}\qty{#1}` |
 | `\discriminantkernel` | 1 | `\Orth^{\mathrm{discker}}\qty{#1}` |

@@ -1281,6 +1281,7 @@ export const macros = {
   "righttriplearrows": "\\operatorname{{\\; \\tikz{ \\foreach \\y in {0, 0.1, 0.2} { \\draw [-stealth] (0, \\y) -- +(0.5, 0);}} \\; }}",
   "bdlattice": ["\\overline{#1}_{ #2  }", 2],
   "orthcomp": ["#1^{\\perp #2}", 2],
+  "perpin": ["#2^{\\perp_{#1}}", 2],
   "signature": ["\\operatorname{sign}\\qty{#1}", 1],
   "spinornorm": ["\\operatorname{sn}\\qty{#1}", 1],
   "discriminantkernel": ["\\Orth^{\\mathrm{discker}}\\qty{#1}", 1],
