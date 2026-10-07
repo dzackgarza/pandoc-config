@@ -98,6 +98,11 @@ def test_domain_aux_files_are_generated() -> None:
         fail("orthogonal-complement fragment removed", repr(macros["orthcomp"]))
     else:
         check("orthogonal-complement fragment removed")
+    for retired in ("sign", "coeq", "cocoeq", "OStab", "OrthObs", "wref"):
+        if retired in macros:
+            fail(f"{retired} retired", repr(macros[retired]))
+        else:
+            check(f"{retired} retired")
     assert_macro(
         macros,
         "discriminantkernel",

@@ -1405,7 +1405,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\ienzero` | 0 | `\iota_{\En, 0}` |
 | `\gref` | 0 | `\Gamma\dref` |
 | `\dref` | 0 | `_{\rm r}` |
-| `\OrthObs` | 0 | `\Orth_*` |
 | `\ADE` | 0 | `\mathrm{ADE}` |
 | `\ADEBC` | 0 | `\mathrm{ADE}+\mathrm{BC}` |
 | `\tADE` | 0 | `\widetilde{ \ADE }` |
@@ -1456,7 +1455,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\dirr` | 0 | `_{\rm irr}` |
 | `\vrel` | 0 | `V\drel` |
 | `\virr` | 0 | `V\dirr` |
-| `\wref` | 0 | `W\dref` |
 | `\chref` | 0 | `\ch\dref` |
 | `\fref` | 0 | `\mfF\dref` |
 | `\fram` | 0 | `\mfF\dram` |
