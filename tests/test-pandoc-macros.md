@@ -94,6 +94,8 @@ Galois group: $\Gal(\QQbar / \QQ)$ acts on roots.
 
 Fundamental group: $\pi_1(X, x_0) \cong \ZZ$ for the circle.
 
+Mapping class group: $\mappingclassgroup{X}$.
+
 Homology: $H_n(X; \ZZ)$ and cohomology: $H^n(X; \ZZ)$.
 
 Homotopy groups: $\pi_n(S^n) \cong \ZZ$.

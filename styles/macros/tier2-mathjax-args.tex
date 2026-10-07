@@ -12,6 +12,8 @@
 
 % Absolute value and norms
 \newcommand{\abs}[1]{{\left\lvert {#1} \right\rvert}}
+\newcommand{\cardinality}[1]{{\left\lvert {#1} \right\rvert}}
+\newcommand{\disc}[1]{{\operatorname{disc}\left( {#1} \right)}}
 \newcommand{\norm}[1]{{\left\lVert {#1} \right\rVert}}
 \newcommand{\normm}[1]{{\left\lVert \left\lVert {#1} \right\rVert\right\rVert}}
 \newcommand{\pnorm}[2]{{\left\lVert {#1} \right\rVert}_{#2}}
@@ -59,6 +61,9 @@
 % Homotopy classes
 \newcommand{\htyclass}[1]{ { \left[ {#1} \right] } }
 
+% Mapping class groups: \mappingclassgroup{X} is the complete object MCG(X)
+\newcommand{\mappingclassgroup}[1]{{\MCG \left( {#1} \right)}}
+
 % Ideals
 \newcommand{\ideal}[1]{\mathcal{#1}}
 
@@ -103,6 +108,13 @@
 % \mkern-6mu version in tier3-tex-complex.tex overrides this in LaTeX.
 \providecommand{\gitquot}{\mathbin{/\!/}}
 
+% Bold vectors: \boldsymbol is deliberately NOT defined here. MathJax
+% renders \boldsymbol natively (autoloaded boldsymbol extension), and a
+% definition in this file would be parsed into tex.macros and shadow
+% that native rendering with a worse approximation. The full-fidelity
+% LaTeX upgrade \boldsymbol -> \bm lives in tier3-tex-complex.tex,
+% which never feeds MathJax.
+
 \newcommand{\jacobsonrad}[1]{{J ({#1}) }}
 \newcommand{\nilrad}[1]{{\sqrt{0_{#1}} }}
 
@@ -114,6 +126,7 @@
 
 % Sheafification and completion
 \newcommand{\sheafify}[1]{ \left( #1 \right)^{\scriptscriptstyle \mathrm{sh}} }
+\newcommand{\padiccompletion}[2]{{ {#1}_{\widehat{#2}} }}
 \newcommand{\complete}[1]{{ {}_{ \hat{#1} } }}
 \newcommand{\takecompletion}[1]{{ \overbrace{#1}^{\widehat{\hspace{4em}}}  }}
 \newcommand{\kv}{{ k_{\hat{v}} }}

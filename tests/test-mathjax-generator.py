@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Contract tests for generated MathJax macro configuration."""
 
-from pathlib import Path
 import json
 import os
 import re
 import subprocess
 import sys
 import tempfile
-
+from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -63,6 +62,11 @@ def test_domain_aux_files_are_generated() -> None:
     macros = generated_macros()
     assert_macro(macros, "coloneqq", "\\mathrel{\\vcenter{:}}=")
     assert_macro(macros, "qty", ["\\left( {#1} \\right)", 1])
+    assert_macro(macros, "cardinality", ["{\\left\\lvert {#1} \\right\\rvert}", 1])
+    assert_macro(macros, "disc", ["{\\operatorname{disc}\\left( {#1} \\right)}", 1])
+    assert_macro(macros, "discrete", "{\\mathrm{disc}}")
+    assert_macro(macros, "discriminantmap", "{\\operatorname{disc}}")
+    assert_macro(macros, "padiccompletion", ["{ {#1}_{\\widehat{#2}} }", 2])
     assert_macro(macros, "Set", "{\\mathsf{Set}}")
     assert_macro(macros, "cC", "{\\mathcal{C}}")
     assert_macro(macros, "modsleft", ["{}_{#1}\\Mod", 1])
@@ -74,12 +78,22 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "fprod", ["\\fiberprod{#1}{#2}{#3}", 3])
     assert_macro(macros, "lktt", ["{L_{\\mathrm{K3}, #1}}", 1])
     assert_macro(macros, "GSpaces", "{G\\dash\\mathsf{Spaces}}")
-    assert_macro(macros, "disjointpower", ["{#1}^{\\scriptscriptstyle\\coprod^{#2}}", 2])
+    assert_macro(
+        macros, "disjointpower", ["{#1}^{\\scriptscriptstyle\\coprod^{#2}}", 2]
+    )
     assert_macro(macros, "prodpower", ["{#1}^{\\scriptscriptstyle\\times^{#2}}", 2])
-    assert_macro(macros, "smashpower", ["{#1}^{\\scriptscriptstyle\\smashprod^{#2}}", 2])
-    assert_macro(macros, "wedgepower", ["{#1}^{\\scriptscriptstyle\\smashprod^{#2}}", 2])
-    assert_macro(macros, "tensorpowerk", ["{#1}^{\\scriptscriptstyle\\otimes_{k}^{#2}}", 2])
-    assert_macro(macros, "fiberpower", ["{#1}^{\\scriptscriptstyle\\fiberproduct{#2}^{#3}}", 3])
+    assert_macro(
+        macros, "smashpower", ["{#1}^{\\scriptscriptstyle\\smashprod^{#2}}", 2]
+    )
+    assert_macro(
+        macros, "wedgepower", ["{#1}^{\\scriptscriptstyle\\smashprod^{#2}}", 2]
+    )
+    assert_macro(
+        macros, "tensorpowerk", ["{#1}^{\\scriptscriptstyle\\otimes_{k}^{#2}}", 2]
+    )
+    assert_macro(
+        macros, "fiberpower", ["{#1}^{\\scriptscriptstyle\\fiberproduct{#2}^{#3}}", 3]
+    )
     assert_macro(macros, "incfiltration", ["{#1}^{\\bullet}", 1])
     assert_macro(macros, "decfiltration", ["{#1}_{\\bullet}", 1])
     # Unary operations take the object they act on as their argument.
@@ -152,6 +166,25 @@ def test_domain_aux_files_are_generated() -> None:
     )
 
 
+def test_native_mathjax_macros_are_not_shadowed() -> None:
+    """Differential-definition contract: macros MathJax renders natively
+    must never appear in tex.macros — a generated entry would shadow the
+    native implementation (worse output for the same source). The LaTeX
+    upgrade of such a macro lives in tier3-tex-complex.tex, which never
+    feeds MathJax; tier2 documents the deliberate absence."""
+    macros = generated_macros()
+    # \boldsymbol: native via MathJax's autoloaded boldsymbol extension;
+    # upgraded to bm.sty's \bm in LaTeX by tier3-tex-complex.tex.
+    for native in ("boldsymbol",):
+        if native in macros:
+            fail(
+                f"{native} shadowed",
+                "tex.macros entry would defeat native MathJax rendering",
+            )
+        else:
+            check(f"{native} left to native MathJax rendering")
+
+
 def test_preview_template_matches_generated_projection() -> None:
     expected = json.loads(GENERATED_JSON.read_text())
     template = PREVIEW_TEMPLATE.read_text()
@@ -182,9 +215,11 @@ def test_dzg_mathjax_style_compiles_domain_macros() -> None:
             )
         )
         env = os.environ.copy()
-        env.update({
-            "TEXINPUTS": f".:{ROOT / 'styles'}//:{ROOT / 'styles' / 'macros'}//:",
-        })
+        env.update(
+            {
+                "TEXINPUTS": f".:{ROOT / 'styles'}//:{ROOT / 'styles' / 'macros'}//:",
+            }
+        )
         cp = subprocess.run(
             [
                 "pdflatex",
@@ -224,6 +259,7 @@ def test_legacy_mathjax_injection_defines_required_shims() -> None:
 
 def main() -> None:
     test_domain_aux_files_are_generated()
+    test_native_mathjax_macros_are_not_shadowed()
     test_preview_template_matches_generated_projection()
     test_dzg_mathjax_style_compiles_domain_macros()
     test_legacy_mathjax_injection_defines_required_shims()

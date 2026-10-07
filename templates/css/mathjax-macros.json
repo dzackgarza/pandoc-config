@@ -309,7 +309,8 @@
   "diam": "{\\operatorname{diam}}",
   "Diff": "\\operatorname{Diff}",
   "Diffeo": "{\\operatorname{Diffeo}}",
-  "disc": "{\\operatorname{disc}}",
+  "discrete": "{\\mathrm{disc}}",
+  "discriminantmap": "{\\operatorname{disc}}",
   "discriminant": "{\\Delta}",
   "Disk": "{\\operatorname{Disk}}",
   "Dist": "\\operatorname{Dist}",
@@ -1044,6 +1045,14 @@
     "{\\left\\lvert {#1} \\right\\rvert}",
     1
   ],
+  "cardinality": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "disc": [
+    "{\\operatorname{disc}\\left( {#1} \\right)}",
+    1
+  ],
   "norm": [
     "{\\left\\lVert {#1} \\right\\rVert}",
     1
@@ -1148,6 +1157,10 @@
     "{ \\left[ {#1} \\right] }",
     1
   ],
+  "mappingclassgroup": [
+    "{\\MCG \\left( {#1} \\right)}",
+    1
+  ],
   "ideal": [
     "\\mathcal{#1}",
     1
@@ -1236,6 +1249,10 @@
   "sheafify": [
     "\\left( #1 \\right)^{\\scriptscriptstyle \\mathrm{sh}}",
     1
+  ],
+  "padiccompletion": [
+    "{ {#1}_{\\widehat{#2}} }",
+    2
   ],
   "complete": [
     "{ {}_{ \\hat{#1} } }",

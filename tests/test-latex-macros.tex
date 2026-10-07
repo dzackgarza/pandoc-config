@@ -61,6 +61,11 @@ Column vector: $\cvec{x}{y}$
 \subsection{Stacking}
 Stacked symbols: $\stack{a \\ b \\ c}$
 
+Bold vectors via the tier 3 \texttt{\string\boldsymbol} renewal to bm.sty
+(the pair's MathJax side is a deliberate absence, guarded in tier2):
+$\boldsymbol{\alpha} + \boldsymbol{x}$, and
+$\boldsymbol{\xi}^{\,2} \in \boldsymbol{H}^1(\boldsymbol{X})$.
+
 \section{Tier 4: Package-Dependent Declarations}
 
 Using operators declared with \texttt{DeclareMathOperator}:
@@ -103,6 +108,8 @@ Galois group: $\Gal(\QQbar / \QQ)$ acts on roots.
 
 \subsection{Topology}
 Fundamental group: $\pi_1(X, x_0) \cong \ZZ$ for the circle.
+
+Mapping class group: $\mappingclassgroup{X} \cong \Aut(\pi_1(X))$ for the torus.
 
 Homology: $H_n(X; \ZZ)$ and cohomology: $H^n(X; \ZZ)$.
 

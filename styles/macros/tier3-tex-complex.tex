@@ -72,6 +72,17 @@
 % Overrides MathJax-safe fallback in tier2-mathjax-args.tex
 \renewcommand{\gitquot}{{ \mathbin{/\mkern-6mu/}}}
 
+% Bold vectors via bm.sty. The name \boldsymbol is the one the
+% authoring vocabulary owns (amsbsy defines it); bm.sty upgrades it to
+% \bm, which selects the true bold math fonts. The renewal is explicit
+% here even though bm.sty already \let\boldsymbol\bm at load, so the
+% upgrade is recorded in the macro sources rather than in package
+% internals. No tier2 counterpart: MathJax renders \boldsymbol natively
+% (autoloaded boldsymbol extension), and a tex.macros entry would
+% shadow that with a worse approximation — see the guard comment in
+% tier2-mathjax-args.tex.
+\renewcommand{\boldsymbol}{\bm}
+
 % Surjection arrow with \mkern
 \newcommand{\surjectsvia}[2][]{ \xrightarrow[#1]{#2} { \mathrel{\mkern-16mu}\rightarrow }\, }
 
