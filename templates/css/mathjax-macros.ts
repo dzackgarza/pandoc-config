@@ -546,6 +546,7 @@ export const macros: Record<string, ZeroArgMacro | NArgMacro> = {
   "submfds": "\\operatorname{SubMfds}",
   "SU": "{\\operatorname{SU}}",
   "Sum": "\\sum",
+  "orthogonalsum": "\\mathop{\\perp}\\displaylimits",
   "supp": "\\operatorname{supp}",
   "Supp": "{\\operatorname{Supp}}",
   "Sw": "{\\mathrm{Sw}}",

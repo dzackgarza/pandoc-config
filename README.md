@@ -988,6 +988,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\submfds` | 0 | `\operatorname{SubMfds}` |
 | `\SU` | 0 | `{\operatorname{SU}}` |
 | `\Sum` | 0 | `\sum` |
+| `\orthogonalsum` | 0 | `\mathop{\perp}\displaylimits` |
 | `\supp` | 0 | `\operatorname{supp}` |
 | `\Supp` | 0 | `{\operatorname{Supp}}` |
 | `\Sw` | 0 | `{\mathrm{Sw}}` |
