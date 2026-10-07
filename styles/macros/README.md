@@ -44,6 +44,24 @@ This directory contains the organized LaTeX macro library, consolidated from sca
 
 **Works in:** LaTeX, Pandoc, Obsidian MathJax
 
+### Semantic script notation
+
+Choose the macro by the mathematical object it names. Each macro takes the
+complete base as its argument.
+
+| Meaning | Macro | Expansion |
+| --- | --- | --- |
+| Group of units | `\units{A}` | `A^{\times}` |
+| Upper-indexed complex | `\chaincomplex{C}` | `C^{\bullet}` |
+| Ascending filtration | `\ascendingfiltration{G}` | `G^{\bullet}` |
+| Descending filtration | `\descendingfiltration{G}` | `G_{\bullet}` |
+| Nonzero elements | `\nonzeroof{A}` | `A^{\bullet}` |
+| Dual | `\dualof{V}` | `V^{\vee}` |
+
+Flowmark's `math/script-macro-candidates` rule uses the loaded macro definitions
+to suggest these meanings for manual symbolic scripts, including alternate
+glyphs. A suggestion requires the author to select the intended meaning.
+
 ### Tier 3: Complex TeX-Specific Commands
 **File:** `tier3-tex-complex.tex`
 

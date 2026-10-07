@@ -26,7 +26,7 @@
   "OP": "{\\mathbb{OP}}",
   "SpSp": "{\\mathbb{S}}",
   "CCpadic": "{ \\CC_p }",
-  "CCstar": "\\unitsof{\\CC}",
+  "CCstar": "\\units{\\CC}",
   "FFbar": "{\\bar\\FF}",
   "FFp": "{\\FF_p}",
   "FFpn": "{\\FF_{p^n}}",
@@ -1117,20 +1117,20 @@
     "{ {#1}^{\\scriptscriptstyle \\bullet, \\bullet}}",
     1
   ],
-  "cocomplex": [
-    "{ {#1}^{\\scriptscriptstyle \\bullet}}",
+  "chaincomplex": [
+    "{ {#1}^{\\bullet} }",
     1
   ],
   "complex": [
     "{ {#1}_{\\scriptscriptstyle \\bullet}}",
     1
   ],
-  "decfiltration": [
-    "{#1}_{\\bullet}",
+  "descendingfiltration": [
+    "{ {#1}_{\\bullet} }",
     1
   ],
-  "incfiltration": [
-    "{#1}^{\\bullet}",
+  "ascendingfiltration": [
+    "{ {#1}^{\\bullet} }",
     1
   ],
   "ctz": [
@@ -1739,7 +1739,7 @@
     "{ {#1}^{-1} }",
     1
   ],
-  "unitsof": [
+  "units": [
     "{ {#1}^{\\times} }",
     1
   ],
@@ -1783,12 +1783,12 @@
     "{\\norm{\\complex{#1}}}",
     1
   ],
-  "Extalgebra": "\\cocomplex{\\bigwedge}",
+  "Extalgebra": "\\chaincomplex{\\bigwedge}",
   "Extalg": "\\Extalgebra",
-  "Extcomplex": "\\cocomplex{ \\Extalgebra}",
-  "drcomplex": "{\\cocomplex{\\Omega}}",
+  "Extcomplex": "\\chaincomplex{ \\Extalgebra}",
+  "drcomplex": "{\\chaincomplex{\\Omega}}",
   "cxH": "{\\complex{H}}",
-  "ccxH": "{\\cocomplex{H}}",
+  "ccxH": "{\\chaincomplex{H}}",
   "sheafhom": "\\mathop{\\mathcal{H}\\! \\mathit{om}}",
   "smallprod": "{ \\scriptscriptstyle\\prod }",
   "eqLH": "{ \\equalsbecause{\\scriptscriptstyle\\text{LH}} }",

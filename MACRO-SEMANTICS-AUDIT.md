@@ -110,7 +110,7 @@ matching operator definitions.
 | `V\dual` | `\dualof{V}` | dual | 5181 |
 | — | `\doubledualof{V}` | double dual | — |
 | `x\inv` | `\inverseof{x}` | inverse | 5183 |
-| `R\units` | `\unitsof{R}` | group of units | 2818 |
+| `R\units` | `\units{R}` | group of units | 2818 |
 | `R\nonzero` | `\nonzeroof{R}` | nonzero elements | 28 |
 | `X\interior` | `\interiorof{X}` | interior | 32 |
 | `k\sep` | `\sepclosure{k}` | separable closure | 289 |

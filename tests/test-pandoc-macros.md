@@ -45,7 +45,7 @@ Rational function field: $\functionfield{x}$, Laurent series: $\laurentseries{t}
 
 ## Complexes
 
-Chain complex: $\complex{C}$, cochain complex: $\cocomplex{C}$.
+Lower-indexed complex: $\complex{C}$, upper-indexed complex: $\chaincomplex{C}$.
 
 Bicomplex: $\bicomplex{K}$.
 

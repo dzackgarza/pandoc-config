@@ -156,5 +156,9 @@
   "fZ": "mfZ",
   "containedin": "iscontainedin",
   "contains": "containing",
-  "sign": "signature"
+  "sign": "signature",
+  "unitsof": "units",
+  "cocomplex": "chaincomplex",
+  "incfiltration": "ascendingfiltration",
+  "decfiltration": "descendingfiltration"
 }

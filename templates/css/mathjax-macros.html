@@ -31,7 +31,7 @@
 \newcommand{\OP}{{\mathbb{OP}}}
 \newcommand{\SpSp}{{\mathbb{S}}}
 \newcommand{\CCpadic}{{ \CC_p }}
-\newcommand{\CCstar}{\unitsof{\CC}}
+\newcommand{\CCstar}{\units{\CC}}
 \newcommand{\FFbar}{{\bar\FF}}
 \newcommand{\FFp}{{\FF_p}}
 \newcommand{\FFpn}{{\FF_{p^n}}}
@@ -1065,10 +1065,10 @@
 \newcommand{\floor}[1]{{\left\lfloor #1 \right\rfloor}}
 \newcommand{\bicomplex}[1]{{ {#1}_{\scriptscriptstyle \bullet, \bullet}}}
 \newcommand{\cobicomplex}[1]{{ {#1}^{\scriptscriptstyle \bullet, \bullet}}}
-\newcommand{\cocomplex}[1]{{ {#1}^{\scriptscriptstyle \bullet}}}
+\newcommand{\chaincomplex}[1]{{ {#1}^{\bullet} }}
 \newcommand{\complex}[1]{{ {#1}_{\scriptscriptstyle \bullet}}}
-\newcommand{\decfiltration}[1]{{#1}_{\bullet}}
-\newcommand{\incfiltration}[1]{{#1}^{\bullet}}
+\newcommand{\descendingfiltration}[1]{{ {#1}_{\bullet} }}
+\newcommand{\ascendingfiltration}[1]{{ {#1}^{\bullet} }}
 \newcommand{\ctz}[1]{\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \,}
 \newcommand{\fps}[1]{{\llbracket #1 \rrbracket  }}
 \newcommand{\formalpowerseries}[1]{\fps{#1}}
@@ -1240,7 +1240,7 @@
 \newcommand{\dualof}[1]{{ {#1}^{\vee} }}
 \newcommand{\doubledualof}[1]{{ {#1}^{\vee\vee} }}
 \newcommand{\inverseof}[1]{{ {#1}^{-1} }}
-\newcommand{\unitsof}[1]{{ {#1}^{\times} }}
+\newcommand{\units}[1]{{ {#1}^{\times} }}
 \newcommand{\nonzeroof}[1]{{ {#1}^{\bullet} }}
 \newcommand{\interiorof}[1]{{ {#1}^{\circ} }}
 \newcommand{\sepclosure}[1]{{ {#1}^{\operatorname{sep}} }}
@@ -1251,12 +1251,12 @@
 \newcommand{\isoclasses}[1]{{ {#1}_{/\sim} }}
 \newcommand{\glue}[1]{{ \Disjoint_{#1} }}
 \newcommand{\normcomplex}[1]{{\norm{\complex{#1}}}}
-\newcommand{\Extalgebra}{\cocomplex{\bigwedge}}
+\newcommand{\Extalgebra}{\chaincomplex{\bigwedge}}
 \newcommand{\Extalg}{\Extalgebra}
-\newcommand{\Extcomplex}{\cocomplex{ \Extalgebra}}
-\newcommand{\drcomplex}{{\cocomplex{\Omega}}}
+\newcommand{\Extcomplex}{\chaincomplex{ \Extalgebra}}
+\newcommand{\drcomplex}{{\chaincomplex{\Omega}}}
 \newcommand{\cxH}{{\complex{H}}}
-\newcommand{\ccxH}{{\cocomplex{H}}}
+\newcommand{\ccxH}{{\chaincomplex{H}}}
 \newcommand{\sheafhom}{\mathop{\mathcal{H}\! \mathit{om}}}
 \newcommand{\smallprod}{{ \scriptscriptstyle\prod }}
 \newcommand{\eqLH}{{ \equalsbecause{\scriptscriptstyle\text{LH}} }}

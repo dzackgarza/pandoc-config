@@ -40,12 +40,12 @@
 % Complexes and bicomplexes
 \newcommand{\bicomplex}[1]{{ {#1}_{\scriptscriptstyle \bullet, \bullet}} }
 \newcommand{\cobicomplex}[1]{ { {#1}^{\scriptscriptstyle \bullet, \bullet}} }
-\newcommand{\cocomplex}[1]{ { {#1}^{\scriptscriptstyle \bullet}} }
+\newcommand{\chaincomplex}[1]{{ {#1}^{\bullet} }}
 \newcommand{\complex}[1]{{ {#1}_{\scriptscriptstyle \bullet}} }
 
 % Filtrations
-\newcommand{\decfiltration}[1]{{#1}_{\bullet}}
-\newcommand{\incfiltration}[1]{{#1}^{\bullet}}
+\newcommand{\descendingfiltration}[1]{{ {#1}_{\bullet} }}
+\newcommand{\ascendingfiltration}[1]{{ {#1}^{\bullet} }}
 
 % Conjugation
 
@@ -375,7 +375,7 @@
 \newcommand{\dualof}[1]{{ {#1}^{\vee} }}
 \newcommand{\doubledualof}[1]{{ {#1}^{\vee\vee} }}
 \newcommand{\inverseof}[1]{{ {#1}^{-1} }}
-\newcommand{\unitsof}[1]{{ {#1}^{\times} }}
+\newcommand{\units}[1]{{ {#1}^{\times} }}
 \newcommand{\nonzeroof}[1]{{ {#1}^{\bullet} }}
 \newcommand{\interiorof}[1]{{ {#1}^{\circ} }}
 \newcommand{\sepclosure}[1]{{ {#1}^{\operatorname{sep}} }}
@@ -392,14 +392,14 @@
 \newcommand{\normcomplex}[1]{{\norm{\complex{#1}}}}
 
 % Extalgebra
-\newcommand{\Extalgebra}{\cocomplex{\bigwedge}}
+\newcommand{\Extalgebra}{\chaincomplex{\bigwedge}}
 \newcommand{\Extalg}{\Extalgebra}
-\newcommand{\Extcomplex}{\cocomplex{ \Extalgebra}}
+\newcommand{\Extcomplex}{\chaincomplex{ \Extalgebra}}
 
 % DR complexes and Hodge
-\newcommand{\drcomplex}{{\cocomplex{\Omega}}}
+\newcommand{\drcomplex}{{\chaincomplex{\Omega}}}
 \newcommand{\cxH}{{\complex{H}}}
-\newcommand{\ccxH}{{\cocomplex{H}}}
+\newcommand{\ccxH}{{\chaincomplex{H}}}
 
 % Sheaf homomorphisms
 \newcommand{\sheafhom}{\mathop{\mathcal{H}\! \mathit{om}}}
