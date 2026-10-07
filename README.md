@@ -977,7 +977,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Spec` | 0 | `\operatorname{Spec}` |
 | `\Spf` | 0 | `\operatorname{Spf}` |
 | `\Spin` | 0 | `{\operatorname{Spin}}` |
-| `\spinornorm` | 0 | `{\mathrm{spinornorm}}` |
 | `\Sq` | 0 | `\operatorname{Sq}` |
 | `\sq` | 0 | `\square` |
 | `\SSym` | 0 | `{\operatorname{SSym}}` |
@@ -1730,6 +1729,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\bdlattice` | 2 | `\overline{#1}_{ #2 }` |
 | `\orthcomp` | 2 | `#1^{\perp #2}` |
 | `\signature` | 1 | `\operatorname{sign}\qty{#1}` |
+| `\spinornorm` | 1 | `\operatorname{sn}\qty{#1}` |
 | `\thecone` | 1 | `\mathfrak{#1}` |
 | `\theposet` | 1 | `\mathcal{#1}` |
 | `\modulistack` | 1 | `\mathcal{#1}` |

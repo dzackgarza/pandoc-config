@@ -516,7 +516,6 @@
   "Spec": "\\operatorname{Spec}",
   "Spf": "\\operatorname{Spf}",
   "Spin": "{\\operatorname{Spin}}",
-  "spinornorm": "{\\mathrm{spinornorm}}",
   "Sq": "\\operatorname{Sq}",
   "sq": "\\square",
   "SSym": "{\\operatorname{SSym}}",
@@ -1799,6 +1798,10 @@
   ],
   "signature": [
     "\\operatorname{sign}\\qty{#1}",
+    1
+  ],
+  "spinornorm": [
+    "\\operatorname{sn}\\qty{#1}",
     1
   ],
   "thecone": [
