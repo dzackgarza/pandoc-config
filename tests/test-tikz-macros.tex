@@ -175,4 +175,44 @@ in both conventions.
   \ssdifferential[ss unlabelled]{F}{2}{-1}{1}
 \end{tikzpicture}
 
+\section*{Hodge diamonds}
+Known examples, ordered row by row from the top of each diamond.
+\begin{center}
+\textbf{$\PP^1$}\par
+\begin{tikzpicture}
+  \hodgediamond{1}{1, 0, 0, 1}
+\end{tikzpicture}
+
+\textbf{$\PP^2$}\par
+\begin{tikzpicture}
+  \hodgediamond{2}{1, 0, 0, 0, 1, 0, 0, 0, 1}
+\end{tikzpicture}
+
+\textbf{$\PP^3$}\par
+\begin{tikzpicture}
+  \hodgediamond{3}{1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1}
+\end{tikzpicture}
+
+\textbf{K3 surface}\par
+\begin{tikzpicture}
+  \hodgediamond{2}{1, 0, 0, 1, 20, 1, 0, 0, 1}
+  \path (hodge-2-0) -- (hodge-2-2);
+\end{tikzpicture}
+
+\textbf{Enriques surface}\par
+\begin{tikzpicture}
+  \hodgediamond{2}{1, 0, 0, 0, 10, 0, 0, 0, 1}
+\end{tikzpicture}
+
+\textbf{Smooth cubic surface}\par
+\begin{tikzpicture}
+  \hodgediamond{2}{1, 0, 0, 0, 7, 0, 0, 0, 1}
+\end{tikzpicture}
+
+\textbf{Abelian surface}\par
+\begin{tikzpicture}
+  \hodgediamond{2}{1, 2, 2, 1, 4, 1, 2, 2, 1}
+\end{tikzpicture}
+\end{center}
+
 \end{document}

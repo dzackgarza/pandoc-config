@@ -487,7 +487,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\OP` | 0 | `{\mathbb{OP}}` |
 | `\SpSp` | 0 | `{\mathbb{S}}` |
 | `\CCpadic` | 0 | `{ \CC_p }` |
-| `\CCstar` | 0 | `\unitsof{\CC}` |
+| `\CCstar` | 0 | `\units{\CC}` |
 | `\FFbar` | 0 | `{\bar\FF}` |
 | `\FFp` | 0 | `{\FF_p}` |
 | `\FFpn` | 0 | `{\FF_{p^n}}` |
@@ -770,7 +770,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\diam` | 0 | `{\operatorname{diam}}` |
 | `\Diff` | 0 | `\operatorname{Diff}` |
 | `\Diffeo` | 0 | `{\operatorname{Diffeo}}` |
-| `\disc` | 0 | `{\operatorname{disc}}` |
+| `\discrete` | 0 | `{\mathrm{disc}}` |
+| `\discriminantmap` | 0 | `{\operatorname{disc}}` |
 | `\discriminant` | 0 | `{\Delta}` |
 | `\Disk` | 0 | `{\operatorname{Disk}}` |
 | `\Dist` | 0 | `\operatorname{Dist}` |
@@ -1507,6 +1508,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | Macro | Args | Expansion |
 | --- | --- | --- |
 | `\abs` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\cardinality` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\disc` | 1 | `{\operatorname{disc}\left( {#1} \right)}` |
 | `\norm` | 1 | `{\left\lVert {#1} \right\rVert}` |
 | `\normm` | 1 | `{\left\lVert \left\lVert {#1} \right\rVert\right\rVert}` |
 | `\pnorm` | 2 | `{\left\lVert {#1} \right\rVert}_{#2}` |
@@ -1523,16 +1526,17 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\floor` | 1 | `{\left\lfloor #1 \right\rfloor}` |
 | `\bicomplex` | 1 | `{ {#1}_{\scriptscriptstyle \bullet, \bullet}}` |
 | `\cobicomplex` | 1 | `{ {#1}^{\scriptscriptstyle \bullet, \bullet}}` |
-| `\cocomplex` | 1 | `{ {#1}^{\scriptscriptstyle \bullet}}` |
+| `\chaincomplex` | 1 | `{ {#1}^{\bullet} }` |
 | `\complex` | 1 | `{ {#1}_{\scriptscriptstyle \bullet}}` |
-| `\decfiltration` | 1 | `{#1}_{\bullet}` |
-| `\incfiltration` | 1 | `{#1}^{\bullet}` |
+| `\descendingfiltration` | 1 | `{ {#1}_{\bullet} }` |
+| `\ascendingfiltration` | 1 | `{ {#1}^{\bullet} }` |
 | `\ctz` | 1 | `\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \,` |
 | `\fps` | 1 | `{\llbracket #1 \rrbracket }` |
 | `\formalpowerseries` | 1 | `\fps{#1}` |
 | `\functionfield` | 1 | `{ \left( {#1} \right) }` |
 | `\rff` | 1 | `\functionfield{#1}` |
 | `\htyclass` | 1 | `{ \left[ {#1} \right] }` |
+| `\mappingclassgroup` | 1 | `{\MCG \left( {#1} \right)}` |
 | `\ideal` | 1 | `\mathcal{#1}` |
 | `\inner` | 2 | `{\left\langle {#1},~{#2} \right\rangle}` |
 | `\invert` | 1 | `{ \left[ { \scriptstyle \frac{1}{#1} } \right] }` |
@@ -1556,6 +1560,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\Induction` | 2 | `\mathrm{Ind}^{#1}_{#2}` |
 | `\coInduction` | 2 | `\mathrm{coInd}^{#1}_{#2}` |
 | `\sheafify` | 1 | `\left( #1 \right)^{\scriptscriptstyle \mathrm{sh}}` |
+| `\padiccompletion` | 2 | `{ {#1}_{\widehat{#2}} }` |
 | `\complete` | 1 | `{ {}_{ \hat{#1} } }` |
 | `\takecompletion` | 1 | `{ \overbrace{#1}^{\widehat{\hspace{4em}}} }` |
 | `\kv` | 0 | `{ k_{\hat{v}} }` |
@@ -1696,7 +1701,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\dualof` | 1 | `{ {#1}^{\vee} }` |
 | `\doubledualof` | 1 | `{ {#1}^{\vee\vee} }` |
 | `\inverseof` | 1 | `{ {#1}^{-1} }` |
-| `\unitsof` | 1 | `{ {#1}^{\times} }` |
+| `\units` | 1 | `{ {#1}^{\times} }` |
 | `\nonzeroof` | 1 | `{ {#1}^{\bullet} }` |
 | `\interiorof` | 1 | `{ {#1}^{\circ} }` |
 | `\sepclosure` | 1 | `{ {#1}^{\operatorname{sep}} }` |
@@ -1707,12 +1712,12 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\isoclasses` | 1 | `{ {#1}_{/\sim} }` |
 | `\glue` | 1 | `{ \Disjoint_{#1} }` |
 | `\normcomplex` | 1 | `{\norm{\complex{#1}}}` |
-| `\Extalgebra` | 0 | `\cocomplex{\bigwedge}` |
+| `\Extalgebra` | 0 | `\chaincomplex{\bigwedge}` |
 | `\Extalg` | 0 | `\Extalgebra` |
-| `\Extcomplex` | 0 | `\cocomplex{ \Extalgebra}` |
-| `\drcomplex` | 0 | `{\cocomplex{\Omega}}` |
+| `\Extcomplex` | 0 | `\chaincomplex{ \Extalgebra}` |
+| `\drcomplex` | 0 | `{\chaincomplex{\Omega}}` |
 | `\cxH` | 0 | `{\complex{H}}` |
-| `\ccxH` | 0 | `{\cocomplex{H}}` |
+| `\ccxH` | 0 | `{\chaincomplex{H}}` |
 | `\sheafhom` | 0 | `\mathop{\mathcal{H}\! \mathit{om}}` |
 | `\smallprod` | 0 | `{ \scriptscriptstyle\prod }` |
 | `\eqLH` | 0 | `{ \equalsbecause{\scriptscriptstyle\text{LH}} }` |
@@ -1765,6 +1770,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\QHS` | 0 | `\mathbf{Q}\kern-0.5pt\operatorname{HS}` |
 | `\BGL` | 0 | `\mathbf{B}\mkern-3mu \operatorname{GL}` |
 | `\gitquot` | 0 | `{ \mathbin{/\mkern-6mu/}}` |
+| `\boldsymbol` | 0 | `\bm` |
 | `\quotleft` | 2 | `{}_{#2}\mkern-.5mu\backslash\mkern-2mu^{#1}` |
 | `\quotright` | 2 | `{}^{#1}\mkern-2mu/\mkern-2mu_{#2}` |
 | `\dcoset` | 3 | `\,\scriptscriptstyle {\textstyle #1} \mkern-4mu\scalebox{1.5}{$\diagdown$}\mkern-5mu^{\textstyle #2} \mkern-4mu\scalebox{1.5}{$\diagup$}\mkern-5mu{\textstyle #3}` |

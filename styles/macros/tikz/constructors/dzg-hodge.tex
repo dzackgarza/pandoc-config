@@ -1,0 +1,102 @@
+% =============================================================================
+% Hodge diamonds: constructor
+% =============================================================================
+% The Hodge diamond of a smooth complex projective variety X of dimension n:
+% the numbers h^{p,q}(X) = dim H^q(X, Omega^p) (so that
+% \bigoplus_{i=0}^{2n} H^i(X;\CC) = \bigoplus_{p+q=i} H^{p,q}(X)) arranged
+% with h^{0,0} at the top and h^{n,n} at the bottom, p increasing left to
+% right and q increasing top to bottom; equivalently the (p,q) grid with
+% p+q constant on horizontal rows. Drawn as a TikZ picture so every entry is a
+% named node that a figure can decorate.
+% \input by dzg-constructors.tex, so "@" is a letter here.
+%
+% Commands:
+%   \hodgediamond{<n>}{<entry list>}
+%       used inside a figure's own tikzpicture environment.
+%
+% Keys:
+%   hodge column sep=<length>, hodge row sep=<length>
+%
+% <entry list> is a comma-separated list of the (n+1)^2 values in diamond
+% reading order: row by row from the top row (p+q = 0) to the bottom row
+% (p+q = 2n), each row left to right with p descending, i.e.
+%   h^{0,0},
+%   h^{1,0}, h^{0,1},
+%   h^{2,0}, h^{1,1}, h^{0,2},
+%   ...
+%   h^{n,n-1}, h^{n-1,n},
+%   h^{n,n}.
+% The entry h^{p,q} is the node hodge-p-q at horizontal offset n-p+q and
+% vertical offset -(p+q). Thus a figure decorates h^{p,q} through
+% (hodge-p-q) directly.
+
+\ExplSyntaxOn
+
+\clist_new:N \l_dzg_hodge_entries_clist
+\int_new:N \l_dzg_hodge_entry_int
+\int_new:N \l_dzg_hodge_row_int
+\int_new:N \l_dzg_hodge_col_int
+\int_new:N \l_dzg_hodge_p_int
+\int_new:N \l_dzg_hodge_q_int
+\tl_new:N \l_dzg_hodge_colsep_tl
+\tl_new:N \l_dzg_hodge_rowsep_tl
+
+\tikzset{
+  hodge~column~sep/.initial=1.2cm,
+  hodge~row~sep/.initial=0.8cm,
+}
+
+% h^{p,q} is the node hodge-p-q at horizontal offset (n-p+q) times the column
+% separation and vertical offset -(p+q) times the row separation.
+\NewDocumentCommand{\hodgediamond}{ m m }{%
+  \clist_set:Nn \l_dzg_hodge_entries_clist {#2}
+  \int_compare:nNnTF { \clist_count:N \l_dzg_hodge_entries_clist }
+    = { \int_eval:n { (#1 + 1) * (#1 + 1) } }
+    { }
+    {
+      \PackageError{dzg-tikz}
+        {\string\hodgediamond\space needs (#1+1)^2 entries}
+        {Supply one Hodge number for every h^{p,q} with 0 <= p,q <= #1.}
+    }
+  \int_compare:nNnTF {#1} < {0}
+    {
+      \PackageError{dzg-tikz}
+        {\string\hodgediamond\space needs a nonnegative dimension}
+        {The first argument must be the complex dimension of the variety.}
+    }
+    {
+      \int_zero:N \l_dzg_hodge_entry_int
+      \tl_set:Nx \l_dzg_hodge_colsep_tl
+        { \pgfkeysvalueof{/tikz/hodge~column~sep} }
+      \tl_set:Nx \l_dzg_hodge_rowsep_tl
+        { \pgfkeysvalueof{/tikz/hodge~row~sep} }
+      \int_step_inline:nn { 2*#1 + 1 }
+        {
+          \int_set:Nn \l_dzg_hodge_row_int {##1 - 1}
+          \int_set:Nn \l_dzg_hodge_p_int
+            { \int_min:nn {#1} { \l_dzg_hodge_row_int } }
+          \int_set:Nn \l_dzg_hodge_col_int
+            { \int_max:nn {0} { \l_dzg_hodge_row_int - #1 } }
+          \bool_while_do:nn
+            { \int_compare_p:nNn { \l_dzg_hodge_p_int } > { \l_dzg_hodge_col_int - 1 } }
+            {
+              \int_incr:N \l_dzg_hodge_entry_int
+              \int_set:Nn \l_dzg_hodge_q_int
+                { \l_dzg_hodge_row_int - \l_dzg_hodge_p_int }
+              \node (hodge-\int_use:N \l_dzg_hodge_p_int-\int_use:N \l_dzg_hodge_q_int)
+                at (
+                  \int_eval:n { #1 - \l_dzg_hodge_p_int + \l_dzg_hodge_q_int }
+                    * \l_dzg_hodge_colsep_tl,
+                  -\int_eval:n { \l_dzg_hodge_p_int + \l_dzg_hodge_q_int }
+                    * \l_dzg_hodge_rowsep_tl
+                )
+                {
+                  $\clist_item:Nn \l_dzg_hodge_entries_clist
+                    { \l_dzg_hodge_entry_int }$
+                };
+              \int_decr:N \l_dzg_hodge_p_int
+            }
+        }
+    }
+}
+\ExplSyntaxOff
