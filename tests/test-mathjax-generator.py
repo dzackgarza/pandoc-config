@@ -90,6 +90,7 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "inverseof", ["{ {#1}^{-1} }", 1])
     assert_macro(macros, "unitsof", ["{ {#1}^{\\times} }", 1])
     assert_macro(macros, "completionat", ["{ {#1}^{\\wedge}_{#2} }", 2])
+    assert_macro(macros, "signature", ["\\operatorname{sign}\\qty{#1}", 1])
 
 
 def test_preview_template_matches_generated_projection() -> None:

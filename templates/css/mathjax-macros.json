@@ -500,7 +500,6 @@
   "sgn": "\\operatorname{sgn}",
   "SHerm": "{\\operatorname{SHerm}}",
   "Sieg": "{\\mathrm{Sieg}}",
-  "signature": "\\operatorname{sign}",
   "Sim": "\\operatorname{Sim}",
   "sinc": "\\operatorname{sinc}",
   "Sing": "{\\operatorname{Sing}}",
@@ -1797,6 +1796,10 @@
   "orthcomp": [
     "#1^{\\perp #2}",
     2
+  ],
+  "signature": [
+    "\\operatorname{sign}\\qty{#1}",
+    1
   ],
   "thecone": [
     "\\mathfrak{#1}",

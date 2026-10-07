@@ -961,7 +961,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\sgn` | 0 | `\operatorname{sgn}` |
 | `\SHerm` | 0 | `{\operatorname{SHerm}}` |
 | `\Sieg` | 0 | `{\mathrm{Sieg}}` |
-| `\signature` | 0 | `\operatorname{sign}` |
 | `\Sim` | 0 | `\operatorname{Sim}` |
 | `\sinc` | 0 | `\operatorname{sinc}` |
 | `\Sing` | 0 | `{\operatorname{Sing}}` |
@@ -1730,6 +1729,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\righttriplearrows` | 0 | `\operatorname{{\; \tikz{ \foreach \y in {0, 0.1, 0.2} { \draw [-stealth] (0, \y) -- +(0.5, 0);}} \; }}` |
 | `\bdlattice` | 2 | `\overline{#1}_{ #2 }` |
 | `\orthcomp` | 2 | `#1^{\perp #2}` |
+| `\signature` | 1 | `\operatorname{sign}\qty{#1}` |
 | `\thecone` | 1 | `\mathfrak{#1}` |
 | `\theposet` | 1 | `\mathcal{#1}` |
 | `\modulistack` | 1 | `\mathcal{#1}` |
