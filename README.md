@@ -1480,7 +1480,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\IA` | 0 | `\mathrm{IA}` |
 | `\IAD` | 0 | `\mathrm{IAD}` |
 | `\IARP` | 0 | `\mathrm{IARP}` |
-| `\OStab` | 0 | `\Orth^*` |
 | `\ZZtwoadic` | 0 | `\ZZ_{\hat 2}` |
 | `\cox` | 0 | `\Cox` |
 | `\irrelevant` | 0 | `\mathrm{irr}` |
@@ -1731,6 +1730,17 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\orthcomp` | 2 | `#1^{\perp #2}` |
 | `\signature` | 1 | `\operatorname{sign}\qty{#1}` |
 | `\spinornorm` | 1 | `\operatorname{sn}\qty{#1}` |
+| `\discriminantkernel` | 1 | `\Orth^{\mathrm{discker}}\qty{#1}` |
+| `\discriminantcokernel` | 1 | `\Orth^{\mathrm{disccoker}}\qty{#1}` |
+| `\spinorkernel` | 1 | `\Orth^{\mathrm{snker}}\qty{#1}` |
+| `\spinorcokernel` | 1 | `\Orth^{\mathrm{sncoker}}\qty{#1}` |
+| `\discriminantspinorkernel` | 1 | `\Orth^{\mathrm{discker},\mathrm{snker}}\qty{#1}` |
+| `\orthogonalreflectiongroup` | 1 | `W\qty{#1}` |
+| `\monodromygroup` | 1 | `\operatorname{Mon}\qty{#1}` |
+| `\eichlergroup` | 1 | `E\qty{#1}` |
+| `\mirandamorrisongroup` | 1 | `\operatorname{MM}\qty{#1}` |
+| `\nikulinobstructiongroup` | 1 | `I\qty{#1}` |
+| `\genusgroup` | 1 | `g\qty{#1}` |
 | `\thecone` | 1 | `\mathfrak{#1}` |
 | `\theposet` | 1 | `\mathcal{#1}` |
 | `\modulistack` | 1 | `\mathcal{#1}` |

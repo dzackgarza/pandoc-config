@@ -95,6 +95,35 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "cyclicgroup", ["C_{#1}", 1])
     assert_macro(
         macros,
+        "discriminantkernel",
+        ["\\Orth^{\\mathrm{discker}}\\qty{#1}", 1],
+    )
+    assert_macro(
+        macros,
+        "discriminantcokernel",
+        ["\\Orth^{\\mathrm{disccoker}}\\qty{#1}", 1],
+    )
+    assert_macro(macros, "spinorkernel", ["\\Orth^{\\mathrm{snker}}\\qty{#1}", 1])
+    assert_macro(macros, "spinorcokernel", ["\\Orth^{\\mathrm{sncoker}}\\qty{#1}", 1])
+    assert_macro(
+        macros,
+        "discriminantspinorkernel",
+        ["\\Orth^{\\mathrm{discker},\\mathrm{snker}}\\qty{#1}", 1],
+    )
+    assert_macro(macros, "orthogonalreflectiongroup", ["W\\qty{#1}", 1])
+    assert_macro(macros, "monodromygroup", ["\\operatorname{Mon}\\qty{#1}", 1])
+    assert_macro(macros, "eichlergroup", ["E\\qty{#1}", 1])
+    assert_macro(
+        macros, "mirandamorrisongroup", ["\\operatorname{MM}\\qty{#1}", 1]
+    )
+    assert_macro(macros, "nikulinobstructiongroup", ["I\\qty{#1}", 1])
+    assert_macro(macros, "genusgroup", ["g\\qty{#1}", 1])
+    if "OStab" in macros:
+        fail("retired orthogonal-group alias removed", repr(macros["OStab"]))
+    else:
+        check("retired orthogonal-group alias removed")
+    assert_macro(
+        macros,
         "equalizer",
         [
             "\\operatorname{Eq}\\qty{#3,#4} \\longrightarrow #1 "

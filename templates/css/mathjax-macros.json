@@ -1019,7 +1019,6 @@
   "IA": "\\mathrm{IA}",
   "IAD": "\\mathrm{IAD}",
   "IARP": "\\mathrm{IARP}",
-  "OStab": "\\Orth^*",
   "ZZtwoadic": "\\ZZ_{\\hat 2}",
   "cox": "\\Cox",
   "irrelevant": "\\mathrm{irr}",
@@ -1806,6 +1805,50 @@
   ],
   "spinornorm": [
     "\\operatorname{sn}\\qty{#1}",
+    1
+  ],
+  "discriminantkernel": [
+    "\\Orth^{\\mathrm{discker}}\\qty{#1}",
+    1
+  ],
+  "discriminantcokernel": [
+    "\\Orth^{\\mathrm{disccoker}}\\qty{#1}",
+    1
+  ],
+  "spinorkernel": [
+    "\\Orth^{\\mathrm{snker}}\\qty{#1}",
+    1
+  ],
+  "spinorcokernel": [
+    "\\Orth^{\\mathrm{sncoker}}\\qty{#1}",
+    1
+  ],
+  "discriminantspinorkernel": [
+    "\\Orth^{\\mathrm{discker},\\mathrm{snker}}\\qty{#1}",
+    1
+  ],
+  "orthogonalreflectiongroup": [
+    "W\\qty{#1}",
+    1
+  ],
+  "monodromygroup": [
+    "\\operatorname{Mon}\\qty{#1}",
+    1
+  ],
+  "eichlergroup": [
+    "E\\qty{#1}",
+    1
+  ],
+  "mirandamorrisongroup": [
+    "\\operatorname{MM}\\qty{#1}",
+    1
+  ],
+  "nikulinobstructiongroup": [
+    "I\\qty{#1}",
+    1
+  ],
+  "genusgroup": [
+    "g\\qty{#1}",
     1
   ],
   "thecone": [
