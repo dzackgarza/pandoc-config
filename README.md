@@ -961,8 +961,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\sgn` | 0 | `\operatorname{sgn}` |
 | `\SHerm` | 0 | `{\operatorname{SHerm}}` |
 | `\Sieg` | 0 | `{\mathrm{Sieg}}` |
-| `\sign` | 0 | `\operatorname{sign}` |
-| `\signature` | 0 | `\operatorname{sig}` |
+| `\signature` | 0 | `\operatorname{sign}` |
 | `\Sim` | 0 | `\operatorname{Sim}` |
 | `\sinc` | 0 | `\operatorname{sinc}` |
 | `\Sing` | 0 | `{\operatorname{Sing}}` |

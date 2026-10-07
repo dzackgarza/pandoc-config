@@ -155,5 +155,6 @@
   "fV": "mfV",
   "fZ": "mfZ",
   "containedin": "iscontainedin",
-  "contains": "containing"
+  "contains": "containing",
+  "sign": "signature"
 }
