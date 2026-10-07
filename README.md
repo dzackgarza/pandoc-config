@@ -2017,8 +2017,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\deltaring` | 0 | `{\delta\dash\mathsf{Ring}}` |
 | `\terminal` | 0 | `{ 0_{\scriptscriptstyle \uparrow}}` |
 | `\initial` | 0 | `{ \mathscr \emptyset^{\scriptscriptstyle \downarrow}}` |
-| `\coeq` | 0 | `\operatorname{coeq}` |
-| `\cocoeq` | 0 | `\operatorname{eq}` |
+| `\equalizer` | 4 | `\operatorname{Eq}\qty{#3,#4} \longrightarrow #1 \mathrel{\underset{#4}{\overset{#3}{\rightrightarrows}}} #2` |
+| `\coequalizer` | 4 | `#1 \mathrel{\underset{#4}{\overset{#3}{\rightrightarrows}}} #2 \longrightarrow \operatorname{Coeq}\qty{#3,#4}` |
 | `\cat` | 1 | `\mathsf{#1}` |
 | `\GSets` | 0 | `{G\dash\mathsf{Set}}` |
 | `\derivedcat` | 1 | `\Dc {#1}` |

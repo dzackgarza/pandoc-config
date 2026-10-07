@@ -1467,8 +1467,8 @@
 \newcommand{\deltaring}{{\delta\dash\mathsf{Ring}}}
 \newcommand{\terminal}{{ 0_{\scriptscriptstyle \uparrow}}}
 \newcommand{\initial}{{ \mathscr \emptyset^{\scriptscriptstyle \downarrow}}}
-\newcommand{\coeq}{\operatorname{coeq}}
-\newcommand{\cocoeq}{\operatorname{eq}}
+\newcommand{\equalizer}[4]{\operatorname{Eq}\qty{#3,#4} \longrightarrow #1 \mathrel{\underset{#4}{\overset{#3}{\rightrightarrows}}} #2}
+\newcommand{\coequalizer}[4]{#1 \mathrel{\underset{#4}{\overset{#3}{\rightrightarrows}}} #2 \longrightarrow \operatorname{Coeq}\qty{#3,#4}}
 \newcommand{\cat}[1]{\mathsf{#1}}
 \newcommand{\GSets}{{G\dash\mathsf{Set}}}
 \newcommand{\derivedcat}[1]{\Dc {#1}}

@@ -93,6 +93,24 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "signature", ["\\operatorname{sign}\\qty{#1}", 1])
     assert_macro(macros, "spinornorm", ["\\operatorname{sn}\\qty{#1}", 1])
     assert_macro(macros, "cyclicgroup", ["C_{#1}", 1])
+    assert_macro(
+        macros,
+        "equalizer",
+        [
+            "\\operatorname{Eq}\\qty{#3,#4} \\longrightarrow #1 "
+            "\\mathrel{\\underset{#4}{\\overset{#3}{\\rightrightarrows}}} #2",
+            4,
+        ],
+    )
+    assert_macro(
+        macros,
+        "coequalizer",
+        [
+            "#1 \\mathrel{\\underset{#4}{\\overset{#3}{\\rightrightarrows}}} #2 "
+            "\\longrightarrow \\operatorname{Coeq}\\qty{#3,#4}",
+            4,
+        ],
+    )
 
 
 def test_preview_template_matches_generated_projection() -> None:
