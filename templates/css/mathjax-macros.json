@@ -1075,6 +1075,10 @@
     "\\left\\langle #1 \\right\\rangle",
     1
   ],
+  "cyclicgroup": [
+    "C_{#1}",
+    1
+  ],
   "generators": [
     "\\left\\langle{#1}\\right\\rangle",
     1

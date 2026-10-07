@@ -1517,6 +1517,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\adjoin` | 1 | `{ \left[ \scriptstyle {#1} \right] }` |
 | `\polynomialring` | 1 | `{ \left[ {#1} \right] }` |
 | `\bracket` | 1 | `\left\langle #1 \right\rangle` |
+| `\cyclicgroup` | 1 | `C_{#1}` |
 | `\generators` | 1 | `\left\langle{#1}\right\rangle` |
 | `\sqgens` | 1 | `\left[ {#1} \right]` |
 | `\freeon` | 1 | `\left[ {#1} \right]` |

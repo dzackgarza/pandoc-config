@@ -92,6 +92,7 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "completionat", ["{ {#1}^{\\wedge}_{#2} }", 2])
     assert_macro(macros, "signature", ["\\operatorname{sign}\\qty{#1}", 1])
     assert_macro(macros, "spinornorm", ["\\operatorname{sn}\\qty{#1}", 1])
+    assert_macro(macros, "cyclicgroup", ["C_{#1}", 1])
 
 
 def test_preview_template_matches_generated_projection() -> None:

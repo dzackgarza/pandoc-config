@@ -1070,6 +1070,7 @@ export const macros = {
   "adjoin": ["{ \\left[ \\scriptstyle {#1} \\right] }", 1],
   "polynomialring": ["{ \\left[ {#1} \\right] }", 1],
   "bracket": ["\\left\\langle #1 \\right\\rangle", 1],
+  "cyclicgroup": ["C_{#1}", 1],
   "generators": ["\\left\\langle{#1}\\right\\rangle", 1],
   "sqgens": ["\\left[ {#1} \\right]", 1],
   "freeon": ["\\left[ {#1} \\right]", 1],
