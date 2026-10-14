@@ -6,6 +6,7 @@
 %     styles/macros/spectral.tex
 \newcommand{\coloneqq}{\mathrel{\vcenter{:}}=}
 \newcommand{\qty}[1]{\left( {#1} \right)}
+\newcommand{\qed}{\blacksquare}
 \newcommand{\AA}{{\mathbf{A}}}
 \newcommand{\CC}{{\mathbf{C}}}
 \newcommand{\DD}{\mathbb{D}}
@@ -738,7 +739,6 @@
 \newcommand{\projectivelim}{\varprojlim}
 \newcommand{\projresolve}{\rightrightarrows}
 \newcommand{\proportional}{\propto}
-\newcommand{\qed}{\hfill\ensuremath{\blacksquare}}
 \newcommand{\rational}{\rationalmap}
 \newcommand{\rationalmap}{\dashrightarrow}
 \newcommand{\semidirect}{\rtimes}
@@ -1067,7 +1067,7 @@
 \newcommand{\descendingfiltration}[1]{{ {#1}_{\bullet} }}
 \newcommand{\ascendingfiltration}[1]{{ {#1}^{\bullet} }}
 \newcommand{\ctz}[1]{\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \,}
-\newcommand{\fps}[1]{{[\![ #1 ]\!]}}
+\newcommand{\fps}[1]{{\left[\!\left[ #1 \right]\!\right]}}
 \newcommand{\formalpowerseries}[1]{\fps{#1}}
 \newcommand{\functionfield}[1]{{ \left( {#1} \right) }}
 \newcommand{\rff}[1]{\functionfield{#1}}
@@ -1078,8 +1078,8 @@
 \newcommand{\invert}[1]{{ \left[ { \scriptstyle \frac{1}{#1} } \right] }}
 \newcommand{\localize}[1]{\left[ { \scriptstyle \inverseof{#1} } \right]}
 \newcommand{\plocalize}[1]{\primelocalize{#1}}
-\newcommand{\primelocalize}[1]{\left[ { \scriptstyle \inverseof{({#1}^c)} } \right]}
-\newcommand{\fls}[1]{(\hspace{-0.25em}( #1 )\hspace{-0.22em})}
+\newcommand{\primelocalize}[1]{\left[ { \scriptstyle \inverseof{\left( {#1}^c \right)} } \right]}
+\newcommand{\fls}[1]{{\left(\!\left( #1 \right)\!\right)}}
 \newcommand{\laurentseries}[1]{\fls{#1}}
 \newcommand{\embedsvia}[1]{\xhookrightarrow{#1}}
 \newcommand{\open}[1]{\overset{\circ}{#1}}
@@ -1089,7 +1089,7 @@
 \newcommand{\dcosetr}[2]{{#1}\mkern-3mu\diagup\mkern-3mu{#2}}
 \newcommand{\leftquotient}[2]{{#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}}
 \newcommand{\gitquot}{\mathbin{/\!/}}
-\newcommand{\jacobsonrad}[1]{{J ({#1}) }}
+\newcommand{\jacobsonrad}[1]{{J \left( {#1} \right) }}
 \newcommand{\nilrad}[1]{{\sqrt{0_{#1}} }}
 \newcommand{\Restriction}[2]{\mathrm{Res}^{#1}_{#2}}
 \newcommand{\coRestriction}[2]{\mathrm{coRes}^{#1}_{#2}}
@@ -1116,7 +1116,7 @@
 \newcommand{\fiberpower}[3]{{#1}^{\scriptscriptstyle\fiberproduct{#2}^{#3}}}
 \newcommand{\powers}[1]{{ {}^{\cdot #1} }}
 \newcommand{\prodpower}[2]{{#1}^{\scriptscriptstyle\times^{#2}}}
-\newcommand{\skel}[1]{{ {}^{ (#1) } }}
+\newcommand{\skel}[1]{{ {}^{ \left( #1 \right) } }}
 \newcommand{\smashpower}[2]{{#1}^{\scriptscriptstyle\smashprod^{#2}}}
 \newcommand{\sumpower}[1]{{ {}^{ \oplus{#1} }  }}
 \newcommand{\tensorpower}[2]{{ {}^{ \scriptstyle\otimes_{#1}^{#2} }  }}
@@ -1157,7 +1157,7 @@
 \newcommand{\openimmerse}{\underset{\scriptscriptstyle O}{\hookrightarrow}}
 \newcommand{\qtext}[1]{{\quad \operatorname{#1} \quad}}
 \newcommand{\roof}[3]{#1 {\, \scriptstyle {}^\swarrow\, } #2 {\, \scriptstyle {}^\searrow\,} #3}
-\newcommand{\shift}[2]{{ \Sigma^{\scriptstyle[#2]} #1 }}
+\newcommand{\shift}[2]{{ \Sigma^{\scriptstyle\left[ #2 \right]} #1 }}
 \newcommand{\squares}[1]{{ {#1}_{\scriptscriptstyle \square} }}
 \newcommand{\weakeq}{\underset{\scriptscriptstyle W}{\rightarrow}}
 \newcommand{\congas}[1]{\underset{#1}{\cong}}
@@ -1194,7 +1194,7 @@
 \newcommand{\mltext}[1]{\left\{\begin{array}{c}#1\end{array}\right\}}
 \newcommand{\Suchthat}{\middle\vert}
 \newcommand{\multinomial}[1]{\left(\!\!{#1}\!\!\right)}
-\newcommand{\realpart}[1]{{\mathcal{Re}({#1})}}
+\newcommand{\realpart}[1]{{\mathcal{Re}\left( {#1} \right)}}
 \newcommand{\sheaf}[1]{\operatorname{\mathcal{#1}}}
 \newcommand{\smpt}[1]{\setminus\theset{#1}}
 \newcommand{\smts}[1]{\setminus\theset{ #1 }}
@@ -1214,7 +1214,7 @@
 \newcommand{\basechange}[1]{{ \fiberproduct{k} {#1} }}
 \newcommand{\fprod}[3]{\fiberprod{#1}{#2}{#3}}
 \newcommand{\qsymb}[2]{{ \left( {#1} \over {#2} \right)  }}
-\newcommand{\kx}[1]{k[x_1, \cdots, x_{#1}]}
+\newcommand{\kx}[1]{k\left[ x_1, \cdots, x_{#1} \right]}
 \newcommand{\lktt}[1]{{L_{\mathrm{K3}, #1}}}
 \newcommand{\fractionalpart}[1]{\theset{#1}}
 \newcommand{\integerpart}[1]{\left[ {#1}\right]}
@@ -1230,7 +1230,7 @@
 \newcommand{\injectsvia}[1]{\xhookrightarrow{#1}}
 \newcommand{\injectsfromvia}[1]{\xhookleftarrow{#1}}
 \newcommand{\relspec}{\underline{ \operatorname{Spec}}}
-\newcommand{\nerve}[1]{{ \mathcal{N}({#1}) }}
+\newcommand{\nerve}[1]{{ \mathcal{N}\left( {#1} \right) }}
 \newcommand{\realize}[1]{{ \abs{#1} }}
 \newcommand{\opcat}[1]{{ {#1}^{\operatorname{op}} }}
 \newcommand{\oppositeof}[1]{{ {#1}^{\mathrm{op}} }}
@@ -1259,7 +1259,6 @@
 \newcommand{\eqLH}{{ \equalsbecause{\scriptscriptstyle\text{LH}} }}
 \newcommand{\eqae}{\underset{\ae}{=}}
 \newcommand{\eq}{\operatorname*{=}}
-\newcommand{\RM}[1]{\textup{\uppercase\expandafter{\romannumeral#1}}%}
 \newcommand{\caniso}{{ \underset{\can}{\iso} }}
 \newcommand{\dif}{\mathop{}\!\operatorname{d}}
 \newcommand{\rotate}[2]{{\style{display: inline-block; transform: rotate(#1deg)}{#2}}}
@@ -1368,7 +1367,7 @@
 \newcommand{\semisimp}{{\mathsf{ss}}}
 \newcommand{\Hodge}{{\mathsf{Hodge}}}
 \newcommand{\VectBundle}{{ \Bun\qty{\GL_r}}}
-\newcommand{\VectSp}{{ \VectSp }}
+\newcommand{\VectSp}{{ \Vect }}
 \newcommand{\VectBun}{{ \VectBundle }}
 \newcommand{\Bung}{{ \Bun\qty{G}}}
 \newcommand{\Alg}{\mathsf{Alg}}
@@ -1488,7 +1487,7 @@
 \newcommand{\torsors}[1]{{\mathsf{#1}\dash\mathsf{Torsors}}}
 \newcommand{\torsorsright}[1]{\mathsf{Torsors}\dash\mathsf{#1}}
 \newcommand{\torsorsleft}[1]{\mathsf{#1}\dash\mathsf{Torsors}}
-\newcommand{\bimods}[2]{({#1}, {#2})\dash\mathsf{biMod}}
+\newcommand{\bimods}[2]{\left( {#1}, {#2} \right)\dash\mathsf{biMod}}
 \newcommand{\modsleft}[1]{{}_{#1}\Mod}
 \newcommand{\modsright}[1]{\Mod_{#1}}
 \newcommand{\mods}[1]{\modsleft{#1}}
@@ -1502,7 +1501,7 @@
 \newcommand{\VectBundlerk}[1]{{ \Bun\qty{\GL_{#1}}}}
 \newcommand{\VectBunrk}[1]{{ \VectBundlerk{#1}}}
 \newcommand{\algs}[1]{{ {}_{#1} \Alg }}
-\newcommand{\inftycatn}[1]{{ \underset{(\infty, {#1})}{ \Cat}  }}
+\newcommand{\inftycatn}[1]{{ \underset{\left( \infty, {#1} \right)}{ \Cat}  }}
 \newcommand{\GSpaces}{{G\dash\mathsf{Spaces}}}
 \newcommand{\gspaces}[1]{{#1}\dash{\mathsf{Spaces}}}
 \newcommand{\Torsor}[1]{{\mathsf{#1}\dash\mathsf{Torsor}}}

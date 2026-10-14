@@ -1197,7 +1197,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\projectivelim` | 0 | `\varprojlim` |
 | `\projresolve` | 0 | `\rightrightarrows` |
 | `\proportional` | 0 | `\propto` |
-| `\qed` | 0 | `\hfill\ensuremath{\blacksquare}` |
 | `\rational` | 0 | `\rationalmap` |
 | `\rationalmap` | 0 | `\dashrightarrow` |
 | `\semidirect` | 0 | `\rtimes` |
@@ -1531,7 +1530,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\descendingfiltration` | 1 | `{ {#1}_{\bullet} }` |
 | `\ascendingfiltration` | 1 | `{ {#1}^{\bullet} }` |
 | `\ctz` | 1 | `\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \,` |
-| `\fps` | 1 | `{[\![ #1 ]\!]}` |
+| `\fps` | 1 | `{\left[\!\left[ #1 \right]\!\right]}` |
 | `\formalpowerseries` | 1 | `\fps{#1}` |
 | `\functionfield` | 1 | `{ \left( {#1} \right) }` |
 | `\rff` | 1 | `\functionfield{#1}` |
@@ -1542,8 +1541,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\invert` | 1 | `{ \left[ { \scriptstyle \frac{1}{#1} } \right] }` |
 | `\localize` | 1 | `\left[ { \scriptstyle \inverseof{#1} } \right]` |
 | `\plocalize` | 1 | `\primelocalize{#1}` |
-| `\primelocalize` | 1 | `\left[ { \scriptstyle \inverseof{({#1}^c)} } \right]` |
-| `\fls` | 1 | `(\hspace{-0.25em}( #1 )\hspace{-0.22em})` |
+| `\primelocalize` | 1 | `\left[ { \scriptstyle \inverseof{\left( {#1}^c \right)} } \right]` |
+| `\fls` | 1 | `{\left(\!\left( #1 \right)\!\right)}` |
 | `\laurentseries` | 1 | `\fls{#1}` |
 | `\embedsvia` | 1 | `\xhookrightarrow{#1}` |
 | `\open` | 1 | `\overset{\circ}{#1}` |
@@ -1553,7 +1552,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\dcosetr` | 2 | `{#1}\mkern-3mu\diagup\mkern-3mu{#2}` |
 | `\leftquotient` | 2 | `{#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}` |
 | `\gitquot` | 0 | `\mathbin{/\!/}` |
-| `\jacobsonrad` | 1 | `{J ({#1}) }` |
+| `\jacobsonrad` | 1 | `{J \left( {#1} \right) }` |
 | `\nilrad` | 1 | `{\sqrt{0_{#1}} }` |
 | `\Restriction` | 2 | `\mathrm{Res}^{#1}_{#2}` |
 | `\coRestriction` | 2 | `\mathrm{coRes}^{#1}_{#2}` |
@@ -1580,7 +1579,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\fiberpower` | 3 | `{#1}^{\scriptscriptstyle\fiberproduct{#2}^{#3}}` |
 | `\powers` | 1 | `{ {}^{\cdot #1} }` |
 | `\prodpower` | 2 | `{#1}^{\scriptscriptstyle\times^{#2}}` |
-| `\skel` | 1 | `{ {}^{ (#1) } }` |
+| `\skel` | 1 | `{ {}^{ \left( #1 \right) } }` |
 | `\smashpower` | 2 | `{#1}^{\scriptscriptstyle\smashprod^{#2}}` |
 | `\sumpower` | 1 | `{ {}^{ \oplus{#1} } }` |
 | `\tensorpower` | 2 | `{ {}^{ \scriptstyle\otimes_{#1}^{#2} } }` |
@@ -1621,7 +1620,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\openimmerse` | 0 | `\underset{\scriptscriptstyle O}{\hookrightarrow}` |
 | `\qtext` | 1 | `{\quad \operatorname{#1} \quad}` |
 | `\roof` | 3 | `#1 {\, \scriptstyle {}^\swarrow\, } #2 {\, \scriptstyle {}^\searrow\,} #3` |
-| `\shift` | 2 | `{ \Sigma^{\scriptstyle[#2]} #1 }` |
+| `\shift` | 2 | `{ \Sigma^{\scriptstyle\left[ #2 \right]} #1 }` |
 | `\squares` | 1 | `{ {#1}_{\scriptscriptstyle \square} }` |
 | `\weakeq` | 0 | `\underset{\scriptscriptstyle W}{\rightarrow}` |
 | `\congas` | 1 | `\underset{#1}{\cong}` |
@@ -1658,7 +1657,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\mltext` | 1 | `\left\{\begin{array}{c}#1\end{array}\right\}` |
 | `\Suchthat` | 0 | `\middle\vert` |
 | `\multinomial` | 1 | `\left(\!\!{#1}\!\!\right)` |
-| `\realpart` | 1 | `{\mathcal{Re}({#1})}` |
+| `\realpart` | 1 | `{\mathcal{Re}\left( {#1} \right)}` |
 | `\sheaf` | 1 | `\operatorname{\mathcal{#1}}` |
 | `\smpt` | 1 | `\setminus\theset{#1}` |
 | `\smts` | 1 | `\setminus\theset{ #1 }` |
@@ -1678,7 +1677,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\basechange` | 1 | `{ \fiberproduct{k} {#1} }` |
 | `\fprod` | 3 | `\fiberprod{#1}{#2}{#3}` |
 | `\qsymb` | 2 | `{ \left( {#1} \over {#2} \right) }` |
-| `\kx` | 1 | `k[x_1, \cdots, x_{#1}]` |
+| `\kx` | 1 | `k\left[ x_1, \cdots, x_{#1} \right]` |
 | `\lktt` | 1 | `{L_{\mathrm{K3}, #1}}` |
 | `\fractionalpart` | 1 | `\theset{#1}` |
 | `\integerpart` | 1 | `\left[ {#1}\right]` |
@@ -1694,7 +1693,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\injectsvia` | 1 | `\xhookrightarrow{#1}` |
 | `\injectsfromvia` | 1 | `\xhookleftarrow{#1}` |
 | `\relspec` | 0 | `\underline{ \operatorname{Spec}}` |
-| `\nerve` | 1 | `{ \mathcal{N}({#1}) }` |
+| `\nerve` | 1 | `{ \mathcal{N}\left( {#1} \right) }` |
 | `\realize` | 1 | `{ \abs{#1} }` |
 | `\opcat` | 1 | `{ {#1}^{\operatorname{op}} }` |
 | `\oppositeof` | 1 | `{ {#1}^{\mathrm{op}} }` |
@@ -1723,7 +1722,6 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\eqLH` | 0 | `{ \equalsbecause{\scriptscriptstyle\text{LH}} }` |
 | `\eqae` | 0 | `\underset{\ae}{=}` |
 | `\eq` | 0 | `\operatorname*{=}` |
-| `\RM` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}%` |
 | `\caniso` | 0 | `{ \underset{\can}{\iso} }` |
 | `\dif` | 0 | `\mathop{}\!\operatorname{d}` |
 | `\rotate` | 2 | `{\style{display: inline-block; transform: rotate(#1deg)}{#2}}` |
@@ -1754,6 +1752,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 
 | Macro | Args | Expansion |
 | --- | --- | --- |
+| `\qed` | 0 | `\hfill\ensuremath{\blacksquare}` |
+| `\RM` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}%` |
 | `\dqty` | 1 | `\left( \left( {#1} \right) \right)` |
 | `\fourcase` | 4 | `\begin{cases}{#1} & {#2} \\ {#3} & {#4}\end{cases}` |
 | `\cvec` | 2 | `{ \begin{bmatrix} {#1} \\ {#2} \end{bmatrix} }` |
@@ -1922,7 +1922,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\semisimp` | 0 | `{\mathsf{ss}}` |
 | `\Hodge` | 0 | `{\mathsf{Hodge}}` |
 | `\VectBundle` | 0 | `{ \Bun\qty{\GL_r}}` |
-| `\VectSp` | 0 | `{ \VectSp }` |
+| `\VectSp` | 0 | `{ \Vect }` |
 | `\VectBun` | 0 | `{ \VectBundle }` |
 | `\Bung` | 0 | `{ \Bun\qty{G}}` |
 | `\Alg` | 0 | `\mathsf{Alg}` |
@@ -2042,7 +2042,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\torsors` | 1 | `{\mathsf{#1}\dash\mathsf{Torsors}}` |
 | `\torsorsright` | 1 | `\mathsf{Torsors}\dash\mathsf{#1}` |
 | `\torsorsleft` | 1 | `\mathsf{#1}\dash\mathsf{Torsors}` |
-| `\bimods` | 2 | `({#1}, {#2})\dash\mathsf{biMod}` |
+| `\bimods` | 2 | `\left( {#1}, {#2} \right)\dash\mathsf{biMod}` |
 | `\modsleft` | 1 | `{}_{#1}\Mod` |
 | `\modsright` | 1 | `\Mod_{#1}` |
 | `\mods` | 1 | `\modsleft{#1}` |
@@ -2056,7 +2056,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\VectBundlerk` | 1 | `{ \Bun\qty{\GL_{#1}}}` |
 | `\VectBunrk` | 1 | `{ \VectBundlerk{#1}}` |
 | `\algs` | 1 | `{ {}_{#1} \Alg }` |
-| `\inftycatn` | 1 | `{ \underset{(\infty, {#1})}{ \Cat} }` |
+| `\inftycatn` | 1 | `{ \underset{\left( \infty, {#1} \right)}{ \Cat} }` |
 | `\GSpaces` | 0 | `{G\dash\mathsf{Spaces}}` |
 | `\gspaces` | 1 | `{#1}\dash{\mathsf{Spaces}}` |
 | `\Torsor` | 1 | `{\mathsf{#1}\dash\mathsf{Torsor}}` |

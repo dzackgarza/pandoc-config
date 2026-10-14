@@ -489,7 +489,7 @@ _test-compile-pandoc:
   bash "{{source_directory()}}/tests/test-compile-pandoc.sh"
 
 # Run all tests (macros, templates, tikz compilation, filter, poset layout, README reference)
-test: _test-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-readme _test-compile-pandoc
+test: _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-readme _test-compile-pandoc
 
 # Commit-tier gate entry point expected by the machine-wide ai-review-ci hook;
 # this repo's commit-tier QC is its own test suite.
@@ -510,6 +510,10 @@ test-push: test-ci
 # dir.
 test-references:
   bash "{{source_directory()}}/tests/test-project-references.sh"
+
+# Typeset every generated macro in MathJax 3 with ams and mathtools
+_test-mathjax-macros:
+  bun "{{source_directory()}}/tests/test-mathjax-macros.ts"
 
 # Test tikzcd filter on multiple scenarios
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.

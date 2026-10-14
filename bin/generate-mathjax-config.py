@@ -45,6 +45,7 @@ class MacroDef(NamedTuple):
 MATHJAX_SHIMS = (
     MacroDef("coloneqq", 0, r"\mathrel{\vcenter{:}}="),
     MacroDef("qty", 1, r"\left( {#1} \right)"),
+    MacroDef("qed", 0, r"\blacksquare"),
 )
 
 

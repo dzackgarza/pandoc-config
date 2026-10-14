@@ -8,6 +8,19 @@
 
 % Macros will be added here by macro-categorizer agent
 
+% End-of-proof mark. \hfill is TeX-only; MathJax uses the shim in
+% bin/generate-mathjax-config.py.
+% \ensuremath: amsthm's \popQED emits \qed in TEXT mode at \end{proof}
+% (the arxiv branch uses stock amsthm proof); bare \blacksquare there is
+% "Missing $ inserted". The plain branch's proof wraps it as $\qed$
+% (environments.tex), which \ensuremath leaves unchanged.
+\renewcommand{\qed}{\hfill\ensuremath{\blacksquare}}
+
+% Roman numeral macro. \romannumeral is a TeX primitive.
+\newcommand{\RM}[1]{%
+  \textup{\uppercase\expandafter{\romannumeral#1}}%
+}
+
 % Better delimiters
 \DeclarePairedDelimiter\qty{(}{)}
 \newcommand{\dqty}[1]{\left( \left( {#1} \right) \right)}

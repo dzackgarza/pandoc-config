@@ -53,7 +53,7 @@
 \newcommand{\ctz}[1]{\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \, }
 
 % Function fields and formal series
-\newcommand{\fps}[1]{{[\![ #1 ]\!]}}
+\newcommand{\fps}[1]{{\left[\!\left[ #1 \right]\!\right]}}
 \newcommand{\formalpowerseries}[1]{ \fps{#1} }
 \newcommand{\functionfield}[1]{ { \left( {#1} \right) } }
 \newcommand{\rff}[1]{ \functionfield{#1} }
@@ -74,10 +74,10 @@
 \newcommand{\invert}[1]{{ \left[ { \scriptstyle \frac{1}{#1} } \right] }}
 \newcommand{\localize}[1]{ \left[ { \scriptstyle \inverseof{#1} } \right] }
 \newcommand{\plocalize}[1]{\primelocalize{#1}}
-\newcommand{\primelocalize}[1]{ \left[ { \scriptstyle \inverseof{({#1}^c)} } \right]}
+\newcommand{\primelocalize}[1]{ \left[ { \scriptstyle \inverseof{\left( {#1}^c \right)} } \right]}
 
 % Laurent series
-\newcommand\fls[1]{(\hspace{-0.25em}( #1 )\hspace{-0.22em}) }
+\newcommand\fls[1]{{\left(\!\left( #1 \right)\!\right)}}
 \newcommand\laurentseries[1]{\fls{#1}}
 
 % Morphisms
@@ -115,7 +115,7 @@
 % LaTeX upgrade \boldsymbol -> \bm lives in tier3-tex-complex.tex,
 % which never feeds MathJax.
 
-\newcommand{\jacobsonrad}[1]{{J ({#1}) }}
+\newcommand{\jacobsonrad}[1]{{J \left( {#1} \right) }}
 \newcommand{\nilrad}[1]{{\sqrt{0_{#1}} }}
 
 % Restriction and induction
@@ -154,7 +154,7 @@
 \newcommand\fiberpower[3]{{#1}^{\scriptscriptstyle\fiberproduct{#2}^{#3}}}
 \newcommand\powers[1]{{ {}^{\cdot #1} }}
 \newcommand\prodpower[2]{{#1}^{\scriptscriptstyle\times^{#2}}}
-\newcommand\skel[1]{{ {}^{ (#1) } }}
+\newcommand\skel[1]{{ {}^{ \left( #1 \right) } }}
 \newcommand\smashpower[2]{{#1}^{\scriptscriptstyle\smashprod^{#2}}}
 \newcommand\sumpower[1]{{ {}^{ \oplus{#1} }  }}
 \newcommand\tensorpower[2]{{ {}^{ \scriptstyle\otimes_{#1}^{#2} }  }}
@@ -205,7 +205,7 @@
 \newcommand{\openimmerse}{\underset{\scriptscriptstyle O}{\hookrightarrow}}
 \newcommand{\qtext}[1]{{\quad \operatorname{#1} \quad}}
 \newcommand{\roof}[3]{ #1 {\, \scriptstyle {}^\swarrow\, } #2 {\, \scriptstyle {}^\searrow\,} #3 }
-\newcommand{\shift}[2]{{ \Sigma^{\scriptstyle[#2]} #1 }}
+\newcommand{\shift}[2]{{ \Sigma^{\scriptstyle\left[ #2 \right]} #1 }}
 \newcommand{\squares}[1]{{ {#1}_{\scriptscriptstyle \square} }}
 \newcommand{\weakeq}{\underset{\scriptscriptstyle W}{\rightarrow}}
 
@@ -281,7 +281,7 @@
 \newcommand{\multinomial}[1]{\left(\!\!{#1}\!\!\right)}
 
 % Pairing with overhead notation
-\newcommand{\realpart}[1]{{\mathcal{Re}({#1})}}
+\newcommand{\realpart}[1]{{\mathcal{Re}\left( {#1} \right)}}
 
 % Sheaf notation
 \newcommand{\sheaf}[1]{\operatorname{\mathcal{#1}}}
@@ -331,7 +331,7 @@
 \newcommand{\qsymb}[2]{{ \left( {#1} \over {#2} \right)  }}
 
 % Polynomial rings
-\newcommand{\kx}[1]{k[x_1, \cdots, x_{#1}]}
+\newcommand{\kx}[1]{k\left[ x_1, \cdots, x_{#1} \right]}
 
 % K-theory variants
 \newcommand{\lktt}[1]{ {L_{\mathrm{K3}, #1}} }
@@ -363,7 +363,7 @@
 \newcommand{\relspec}{\underline{ \operatorname{Spec}} }
 
 % Nerves and realizations
-\newcommand{\nerve}[1]{{ \mathcal{N}({#1}) }}
+\newcommand{\nerve}[1]{{ \mathcal{N}\left( {#1} \right) }}
 \newcommand{\realize}[1]{{ \abs{#1} }}
 
 % Category operations
@@ -413,11 +413,6 @@
 
 % Hodge structure variants
 \newcommand{\eq}{\operatorname*{=}}
-
-% Roman numeral macro
-\newcommand{\RM}[1]{%
-  \textup{\uppercase\expandafter{\romannumeral#1}}%
-}
 
 % Canonical isomorphism
 \newcommand\caniso{{ \underset{\can}{\iso} }}

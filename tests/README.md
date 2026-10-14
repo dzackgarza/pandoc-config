@@ -15,6 +15,12 @@ This directory contains test documents that exercise the unified LaTeX macro sys
 - **test-pandoc-macros.md** - Markdown document with same macro tests
 - **just test** - Runs the complete repository test recipe
 
+### MathJax Test
+
+- **test-mathjax-macros.ts** - Typesets every macro of
+  `templates/css/mathjax-macros.json` in MathJax 3 with the ams and mathtools
+  packages and fails on a TeX error (`just _test-mathjax-macros`)
+
 ## Compiling the LaTeX Test
 
 Run the LaTeX test from the repository root:
