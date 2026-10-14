@@ -58,6 +58,18 @@ for (const bracket of [
 ])
   if (!bracket.test(series))
     failures.push(`\\fps{\\frac{a}{b}} lacks ${bracket}:\n${series}`);
+// \fls sets its four parentheses as three \left ... \right groups in sequence,
+// none inside another, so MathJax sizes each one to the argument alone and
+// the two parentheses of each side have the same height.
+const laurent = await mathjax.tex2mmlPromise(String.raw`\fls{\frac{a}{b}}`);
+const delimiters = [...laurent.matchAll(/data-latex="(\\(?:left|right).)"/g)]
+  .map((match) => match[1])
+  .join(" ");
+const sequence = String.raw`\left( \right. \left( \right) \left. \right)`;
+if (delimiters !== sequence)
+  failures.push(
+    `\\fls{\\frac{a}{b}} sets ${delimiters}, not ${sequence}:\n${laurent}`,
+  );
 for (const failure of failures) console.log(failure);
 const count = Object.keys(macros).length;
 console.log(`${count - failures.length}/${count} macros typeset in MathJax.`);

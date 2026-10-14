@@ -1096,7 +1096,7 @@ export const macros = {
   "localize": ["\\left[ { \\scriptstyle \\inverseof{#1} } \\right]", 1],
   "plocalize": ["\\primelocalize{#1}", 1],
   "primelocalize": ["\\left[ { \\scriptstyle \\inverseof{\\left( {#1}^c \\right)} } \\right]", 1],
-  "fls": ["{\\left(\\!\\left( #1 \\right)\\!\\right)}", 1],
+  "fls": ["{\\mathopen{\\left(\\vphantom{#1}\\right.}\\mkern-5mu\\left( #1 \\right)\\mkern-5mu\\mathclose{\\left.\\vphantom{#1}\\right)}}", 1],
   "laurentseries": ["\\fls{#1}", 1],
   "embedsvia": ["\\xhookrightarrow{#1}", 1],
   "open": ["\\overset{\\circ}{#1}", 1],

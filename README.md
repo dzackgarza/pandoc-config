@@ -1549,7 +1549,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\localize` | 1 | `\left[ { \scriptstyle \inverseof{#1} } \right]` |
 | `\plocalize` | 1 | `\primelocalize{#1}` |
 | `\primelocalize` | 1 | `\left[ { \scriptstyle \inverseof{\left( {#1}^c \right)} } \right]` |
-| `\fls` | 1 | `{\left(\!\left( #1 \right)\!\right)}` |
+| `\fls` | 1 | `{\mathopen{\left(\vphantom{#1}\right.}\mkern-5mu\left( #1 \right)\mkern-5mu\mathclose{\left.\vphantom{#1}\right)}}` |
 | `\laurentseries` | 1 | `\fls{#1}` |
 | `\embedsvia` | 1 | `\xhookrightarrow{#1}` |
 | `\open` | 1 | `\overset{\circ}{#1}` |

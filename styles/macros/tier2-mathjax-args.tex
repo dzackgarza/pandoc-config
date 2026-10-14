@@ -76,8 +76,12 @@
 \newcommand{\plocalize}[1]{\primelocalize{#1}}
 \newcommand{\primelocalize}[1]{ \left[ { \scriptstyle \inverseof{\left( {#1}^c \right)} } \right]}
 
-% Laurent series
-\newcommand\fls[1]{{\left(\!\left( #1 \right)\!\right)}}
+% Laurent series. No font has a stretchy double parenthesis, so \fls builds the
+% delimiter that stmaryrd's \DeclareMathDelimiter\llbracket gets from its font:
+% each outer parenthesis is a \left delimiter sized to a \vphantom of the
+% argument, the same height as the inner \left( #1 \right). The 5mu kern
+% removes the null delimiter space and overlaps the pair as (\!( does.
+\newcommand\fls[1]{{\mathopen{\left(\vphantom{#1}\right.}\mkern-5mu\left( #1 \right)\mkern-5mu\mathclose{\left.\vphantom{#1}\right)}}}
 \newcommand\laurentseries[1]{\fls{#1}}
 
 % Morphisms

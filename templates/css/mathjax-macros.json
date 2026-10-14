@@ -1186,7 +1186,7 @@
     1
   ],
   "fls": [
-    "{\\left(\\!\\left( #1 \\right)\\!\\right)}",
+    "{\\mathopen{\\left(\\vphantom{#1}\\right.}\\mkern-5mu\\left( #1 \\right)\\mkern-5mu\\mathclose{\\left.\\vphantom{#1}\\right)}}",
     1
   ],
   "laurentseries": [
