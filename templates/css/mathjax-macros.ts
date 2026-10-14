@@ -1084,7 +1084,7 @@ export const macros: Record<string, ZeroArgMacro | NArgMacro> = {
   "descendingfiltration": ["{ {#1}_{\\bullet} }", 1],
   "ascendingfiltration": ["{ {#1}^{\\bullet} }", 1],
   "ctz": ["\\, {{\\converges{{#1} \\to\\infty}\\longrightarrow 0}} \\,", 1],
-  "fps": ["{\\left[\\!\\left[ #1 \\right]\\!\\right]}", 1],
+  "fps": ["{\\left\\llbracket #1 \\right\\rrbracket}", 1],
   "formalpowerseries": ["\\fps{#1}", 1],
   "functionfield": ["{ \\left( {#1} \\right) }", 1],
   "rff": ["\\functionfield{#1}", 1],

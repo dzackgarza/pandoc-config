@@ -181,6 +181,13 @@ files in `styles/macros/mathjax-sources.txt` and writes
 `templates/pandoc_preview_template.html`. `styles/obsidian/` holds the Obsidian
 setup.
 
+The macros need MathJax 4 with the `ams`, `mathtools` and `stmaryrd` TeX
+packages. MathJax does not define stmaryrd's `\llbracket` and `\rrbracket`
+(used by `\fps`); `templates/js/mathjax-stmaryrd.js` adds them as sized
+delimiters. A consumer runs the file, calls `registerStmaryrd(MathJax)` in
+`startup.ready` before `MathJax.startup.defaultReady()`, and adds `stmaryrd`
+to `tex.packages`. `just _test-mathjax-macros` typesets every macro this way.
+
 ## Figures
 
 ### The dzg TikZ library
@@ -1530,7 +1537,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\descendingfiltration` | 1 | `{ {#1}_{\bullet} }` |
 | `\ascendingfiltration` | 1 | `{ {#1}^{\bullet} }` |
 | `\ctz` | 1 | `\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \,` |
-| `\fps` | 1 | `{\left[\!\left[ #1 \right]\!\right]}` |
+| `\fps` | 1 | `{\left\llbracket #1 \right\rrbracket}` |
 | `\formalpowerseries` | 1 | `\fps{#1}` |
 | `\functionfield` | 1 | `{ \left( {#1} \right) }` |
 | `\rff` | 1 | `\functionfield{#1}` |

@@ -511,9 +511,9 @@ test-push: test-ci
 test-references:
   bash "{{source_directory()}}/tests/test-project-references.sh"
 
-# Typeset every generated macro in MathJax 3 with ams and mathtools
+# Typeset every generated macro in MathJax 4 with ams, mathtools and stmaryrd
 _test-mathjax-macros:
-  bun "{{source_directory()}}/tests/test-mathjax-macros.ts"
+  cd "{{source_directory()}}" && bun install --frozen-lockfile && bun tests/test-mathjax-macros.ts
 
 # Test tikzcd filter on multiple scenarios
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.

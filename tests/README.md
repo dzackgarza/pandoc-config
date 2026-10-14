@@ -18,8 +18,8 @@ This directory contains test documents that exercise the unified LaTeX macro sys
 ### MathJax Test
 
 - **test-mathjax-macros.ts** - Typesets every macro of
-  `templates/css/mathjax-macros.json` in MathJax 3 with the ams and mathtools
-  packages and fails on a TeX error (`just _test-mathjax-macros`)
+  `templates/css/mathjax-macros.json` in MathJax 4 with the ams, mathtools and
+  stmaryrd packages and fails on a TeX error (`just _test-mathjax-macros`)
 
 ## Compiling the LaTeX Test
 
