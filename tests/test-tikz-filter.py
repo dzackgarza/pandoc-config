@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["beautifulsoup4"]
+# ///
 """Semantic test for tikzcd.lua pandoc filter.
 
 Reads markdown fixtures from tests/fixtures/, runs them through the filter,

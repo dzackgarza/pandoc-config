@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = []
+# ///
 """
 Generate MathJax 3 macro configuration (JS/TS) from compatible LaTeX macro files.
 

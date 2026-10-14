@@ -1138,7 +1138,7 @@
     1
   ],
   "fps": [
-    "{\\llbracket #1 \\rrbracket  }",
+    "{[\\![ #1 ]\\!]}",
     1
   ],
   "formalpowerseries": [

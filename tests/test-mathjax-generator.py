@@ -37,7 +37,7 @@ def generated_macros() -> dict:
         out_dir = Path(tmp)
         cp = subprocess.run(
             [
-                os.environ.get("PYTHON", "python3"),
+                sys.executable,
                 str(GENERATOR),
                 "--out-dir",
                 str(out_dir),

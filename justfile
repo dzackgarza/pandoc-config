@@ -190,7 +190,7 @@ render-figures *args:
   #!/usr/bin/env bash
   set -euo pipefail
   # TEXINPUTS inherited from shell env (~/.zshrc)
-  python3 "$HOME/.pandoc/bin/render_figures.py" {{args}}
+  uv run "$HOME/.pandoc/bin/render_figures.py" {{args}}
 
 # Compile LaTeX source
 compile-tex main_file="main.tex" output_name="paper" bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_TEX:
@@ -479,11 +479,11 @@ _test-posets:
 
 # Regenerate the reference section of README.md (every macro, environment and figure object)
 readme-reference:
-  python3 "{{source_directory()}}/bin/generate-readme-reference.py"
+  uv run "{{source_directory()}}/bin/generate-readme-reference.py"
 
 # Fail when the README reference no longer matches the sources
 _test-readme:
-  python3 "{{source_directory()}}/bin/generate-readme-reference.py" --check
+  uv run "{{source_directory()}}/bin/generate-readme-reference.py" --check
 
 _test-compile-pandoc:
   bash "{{source_directory()}}/tests/test-compile-pandoc.sh"
@@ -514,22 +514,22 @@ test-references:
 # Test tikzcd filter on multiple scenarios
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.
 _test-tikz-filter:
-  python3 "{{source_directory()}}/tests/test-tikz-filter.py"
+  uv run "{{source_directory()}}/tests/test-tikz-filter.py"
 
 # Test Lamport-style proof parsing, numbering, references, and LaTeX output
 _test-lamport-proof:
-  python3 "{{source_directory()}}/tests/test-lamport-proof.py"
+  uv run "{{source_directory()}}/tests/test-lamport-proof.py"
 
 # Test that wikilinks become links to the headings the editor resolved
 _test-wikilinks:
-  python3 "{{source_directory()}}/tests/test-wikilinks.py"
+  uv run "{{source_directory()}}/tests/test-wikilinks.py"
 
 
 # Generate every MathJax projection from the canonical macro manifest.
 # This is the only regeneration path: JSON/JS/TS, both HTML consumers, and the
 # preview template all derive from the same parsed semantic macro API.
 generate-math-macros:
-  python3 "{{source_directory()}}/bin/generate-mathjax-config.py"
+  uv run "{{source_directory()}}/bin/generate-mathjax-config.py"
 
 # Compatibility alias. There is deliberately no separate legacy generator.
 generate-math-macros-legacy: generate-math-macros

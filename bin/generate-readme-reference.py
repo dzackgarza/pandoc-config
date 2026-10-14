@@ -1,3 +1,8 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = []
+# ///
 """Regenerate the reference section of README.md from the sources.
 
 The section between the markers below lists every math macro (name, number of
@@ -6,8 +11,8 @@ environment files, every theorem-like environment, and every figure object
 under figures/objects/ with the first sentence of its leading comment. The
 macro parser is the one bin/generate-mathjax-config.py uses for MathJax.
 
-    python3 bin/generate-readme-reference.py           # rewrite README.md
-    python3 bin/generate-readme-reference.py --check   # fail if README.md is stale
+    uv run bin/generate-readme-reference.py           # rewrite README.md
+    uv run bin/generate-readme-reference.py --check   # fail if README.md is stale
 """
 
 import argparse

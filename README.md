@@ -1531,7 +1531,7 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\descendingfiltration` | 1 | `{ {#1}_{\bullet} }` |
 | `\ascendingfiltration` | 1 | `{ {#1}^{\bullet} }` |
 | `\ctz` | 1 | `\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \,` |
-| `\fps` | 1 | `{\llbracket #1 \rrbracket }` |
+| `\fps` | 1 | `{[\![ #1 ]\!]}` |
 | `\formalpowerseries` | 1 | `\fps{#1}` |
 | `\functionfield` | 1 | `{ \left( {#1} \right) }` |
 | `\rff` | 1 | `\functionfield{#1}` |
