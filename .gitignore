@@ -25,3 +25,7 @@ plans/*.png
 
 # Claude Code session worktrees (local agent state)
 .claude/worktrees/
+
+# Dependencies resolve to their latest versions; lock files stay local
+bun.lock
+uv.lock

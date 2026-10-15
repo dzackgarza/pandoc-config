@@ -5,8 +5,8 @@
     "": {
       "name": "pandoc-config",
       "devDependencies": {
-        "@types/bun": "^1.4.3",
-        "mathjax": "4",
+        "@types/bun": "latest",
+        "mathjax": "latest",
       },
     },
   },

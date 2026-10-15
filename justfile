@@ -513,7 +513,7 @@ test-references:
 
 # Typeset every generated macro in MathJax 4 with ams, mathtools and stmaryrd
 _test-mathjax-macros:
-  cd "{{source_directory()}}" && bun install --frozen-lockfile && bun tests/test-mathjax-macros.ts
+  cd "{{source_directory()}}" && bun update && bun tests/test-mathjax-macros.ts
 
 # Test tikzcd filter on multiple scenarios
 # Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.
