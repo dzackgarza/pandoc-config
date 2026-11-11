@@ -21,8 +21,9 @@ of that export.
   Zotero item, then use the key that the export gives.
 - If this checkout and its remote disagree on the file, the current export
   replaces the file whole. Do not combine the two versions.
-- A commit of the file publishes every library change that the export holds.
-  Get the owner's approval before you commit or push it.
+- Zotero syncs each library change to the file immediately. Commit and push the
+  file whenever it differs from `HEAD`; that is how the published copy stays up
+  to date.
 
 ## Directory Structure
 
