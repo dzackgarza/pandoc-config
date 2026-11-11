@@ -7,6 +7,23 @@ CI use, and the host launchers.
 
 Personal Pandoc and LaTeX configuration for generating PDFs from markdown and managing LaTeX macros.
 
+## `bib/references.bib` is generated: never edit it
+
+`bib/references.bib` is written by Zotero's Better BibTeX auto-export. Zotero is
+the only source of its content. The file in this repository is a published copy
+of that export.
+
+- Do not edit the file. This includes an editor, `sed`, a script, a formatter,
+  and a hand-resolved merge conflict.
+- Make every change in Zotero: a new entry, a corrected field, a changed
+  citation key, a removed duplicate. Better BibTeX then writes the file again.
+- A missing or wrong citation key is a Zotero library problem. Correct the
+  Zotero item, then use the key that the export gives.
+- If this checkout and its remote disagree on the file, the current export
+  replaces the file whole. Do not combine the two versions.
+- A commit of the file publishes every library change that the export holds.
+  Get the owner's approval before you commit or push it.
+
 ## Directory Structure
 
 ```
