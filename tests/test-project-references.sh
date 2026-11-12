@@ -134,7 +134,7 @@ check 'empty-key id produced no label (\label{thm:} absent)' \
 # The baseline was generated with the pre-change filter at commit
 # 81792cc; this run uses the shared tex stage in its no-crossref mode (the
 # PANDOC_CROSSREF=no-crossref opt-out), research_draft.tex, and the bib
-# symlinked as global.bib.
+# file named relative to the invocation directory.
 # Scope of the claim: the sample contains theorem divs with the legacy
 # title=/ref= attribute syntax and NO theorem-family citations, so this
 # proves byte-stability of the attribute-style sample only. Theorem
@@ -145,7 +145,7 @@ cd "$SCRATCH/single"
 cp "$REPO/tests/fixtures/theorem-references/attribute_style_sample.md" .
 cp "$REPO/tests/fixtures/theorem-references/references.bib" refs.bib
 just --justfile "$REPO/justfile" \
-  _compile-pandoc-tex no-crossref research_draft.tex "$SCRATCH/single/refs.bib" .build_pandoc \
+  _compile-pandoc-tex no-crossref research_draft.tex refs.bib .build_pandoc \
   attribute_style_sample.md
 check "attribute-style sample byte-stable (byte-identical to pre-change baseline; sample has no theorem citations)" \
   diff "$REPO/tests/fixtures/theorem-references/expected_attribute_style.tex" .build_pandoc/output.tex
@@ -183,7 +183,6 @@ echo "[7/9] plain-branch latexmk compile of the all-theorem-classes fixture"
 mkdir -p "$SCRATCH/latexmk-plain"
 cd "$SCRATCH/latexmk-plain"
 cp "$SCRATCH/workspace/.build_pandoc/output.tex" .
-cp "$REPO/tests/fixtures/theorem-references/references.bib" global.bib
 LATEXMK_RC=0
 TEXINPUTS=".:$REPO/styles//:$REPO/config//:" BIBINPUTS=".:" \
   latexmk -pdf -interaction=nonstopmode -gg output.tex > latexmk.log 2>&1 \
@@ -232,7 +231,6 @@ just --justfile "$REPO/justfile" \
 mkdir -p "$SCRATCH/latexmk-arxiv"
 cd "$SCRATCH/latexmk-arxiv"
 cp "$SCRATCH/arxiv-ws/.build_arxiv/output.tex" .
-cp "$REPO/tests/fixtures/theorem-references/references.bib" global.bib
 ARXIV_RC=0
 TEXINPUTS=".:$REPO/styles//:$REPO/config//:" BIBINPUTS=".:" \
   latexmk -pdf -interaction=nonstopmode -gg output.tex > latexmk.log 2>&1 \

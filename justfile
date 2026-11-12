@@ -35,7 +35,13 @@ DEFAULT_TEMPLATE := "research_draft.tex"
 #       just pandoc::compile-pandoc-project out template.tex main.md
 #
 # The failure is silent -- the default is used and the build still succeeds --
-# so check the generated global.bib symlink if a setting seems ignored.
+# so check the \addbibresource lines of the generated output.tex if a setting
+# seems ignored.
+#
+# PANDOC_BIB_SOURCE is a list of bibliography files separated by ':'; an empty
+# value is a document without a bibliography. compile-pandoc and
+# compile-pandoc-project both read it; without it, the bibliography is
+# ZOTERO_GLOBAL_BIB.
 PROJECT_BIB_SOURCE := env_var_or_default("PANDOC_BIB_SOURCE", GLOBAL_BIB_SOURCE)
 PROJECT_BUILD_DIR := env_var_or_default("PANDOC_BUILD_DIR", BUILD_DIR_PANDOC)
 
@@ -96,7 +102,7 @@ preview file format="pdf" template="research_draft.tex":
   export NAME
   export FILE
   export ROOT
-  export BIB_SOURCE="{{GLOBAL_BIB_SOURCE}}"
+  export BIB_SOURCE="{{PROJECT_BIB_SOURCE}}"
 
   compile_and_view() {
       echo "[preview] Compiling $FILE..."
@@ -218,7 +224,7 @@ compile-tex main_file="main.tex" output_name="paper" bib_source=GLOBAL_BIB_SOURC
   cp "$ROOT/{{build_dir}}/${FILE%.tex}.pdf" "$ROOT/{{output_name}}-$(date +%d-%m-%y).pdf"
 
 # Compile Pandoc source to PDF via LaTeX
-compile-pandoc input_file="main.md" output_name="output" template=DEFAULT_TEMPLATE bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex CROSSREF_MODE template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
+compile-pandoc input_file="main.md" output_name="output" template=DEFAULT_TEMPLATE bib_source=PROJECT_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex CROSSREF_MODE template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
 
 # Compile multiple ordered Pandoc sources into one project PDF.
 # Inputs are passed to pandoc verbatim, in the given order, and
@@ -279,14 +285,22 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   ROOT="{{invocation_directory()}}"
   mkdir -p "$ROOT/{{build_dir}}"
 
-  # A missing bibliography would reach biber as a dangling link, and every
-  # citation would come out undefined.
-  if [ ! -f "{{bib_source}}" ]; then
-    echo "❌ Bibliography {{bib_source}} does not exist (set ZOTERO_GLOBAL_BIB or PANDOC_BIB_SOURCE)." >&2
-    exit 1
-  fi
-  # Symlink global bib for easy resolution
-  ln -sf "{{bib_source}}" "$ROOT/global.bib"
+  # bib_source is a list of bibliography files separated by ':'; each one is
+  # a bibliography of the document, and an empty list is a document without
+  # one. A relative file is relative to the invocation directory. A missing
+  # file would reach biber as an unknown resource, and every citation of it
+  # would come out undefined.
+  cd "$ROOT"
+  BIB_FILES=()
+  IFS=':' read -r -a BIB_FILES <<< "{{bib_source}}"
+  BIB_ARGS=()
+  for bib in "${BIB_FILES[@]}"; do
+    if [ ! -f "$bib" ]; then
+      echo "❌ Bibliography $bib does not exist (set ZOTERO_GLOBAL_BIB or PANDOC_BIB_SOURCE)." >&2
+      exit 1
+    fi
+    BIB_ARGS+=(--bibliography="$bib")
+  done
 
   # Run pandoc from ROOT to ensure relative include.lua paths work correctly.
   # \(...\) and \[...\] are math in these documents (the Zettlr editor and
@@ -295,7 +309,6 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   # [[target|label]] wikilinks are Links for wikilinks.lua, which applies
   # the resolutions the editor names in PANDOC_WIKILINKS; it runs before
   # include.lua adds the headings of transcluded files.
-  cd "$ROOT"
   pandoc "${@:5}" \
       --from=markdown+tex_math_single_backslash+wikilinks_title_after_pipe \
       --lua-filter="{{source_directory()}}/filters/wikilinks.lua" \
@@ -304,7 +317,7 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
       --lua-filter="{{source_directory()}}/filters/convert_amsthm_envs.lua" \
       --lua-filter="{{source_directory()}}/filters/select_images.lua" \
       --natbib \
-      --bibliography="global.bib" \
+      "${BIB_ARGS[@]}" \
       --template={{template}} \
       --biblatex \
       --number-sections \
@@ -320,7 +333,8 @@ _compile-pandoc-latexmk output_name build_dir:
   ROOT="{{invocation_directory()}}"
   cd "$ROOT"
   cd "{{build_dir}}"
-  # BIBINPUTS setup (Augment environment with project root so global.bib is found)
+  # BIBINPUTS setup (Augment environment with project root so a relative
+  # bibliography is found)
   export BIBINPUTS=".:$ROOT:${BIBINPUTS:-}"
   LATEXMK_RC=0
   latexmk -pdf -interaction=nonstopmode -f -gg output.tex || LATEXMK_RC=$?

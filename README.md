@@ -412,7 +412,7 @@ just pandoc::preview notes.md pdf research_draft.tex
 
 | Recipe | Does |
 | --- | --- |
-| `compile-pandoc`, `compile-pandoc-project` | markdown to PDF through a LaTeX template and latexmk |
+| `compile-pandoc`, `compile-pandoc-project` | markdown to PDF through a LaTeX template and latexmk; the bibliographies are the files of `PANDOC_BIB_SOURCE` (separated by `:`, empty for none), else `ZOTERO_GLOBAL_BIB` |
 | `compile-tex` | a LaTeX project with latexmk and the global bibliography |
 | `preview` | compile a markdown file and recompile on every change (entr), viewing the PDF in zathura |
 | `format-md`, `format-markdown` | one sentence per line (prettier), or semantic line breaks (flowmark) |
