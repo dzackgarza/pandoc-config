@@ -23,6 +23,28 @@
   "UU": "\\mathbb{U}",
   "VV": "{\\mathbf{V}}",
   "ZZ": "{\\mathbf{Z}}",
+  "irrationals": "{\\mathbb{P}}",
+  "Prob": "{\\mathbb{P}}",
+  "halfplane": "{\\mathbb{H}}",
+  "quaternions": "{\\mathbb{H}}",
+  "halfspace": "{\\mathbb{H}}",
+  "hyperbolicspace": "{\\mathbb{H}}",
+  "quatprojective": "{\\mathbb{HP}}",
+  "circlegroup": "{\\mathbb{T}}",
+  "sphere": "{\\mathbb{S}}",
+  "sorgenfrey": "{\\mathbb{S}}",
+  "mobiusband": "{\\mathbb{M}}",
+  "Gm": "{\\GG_m}",
+  "Ga": "{\\GG_a}",
+  "octonions": "{\\mathbb{O}}",
+  "annulus": "{\\mathbb{A}}",
+  "adeles": "{\\mathbb{A}}",
+  "polys": "{\\mathbb{P}}",
+  "primes": "{\\mathbb{P}}",
+  "schur": "{\\mathbb{S}}",
+  "projtangent": "{\\mathbb{T}}",
+  "hypercohomology": "{\\mathbb{H}}",
+  "openball": "{\\mathbb{B}}",
   "GGr": "{\\mathbb{Gr}}",
   "OP": "{\\mathbb{OP}}",
   "SpSp": "{\\mathbb{S}}",
@@ -679,6 +701,15 @@
   "divergence": "{ \\nabla\\cdot }",
   "divides": "\\mathrel{|}",
   "notdivides": "\\nmid",
+  "exactlydivides": "\\mathrel{\\Vert}",
+  "given": "\\mathrel{\\vert}",
+  "presentationbar": "\\mathrel{\\vert}",
+  "restrict": "\\vert",
+  "thetaseparator": "\\mathrel{\\vert}",
+  "diracbar": "\\vert",
+  "blockseparator": "\\vert",
+  "arrayrule": "\\vert",
+  "verticalequals": "\\Vert",
   "dV": "\\,dV",
   "dalpha": "\\,d\\alpha",
   "dA": "\\,dA",
@@ -1047,6 +1078,66 @@
   ],
   "cardinality": [
     "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "determinant": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "elementorder": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "subgroupindex": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "setmeasure": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "totalvariation": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "multiindexsize": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "lengthof": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "linearsystem": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "realization": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "gradeddegree": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "underlyingspace": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "operatorabs": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "divisorsupport": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "partitionmesh": [
+    "{\\left\\lvert {#1} \\right\\rvert}",
+    1
+  ],
+  "entrymatrix": [
+    "{\\left\\lVert {#1} \\right\\rVert}",
     1
   ],
   "disc": [
@@ -1552,6 +1643,14 @@
     2
   ],
   "evalfrom": "\\Big|",
+  "evaluated": [
+    "{\\left. {#1} \\right\\rvert}",
+    1
+  ],
+  "restricted": [
+    "{\\left. {#1} \\right\\rvert}",
+    1
+  ],
   "restrictionof": [
     "{\\left.{{#1}} \\right|_{{#2}} }",
     2
