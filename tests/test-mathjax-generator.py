@@ -20,7 +20,9 @@ REVEALJS_TEMPLATE = ROOT / "templates" / "pandoc_revealjs_template.html"
 # only for a document that has math.
 MATH_DOCUMENT = "---\ntitle: Macros\n---\n\nA formula $\\ZZ$.\n"
 MATHJAX_URL = "file:///opt/mathjax/tex-chtml.js"
+ROOT_URL = "file:///opt/mathjax"
 FONTS_URL = "file:///opt/mathjax/fonts"
+LOCAL_MATHJAX = [f"mathjax-root={ROOT_URL}", f"mathjax-fonts={FONTS_URL}"]
 
 passed = 0
 failed = 0
@@ -243,26 +245,33 @@ def test_preview_template_configures_mathjax_before_it_loads() -> None:
         check("preview page sets the macros before it loads MathJax")
     else:
         fail("preview page MathJax order", f"config at {config}, script at {script}")
-    if "loader:" not in page[config:script]:
-        check("preview page names no font location when none is given")
+    if "mathjax:" not in page[config:script] and "fonts:" not in page[config:script]:
+        check("preview page names no place of a local MathJax when none is given")
     else:
-        fail("preview page font location", "a loader path without the mathjax-fonts variable")
+        fail("preview page MathJax places", "a loader path without its variable")
 
-    local = rendered("html5", PREVIEW_TEMPLATE, [f"mathjax-fonts={FONTS_URL}"])
-    if f'paths: {{ fonts: "{FONTS_URL}" }}' in local:
-        check("preview page takes its fonts from the mathjax-fonts variable")
-    else:
-        fail("preview page font location", "the mathjax-fonts variable is not in the page")
+    local = rendered("html5", PREVIEW_TEMPLATE, LOCAL_MATHJAX)
+    for name, text in {
+        "preview page takes the folder of MathJax from the mathjax-root variable": (
+            f'mathjax: "{ROOT_URL}",'
+        ),
+        "preview page takes its fonts from the mathjax-fonts variable": f'fonts: "{FONTS_URL}",',
+    }.items():
+        if text in local:
+            check(name)
+        else:
+            fail(name, f"{text!r} is not in the page")
 
 
 def test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin() -> None:
-    page = rendered("revealjs", REVEALJS_TEMPLATE, [f"mathjax-fonts={FONTS_URL}"])
+    page = rendered("revealjs", REVEALJS_TEMPLATE, LOCAL_MATHJAX)
     expectations = {
         "the MathJax 3 plugin is a plugin of the deck": "RevealMath.MathJax3,",
         "the plugin loads the MathJax of the export": f"mathjax: '{MATHJAX_URL}'",
-        "the deck takes its fonts from the mathjax-fonts variable": (
-            f"paths: {{ fonts: '{FONTS_URL}' }}"
+        "the deck takes the folder of MathJax from the mathjax-root variable": (
+            f"mathjax: '{ROOT_URL}',"
         ),
+        "the deck takes its fonts from the mathjax-fonts variable": f"fonts: '{FONTS_URL}',",
         "the deck has the macros": '"ZZ":',
     }
     for name, text in expectations.items():
@@ -276,10 +285,11 @@ def test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin() -> None:
         check("the MathJax block of the deck has no unfilled template variable")
 
     plain = rendered("revealjs", REVEALJS_TEMPLATE, [])
-    if "loader:" not in plain.split("mathjax3: {")[1].split("tex: {")[0]:
-        check("the deck names no font location when none is given")
+    places = plain.split("mathjax3: {")[1].split("tex: {")[0].split("paths: {")[1]
+    if "mathjax:" not in places and "fonts:" not in places:
+        check("the deck names no place of a local MathJax when none is given")
     else:
-        fail("reveal.js font location", "a loader path without the mathjax-fonts variable")
+        fail("reveal.js MathJax places", "a loader path without its variable")
 
 
 def test_dzg_mathjax_style_compiles_domain_macros() -> None:
