@@ -1,0 +1,22 @@
+% Reflexive anticanonical triangle for P^2 and its polar. Derived from
+% P = 3 Delta_2-(1,1), P^circ = Conv((1,0),(0,1),(-1,-1)); old toric notes
+% (2023-08-01, 2023-08-25), cf. CLS11, Section 8.3.
+\coordinate (-p1) at (-1,-1);
+\coordinate (-p2) at (2,-1);
+\coordinate (-p3) at (-1,2);
+\coordinate (-q1) at (7,0);
+\coordinate (-q2) at (6,1);
+\coordinate (-q3) at (5,-1);
+\fill[polygon region] (-p1) -- (-p2) -- (-p3) -- cycle;
+\draw[polytope edge] (-p1) -- (-p2) -- (-p3) -- cycle;
+\fill[polygon region] (-q1) -- (-q2) -- (-q3) -- cycle;
+\draw[polytope edge] (-q1) -- (-q2) -- (-q3) -- cycle;
+\foreach \p in {p1,p2,p3,q1,q2,q3} \node[distinguished point] at (-\p) {};
+\node[below left] at (-p1) {$(-1,-1)$};
+\node[below right] at (-p2) {$(2,-1)$};
+\node[above left] at (-p3) {$(-1,2)$};
+\node[right] at (-q1) {$(1,0)$};
+\node[above] at (-q2) {$(0,1)$};
+\node[below left] at (-q3) {$(-1,-1)$};
+\node[polygon title] at (0.1,2.7) {$P_{-K_{\mathbb P^2}}$};
+\node[polygon title] at (6,2.7) {$P^\circ$};

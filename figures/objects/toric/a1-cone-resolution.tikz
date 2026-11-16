@@ -1,0 +1,14 @@
+% The A_1 cone sigma = Cone((0,1),(2,-1)) and its regular subdivision
+% by (1,0). Derived from the dual-semigroup calculation in the old toric
+% notes (2023-08-01, 2023-08-25); cf. CLS11, Section 3.3.
+\coordinate (-origin) at (0,0);
+\coordinate (-vone) at (0,2);
+\coordinate (-vtwo) at (4,-2);
+\coordinate (-exceptional) at (2,0);
+\draw[fan ray] (-origin) -- (-vone);
+\draw[fan ray] (-origin) -- (-vtwo);
+\draw[fan ray] (-origin) -- (-exceptional);
+\node[distinguished point] at (-origin) {};
+\node[above left] at (-vone) {$(0,1)$};
+\node[below right] at (-vtwo) {$(2,-1)$};
+\node[above] at (-exceptional) {$(1,0)$};
