@@ -1,0 +1,62 @@
+\begin{figure}
+\centering
+\begin{subfigure}[b]{\textwidth}
+\hspace{15em}
+\begin{tikzpicture}[scale=0.7]
+\begin{pgfonlayer}{background}
+\tikzset{help lines/.style={color=blue!10}}
+\draw[ultra thin,step=1cm,help lines] (-1,-1) grid (11,11);
+\end{pgfonlayer}
+\begin{pgfonlayer}{nodelayer}
+\node [style=black node, label=left:$p_{13}^1$] (0a) at (0, 1) {};
+\node [style=black node, label=below:$p_{13}^2$] (0b) at (1,0) {};
+\node [style=black node, label=above left:$p_{12}^1$] (3) at (0, 9) {};
+\node [style=black node, label=above right:$p_{12}^2$] (4) at (1, 9) {};
+\node [style=none] (5) at (0, 1) {};
+\node [style=none] (6) at (1, 0) {};
+\node [style=black node, label=below right:$p_{23}^2$] (7) at (9, 0) {};
+\node [style=black node, label=above right:$p_{23}^3$] (8) at (9, 1) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw [style=plain edge] (0a) edge["$e_1$"] node[right] {$1$} (3);
+\draw [style=plain edge] (3) edge["$f_{12}$"] node[below] {$1$}  (4);
+\draw [style=plain edge] (4) edge["$e_2$"] node[left] {$1$}  (8);
+\draw [style=plain edge] (8) edge["$f_{23}$"] node[left] {$1$}  (7);
+\draw [style=plain edge] (7) edge["$e_3$"] node[above] {$1$}  (0b);
+\draw [style=plain edge] (0a) edge["$f_{13}$"'] node[above right] {$1$}  (0b);
+\end{pgfonlayer}
+\end{tikzpicture}
+\end{subfigure}
+\par\bigskip
+\begin{subfigure}[b]{0.3\textwidth}
+\begin{tikzpicture}[scale=0.6]
+\begin{pgfonlayer}{nodelayer}
+%\node [style=black node, label=above:$q_{13}$] (sw1) at (0, 0) {};
+%\node [style=black node, label=above:$q_{23}$] (se1) at (16, 0) {};
+%\node [style=none, label=above:$q_{12}$] (n1) at (8, 8) {};
+%
+\node [style=none] (0) at (-1, -1) {};
+\node [style=none] (1) at (8, 9) {};
+\node [style=none] (2) at (17, -1) {};
+%
+\node [style=black node, label=above left:$q_{12}^1$] (n1a) at (7, 7) {};
+\node [style=black node, label=above right:$q_{12}^2$] (n1b) at (9, 7) {};
+\node [style=black node, label=left:$q_{13}^1$] (sw1a) at (1, 1) {};
+\node [style=black node, label=below  left:$q_{13}^3$] (sw1b) at (1, 0) {};
+\node [style=black node, label=above right:$q_{23}^2$] (se1a) at (15, 1) {};
+\node [style=black node, label=below right:$q_{23}^3$] (se1b) at (15, 0) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (sw1a) to node[label=left:$C_1$, label=right:$1$] {} (n1a);
+\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (n1b) to node[label=right:$C_2$, label=left:$1$] {} (se1a);
+\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (se1b) to node[label=below:$C_3$, label=above:$1$] {} (sw1b);
+%
+\draw[shorten >=-1cm,shorten <=-1cm] ($(n1a.south) + (0, 0.2em)$) to[bend right=20] node[above, yshift=2em] {$E_{12}$} node[below] {$1$} ($(n1b.south) + (0, 0.2em)$);
+\draw[shorten >=-1cm,shorten <=-1cm] ($(se1a.center) - (0.2em, 0)$) to[bend right=20] node[right, xshift=2em] {$E_{23}$} node[left] {$1$} ($(se1b.center) - (0.2em, 0)$);
+\draw[shorten >=-1cm,shorten <=-1cm] ($(sw1b.east) - (0.2em, 0)$) to[bend right=20] node[left, xshift=-2em] {$E_{13}$} node[right] {$1$} ($(sw1a.east) - (0.2em, 0)$);	\end{pgfonlayer}
+\end{tikzpicture}
+\end{subfigure}
+\vspace{4em}
+\caption{$\PP^2$ with all three toric points blown up, resulting in a toric variety with an anticanonical cycle of six $(-1)\dash$curves whose polytope is a non-regular hexagon.}
+\label{fig:toric-blowup-c}
+\end{figure}

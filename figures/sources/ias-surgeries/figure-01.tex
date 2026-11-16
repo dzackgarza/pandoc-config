@@ -1,0 +1,51 @@
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.3\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=0.4]
+    \begin{pgfonlayer}{background}
+    \tikzset{help lines/.style={color=blue!10}}
+    \draw[ultra thin,step=1cm,help lines] (-1,-1) grid (11,11);
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{nodelayer}
+    \node [style=black node, label=left:$p_{13}$] (0) at (0, 0) {};
+    \node [style=black node, label=above:$p_{12}$] (1) at (0, 10) {};
+    \node [style=black node, label=right:$p_{23}$] (2) at (10, 0) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+    \draw (0) edge["$e_1$"] node[right, near start] {$-1$} (1);
+    \draw (1) edge["$e_2$"] node[below left] {$-1$}  (2);
+    \draw (0) edge["$e_3$"'] node[above, near start] {$-1$} (2);
+    \end{pgfonlayer}
+    \end{tikzpicture}
+    \caption{The moment polytope.}
+\end{subfigure}
+\hspace{6em}
+\begin{subfigure}[b]{0.3\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=0.4]
+		\begin{pgfonlayer}{nodelayer}
+		\node [style=black node, label=above:$q_{13}$] (sw1) at (0, 0) {};
+		\node [style=black node, label=above:$q_{23}$] (se1) at (16, 0) {};
+		\node [style=black node, label=above:$q_{12}$] (n1) at (8, 8) {};
+		\node [style=none] (0) at (-1, -1) {};
+		\node [style=none] (1) at (8, 9) {};
+		\node [style=none] (2) at (17, -1) {};
+		\node [style=none] (n1a) at (7, 7) {};
+		\node [style=none] (n1b) at (9, 7) {};
+		\node [style=none] (se1a) at (1, 1) {};
+		\node [style=none] (se1b) at (1, 0) {};
+		\node [style=none] (sw1a) at (15, 1) {};
+		\node [style=none] (sw1b) at (15, 0) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (sw1) to node[label=left:$C_1$, label=right:$-1$] {} (n1);
+		\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (n1) to node[label=right:$C_2$, label=left:$-1$] {} (se1);
+		\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (se1) to node[label=below:$C_3$, label=above:$-1$] {} (sw1);
+	\end{pgfonlayer}
+\end{tikzpicture}
+    \caption{The toric boundary.}
+\end{subfigure}
+\caption{The moment polytope and corresponding toric boundary divisor $D$ for $\PP^2$. The numbers record $d_i \da -C_i^2$, noting that each $C_i$ is a line in $\PP^2$ and thus satisfies $C_i^2 = 1$.}
+\label{fig:moment-poly-one}
+\end{figure}

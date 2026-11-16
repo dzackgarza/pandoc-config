@@ -1,0 +1,22 @@
+% P2 integral-affine surgery drawing. Source: authored IAS notes; Eng18, Defs. 4.2-4.4; AE23, Def. 3.7.
+\begin{scope}[scale=0.4]
+\begin{scope}
+		\node [distinguished point, label=above:$q_{13}$] (sw1) at (0, 0) {};
+		\node [distinguished point, label=above:$q_{23}$] (se1) at (16, 0) {};
+		\node [distinguished point, label=above:$q_{12}$] (n1) at (8, 8) {};
+		\node [inner sep=0pt] (0) at (-1, -1) {};
+		\node [inner sep=0pt] (1) at (8, 9) {};
+		\node [inner sep=0pt] (2) at (17, -1) {};
+		\node [inner sep=0pt] (n1a) at (7, 7) {};
+		\node [inner sep=0pt] (n1b) at (9, 7) {};
+		\node [inner sep=0pt] (se1a) at (1, 1) {};
+		\node [inner sep=0pt] (se1b) at (1, 0) {};
+		\node [inner sep=0pt] (sw1a) at (15, 1) {};
+		\node [inner sep=0pt] (sw1b) at (15, 0) {};
+	\end{scope}
+	\begin{scope}[on edge layer]
+		\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (sw1) to node[label=left:$C_1$, label=right:$-1$] {} (n1);
+		\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (n1) to node[label=right:$C_2$, label=left:$-1$] {} (se1);
+		\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (se1) to node[label=below:$C_3$, label=above:$-1$] {} (sw1);
+	\end{scope}
+\end{scope}

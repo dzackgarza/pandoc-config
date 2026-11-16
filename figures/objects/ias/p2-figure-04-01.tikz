@@ -1,0 +1,24 @@
+% P2 integral-affine surgery drawing. Source: authored IAS notes; Eng18, Defs. 4.2-4.4; AE23, Def. 3.7.
+\begin{scope}[scale=0.7]
+\begin{scope}[on background layer]
+\draw[lattice grid,step=1cm] (-1,-1) grid (11,11);
+\end{scope}
+\begin{scope}
+\node [distinguished point, label=left:$p_{13}^1$] (0a) at (0, 1) {};
+\node [distinguished point, label=below:$p_{13}^2$] (0b) at (1,0) {};
+\node [distinguished point, label=above left:$p_{12}^1$] (3) at (0, 9) {};
+\node [distinguished point, label=above right:$p_{12}^2$] (4) at (1, 9) {};
+\node [inner sep=0pt] (5) at (0, 1) {};
+\node [inner sep=0pt] (6) at (1, 0) {};
+\node [distinguished point, label=below right:$p_{23}^2$] (7) at (9, 0) {};
+\node [distinguished point, label=above right:$p_{23}^3$] (8) at (9, 1) {};
+\end{scope}
+\begin{scope}[on edge layer]
+\draw [ias edge] (0a) edge["$e_1$"] node[right] {$1$} (3);
+\draw [ias edge] (3) edge["$f_{12}$"] node[below] {$1$}  (4);
+\draw [ias edge] (4) edge["$e_2$"] node[left] {$1$}  (8);
+\draw [ias edge] (8) edge["$f_{23}$"] node[left] {$1$}  (7);
+\draw [ias edge] (7) edge["$e_3$"] node[above] {$1$}  (0b);
+\draw [ias edge] (0a) edge["$f_{13}$"'] node[above right] {$1$}  (0b);
+\end{scope}
+\end{scope}

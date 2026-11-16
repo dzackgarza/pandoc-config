@@ -1,0 +1,27 @@
+% P2 integral-affine surgery drawing. Source: authored IAS notes; Eng18, Defs. 4.2-4.4; AE23, Def. 3.7.
+\begin{scope}[scale=0.6]
+\begin{scope}
+%\node [distinguished point, label=above:$q_{13}$] (sw1) at (0, 0) {};
+%\node [distinguished point, label=above:$q_{23}$] (se1) at (16, 0) {};
+%\node [inner sep=0pt, label=above:$q_{12}$] (n1) at (8, 8) {};
+%
+\node [inner sep=0pt] (0) at (-1, -1) {};
+\node [inner sep=0pt] (1) at (8, 9) {};
+\node [inner sep=0pt] (2) at (17, -1) {};
+%
+\node [distinguished point, label=above left:$q_{12}^1$] (n1a) at (7, 7) {};
+\node [distinguished point, label=above right:$q_{12}^2$] (n1b) at (9, 7) {};
+\node [distinguished point, label=left:$q_{13}^1$] (sw1a) at (1, 1) {};
+\node [distinguished point, label=below  left:$q_{13}^3$] (sw1b) at (1, 0) {};
+\node [distinguished point, label=above right:$q_{23}^2$] (se1a) at (15, 1) {};
+\node [distinguished point, label=below right:$q_{23}^3$] (se1b) at (15, 0) {};
+\end{scope}
+\begin{scope}[on edge layer]
+\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (sw1a) to node[label=left:$C_1$, label=right:$1$] {} (n1a);
+\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (n1b) to node[label=right:$C_2$, label=left:$1$] {} (se1a);
+\draw[shorten >=-0.5cm,shorten <=-0.5cm]  (se1b) to node[label=below:$C_3$, label=above:$1$] {} (sw1b);
+%
+\draw[shorten >=-1cm,shorten <=-1cm] ($(n1a.south) + (0, 0.2em)$) to[bend right=20] node[above, yshift=2em] {$E_{12}$} node[below] {$1$} ($(n1b.south) + (0, 0.2em)$);
+\draw[shorten >=-1cm,shorten <=-1cm] ($(se1a.center) - (0.2em, 0)$) to[bend right=20] node[right, xshift=2em] {$E_{23}$} node[left] {$1$} ($(se1b.center) - (0.2em, 0)$);
+\draw[shorten >=-1cm,shorten <=-1cm] ($(sw1b.east) - (0.2em, 0)$) to[bend right=20] node[left, xshift=-2em] {$E_{13}$} node[right] {$1$} ($(sw1a.east) - (0.2em, 0)$);	\end{scope}
+\end{scope}

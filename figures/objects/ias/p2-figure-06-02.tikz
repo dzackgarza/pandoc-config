@@ -1,0 +1,24 @@
+% P2 integral-affine surgery drawing. Source: authored IAS notes; Eng18, Defs. 4.2-4.4; AE23, Def. 3.7.
+\begin{scope}[scale=0.8]
+\begin{scope}
+\node [inner sep=0pt] (0) at (1, 0) {};
+\node [inner sep=0pt] (1) at (9, 0) {};
+\node [inner sep=0pt] (2) at (6, 5) {};
+\node [inner sep=0pt] (3) at (4, 5) {};
+\node [inner sep=0pt] (4) at (1, 1) {};
+\node [inner sep=0pt] (5) at (9, 1) {};
+\node [distinguished point, label=above:$q_{12}$] (6) at (5, 4) {};
+\node [distinguished point, label=above:$q_{23}$] (7) at (2, 1) {};
+\node [distinguished point, label=above:$q_{13}$] (8) at (8, 1) {};
+\node[nontoric blowup] (ccc) at (4, 1) {};
+\node[nontoric blowup] (ddd) at (6, 3) {};
+\end{scope}
+\begin{scope}[on edge layer]
+\draw (0) edge["$C_1$"] node[below] {$-1$} 
+(2);
+\draw (3) edge["$C_2$"] node[below] {$0$}(1);
+\draw (5) edge["$C_3$", midway] node[above] {$0$} (4);
+\draw [exceptional curve] (ccc) to node[below left, near start] {$E_1$} node[above, near start] {$-1$} (ccc);
+\draw [exceptional curve] (ddd) to node[above right, near start] {$E_2$} node[below left, near start] {$-1$} (ddd);
+\end{scope}
+\end{scope}

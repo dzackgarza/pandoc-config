@@ -1,0 +1,61 @@
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.3\textwidth}
+\begin{tikzpicture}[scale=0.4]
+\begin{pgfonlayer}{background}
+\tikzset{help lines/.style={color=blue!10}}
+\draw[ultra thin,step=1cm,help lines] (-1,-1) grid (11,11);
+\end{pgfonlayer}
+\begin{pgfonlayer}{nodelayer}
+\node [style=black node, label=left:$p_{13}$] (0) at (0, 0) {};
+\node [style=black node, label=above:$p_{12}$] (1) at (0, 10) {};
+\node [style=black node, label=right:$p_{23}$] (2) at (10, 0) {};
+\node [style=white node, scale=0.5] (3) at (5, 0) {};
+\node [style=white node, scale=0.5] (4) at (6, 0) {};
+\node [style=starred node] (5) at (5, 1) {};
+\node [style=white node, scale=0.5] (na) at (3, 7) {};
+\node [style=white node, scale=0.5] (nb) at (4, 6) {};
+\node [style=starred node] (nc) at (3, 6) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw (0) edge["$e_1$", near start] node[right, near start] {$-1$} (1);
+\draw (2) edge["$e_2$"'] node[below] {0} (nb);
+\draw (na) edge["$e_2$"'] (1);
+\draw (0) edge["$e_3$"', midway] node[above, midway] {$0$} (3);
+\draw (4) edge["$e_3$"', midway] (2);
+\draw [densely dashed] (3) to (5);
+\draw [densely dashed] (4) to (5);
+\draw [densely dashed] (na) to (nc);
+\draw [densely dashed] (nb) to (nc);
+\end{pgfonlayer}
+\end{tikzpicture}
+\end{subfigure}
+\hspace{6em}
+\begin{subfigure}[b]{0.3\textwidth}
+\begin{tikzpicture}[scale=0.8]
+\begin{pgfonlayer}{nodelayer}
+\node [style=none] (0) at (1, 0) {};
+\node [style=none] (1) at (9, 0) {};
+\node [style=none] (2) at (6, 5) {};
+\node [style=none] (3) at (4, 5) {};
+\node [style=none] (4) at (1, 1) {};
+\node [style=none] (5) at (9, 1) {};
+\node [style=black node, label=above:$q_{12}$] (6) at (5, 4) {};
+\node [style=black node, label=above:$q_{23}$] (7) at (2, 1) {};
+\node [style=black node, label=above:$q_{13}$] (8) at (8, 1) {};
+\node[fill=red, shape=circle, scale=0.5] (ccc) at (4, 1) {};
+\node[fill=red, shape=circle, scale=0.5] (ddd) at (6, 3) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{edgelayer}
+\draw (0) edge["$C_1$"] node[below] {$-1$} 
+(2);
+\draw (3) edge["$C_2$"] node[below] {$0$}(1);
+\draw (5) edge["$C_3$", midway] node[above] {$0$} (4);
+\draw [thick, red] (ccc) to node[below left, near start] {$E_1$} node[above, near start] {$-1$} (ccc);
+\draw [thick, red] (ddd) to node[above right, near start] {$E_2$} node[below left, near start] {$-1$} (ddd);
+\end{pgfonlayer}
+\end{tikzpicture}
+\end{subfigure}
+\caption{$\PP^2$ with two nontoric blowups at points in the curves $C_3$ and $C_2$.}
+\label{fig:p2-two-nontoric-blowups}
+\end{figure}
