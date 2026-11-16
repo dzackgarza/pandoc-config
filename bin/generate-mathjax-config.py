@@ -34,6 +34,7 @@ MACRO_DIR = REPO_ROOT / "styles" / "macros"
 MACRO_MANIFEST = MACRO_DIR / "mathjax-sources.txt"
 OUT_DIR = REPO_ROOT / "templates" / "css"
 PREVIEW_TEMPLATE = REPO_ROOT / "templates" / "pandoc_preview_template.html"
+REVEALJS_TEMPLATE = REPO_ROOT / "templates" / "pandoc_revealjs_template.html"
 
 
 class MacroDef(NamedTuple):
@@ -420,35 +421,61 @@ def _macro_object(macros: list[MacroDef]) -> dict[str, str | list]:
     return obj
 
 
-def update_preview_template(template_path: Path, macros: list[MacroDef]) -> None:
-    """Replace the generated macro map inside the preview template.
+class GeneratedTemplate(NamedTuple):
+    """A Pandoc template that holds a generated ``macros: {...},`` line.
+
+    The markers are text of the language at their place in the template: an
+    HTML comment in the head of a page, a JavaScript comment inside a script.
+    """
+
+    path: Path
+    start_marker: str
+    end_marker: str
+
+
+HTML_MARKERS = ("<!--MATHJAX_MACROS_START-->", "<!--MATHJAX_MACROS_END-->")
+SCRIPT_MARKERS = ("/* MATHJAX_MACROS_START */", "/* MATHJAX_MACROS_END */")
+
+# Each template whose MathJax configuration takes its macros from this
+# generator. A template that is not listed here must not hold a macro map.
+GENERATED_TEMPLATES = (
+    GeneratedTemplate(PREVIEW_TEMPLATE, *HTML_MARKERS),
+    GeneratedTemplate(REVEALJS_TEMPLATE, *SCRIPT_MARKERS),
+)
+
+
+def update_template_macros(template: GeneratedTemplate, macros: list[MacroDef]) -> None:
+    """Replace the generated macro map inside a template.
 
     The surrounding MathJax configuration is hand-owned by the template; only
     the ``macros: {...},`` line between the explicit generation markers is a
     derivative of ``styles/macros``. Keeping this in the same generator as the
-    JSON/JS outputs prevents the preview from becoming a second macro authority.
+    JSON/JS outputs prevents a template from becoming a second macro authority.
     """
-    start_marker = "<!--MATHJAX_MACROS_START-->"
-    end_marker = "<!--MATHJAX_MACROS_END-->"
+    template_path = template.path
+    start_marker = template.start_marker
+    end_marker = template.end_marker
     text = template_path.read_text()
     start = text.find(start_marker)
     end = text.find(end_marker, start + len(start_marker))
     if start < 0 or end < 0:
         raise RuntimeError(
-            f"Preview template {template_path} is missing the MathJax generation markers"
+            f"Template {template_path} is missing the MathJax generation markers"
         )
 
     section = text[start:end]
     replacement = json.dumps(_macro_object(macros), separators=(",", ":"))
     section, count = re.subn(
-        r"(?m)^(\s*macros:\s*)\{.*\},\s*$",
+        # The space after the comma is of that line only: the line can be
+        # the last one before the end marker.
+        r"(?m)^(\s*macros:\s*)\{.*\},[^\S\n]*$",
         lambda match: f"{match.group(1)}{replacement},",
         section,
         count=1,
     )
     if count != 1:
         raise RuntimeError(
-            f"Preview template {template_path} must contain exactly one generated macros line"
+            f"Template {template_path} must contain exactly one generated macros line"
         )
     template_path.write_text(text[:start] + section + text[end:])
 
@@ -545,7 +572,8 @@ def main() -> None:
         default=None,
         help=(
             "Pandoc preview template whose generated MathJax macro map should be refreshed. "
-            "The canonical template is updated automatically for the canonical output directory."
+            "The canonical templates (preview and reveal.js) are updated automatically for the "
+            "canonical output directory."
         ),
     )
     parser.add_argument(
@@ -587,11 +615,16 @@ def main() -> None:
     html_path.write_text(html_content)
     legacy_html_path.write_text(legacy_html_content)
 
-    preview_template = args.preview_template
-    if preview_template is None and out_dir.resolve() == OUT_DIR.resolve():
-        preview_template = PREVIEW_TEMPLATE
-    if preview_template is not None:
-        update_preview_template(preview_template, all_macros)
+    # A run into the canonical output directory refreshes each canonical
+    # template. A preview template that the caller names is the one template
+    # of the run.
+    templates: list[GeneratedTemplate] = []
+    if args.preview_template is not None:
+        templates = [GeneratedTemplate(args.preview_template, *HTML_MARKERS)]
+    elif out_dir.resolve() == OUT_DIR.resolve():
+        templates = list(GENERATED_TEMPLATES)
+    for template in templates:
+        update_template_macros(template, all_macros)
 
     zero = sum(1 for m in all_macros if m.arg_count == 0)
     narg = sum(1 for m in all_macros if m.arg_count > 0)
@@ -602,8 +635,8 @@ def main() -> None:
     print(f"Generated: {json_path}")
     print(f"Generated: {html_path}")
     print(f"Generated: {legacy_html_path}")
-    if preview_template is not None:
-        print(f"Updated: {preview_template}")
+    for template in templates:
+        print(f"Updated: {template.path}")
 
 
 if __name__ == "__main__":
