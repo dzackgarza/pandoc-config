@@ -75,8 +75,9 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "discrete", "{\\mathrm{disc}}")
     assert_macro(macros, "discriminantmap", "{\\operatorname{disc}}")
     assert_macro(macros, "padiccompletion", ["{ {#1}_{\\widehat{#2}} }", 2])
-    assert_macro(macros, "Set", "{\\mathsf{Set}}")
-    assert_macro(macros, "cC", "{\\mathcal{C}}")
+    # One name per meaning (d823b92): \Set is \Sets and \cC is \mcc.
+    assert_macro(macros, "Sets", "{\\mathsf{Set}}")
+    assert_macro(macros, "mcc", "{\\mathcal{C}}")
     assert_macro(macros, "modsleft", ["{}_{#1}\\Mod", 1])
     assert_macro(macros, "tmf", "\\mathrm{tmf}")
     assert_macro(macros, "Suspendpinf", "\\operatorname{{\\Sigma_+^\\infty}}")
@@ -302,7 +303,7 @@ def test_dzg_mathjax_style_compiles_domain_macros() -> None:
                     r"\documentclass{article}",
                     r"\usepackage{dzg-mathjax}",
                     r"\begin{document}",
-                    r"$\Set\quad\tmf\quad\Suspendpinf\quad\modsleft{R}\quad x\coloneqq\qty{y}\quad\fiberprod{X}{S}{Y}\quad\lktt{2d}\quad\GSpaces\quad\disjointpower{X}{n}\quad\prodpower{X}{n}\quad\smashpower{X}{n}\quad\wedgepower{X}{n}\quad\tensorpowerk{M}{n}\quad\fiberpower{X}{S}{n}\quad\chaincomplex{C}\quad\ascendingfiltration{F}\quad\descendingfiltration{F}\quad\opcat{\cC}\quad\oppositeof{P}\quad\CCstar\quad\localize{f}\quad\doubledualof{V}\quad\inverseof{x}\quad\units{R}\quad\nonzeroof{R}\quad\interiorof{X}\quad\sepclosure{k}\quad\ksep\quad\tiltof{K}\quad\plusconstruction{X}\quad\completionat{X}{p}\quad\procompletion{G}\quad\isoclasses{X}\quad\dualof{V^{2}}$",
+                    r"$\Sets\quad\tmf\quad\Suspendpinf\quad\modsleft{R}\quad x\coloneqq\qty{y}\quad\fiberprod{X}{S}{Y}\quad\lktt{2d}\quad\GSpaces\quad\disjointpower{X}{n}\quad\prodpower{X}{n}\quad\smashpower{X}{n}\quad\wedgepower{X}{n}\quad\tensorpowerk{M}{n}\quad\fiberpower{X}{S}{n}\quad\chaincomplex{C}\quad\ascendingfiltration{F}\quad\descendingfiltration{F}\quad\opcat{\mcc}\quad\oppositeof{P}\quad\CCstar\quad\localize{f}\quad\doubledualof{V}\quad\inverseof{x}\quad\units{R}\quad\nonzeroof{R}\quad\interiorof{X}\quad\sepclosure{k}\quad\ksep\quad\tiltof{K}\quad\plusconstruction{X}\quad\completionat{X}{p}\quad\procompletion{G}\quad\isoclasses{X}\quad\dualof{V^{2}}$",
                     r"\end{document}",
                 ]
             )
