@@ -464,7 +464,7 @@ below is current. The commit hook runs it.
 
 ## Reference (generated)
 
-Regenerate with `just readme-reference`; `just test` fails when this section is stale.
+Regenerate with `just readme-reference`.
 
 ## Math macros and environments
 
@@ -490,6 +490,28 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\UU` | 0 | `\mathbb{U}` |
 | `\VV` | 0 | `{\mathbf{V}}` |
 | `\ZZ` | 0 | `{\mathbf{Z}}` |
+| `\irrationals` | 0 | `{\mathbb{P}}` |
+| `\Prob` | 0 | `{\mathbb{P}}` |
+| `\halfplane` | 0 | `{\mathbb{H}}` |
+| `\quaternions` | 0 | `{\mathbb{H}}` |
+| `\halfspace` | 0 | `{\mathbb{H}}` |
+| `\hyperbolicspace` | 0 | `{\mathbb{H}}` |
+| `\quatprojective` | 0 | `{\mathbb{HP}}` |
+| `\circlegroup` | 0 | `{\mathbb{T}}` |
+| `\sphere` | 0 | `{\mathbb{S}}` |
+| `\sorgenfrey` | 0 | `{\mathbb{S}}` |
+| `\mobiusband` | 0 | `{\mathbb{M}}` |
+| `\Gm` | 0 | `{\GG_m}` |
+| `\Ga` | 0 | `{\GG_a}` |
+| `\octonions` | 0 | `{\mathbb{O}}` |
+| `\annulus` | 0 | `{\mathbb{A}}` |
+| `\adeles` | 0 | `{\mathbb{A}}` |
+| `\polys` | 0 | `{\mathbb{P}}` |
+| `\primes` | 0 | `{\mathbb{P}}` |
+| `\schur` | 0 | `{\mathbb{S}}` |
+| `\projtangent` | 0 | `{\mathbb{T}}` |
+| `\hypercohomology` | 0 | `{\mathbb{H}}` |
+| `\openball` | 0 | `{\mathbb{B}}` |
 | `\GGr` | 0 | `{\mathbb{Gr}}` |
 | `\OP` | 0 | `{\mathbb{OP}}` |
 | `\SpSp` | 0 | `{\mathbb{S}}` |
@@ -1146,6 +1168,15 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\divergence` | 0 | `{ \nabla\cdot }` |
 | `\divides` | 0 | `\mathrel{\|}` |
 | `\notdivides` | 0 | `\nmid` |
+| `\exactlydivides` | 0 | `\mathrel{\Vert}` |
+| `\given` | 0 | `\mathrel{\vert}` |
+| `\presentationbar` | 0 | `\mathrel{\vert}` |
+| `\restrict` | 0 | `\vert` |
+| `\thetaseparator` | 0 | `\mathrel{\vert}` |
+| `\diracbar` | 0 | `\vert` |
+| `\blockseparator` | 0 | `\vert` |
+| `\arrayrule` | 0 | `\vert` |
+| `\verticalequals` | 0 | `\Vert` |
 | `\dV` | 0 | `\,dV` |
 | `\dalpha` | 0 | `\,d\alpha` |
 | `\dA` | 0 | `\,dA` |
@@ -1515,6 +1546,21 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | --- | --- | --- |
 | `\abs` | 1 | `{\left\lvert {#1} \right\rvert}` |
 | `\cardinality` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\determinant` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\elementorder` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\subgroupindex` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\setmeasure` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\totalvariation` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\multiindexsize` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\lengthof` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\linearsystem` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\realization` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\gradeddegree` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\underlyingspace` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\operatorabs` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\divisorsupport` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\partitionmesh` | 1 | `{\left\lvert {#1} \right\rvert}` |
+| `\entrymatrix` | 1 | `{\left\lVert {#1} \right\rVert}` |
 | `\disc` | 1 | `{\operatorname{disc}\left( {#1} \right)}` |
 | `\norm` | 1 | `{\left\lVert {#1} \right\rVert}` |
 | `\normm` | 1 | `{\left\lVert \left\lVert {#1} \right\rVert\right\rVert}` |
@@ -1655,6 +1701,8 @@ Regenerate with `just readme-reference`; `just test` fails when this section is 
 | `\ddd` | 2 | `{\frac{d #1}{d #2}\,}` |
 | `\dd` | 2 | `{\frac{\partial #1}{\partial #2}\,}` |
 | `\evalfrom` | 0 | `\Big\|` |
+| `\evaluated` | 1 | `{\left. {#1} \right\rvert}` |
+| `\restricted` | 1 | `{\left. {#1} \right\rvert}` |
 | `\restrictionof` | 2 | `{\left.{{#1}} \right\|_{{#2}} }` |
 | `\ddt` | 0 | `\tfrac{\dif}{\dif t}` |
 | `\ddx` | 0 | `\tfrac{\dif}{\dif x}` |
@@ -2297,6 +2345,29 @@ No macro or environment definitions.
 | `dynkin-folding/D-to-B` | `\pic {object=dynkin-folding/D-to-B}` | `The folding D_{n+1} -> B_n by the reflection of D_{n+1} swapping its two short arms (the group S_2): the classical foldings of simply-laced Dynkin diagrams, table in the dissertation, ...` |
 | `dynkin-folding/D4-to-G2` | `\pic {object=dynkin-folding/D4-to-G2}` | `The folding D_4 -> G_2 by the rotation of D_4 by 2 pi / 3 (the group S_3): the classical foldings of simply-laced Dynkin diagrams, table in the dissertation, ...` |
 | `dynkin-folding/E6-to-F4` | `\pic {object=dynkin-folding/E6-to-F4}` | `The folding E_6 -> F_4 by the reflection of E_6 (the group S_2): the classical foldings of simply-laced Dynkin diagrams, table in the dissertation, ...` |
+| `ias/p2-figure-01-01` | `\pic {object=ias/p2-figure-01-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-01-02` | `\pic {object=ias/p2-figure-01-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-02-01` | `\pic {object=ias/p2-figure-02-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-02-02` | `\pic {object=ias/p2-figure-02-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-03-01` | `\pic {object=ias/p2-figure-03-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-03-02` | `\pic {object=ias/p2-figure-03-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-04-01` | `\pic {object=ias/p2-figure-04-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-04-02` | `\pic {object=ias/p2-figure-04-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-05-01` | `\pic {object=ias/p2-figure-05-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-05-02` | `\pic {object=ias/p2-figure-05-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-05-03` | `\pic {object=ias/p2-figure-05-03}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-06-01` | `\pic {object=ias/p2-figure-06-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-06-02` | `\pic {object=ias/p2-figure-06-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-07-01` | `\pic {object=ias/p2-figure-07-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-07-02` | `\pic {object=ias/p2-figure-07-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-08-01` | `\pic {object=ias/p2-figure-08-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-08-02` | `\pic {object=ias/p2-figure-08-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-09-01` | `\pic {object=ias/p2-figure-09-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-figure-09-02` | `\pic {object=ias/p2-figure-09-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-node-smoothing-step-2-01` | `\pic {object=ias/p2-node-smoothing-step-2-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-node-smoothing-step-2-02` | `\pic {object=ias/p2-node-smoothing-step-2-02}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-node-smoothing-step-3-01` | `\pic {object=ias/p2-node-smoothing-step-3-01}` | `P2 integral-affine surgery drawing.` |
+| `ias/p2-node-smoothing-step-3-02` | `\pic {object=ias/p2-node-smoothing-step-3-02}` | `P2 integral-affine surgery drawing.` |
 | `ias/sterk3-ias` | `\pic {object=ias/sterk3-ias}` | `Gamma(X_0) = B_3(l) at Sterk cusp 3, l = (2,0^15,2,4,6,4,0,4) [AEGS Ex. 4.13, Fig. 13 left], drawn in the integral lattice of unit squares: R the triangulated region: the six unit squares of ...` |
 | `ias/sterk3-kulikov` | `\pic {object=ias/sterk3-kulikov}` | `The Kulikov central fibre X_0 of B_3(l) at Sterk cusp 3, l = (2,0^15,2,4,6,4,0,4) [AEGS Ex. 4.13, Fig. 13 middle]: the dual complex of the triangulation of Gamma(X_0) (objects/ias/sterk3-ias, same ...` |
 | `ias/symington-18-0-0` | `\pic {object=ias/symington-18-0-0}` | `The Symington polygon P(l) of the 0-cusp (18,0,0)_1 = U + E_8^2 of F_{(2,2,0)} [AEGS §4.2, Fig. 12], cut open along p_19 p_2: sides 2..18, and Symington surgeries with the roots 1 and 19 on the sides ...` |
@@ -2330,8 +2401,10 @@ No macro or environment definitions.
 | `spaces/sphere-2` | `\pic {object=spaces/sphere-2}` | `The 2-sphere S^2, radius 1 about the origin, drawn with its equator and a meridian, back halves dashed.` |
 | `spaces/torus-fundamental-square` | `\pic {object=spaces/torus-fundamental-square}` | `The fundamental square of the torus, word a b a^{-1} b^{-1}: the square [0,6]^2 with the horizontal sides glued (a, one arrow tip) and the vertical sides glued (b, two arrow tips).` |
 | `spaces/torus` | `\pic {object=spaces/torus}` | `The torus T^2: outer radii 4 and 2, centred at the origin.` |
+| `toric/a1-cone-resolution` | `\pic {object=toric/a1-cone-resolution}` | `The A_1 cone sigma = Cone((0,1),(2,-1)) and its regular subdivision by (1,0).` |
 | `toric/fan-F2` | `\pic {object=toric/fan-F2}` | `The fan of the Hirzebruch surface F_2, the normal fan of the lattice quadrilateral P_{2,4} = conv{(0,0), (2,0), (4,1), (0,1)} [CLS Example 2.3.16]: rays rho_1..rho_4 = (1,0), (0,1), (-1,2), (0,-1) ...` |
 | `toric/fan-P1` | `\pic {object=toric/fan-P1}` | `The fan of P^1 in N_R = R: sigma_0 = R_{>=0} = Cone(rho_0), sigma_1 = R_{<=0} = Cone(rho_1), the normal fan of an interval [CLS Example 2.4.10].` |
+| `toric/p2-anticanonical-polar` | `\pic {object=toric/p2-anticanonical-polar}` | `Reflexive anticanonical triangle for P^2 and its polar.` |
 
 | Poset data | Written by | Description |
 | --- | --- | --- |

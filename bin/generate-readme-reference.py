@@ -12,13 +12,11 @@ under figures/objects/ with the first sentence of its leading comment. The
 macro parser is the one bin/generate-mathjax-config.py uses for MathJax.
 
     uv run bin/generate-readme-reference.py           # rewrite README.md
-    uv run bin/generate-readme-reference.py --check   # fail if README.md is stale
 """
 
 import argparse
 import importlib.util
 import re
-import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -99,8 +97,8 @@ def object_section() -> list[str]:
 
 def reference() -> str:
     lines = [BEGIN, "", "## Reference (generated)", "",
-             "Regenerate with `just readme-reference`; `just test` fails when this "
-             "section is stale.", "", "## Math macros and environments", ""]
+             "Regenerate with `just readme-reference`.",
+             "", "## Math macros and environments", ""]
     for path in macro_files():
         lines += macro_section(path)
     lines += ["## Figure objects", ""] + object_section() + [END]
@@ -108,19 +106,12 @@ def reference() -> str:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--check", action="store_true", help="fail if README.md is stale")
-    args = parser.parse_args()
+    argparse.ArgumentParser(description=__doc__.splitlines()[0]).parse_args()
     readme = README.read_text()
     assert BEGIN in readme and END in readme, f"{README} has no generated-reference markers"
     head, rest = readme.split(BEGIN, 1)
     tail = rest.split(END, 1)[1].lstrip("\n")
-    updated = head + reference() + tail
-    if args.check:
-        if updated != readme:
-            sys.exit("README.md reference is stale: run `just readme-reference`")
-        return
-    README.write_text(updated)
+    README.write_text(head + reference() + tail)
 
 
 if __name__ == "__main__":

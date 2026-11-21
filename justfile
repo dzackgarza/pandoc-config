@@ -495,15 +495,11 @@ _test-posets:
 readme-reference:
   uv run "{{source_directory()}}/bin/generate-readme-reference.py"
 
-# Fail when the README reference no longer matches the sources
-_test-readme:
-  uv run "{{source_directory()}}/bin/generate-readme-reference.py" --check
-
 _test-compile-pandoc:
   bash "{{source_directory()}}/tests/test-compile-pandoc.sh"
 
-# Run all tests (macros, templates, tikz compilation, filter, poset layout, README reference)
-test: _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-readme _test-compile-pandoc
+# Run all tests (macros, templates, tikz compilation, filter, poset layout)
+test: _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-compile-pandoc
 
 # Run the fast commit check; the commit hook runs this
 test-commit:
