@@ -498,8 +498,8 @@ readme-reference:
 _test-compile-pandoc:
   bash "{{source_directory()}}/tests/test-compile-pandoc.sh"
 
-# Run all tests (macros, templates, tikz compilation, filter, poset layout)
-test: _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-compile-pandoc
+# Regenerate the README reference, then run all tests (macros, templates, tikz compilation, filter, poset layout)
+test: readme-reference _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-compile-pandoc
 
 # Run the fast commit check; the commit hook runs this
 test-commit:
