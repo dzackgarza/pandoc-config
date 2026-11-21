@@ -15,6 +15,14 @@ GENERATOR = ROOT / "bin" / "generate-mathjax-config.py"
 LEGACY_MACROS = ROOT / "templates" / "css" / "math-macros.html"
 GENERATED_JSON = ROOT / "templates" / "css" / "mathjax-macros.json"
 PREVIEW_TEMPLATE = ROOT / "templates" / "pandoc_preview_template.html"
+REVEALJS_TEMPLATE = ROOT / "templates" / "pandoc_revealjs_template.html"
+# A document with a formula: Pandoc sets the math variables of a template
+# only for a document that has math.
+MATH_DOCUMENT = "---\ntitle: Macros\n---\n\nA formula $\\ZZ$.\n"
+MATHJAX_URL = "file:///opt/mathjax/tex-chtml.js"
+ROOT_URL = "file:///opt/mathjax"
+FONTS_URL = "file:///opt/mathjax/fonts"
+LOCAL_MATHJAX = [f"mathjax-root={ROOT_URL}", f"mathjax-fonts={FONTS_URL}"]
 
 passed = 0
 failed = 0
@@ -67,8 +75,9 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "discrete", "{\\mathrm{disc}}")
     assert_macro(macros, "discriminantmap", "{\\operatorname{disc}}")
     assert_macro(macros, "padiccompletion", ["{ {#1}_{\\widehat{#2}} }", 2])
-    assert_macro(macros, "Set", "{\\mathsf{Set}}")
-    assert_macro(macros, "cC", "{\\mathcal{C}}")
+    # One name per meaning (d823b92): \Set is \Sets and \cC is \mcc.
+    assert_macro(macros, "Sets", "{\\mathsf{Set}}")
+    assert_macro(macros, "mcc", "{\\mathcal{C}}")
     assert_macro(macros, "modsleft", ["{}_{#1}\\Mod", 1])
     assert_macro(macros, "tmf", "\\mathrm{tmf}")
     assert_macro(macros, "Suspendpinf", "\\operatorname{{\\Sigma_+^\\infty}}")
@@ -186,18 +195,102 @@ def test_native_mathjax_macros_are_not_shadowed() -> None:
             check(f"{native} left to native MathJax rendering")
 
 
-def test_preview_template_matches_generated_projection() -> None:
+def template_matches_generated_projection(name: str, template_path: Path) -> None:
     expected = json.loads(GENERATED_JSON.read_text())
-    template = PREVIEW_TEMPLATE.read_text()
-    match = re.search(r"(?m)^\s*macros:\s*(\{.*\}),\s*$", template)
-    if match is None:
-        fail("preview macro projection", "generated macros line missing")
+    template = template_path.read_text()
+    matches = re.findall(r"(?m)^\s*macros:\s*(\{.*\}),\s*$", template)
+    if len(matches) != 1:
+        fail(f"{name} macro projection", f"{len(matches)} generated macros lines, expected 1")
         return
-    actual = json.loads(match.group(1))
+    actual = json.loads(matches[0])
     if actual == expected:
-        check("preview macro projection matches canonical generated JSON")
+        check(f"{name} macro projection matches canonical generated JSON")
     else:
-        fail("preview macro projection", "embedded macro map is stale")
+        fail(f"{name} macro projection", "embedded macro map is stale")
+
+
+def test_preview_template_matches_generated_projection() -> None:
+    template_matches_generated_projection("preview", PREVIEW_TEMPLATE)
+
+
+def test_revealjs_template_matches_generated_projection() -> None:
+    template_matches_generated_projection("reveal.js", REVEALJS_TEMPLATE)
+
+
+def rendered(writer: str, template_path: Path, variables: list[str]) -> str:
+    """The standalone page that Pandoc writes with a template of this repository."""
+    cp = subprocess.run(
+        [
+            "pandoc",
+            "--from=markdown",
+            f"--to={writer}",
+            "--standalone",
+            f"--template={template_path}",
+            f"--mathjax={MATHJAX_URL}",
+            *[f"--variable={variable}" for variable in variables],
+        ],
+        input=MATH_DOCUMENT,
+        capture_output=True,
+        text=True,
+    )
+    if cp.returncode != 0:
+        raise RuntimeError(cp.stderr.strip())
+    return cp.stdout
+
+
+def test_preview_template_configures_mathjax_before_it_loads() -> None:
+    page = rendered("html5", PREVIEW_TEMPLATE, [])
+    config = page.find("window.MathJax = {")
+    script = page.find(MATHJAX_URL)
+    if 0 <= config < script and '"ZZ":' in page[config:script]:
+        check("preview page sets the macros before it loads MathJax")
+    else:
+        fail("preview page MathJax order", f"config at {config}, script at {script}")
+    if "mathjax:" not in page[config:script] and "fonts:" not in page[config:script]:
+        check("preview page names no place of a local MathJax when none is given")
+    else:
+        fail("preview page MathJax places", "a loader path without its variable")
+
+    local = rendered("html5", PREVIEW_TEMPLATE, LOCAL_MATHJAX)
+    for name, text in {
+        "preview page takes the folder of MathJax from the mathjax-root variable": (
+            f'mathjax: "{ROOT_URL}",'
+        ),
+        "preview page takes its fonts from the mathjax-fonts variable": f'fonts: "{FONTS_URL}",',
+    }.items():
+        if text in local:
+            check(name)
+        else:
+            fail(name, f"{text!r} is not in the page")
+
+
+def test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin() -> None:
+    page = rendered("revealjs", REVEALJS_TEMPLATE, LOCAL_MATHJAX)
+    expectations = {
+        "the MathJax 3 plugin is a plugin of the deck": "RevealMath.MathJax3,",
+        "the plugin loads the MathJax of the export": f"mathjax: '{MATHJAX_URL}'",
+        "the deck takes the folder of MathJax from the mathjax-root variable": (
+            f"mathjax: '{ROOT_URL}',"
+        ),
+        "the deck takes its fonts from the mathjax-fonts variable": f"fonts: '{FONTS_URL}',",
+        "the deck has the macros": '"ZZ":',
+    }
+    for name, text in expectations.items():
+        if text in page:
+            check(name)
+        else:
+            fail(name, f"{text!r} is not in the deck")
+    if "$" in re.sub(r"(?s)macros: \{.*?\},\n", "", page.split("mathjax3: {")[1].split("},\n        },")[0]):
+        fail("reveal.js MathJax block", "an unfilled template variable")
+    else:
+        check("the MathJax block of the deck has no unfilled template variable")
+
+    plain = rendered("revealjs", REVEALJS_TEMPLATE, [])
+    places = plain.split("mathjax3: {")[1].split("tex: {")[0].split("paths: {")[1]
+    if "mathjax:" not in places and "fonts:" not in places:
+        check("the deck names no place of a local MathJax when none is given")
+    else:
+        fail("reveal.js MathJax places", "a loader path without its variable")
 
 
 def test_dzg_mathjax_style_compiles_domain_macros() -> None:
@@ -210,7 +303,7 @@ def test_dzg_mathjax_style_compiles_domain_macros() -> None:
                     r"\documentclass{article}",
                     r"\usepackage{dzg-mathjax}",
                     r"\begin{document}",
-                    r"$\Set\quad\tmf\quad\Suspendpinf\quad\modsleft{R}\quad x\coloneqq\qty{y}\quad\fiberprod{X}{S}{Y}\quad\lktt{2d}\quad\GSpaces\quad\disjointpower{X}{n}\quad\prodpower{X}{n}\quad\smashpower{X}{n}\quad\wedgepower{X}{n}\quad\tensorpowerk{M}{n}\quad\fiberpower{X}{S}{n}\quad\chaincomplex{C}\quad\ascendingfiltration{F}\quad\descendingfiltration{F}\quad\opcat{\cC}\quad\oppositeof{P}\quad\CCstar\quad\localize{f}\quad\doubledualof{V}\quad\inverseof{x}\quad\units{R}\quad\nonzeroof{R}\quad\interiorof{X}\quad\sepclosure{k}\quad\ksep\quad\tiltof{K}\quad\plusconstruction{X}\quad\completionat{X}{p}\quad\procompletion{G}\quad\isoclasses{X}\quad\dualof{V^{2}}$",
+                    r"$\Sets\quad\tmf\quad\Suspendpinf\quad\modsleft{R}\quad x\coloneqq\qty{y}\quad\fiberprod{X}{S}{Y}\quad\lktt{2d}\quad\GSpaces\quad\disjointpower{X}{n}\quad\prodpower{X}{n}\quad\smashpower{X}{n}\quad\wedgepower{X}{n}\quad\tensorpowerk{M}{n}\quad\fiberpower{X}{S}{n}\quad\chaincomplex{C}\quad\ascendingfiltration{F}\quad\descendingfiltration{F}\quad\opcat{\mcc}\quad\oppositeof{P}\quad\CCstar\quad\localize{f}\quad\doubledualof{V}\quad\inverseof{x}\quad\units{R}\quad\nonzeroof{R}\quad\interiorof{X}\quad\sepclosure{k}\quad\ksep\quad\tiltof{K}\quad\plusconstruction{X}\quad\completionat{X}{p}\quad\procompletion{G}\quad\isoclasses{X}\quad\dualof{V^{2}}$",
                     r"\end{document}",
                 ]
             )
@@ -262,6 +355,9 @@ def main() -> None:
     test_domain_aux_files_are_generated()
     test_native_mathjax_macros_are_not_shadowed()
     test_preview_template_matches_generated_projection()
+    test_revealjs_template_matches_generated_projection()
+    test_preview_template_configures_mathjax_before_it_loads()
+    test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin()
     test_dzg_mathjax_style_compiles_domain_macros()
     test_legacy_mathjax_injection_defines_required_shims()
     total = passed + failed

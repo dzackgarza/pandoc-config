@@ -101,6 +101,45 @@ export BIBINPUTS=".:$HOME/.pandoc/bib//:${BIBINPUTS:-}"
 export PATH="$HOME/.pandoc/bin:$PATH"
 ```
 
+## Templates that zettlr-pandoc exports with
+
+zettlr-pandoc (the editor) assembles no math for an export. The template of an
+export owns its math, and an export without a template of its own uses a
+template of this repository, by name:
+
+| Writer | Template |
+| --- | --- |
+| `html`, `html5`, `html4` | `templates/pandoc_preview_template.html` |
+| `revealjs` | `templates/pandoc_revealjs_template.html` |
+| `latex` | `templates/research_draft.tex` |
+
+So a change of one of these three files changes each such export of the
+editor, and a rename or a removal stops those exports (the editor names the
+missing file). The list is `PANDOC_DIRECTORY_TEMPLATES` in zettlr-pandoc
+(`source/app/service-providers/commands/exporter/resolve-export.ts`); its CI
+clones `main` of this repository, so a change here that the editor needs lands
+here first.
+
+The two HTML templates hold a MathJax configuration:
+
+- The `macros: {...},` line between the `MATHJAX_MACROS_START` and
+  `MATHJAX_MACROS_END` markers is written by `bin/generate-mathjax-config.py`
+  (`GENERATED_TEMPLATES`). Never edit it by hand. A new template with macros
+  goes into that list.
+- `mathjax-root` and `mathjax-fonts` are Pandoc variables for a MathJax that is
+  not loaded from its CDN: the folder of the MathJax component and the folder
+  of its font packages. The editor sets both to its own copy of MathJax 4. A
+  page that embeds the component (`--embed-resources`) cannot find its TeX
+  extensions without `mathjax-root`. Without the variables a page loads
+  MathJax as Pandoc names it (MathJax 3 by default), so the configuration must
+  stay valid for MathJax 3 and 4: no option that only one of them knows.
+- The reveal.js template is the template of Pandoc (`pandoc -D revealjs`) with
+  the MathJax 3 plugin of reveal.js (`RevealMath.MathJax3`) in the place of
+  the MathJax 2 plugin. After a Pandoc release, compare it with the new
+  `pandoc -D revealjs` and carry the changes over.
+
+`tests/test-mathjax-generator.py` checks both templates.
+
 ## Authoring Style
 
 `AUTHORING_STYLE.md` holds the markdown conventions for prose compiled through

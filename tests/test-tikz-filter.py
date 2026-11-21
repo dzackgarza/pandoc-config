@@ -13,6 +13,8 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
+import uuid
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -25,7 +27,9 @@ passed = 0
 failed = 0
 
 
-def pandoc_transform(input_path: Path, to_fmt: str) -> subprocess.CompletedProcess:
+def pandoc_transform(
+    input_path: Path, to_fmt: str, env: dict[str, str] | None = None
+) -> subprocess.CompletedProcess:
     """Run the filter: transform markdown into to_fmt."""
     return subprocess.run(
         [
@@ -40,6 +44,7 @@ def pandoc_transform(input_path: Path, to_fmt: str) -> subprocess.CompletedProce
         ],
         capture_output=True,
         text=True,
+        env=env,
     )
 
 
@@ -426,6 +431,43 @@ def test_tikzcd_complex_labels_latex() -> None:
         fail("complex labels: raw LaTeX output", "no \\includesvg found in output")
 
 
+# --- cache-only mode ---
+
+
+def test_cache_only() -> None:
+    """TIKZ_CACHE_ONLY=1 never compiles: a miss fails with a marker, a hit renders."""
+    with tempfile.TemporaryDirectory() as work:
+        cache = Path(work) / "cache"
+        source = Path(work) / "input.md"
+        source.write_text(
+            f"\\begin{{tikzcd}} X_{{{uuid.uuid4().hex}}} \\ar[r] & Y \\end{{tikzcd}}\n"
+        )
+        only = {**os.environ, "SVG_DIR": str(cache), "TIKZ_CACHE_ONLY": "1"}
+        cp = pandoc_transform(source, "html", only)
+        if (
+            cp.returncode != 0
+            and "[tikzcd-cache-miss]" in cp.stderr
+            and not list(cache.glob("*.svg"))
+        ):
+            check("cache-only miss fails with a marker and compiles nothing")
+        else:
+            fail(
+                "cache-only miss fails with a marker and compiles nothing",
+                f"rc={cp.returncode}, svgs={list(cache.glob('*.svg'))}: {cp.stderr.strip()}",
+            )
+        compiled = pandoc_transform(
+            source, "html", {**os.environ, "SVG_DIR": str(cache)}
+        )
+        cp = pandoc_transform(source, "html", only)
+        if compiled.returncode == 0 and cp.returncode == 0 and "<svg" in cp.stdout:
+            check("cache-only hit renders the cached figure")
+        else:
+            fail(
+                "cache-only hit renders the cached figure",
+                f"rc={compiled.returncode}/{cp.returncode}: {cp.stderr.strip()}",
+            )
+
+
 # --- crash handling ---
 
 
@@ -495,6 +537,12 @@ def main() -> None:
                 test_tikzcode_latex,
                 test_tikzcode_html,
                 test_tikz_snippet_html,
+            ],
+        ),
+        (
+            "cache-only mode",
+            [
+                test_cache_only,
             ],
         ),
         (

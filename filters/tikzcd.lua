@@ -129,6 +129,13 @@ local function run_latex_and_convert(tex_source, tmp_prefix, hash, doc_dir, figu
     return svg_path, pdf_path
   end
 
+  -- A viewer that must never wait for a compile sets TIKZ_CACHE_ONLY=1 and
+  -- leaves compilation to a separate job; a miss names the missing figure.
+  if os.getenv("TIKZ_CACHE_ONLY") == "1" then
+    io.stderr:write("[tikzcd-cache-miss] " .. hash .. "\n")
+    error("tikzcd.lua: figure not compiled yet: " .. hash)
+  end
+
   os.execute("mkdir -p " .. svg_dir)
   -- A force refresh skips the cache hit but deliberately leaves the previous
   -- SVG in place until the replacement SVG has been converted successfully.
