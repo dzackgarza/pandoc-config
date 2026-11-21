@@ -505,16 +505,16 @@ _test-compile-pandoc:
 # Run all tests (macros, templates, tikz compilation, filter, poset layout, README reference)
 test: _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-readme _test-compile-pandoc
 
-# Commit-tier gate entry point expected by the machine-wide ai-review-ci hook;
-# this repo's commit-tier QC is its own test suite.
-test-commit: test
+# Run the fast commit check; the commit hook runs this
+test-commit:
+    @just -f ~/ai-review-ci/justfiles/python.just -d . test-commit
 
-# CI gate (run by the global pre-push hook): same full suite as `test`.
+# CI gate: the full suite, same as `test`.
 test-ci: test
 
-# Push-tier entry point expected by the machine-wide ai-review-ci hook.
-[private]
-test-push: test-ci
+# Run the fast push check; the push hook runs this
+test-push:
+    @just -f ~/ai-review-ci/justfiles/python.just -d . test-push
 
 # Test workspace-resolved theorem references (compile-pandoc-project
 # tex stage on ordered inputs), byte-stability of the compile-pandoc
