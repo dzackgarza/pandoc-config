@@ -1,17 +1,11 @@
-// Typesets every generated macro with MathJax 4 and the TeX packages its
-// consumers load (ams, mathtools, and stmaryrd from
-// templates/js/mathjax-stmaryrd.js), and fails on a TeX error. A macro that
+// Typesets every generated macro using the MathJax 4 configuration in a
+// Pandoc preview export, and fails on a TeX error. A macro that
 // LaTeX accepts but MathJax does not define renders as an error in every
 // MathJax consumer. The Node entry point and tex2mmlPromise, which loads the
 // extensions a formula autoloads, are MathJax's documented server use:
 // https://docs.mathjax.org/en/latest/server/components.html
+import { runInNewContext } from "node:vm";
 import MathJaxNode from "mathjax";
-import "../templates/js/mathjax-stmaryrd.js";
-
-declare global {
-  var MathJax: { startup: { defaultReady(): void } };
-  function registerStmaryrd(mathjax: typeof globalThis.MathJax): void;
-}
 
 // MathJax passes its TeX input jax to formatError; the test does not read it.
 type TexInputJax = object;
@@ -19,17 +13,40 @@ type Macro = string | [string, number] | [string, number, string];
 const macros: Record<string, Macro> = await Bun.file(
   `${import.meta.dir}/../templates/css/mathjax-macros.json`,
 ).json();
+// Use the configuration from a real Pandoc export, not a separate test-only
+// registration of the TeX package. The Node component replaces the browser
+// component for typesetting, but executes the export's startup callback.
+const rendered = Bun.spawnSync({
+  cmd: [
+    "pandoc", "-f", "markdown", "-t", "html5", "--standalone",
+    `--template=${import.meta.dir}/../templates/pandoc_preview_template.html`,
+    "--mathjax=https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js",
+  ],
+  stdin: Buffer.from(String.raw`$\fps{\frac{a}{b}}$`),
+});
+if (rendered.exitCode !== 0) throw new Error(rendered.stderr.toString());
+const script = rendered.stdout.toString().match(
+  /<!--MATHJAX_MACROS_START-->\s*<script>([\s\S]*?)<\/script>/,
+)?.[1];
+if (script === undefined)
+  throw new Error("Missing preview MathJax configuration");
+type PreviewConfig = {
+  loader: { load?: string[] };
+  tex: { macros: Record<string, Macro> };
+  startup?: { ready(): void };
+};
+const window: { MathJax?: PreviewConfig } = {};
+runInNewContext(script, { window, globalThis });
+const preview = window.MathJax;
+if (preview === undefined) throw new Error("Missing preview MathJax config");
 const mathjax = await MathJaxNode.init({
-  loader: { load: ["input/tex", "[tex]/mathtools"] },
-  startup: {
-    ready() {
-      registerStmaryrd(MathJax);
-      MathJax.startup.defaultReady();
-    },
+  ...preview,
+  loader: {
+    ...preview.loader,
+    load: ["input/tex", ...(preview.loader.load ?? [])],
   },
   tex: {
-    packages: { "[+]": ["mathtools", "stmaryrd"] },
-    macros,
+    ...preview.tex,
     formatError: (_jax: TexInputJax, error: Error) => {
       throw error;
     },
