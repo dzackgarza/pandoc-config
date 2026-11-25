@@ -491,6 +491,11 @@ _test-posets:
     || { grep -A4 '^!\|dzg-poset.lua:[0-9]*:' test-posets.log; exit 1; }
   echo "✅ Poset test compiled: test-posets.pdf"
 
+# List the downstream sites whose known-good marker lags this checkout, with the changes since each marker (default: the sites of downstream-sites.txt)
+[positional-arguments]
+staleness-report *sites:
+  @uv run --quiet "{{source_directory()}}/bin/staleness-report.py" --repository "{{source_directory()}}" --registry "{{source_directory()}}/downstream-sites.txt" "$@"
+
 # Regenerate the reference section of README.md (every macro, environment and figure object)
 readme-reference:
   uv run "{{source_directory()}}/bin/generate-readme-reference.py"
