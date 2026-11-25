@@ -1025,13 +1025,13 @@ def test_mathjax_typesets_each_paired_delimiter_and_shim_as_pdflatex() -> None:
         tmp_dir = Path(tmp)
         (tmp_dir / "latex").mkdir()
         (tmp_dir / "mathjax").mkdir()
-        latex = pdflatex_pages(calls + meanings, tmp_dir / "latex")
         mathjax = mathjax_pages(calls + meanings, tmp_dir / "mathjax")
+        if isinstance(mathjax, str):
+            fail("MathJax pages of the paired delimiters and shims", mathjax[-2000:])
+            return
+        latex = pdflatex_pages(calls + meanings, tmp_dir / "latex")
     if isinstance(latex, str):
         fail("pdflatex pages of the paired delimiters and shims", latex[-2000:])
-        return
-    if isinstance(mathjax, str):
-        fail("MathJax pages of the paired delimiters and shims", mathjax[-2000:])
         return
     count = len(calls)
     if len(latex) != 2 * count:
