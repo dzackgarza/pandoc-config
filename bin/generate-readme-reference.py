@@ -1,17 +1,16 @@
-#!/usr/bin/env -S uv run --script
-# /// script
-# requires-python = ">=3.12"
-# dependencies = []
-# ///
+#!/usr/bin/env -S uv run
 """Regenerate the reference section of README.md from the sources.
 
 The section between the markers below lists every math macro (name, number of
 arguments, expansion) of the files styles/dzg-macros.sty inputs and of the
 environment files, every theorem-like environment, and every figure object
 under figures/objects/ with the first sentence of its leading comment. The
-macro parser is the one bin/generate-mathjax-config.py uses for MathJax.
+macro parser is the one bin/generate-mathjax-config.py uses for MathJax. The
+environment files are those that dzg-unified.sty loads after dzg-macros.sty
+(environments-arxiv under the arxiv option) and that dzg-dissertation.sty loads
+(dissertation-overrides).
 
-    uv run bin/generate-readme-reference.py           # rewrite README.md
+    uv run bin/generate-readme-reference.py
 """
 
 import argparse
@@ -26,8 +25,6 @@ MACROS = STYLES / "macros"
 OBJECTS = REPO_ROOT / "figures" / "objects"
 BEGIN = "<!-- BEGIN GENERATED REFERENCE: bin/generate-readme-reference.py -->"
 END = "<!-- END GENERATED REFERENCE -->"
-# Loaded by dzg-unified.sty after dzg-macros.sty (environments-arxiv under the
-# arxiv option) and by dzg-dissertation.sty (dissertation-overrides).
 EXTRA_MACRO_FILES = ("environments.tex", "environments-arxiv.tex", "dissertation-overrides.tex")
 
 _spec = importlib.util.spec_from_file_location(

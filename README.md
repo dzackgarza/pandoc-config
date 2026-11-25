@@ -1939,6 +1939,7 @@ Regenerate with `just readme-reference`.
 | `\QHS` | 0 | `\mathbf{Q}\kern-0.5pt\operatorname{HS}` |
 | `\BGL` | 0 | `\mathbf{B}\mkern-3mu \operatorname{GL}` |
 | `\gitquot` | 0 | `{ \mathbin{/\mkern-6mu/}}` |
+| `\surjectsvia` | 2 | `\xrightarrow[#1]{#2} { \mathrel{\mkern-16mu}\rightarrow }\,` |
 | `\quotleft` | 2 | `{}_{#2}\mkern-.5mu\backslash\mkern-2mu^{#1}` |
 | `\quotright` | 2 | `{}^{#1}\mkern-2mu/\mkern-2mu_{#2}` |
 | `\dcoset` | 3 | `\,\scriptscriptstyle {\textstyle #1} \mkern-4mu\scalebox{1.5}{$\diagdown$}\mkern-5mu^{\textstyle #2} \mkern-4mu\scalebox{1.5}{$\diagup$}\mkern-5mu{\textstyle #3}` |
@@ -1951,6 +1952,7 @@ Regenerate with `just readme-reference`.
 | `\horzbar` | 0 | `\rule[.5ex]{2.5ex}{0.5pt}` |
 | `\vertbar` | 0 | `\rule[-1ex]{0.5pt}{2.5ex}` |
 | `\mypound` | 0 | `\scalebox{0.8}{\raisebox{0.4ex}{\#}}` |
+| `\ratmap` | 1 | `\mathbin{\tikz [baseline=-0.25ex,-latex, dashed,#1] \draw [#1] (0pt,0.5ex) -- (1.3em,0.5ex);}` |
 | `\p` | 0 | `\prime` |
 | `\pp` | 0 | `{\prime\prime}` |
 | `\ph` | 0 | `\protect\kern -2pt\protect\phantom{.}` |
@@ -2266,7 +2268,9 @@ Regenerate with `just readme-reference`.
 
 ### `styles/macros/figure-include.tex`
 
-No macro or environment definitions.
+| Macro | Args | Expansion |
+| --- | --- | --- |
+| `\ctikzsvg` | 2 | `\begingroup \CatchFileEdef\abspath{\|kpsewhich "#2"}{\endlinechar=-1 }\immediate\write18{python3 /home/dzack/.pandoc/bin/render_figures.py \abspath}\filename@parse{#2}\@expandtwoargs\in@{objects/}{\filename@area}\ifin@\edef\dzg@svgdir{\filename@area}\else\def\dzg@svgdir{}\fi \begin{center}% \includesvg[#1]{/home/dzack/.pandoc/figures/rendered/\dzg@svgdir\filename@base}% \end{center}\endgroup` |
 
 ### `styles/macros/environments.tex`
 
@@ -2275,7 +2279,7 @@ No macro or environment definitions.
 | `\rmargnote` | 1 | `\marginnote{{\footnotesize #1}}` |
 | `\quote` | 0 | `\myblock` |
 | `\endquote` | 0 | `\endmyblock` |
-| `\stacktype` | 0 | `L` |
+| `\danger` | 1 | `\renewcommand\stacktype{L}\scaleto{\stackon[1.0pt]{\color{Maroon}$\triangle$}{\tiny\bfseries !}}{#1}` |
 
 | Environment | Heading or definition |
 | --- | --- |
@@ -2296,7 +2300,6 @@ No macro or environment definitions.
 | `solution` | `Solution` |
 | `strategy` | `Strategy` |
 | `concept` | `Concepts Used` |
-| `exercise` | `Exercise` |
 | `exercise` | `Exercise` |
 | `slogan` | `Slogan` |
 | `question` | `Question` |

@@ -1,9 +1,10 @@
-#!/usr/bin/env -S uv run --script
+#!/usr/bin/env -S uv run
 """
 Generate MathJax 3 macro configuration (JS/TS) from compatible LaTeX macro files.
 
-Reads the canonical MathJax-compatible macro sources, parses \\newcommand /
-\\def / \\DeclareMathOperator / \\DeclarePairedDelimiter definitions, and
+Reads the canonical MathJax-compatible macro sources, parses the \\newcommand /
+\\renewcommand / \\providecommand / \\DeclareMathOperator and parameterless \\def
+definitions with the LaTeX parser of pylatexenc, and
 outputs:
 
   - A JavaScript ESM module exporting a { macros } object
@@ -23,6 +24,17 @@ import re
 import sys
 from pathlib import Path
 from typing import NamedTuple
+
+from pylatexenc.latexwalker import (
+    LatexCommentNode,
+    LatexEnvironmentNode,
+    LatexGroupNode,
+    LatexMacroNode,
+    LatexNode,
+    LatexWalker,
+    get_default_latex_context_db,
+)
+from pylatexenc.macrospec import LatexContextDb, MacroSpec
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MACRO_DIR = REPO_ROOT / "styles" / "macros"
@@ -46,188 +58,94 @@ MATHJAX_SHIMS = (
     MacroDef("qed", 0, r"\blacksquare"),
 )
 
-DEF_CMD_RE = re.compile(
-    r"""
-    \\
-    (?:newcommand|renewcommand|providecommand
-      |DeclareMathOperator|DeclarePairedDelimiter
-      |def
-    )\*?
-    """,
-    re.VERBOSE | re.DOTALL,
-)
-
-_COMMENT_OR_EMPTY = re.compile(r"^\s*(%.*|\s*)$")
-
-_EXCLUDE_STARTSWITH = (
-    "\\NeedsTeXFormat",
-    "\\ProvidesPackage",
-    "\\usepackage",
-    "\\makeatletter",
-    "\\makeatother",
-    "\\endinput",
-)
-
-EXCLUDE_LINES_STARTSWITH = (
-    "\\NeedsTeXFormat",
-    "\\ProvidesPackage",
-    "\\usepackage",
-    "\\makeatletter",
-    "\\makeatother",
-    "\\endinput",
-    "\\input{",
-)
-
-COMMENT_OR_EMPTY = re.compile(r"^\s*(%.*|\s*)$")
-
-DECLARE_MATH_OP_RE = re.compile(
-    r"\\DeclareMathOperator\*?\s*\{\s*\\([a-zA-Z@]+)\s*\}\s*\{(.*)\}",
-    re.DOTALL,
-)
+_NEWCOMMANDS = ("newcommand", "renewcommand", "providecommand")
+_DEFINITION_MACROS = (*_NEWCOMMANDS, "DeclareMathOperator", "DeclarePairedDelimiter", "def")
 
 
-def _strip_comments_and_boilerplate(content: str) -> str:
-    """Remove comment-only lines and preamble boilerplate."""
-    lines: list[str] = []
-    for line in content.splitlines():
-        stripped = line.strip()
-        if _COMMENT_OR_EMPTY.match(stripped):
-            continue
-        if stripped.startswith(_EXCLUDE_STARTSWITH):
-            continue
-        lines.append(line)
-    return "\n".join(lines)
-
-
-def _merge_continuations(raw: str) -> str:
-    """Merge lines that end with a trailing % (continuation marker)."""
-    lines = raw.splitlines()
-    merged: list[str] = []
-    i = 0
-    while i < len(lines):
-        line = lines[i]
-        if line.rstrip().endswith("%") and i + 1 < len(lines):
-            line = line.rstrip()[:-1]
-            i += 1
-            line += " " + lines[i].lstrip()
-        merged.append(line)
-        i += 1
-    return "\n".join(merged)
-
-
-def _skip_ws(raw: str, pos: int) -> int:
-    """Skip whitespace, return new position."""
-    while pos < len(raw) and raw[pos] in " \t\n\r":
-        pos += 1
-    return pos
-
-
-def _extract_balanced_group(raw: str, pos: int) -> tuple[str, int]:
-    """Extract balanced-brace group starting at raw[pos].  raw[pos] must be '{'.
-    Returns (inner_content, position_after_closing_brace).
-    """
-    assert pos < len(raw) and raw[pos] == "{", (
-        f"expected '{{' at pos {pos}, got {raw[pos : pos + 10]!r}"
+def _latex_context() -> LatexContextDb:
+    context = get_default_latex_context_db()
+    context.add_context_category(
+        "macro-definitions",
+        prepend=True,
+        macros=[
+            MacroSpec("def", "{{"),
+            MacroSpec("DeclarePairedDelimiter", "{{{"),
+        ],
     )
-    depth = 0
-    start = pos
-    while pos < len(raw):
-        ch = raw[pos]
-        if ch == "{":
-            depth += 1
-        elif ch == "}":
-            depth -= 1
-            if depth == 0:
-                return raw[start + 1 : pos], pos + 1
-        elif ch == "\\":
-            pos += 1
-        pos += 1
-    return raw[start + 1 : pos], pos
+    return context
 
 
-def _extract_name(raw: str, pos: int) -> tuple[str, int]:
-    """Extract macro name from raw[pos:].  Returns (name, new_position)."""
-    pos = _skip_ws(raw, pos)
-    if pos >= len(raw):
-        return "", pos
-    if raw[pos] == "{" and pos + 1 < len(raw) and raw[pos + 1] == "\\":
-        inner, after = _extract_balanced_group(raw, pos)
-        assert inner.startswith("\\"), f"expected \\ name in braces, got {inner!r}"
-        return inner[1:], after
-    if raw[pos] == "\\":
-        end = pos + 1
-        while end < len(raw) and raw[end].isalpha():
-            end += 1
-        return raw[pos + 1 : end], end
-    return "", pos
+_LATEX_CONTEXT = _latex_context()
 
 
-def _extract_opt_arg_count(raw: str, pos: int) -> tuple[int, int]:
-    """Extract optional [N] arg count. Returns (N, new_position)."""
-    pos = _skip_ws(raw, pos)
-    if pos < len(raw) and raw[pos] == "[":
-        close = raw.find("]", pos)
-        if close != -1:
-            try:
-                n = int(raw[pos + 1 : close])
-                return n, close + 1
-            except ValueError:
-                pass
-    return 0, pos
+def _without_comments(nodes: list[LatexNode]) -> str:
+    return "".join(
+        node.latex_verbatim() for node in nodes if not isinstance(node, LatexCommentNode)
+    )
 
 
-def _extract_body(raw: str, pos: int) -> tuple[str, int]:
-    """Extract body from raw[pos:]. raw[pos] must start with '{'.
-    Returns (body_text, position_after_closing_brace)."""
-    pos = _skip_ws(raw, pos)
-    if pos >= len(raw) or raw[pos] != "{":
-        return "", pos
-    return _extract_balanced_group(raw, pos)
+def _defined_name(argument: LatexNode | None) -> str:
+    if isinstance(argument, LatexMacroNode):
+        return argument.macroname
+    if isinstance(argument, LatexGroupNode):
+        inner = [node for node in argument.nodelist if not isinstance(node, LatexCommentNode)]
+        if inner and isinstance(inner[0], LatexMacroNode):
+            return inner[0].macroname
+    return ""
+
+
+def _group_text(argument: LatexNode | None) -> str:
+    if not isinstance(argument, LatexGroupNode) or argument.delimiters != ("{", "}"):
+        return ""
+    return _without_comments(argument.nodelist).strip()
+
+
+def _arg_count(argument: LatexNode | None) -> int:
+    if not isinstance(argument, LatexGroupNode):
+        return 0
+    text = _without_comments(argument.nodelist).strip()
+    return int(text) if text.isdecimal() else 0
+
+
+def _definition(node: LatexMacroNode) -> MacroDef | None:
+    arguments = node.nodeargd.argnlist
+    if node.macroname == "DeclarePairedDelimiter":
+        return None
+    if node.macroname in _NEWCOMMANDS:
+        _star, name_arg, count_arg, _default, body_arg = arguments
+        name, arg_count, body = _defined_name(name_arg), _arg_count(count_arg), _group_text(body_arg)
+    elif node.macroname == "DeclareMathOperator":
+        _star, name_arg, body_arg = arguments
+        name, arg_count, body = _defined_name(name_arg), 0, _group_text(body_arg)
+        body = f"\\operatorname{{{body}}}" if body else ""
+    else:
+        name_arg, body_arg = arguments
+        name, arg_count, body = _defined_name(name_arg), 0, _group_text(body_arg)
+    if not name or not body:
+        return None
+    return MacroDef(name=name, arg_count=arg_count, body=body)
+
+
+def _definitions_in(nodes: list[LatexNode | None]) -> list[MacroDef]:
+    macros: list[MacroDef] = []
+    for node in nodes:
+        if isinstance(node, LatexMacroNode) and node.macroname in _DEFINITION_MACROS:
+            definition = _definition(node)
+            if definition is not None:
+                macros.append(definition)
+        elif isinstance(node, LatexMacroNode) and node.nodeargd is not None:
+            macros.extend(_definitions_in(node.nodeargd.argnlist))
+        elif isinstance(node, (LatexGroupNode, LatexEnvironmentNode)):
+            macros.extend(_definitions_in(node.nodelist))
+    return macros
 
 
 def parse_macros(content: str) -> list[MacroDef]:
     """Parse all \\newcommand, \\def, \\DeclareMathOperator definitions."""
-    text = _strip_comments_and_boilerplate(content)
-    text = _merge_continuations(text)
-
-    macros: list[MacroDef] = []
-    pos = 0
-
-    while True:
-        m = DEF_CMD_RE.search(text, pos)
-        if not m:
-            break
-
-        cmd = m.group(0).lstrip("\\").rstrip("*")
-        pos = m.end()
-        pos = _skip_ws(text, pos)
-
-        if "DeclarePairedDelimiter" in cmd:
-            name, pos = _extract_name(text, pos)
-            _body, pos = _extract_body(text, pos)
-            _body, pos = _extract_body(text, pos)
-            continue
-
-        name, pos = _extract_name(text, pos)
-        if not name:
-            continue
-
-        arg_count, pos = _extract_opt_arg_count(text, pos)
-
-        body, pos = _extract_body(text, pos)
-        body = body.strip()
-
-        if not body:
-            continue
-
-        if "DeclareMathOperator" in cmd:
-            body = f"\\operatorname{{{body}}}"
-            arg_count = 0
-
-        macros.append(MacroDef(name=name, arg_count=arg_count, body=body))
-
-    return macros
-
+    nodes, _pos, _len = LatexWalker(
+        content, latex_context=_LATEX_CONTEXT, tolerant_parsing=False
+    ).get_latex_nodes()
+    return _definitions_in(nodes)
 
 def _unique_macros(macros: list[MacroDef]) -> list[MacroDef]:
     """Keep LaTeX-style first definitions when later aux files use providecommand."""
