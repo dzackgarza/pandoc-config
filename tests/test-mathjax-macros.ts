@@ -1,21 +1,11 @@
-// Typesets every generated macro using the MathJax 4 configuration in a
-// Pandoc preview export, and fails on a TeX error. A macro that
-// LaTeX accepts but MathJax does not define renders as an error in every
-// MathJax consumer. The Node entry point and tex2mmlPromise, which loads the
-// extensions a formula autoloads, are MathJax's documented server use:
-// https://docs.mathjax.org/en/latest/server/components.html
 import { runInNewContext } from "node:vm";
 import MathJaxNode from "mathjax";
 
-// MathJax passes its TeX input jax to formatError; the test does not read it.
 type TexInputJax = object;
 type Macro = string | [string, number] | [string, number, string];
 const macros: Record<string, Macro> = await Bun.file(
   `${import.meta.dir}/../templates/css/mathjax-macros.json`,
 ).json();
-// Use the configuration from a real Pandoc export, not a separate test-only
-// registration of the TeX package. The Node component replaces the browser
-// component for typesetting, but executes the export's startup callback.
 const rendered = Bun.spawnSync({
   cmd: [
     "pandoc", "-f", "markdown", "-t", "html5", "--standalone",
@@ -55,19 +45,22 @@ const mathjax = await MathJaxNode.init({
 const failures: string[] = [];
 for (const [name, macro] of Object.entries(macros)) {
   const arity = typeof macro === "string" ? 0 : macro[1];
-  // One more argument than the macro takes serves aliases such as
-  // \wh = \widehat, and \left. \right. serves aliases of \middle.
   const call = `\\${name}` + "{x}".repeat(arity);
   try {
-    await mathjax.tex2mmlPromise(`\\left. ${call}{x} \\right.`, {
+    const mml = await mathjax.tex2mmlPromise(`\\left. ${call}{x} \\right.`, {
       display: true,
     });
+    const undefinedCommands = [
+      ...mml.matchAll(/<mtext mathcolor="red"[^>]*>(\\[A-Za-z]+)<\/mtext>/g),
+    ].map((match) => match[1]);
+    if (undefinedCommands.length)
+      failures.push(
+        `${call}: MathJax does not define ${undefinedCommands.join(", ")}`,
+      );
   } catch (error) {
     failures.push(`${call}: ${(error as Error).message}`);
   }
 }
-// \fps sets its argument in the stmaryrd double brackets as \left and \right
-// delimiters, which MathJax sizes to the argument.
 const series = await mathjax.tex2mmlPromise(String.raw`\fps{\frac{a}{b}}`);
 for (const bracket of [
   /data-latex="\\left\\llbracket\s*">&#x27E6;<\/mo>/,
@@ -75,9 +68,6 @@ for (const bracket of [
 ])
   if (!bracket.test(series))
     failures.push(`\\fps{\\frac{a}{b}} lacks ${bracket}:\n${series}`);
-// \fls sets its four parentheses as three \left ... \right groups in sequence,
-// none inside another, so MathJax sizes each one to the argument alone and
-// the two parentheses of each side have the same height.
 const laurent = await mathjax.tex2mmlPromise(String.raw`\fls{\frac{a}{b}}`);
 const delimiters = [...laurent.matchAll(/data-latex="(\\(?:left|right).)"/g)]
   .map((match) => match[1])
@@ -87,8 +77,6 @@ if (delimiters !== sequence)
   failures.push(
     `\\fls{\\frac{a}{b}} sets ${delimiters}, not ${sequence}:\n${laurent}`,
   );
-// \diagonal names the diagonal, an object, so it takes no argument: the
-// symbol that follows it stays in the formula (\diagonal X, \diagonal^c).
 const diagonal = await mathjax.tex2mmlPromise(String.raw`\diagonal X`);
 if (!/<mi[^>]*>X<\/mi>/.test(diagonal))
   failures.push(`\\diagonal X drops the X:\n${diagonal}`);
