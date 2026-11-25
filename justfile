@@ -517,6 +517,10 @@ _test-theorem-tables:
 _test-compile-html:
   bash "{{source_directory()}}/tests/test-compile-html.sh"
 
+[doc("Fold or drop proof and solution blocks in HTML and LaTeX output")]
+_test-hide-solutions:
+  bash "{{source_directory()}}/tests/test-hide-solutions.sh"
+
 [doc("Expand the central macros of a Markdown file without environment variables")]
 _test-stripmacros:
   bash "{{source_directory()}}/tests/test-stripmacros.sh"
@@ -526,7 +530,7 @@ _test-plain-clone:
   bash "{{source_directory()}}/tests/test-plain-clone.sh"
 
 [doc("Regenerate the README reference, then run all tests (macros, templates, tikz compilation, filter, poset layout)")]
-test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-math-delimiters _test-posets _test-compile-pandoc _test-compile-html _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
+test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-math-delimiters _test-posets _test-compile-pandoc _test-compile-html _test-hide-solutions _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
 
 [doc("Run the fast commit check; the commit hook runs this")]
 test-commit:
