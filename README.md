@@ -486,8 +486,11 @@ bibliography.
 (`tests/test-latex-macros.tex`), compiles every
 template, the TikZ vocabulary and every figure object (`tests/test-tikz-macros.tex`,
 pdflatex), the tikzcd filter, the Lamport-proof filter, the poset layout
-(`tests/test-posets.tex`, lualatex) and checks that the generated reference
-below is current. The commit hook runs it.
+(`tests/test-posets.tex`, lualatex), the `compile-pandoc` recipe
+(`tests/test-compile-pandoc.sh`) and a captionless table inside a theorem
+environment through that recipe (`tests/test-theorem-tables.sh`, which fails
+on each TeX error in the log, as latexmk runs in force mode), and checks that
+the generated reference below is current. The commit hook runs it.
 
 <!-- BEGIN GENERATED REFERENCE: bin/generate-readme-reference.py -->
 

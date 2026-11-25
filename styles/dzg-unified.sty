@@ -17,6 +17,14 @@
 
 % Tables and Floats
 \RequirePackage{longtable}
+% Pandoc selects LTcaptype=none for captionless tables.
+% Pandoc's default LaTeX template declares this counter (jgm/pandoc#11201),
+% so these tables do not advance the table counter.
+\newcounter{none}
+% amsthm defers the theorem heading until the first paragraph. A
+% longtable can start in vertical mode; emit a pending list/theorem
+% label first (amsthdoc, section 2.1: use \leavevmode after the head).
+\AddToHook{env/longtable/before}{\if@inlabel\leavevmode\par\fi}
 \RequirePackage{array}
 \RequirePackage{booktabs}
 \RequirePackage{tabularx}
