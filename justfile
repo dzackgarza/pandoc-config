@@ -530,7 +530,7 @@ _test-plain-clone:
   bash "{{source_directory()}}/tests/test-plain-clone.sh"
 
 [doc("Regenerate the README reference, then run all tests (macros, templates, tikz compilation, filter, poset layout)")]
-test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-math-delimiters _test-posets _test-compile-pandoc _test-compile-html _test-hide-solutions _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
+test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-tikz-paths _test-lamport-proof _test-wikilinks _test-math-delimiters _test-posets _test-compile-pandoc _test-compile-html _test-hide-solutions _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
 
 [doc("Run the fast commit check; the commit hook runs this")]
 test-commit:
@@ -558,6 +558,10 @@ _test-mathjax-macros:
 [doc("Test the tikzcd filter through the Pandoc JSON AST and the DOM of the HTML")]
 _test-tikz-filter:
   uv run "{{source_directory()}}/tests/test-tikz-filter.py"
+
+[doc("Test that the tikzcd filter writes its figure cache at a path with a space")]
+_test-tikz-paths:
+  bash "{{source_directory()}}/tests/test-tikz-paths.sh"
 
 [doc("Test Lamport-style proof parsing, numbering, references, and LaTeX output")]
 _test-lamport-proof:
