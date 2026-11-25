@@ -177,7 +177,10 @@ and `MACRO-SEMANTICS-AUDIT.md` hold the rule and the migration ledger.
 
 MathJax targets read a generated copy: `just generate-math-macros` parses the
 files in `styles/macros/mathjax-sources.txt` and writes
-`templates/css/mathjax-macros.{mjs,ts,json,html}` and the macro maps of
+`templates/css/mathjax-macros.{mjs,ts,json,html}`, the reader input
+`templates/css/math-macros.md` (the `\newcommand` lines for each Pandoc writer
+without such a template; AGENTS.md, "Templates that zettlr-pandoc exports
+with") and the macro maps of
 `templates/mathjax-config.html` (the MathJax configuration that each HTML
 template except reveal.js includes) and `templates/pandoc_revealjs_template.html`. `styles/obsidian/` holds the Obsidian
 setup.
@@ -481,6 +484,8 @@ stylesheets and the generated MathJax macros.
 | `obsidian.lua`, `obsidian_callouts.lua` | strip Obsidian wikilinks, comments and tags; render callouts |
 | `hide_solutions_html.lua`, `hide_solutions_pdf.lua` | collapse or drop solution blocks |
 | `replace_symbols_html.lua` | MathJax replacements for symbols it lacks (`\coloneqq`) |
+| `math-macros.lua` | removes the macro definitions of `templates/css/math-macros.md` from the document |
+| `context-mathml.lua` | gives ConTeXt each formula as MathML, for its `mathml` module |
 | `components.lua`, `post-navigation.lua`, `youtube.lua`, `select_images.lua`, `semanticlean.lua` | blog components, navigation, embeds, image selection, make4ht HTML cleanup |
 
 `defaults/`, `csl/` and `bib/` hold pandoc defaults, citation styles and the
