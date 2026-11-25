@@ -197,6 +197,32 @@ LaTeX-only form: the double cosets (`\dcoset`, `\dcosetl`, `\dcosetr`,
 MathJax), `\gitquot` (`\mkern` in LaTeX) and `\righttriplearrows` (a TikZ
 drawing in LaTeX, a `\substack` of three arrows in MathJax).
 
+The tree also overrides five native commands of LaTeX and its packages. Each
+name is one of the most-used names of the authoring language, so the tree
+keeps it (#26).
+
+| Command | Native meaning | Macro meaning | Expansion |
+| --- | --- | --- | --- |
+| `\AA` | Å, a text command of LaTeX; MathJax gives Å (U+212B) in math | affine space | `{\mathbf{A}}` |
+| `\SS` | "SS", the capital of ß, a text command of LaTeX | sphere, as `\sphere` | `{\mathbb{S}}` |
+| `\ae` | the æ ligature, a text command of LaTeX | "almost everywhere" | `{ \text{a.e.} }` |
+| `\vector` | `\vector(x,y){l}`, the arrow of the `picture` environment of LaTeX | a vector | `\vector{v}` gives `\mathbf{v}` |
+| `\hyp` | the breakable hyphen of hyphenat, which dzg-unified loads | the operator "hyp" | `{\operatorname{hyp}}` |
+
+- A document that loads the tree does not have the native command: no Å
+  or æ from `\AA` or `\ae`, no "SS" from `\SS`, no `picture` arrow, no
+  breakable hyphen from `\hyp`. Write the character itself (Å, æ), or use
+  another command for the arrow or the hyphen.
+- In math, the PDF and MathJax agree on each of the five: the projection
+  has the expansion of the table, so MathJax uses it in place of its own
+  `\AA`, and LaTeX has no math meaning for the other four.
+- `tests/test-mathjax-generator.py` reads the first column of this table.
+  It finds each macro of the projection that changes the meaning of a
+  command that the document has where dzg-macros loads (amsart,
+  dzg-unified), and fails when that set and this table differ. A new
+  override of a native command therefore fails the test until a row of this
+  table declares it.
+
 ## Adding New Macros
 
 ### Decision Tree

@@ -45,11 +45,10 @@ This produces `test-latex-macros.pdf` which exercises:
 
 ### Command Conflicts
 
-Some macros conflict with LaTeX defaults:
-- `\ae` (already defined by LaTeX)
-- `\too` (conflicts with a standard command)
-
-These are handled by the macro files but may generate warnings.
+The macros that override a native command of LaTeX or a loaded package are
+the rows of the section "Overrides" of `styles/macros/README.md`.
+`test-mathjax-generator.py` fails when the tree overrides a native command
+that the table does not declare, or when a row overrides none.
 
 ### TEXINPUTS Configuration
 
