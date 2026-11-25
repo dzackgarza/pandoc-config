@@ -349,7 +349,7 @@ spacing. `just format-md <dir>` enforces the mechanical parts.
 ## Macro Semantics: object-valued macros are atomic
 
 Macros in this repository are an authoring language, not merely abbreviations for
-individual glyphs. A macro that names a mathematical construction MUST take the data
+individual glyphs. A macro that names a mathematical construction must take the data
 of that construction as arguments and expand to the complete mathematical object.
 Its arguments are the semantic boundary of the object.
 
@@ -359,7 +359,7 @@ For example, the fibre product is written
 \fiberprod{X}{S}{Y}
 ```
 
-and means the complete object `X \times_S Y`. It must never be reduced to a one-argument
+and means the complete object `X \times_S Y`. Do not reduce it to a one-argument
 shortcut for the decorated multiplication sign `\times_S` and then rely on adjacent
 source text to provide `X` and `Y`.
 
@@ -487,7 +487,7 @@ Every figure draws with the style vocabulary in
    correct data (Gram matrices, root norms, polygon rules, lattice invariants)
    with the research preamble (`~/research/src/dzack_research/preamble/`) or
    derive it from the source paper, and cite the source in the object's
-   comment. Never keep two versions and never choose by appearance.
+   comment. Keep one version, chosen by the data and not by appearance.
 
 ## Figures: survey the library landscape before drawing
 
@@ -525,7 +525,7 @@ through listed points, had been loaded by the preamble the entire time.
 5. **A user report of a visual defect is an observation, not a claim to
    rebut.** Re-render and look before explaining why the output must be fine.
    "It is a Bézier" says nothing about whether it looks smooth.
-6. **"Not in the preamble" is never a blocker.** Any TikZ library or LaTeX
+6. **"Not in the preamble" is not a blocker.** Any TikZ library or LaTeX
    package on CTAN can be added to the shared preamble in one line; see
    *Adding a library* below. Hand-rolling because a library is not yet loaded
    is the same failure as not surveying.
