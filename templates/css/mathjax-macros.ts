@@ -1,7 +1,8 @@
 type ZeroArgMacro = string;
 type NArgMacro = [replacement: string, argCount: number];
+type DefaultArgMacro = [replacement: string, argCount: number, defaultArgument: string];
 
-export const macros: Record<string, ZeroArgMacro | NArgMacro> = {
+export const macros: Record<string, ZeroArgMacro | NArgMacro | DefaultArgMacro> = {
   "coloneqq": "\\mathrel{\\vcenter{:}}=",
   "qty": ["\\left( {#1} \\right)", 1],
   "qed": "\\blacksquare",
@@ -1001,6 +1002,7 @@ export const macros: Record<string, ZeroArgMacro | NArgMacro> = {
   "ubb": "^{\\rm BB}",
   "dto": "\\Rightarrow",
   "fign": "Fig.~\\ref{fig:discforms}",
+  "ditto": "",
   "hoV": "\\widehat{\\overline V}",
   "hoD": "\\widehat{\\overline D}",
   "ooT": "\\overline{\\overline T}",
@@ -1250,6 +1252,8 @@ export const macros: Record<string, ZeroArgMacro | NArgMacro> = {
   "places": ["\\mathrm{Pl}\\qty{#1}", 1],
   "ZZlocal": ["{ \\ZZ_{\\widehat{#1}} }", 1],
   "rad": ["\\sqrt{#1}", 1],
+  "rising": ["\\qty{#1}^{ (#2) }", 2],
+  "falling": ["\\qty{#1}_{ (#2) }", 2],
   "elts": ["{ {#1}_1, {#1}_2, \\cdots, {#1}_{#2}}", 2],
   "tselts": ["{ \\theset{ {#1}_1, {#1}_2, \\cdots, {#1}_{#2} } }", 2],
   "mix": ["\\overset{\\scriptscriptstyle {#1} }{\\times}", 1],
@@ -1309,6 +1313,8 @@ export const macros: Record<string, ZeroArgMacro | NArgMacro> = {
   "rrrarrows": "\\mathrel{\\substack{\\textstyle\\rightarrow\\\\[-0.6ex]\n        \\textstyle\\rightarrow \\\\[-0.6ex]\n        \\textstyle\\rightarrow}}",
   "righttriplearrows": "\\mathrel{\\substack{\\rightarrow\\\\[-1ex]\\rightarrow\\\\[-1ex]\\rightarrow}}",
   "contradiction": "\\mathord{\\lightning}",
+  "multichoose": ["{\\left(\\kern-.3em\\left(\\genfrac{}{}{0pt}{}{#1}{#2}\\right)\\kern-.3em\\right)}", 2],
+  "ceil": ["\\mathopen{\\lceil}#1\\mathclose{\\rceil}", 1],
   "bdlattice": ["\\overline{#1}_{ #2  }", 2],
   "perpin": ["#2^{\\perp_{#1}}", 2],
   "signature": ["\\operatorname{sign}\\qty{#1}", 1],

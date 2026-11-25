@@ -50,7 +50,7 @@ def code(text: str) -> str:
 
 def macro_section(path: Path) -> list[str]:
     content = path.read_text()
-    macros = _mathjax.parse_macros(content)
+    macros = _mathjax.parse_macros(content, str(path.relative_to(REPO_ROOT)))
     environments = ENVIRONMENT_RE.findall(content)
     lines = [f"### `{path.relative_to(REPO_ROOT)}`", ""]
     if macros:

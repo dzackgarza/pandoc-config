@@ -152,6 +152,26 @@ or independently override their macro semantics.
   `templates/mathjax-config.html` and `templates/pandoc_revealjs_template.html`.
   Do not edit these outputs; run `just generate-math-macros`. A template with no
   such line or with more than one stops the generator.
+- **The generator projects each definition or stops.** It parses each file
+  of the manifest with pylatexenc and gives MathJax the LaTeX meaning of:
+  - `\newcommand`, `\renewcommand`, `\providecommand`, with an optional
+    default (`\newcommand{\x}[2][d]{...}` gives `["...", 2, "d"]`);
+  - `\def` with the parameter text `#1#2...#n` and nothing else;
+  - `\DeclareMathOperator` (`\operatorname`) and its star form
+    (`\operatorname*`);
+  - `\DeclarePairedDelimiter{\x}{L}{R}`, as `\mathopen{L}#1\mathclose{R}`:
+    the form of mathtools without a star and without a size. MathJax has
+    no form for `\x*` and `\x[\big]`;
+  - `\let\x\relax`, which defines nothing.
+
+  Each other definition (`\gdef`, `\edef`, `\xdef`, another `\let`, a `\def`
+  with a delimited parameter text, `\DeclareRobustCommand`, the xparse
+  commands, `\DeclarePairedDelimiterX`, `\DeclareMathSymbol`,
+  `\mathchardef`, `\chardef`) stops the generator with its file, its line
+  and its name. A definition between `\makeatletter` and `\makeatother`
+  can have `@` in its name.
+- `bin/generate-readme-reference.py` lists the definitions of each macro
+  file with the same parser, also of the files outside the manifest.
 - A tier 1 or tier 2 expansion uses only commands that MathJax defines with
   the packages that the configuration loads: the default set, `mathtools`,
   `centernot` and `stmaryrd` (`templates/js/mathjax-stmaryrd.js`: `\llbracket`,

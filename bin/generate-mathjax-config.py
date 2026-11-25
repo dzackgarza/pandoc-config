@@ -26,6 +26,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from pylatexenc.latexwalker import (
+    LatexCharsNode,
     LatexCommentNode,
     LatexEnvironmentNode,
     LatexGroupNode,
@@ -50,6 +51,11 @@ class MacroDef(NamedTuple):
     name: str
     arg_count: int
     body: str
+    default: str | None = None
+
+
+class ProjectionError(Exception):
+    pass
 
 
 MATHJAX_SHIMS = (
@@ -59,7 +65,31 @@ MATHJAX_SHIMS = (
 )
 
 _NEWCOMMANDS = ("newcommand", "renewcommand", "providecommand")
-_DEFINITION_MACROS = (*_NEWCOMMANDS, "DeclareMathOperator", "DeclarePairedDelimiter", "def")
+_DEFINITION_MACROS = (
+    *_NEWCOMMANDS,
+    "DeclareMathOperator",
+    "DeclarePairedDelimiter",
+    "def",
+    "let",
+)
+_UNPROJECTED_DEFINITIONS = (
+    "gdef",
+    "edef",
+    "xdef",
+    "DeclareRobustCommand",
+    "DeclarePairedDelimiterX",
+    "DeclarePairedDelimiterXPP",
+    "NewDocumentCommand",
+    "RenewDocumentCommand",
+    "ProvideDocumentCommand",
+    "DeclareDocumentCommand",
+    "DeclareMathSymbol",
+    "mathchardef",
+    "chardef",
+)
+_PARAMETER_TEXT_RE = re.compile(r"(?:#[1-9])*")
+_AT_LETTER = "ǝ"
+_AT_LETTER_REGION_RE = re.compile(r"\\makeatletter(.*?)(?=\\makeatother|\Z)", re.S)
 
 
 def _latex_context() -> LatexContextDb:
@@ -68,8 +98,10 @@ def _latex_context() -> LatexContextDb:
         "macro-definitions",
         prepend=True,
         macros=[
-            MacroSpec("def", "{{"),
+            MacroSpec("def", "{"),
+            MacroSpec("let", "{{"),
             MacroSpec("DeclarePairedDelimiter", "{{{"),
+            *(MacroSpec(name, "{") for name in _UNPROJECTED_DEFINITIONS),
         ],
     )
     return context
@@ -94,10 +126,14 @@ def _defined_name(argument: LatexNode | None) -> str:
     return ""
 
 
-def _group_text(argument: LatexNode | None) -> str:
-    if not isinstance(argument, LatexGroupNode) or argument.delimiters != ("{", "}"):
-        return ""
-    return _without_comments(argument.nodelist).strip()
+def _group_text(argument: LatexNode | None) -> str | None:
+    if argument is None:
+        return None
+    if isinstance(argument, LatexGroupNode) and argument.delimiters == ("{", "}"):
+        return _without_comments(argument.nodelist).strip()
+    if isinstance(argument, LatexGroupNode):
+        return None
+    return argument.latex_verbatim().strip()
 
 
 def _arg_count(argument: LatexNode | None) -> int:
@@ -107,45 +143,134 @@ def _arg_count(argument: LatexNode | None) -> int:
     return int(text) if text.isdecimal() else 0
 
 
-def _definition(node: LatexMacroNode) -> MacroDef | None:
+def _optional_text(argument: LatexNode | None) -> str | None:
+    if not isinstance(argument, LatexGroupNode):
+        return None
+    return _without_comments(argument.nodelist)
+
+
+class _Source(NamedTuple):
+    name: str
+    walker: LatexWalker
+
+    def refuse(self, node: LatexNode, defined: str, cause: str) -> ProjectionError:
+        line, _column = self.walker.pos_to_lineno_colno(node.pos)
+        named = defined.replace(_AT_LETTER, "@")
+        return ProjectionError(f"{self.name}:{line}: \\{named}: {cause}")
+
+
+def _parameter_count(text: str) -> int | None:
+    if not _PARAMETER_TEXT_RE.fullmatch(text):
+        return None
+    numbers = [int(digit) for digit in text[1::2]]
+    return len(numbers) if numbers == list(range(1, len(numbers) + 1)) else None
+
+
+def _def_definition(
+    source: _Source, node: LatexMacroNode, siblings: list[LatexNode | None], start: int
+) -> tuple[MacroDef, int]:
+    name = _defined_name(node.nodeargd.argnlist[0])
+    index = start
+    parameter_text = ""
+    while index < len(siblings) and not isinstance(siblings[index], LatexGroupNode):
+        sibling = siblings[index]
+        if not isinstance(sibling, (LatexCharsNode, LatexCommentNode)):
+            raise source.refuse(node, name, "its parameter text is not #1#2...")
+        if isinstance(sibling, LatexCharsNode):
+            parameter_text += sibling.chars
+        index += 1
+    arg_count = _parameter_count(parameter_text.strip())
+    if index == len(siblings) or arg_count is None:
+        raise source.refuse(
+            node, name, f"a delimited parameter text {parameter_text.strip()!r} has no MathJax form"
+        )
+    body = _group_text(siblings[index])
+    if body is None:
+        raise source.refuse(node, name, "the body is not a group")
+    return MacroDef(name=name, arg_count=arg_count, body=body), index + 1
+
+
+def _definition(source: _Source, node: LatexMacroNode) -> MacroDef | None:
     arguments = node.nodeargd.argnlist
+    if node.macroname in _UNPROJECTED_DEFINITIONS:
+        raise source.refuse(
+            node, _defined_name(arguments[0]), f"\\{node.macroname} has no MathJax projection"
+        )
+    if node.macroname == "let":
+        name_arg, target_arg = arguments
+        name = _defined_name(name_arg)
+        if isinstance(target_arg, LatexMacroNode) and target_arg.macroname == "relax":
+            return None
+        raise source.refuse(node, name, "a \\let copy of another macro has no MathJax projection")
     if node.macroname == "DeclarePairedDelimiter":
-        return None
-    if node.macroname in _NEWCOMMANDS:
-        _star, name_arg, count_arg, _default, body_arg = arguments
-        name, arg_count, body = _defined_name(name_arg), _arg_count(count_arg), _group_text(body_arg)
-    elif node.macroname == "DeclareMathOperator":
-        _star, name_arg, body_arg = arguments
-        name, arg_count, body = _defined_name(name_arg), 0, _group_text(body_arg)
-        body = f"\\operatorname{{{body}}}" if body else ""
+        name_arg, left_arg, right_arg = arguments
+        name, left, right = _defined_name(name_arg), _group_text(left_arg), _group_text(right_arg)
+        if left is None or right is None:
+            raise source.refuse(node, name, "a delimiter of the pair is not a group")
+        opening = "" if left == "." else f"\\mathopen{{{left}}}"
+        closing = "" if right == "." else f"\\mathclose{{{right}}}"
+        definition = MacroDef(name=name, arg_count=1, body=f"{opening}#1{closing}")
+    elif node.macroname in _NEWCOMMANDS:
+        _star, name_arg, count_arg, default_arg, body_arg = arguments
+        definition = MacroDef(
+            name=_defined_name(name_arg),
+            arg_count=_arg_count(count_arg),
+            body=_group_text(body_arg),
+            default=_optional_text(default_arg),
+        )
     else:
-        name_arg, body_arg = arguments
-        name, arg_count, body = _defined_name(name_arg), 0, _group_text(body_arg)
-    if not name or not body:
-        return None
-    return MacroDef(name=name, arg_count=arg_count, body=body)
+        star_arg, name_arg, body_arg = arguments
+        operator = "operatorname*" if star_arg is not None else "operatorname"
+        body = _group_text(body_arg)
+        definition = MacroDef(
+            name=_defined_name(name_arg),
+            arg_count=0,
+            body=None if body is None else f"\\{operator}{{{body}}}",
+        )
+    if not definition.name or definition.body is None:
+        raise source.refuse(node, definition.name or node.macroname, "the definition has no name or no body")
+    return definition
 
 
-def _definitions_in(nodes: list[LatexNode | None]) -> list[MacroDef]:
+def _definitions_in(source: _Source, nodes: list[LatexNode | None]) -> list[MacroDef]:
     macros: list[MacroDef] = []
-    for node in nodes:
-        if isinstance(node, LatexMacroNode) and node.macroname in _DEFINITION_MACROS:
-            definition = _definition(node)
+    index = 0
+    while index < len(nodes):
+        node = nodes[index]
+        index += 1
+        if isinstance(node, LatexMacroNode) and node.macroname == "def":
+            definition, index = _def_definition(source, node, nodes, index)
+            macros.append(definition)
+        elif isinstance(node, LatexMacroNode) and (
+            node.macroname in _DEFINITION_MACROS or node.macroname in _UNPROJECTED_DEFINITIONS
+        ):
+            definition = _definition(source, node)
             if definition is not None:
                 macros.append(definition)
         elif isinstance(node, LatexMacroNode) and node.nodeargd is not None:
-            macros.extend(_definitions_in(node.nodeargd.argnlist))
+            macros.extend(_definitions_in(source, node.nodeargd.argnlist))
         elif isinstance(node, (LatexGroupNode, LatexEnvironmentNode)):
-            macros.extend(_definitions_in(node.nodelist))
+            macros.extend(_definitions_in(source, node.nodelist))
     return macros
 
 
-def parse_macros(content: str) -> list[MacroDef]:
-    """Parse all \\newcommand, \\def, \\DeclareMathOperator definitions."""
-    nodes, _pos, _len = LatexWalker(
-        content, latex_context=_LATEX_CONTEXT, tolerant_parsing=False
-    ).get_latex_nodes()
-    return _definitions_in(nodes)
+def parse_macros(content: str, source_name: str) -> list[MacroDef]:
+    """Parse each macro definition of a TeX source.
+
+    A definition that has no MathJax form raises ProjectionError with the
+    source name, the line and the defined name."""
+    if _AT_LETTER in content:
+        raise ProjectionError(f"{source_name}: the source holds {_AT_LETTER!r}, which the parser uses for @")
+    with_at_letters = _AT_LETTER_REGION_RE.sub(
+        lambda region: region.group(0).replace("@", _AT_LETTER), content
+    )
+    walker = LatexWalker(with_at_letters, latex_context=_LATEX_CONTEXT, tolerant_parsing=False)
+    nodes, _pos, _len = walker.get_latex_nodes()
+    return [
+        MacroDef(*(field.replace(_AT_LETTER, "@") if isinstance(field, str) else field for field in macro))
+        for macro in _definitions_in(_Source(source_name, walker), nodes)
+    ]
+
 
 def _unique_macros(macros: list[MacroDef]) -> list[MacroDef]:
     """Keep LaTeX-style first definitions when later aux files use providecommand."""
@@ -191,15 +316,16 @@ def _read_manifest(manifest_path: Path) -> tuple[Path, ...]:
 def _read_macros(source_files: tuple[Path, ...]) -> list[MacroDef]:
     macros: list[MacroDef] = list(MATHJAX_SHIMS)
     for source_file in source_files:
-        macros.extend(parse_macros(_read_file(source_file)))
+        macros.extend(parse_macros(_read_file(source_file), str(source_file)))
     return _unique_macros(macros)
 
 
 TS_PRELUDE = """\
 type ZeroArgMacro = string;
 type NArgMacro = [replacement: string, argCount: number];
+type DefaultArgMacro = [replacement: string, argCount: number, defaultArgument: string];
 
-export const macros: Record<string, ZeroArgMacro | NArgMacro> = {"""
+export const macros: Record<string, ZeroArgMacro | NArgMacro | DefaultArgMacro> = {"""
 
 
 def _read_file(path: Path) -> str:
@@ -209,58 +335,19 @@ def _read_file(path: Path) -> str:
     return path.read_text()
 
 
-def _escape_for_js(body: str) -> str:
-    """Make a LaTeX body safe to embed in a JavaScript string literal.
-
-    - Double all backslashes
-    - Escape newlines and other control characters via \\n, \\t, etc.
-    - Other chars that break JS string literals get \\uXXXX encoding
-    """
-    body = body.replace("\\", "\\\\")
-
-    body = body.replace("\n", "\\n")
-    body = body.replace("\r", "\\r")
-    body = body.replace("\t", "\\t")
-    return body
-
-
-def _format_0arg(body: str) -> str:
-    """Format a zero-arg macro as a JS string."""
-    return f'"{_escape_for_js(body)}"'
-
-
-def _format_narg(body: str, n: int) -> str:
-    """Format an N-arg macro as a JS tuple [body, n]."""
-    return f'["{_escape_for_js(body)}", {n}]'
+def _js_entry(macro: MacroDef) -> str:
+    value = json.dumps(_mathjax_value(macro), ensure_ascii=False, separators=(", ", ": "))
+    return f'  "{macro.name}": {value},'
 
 
 def generate_js(macros: list[MacroDef]) -> str:
     """Generate JavaScript ESM module content."""
-    lines: list[str] = ["export const macros = {"]
-
-    for m in macros:
-        if m.arg_count == 0:
-            lines.append(f'  "{m.name}": {_format_0arg(m.body)},')
-        else:
-            lines.append(f'  "{m.name}": {_format_narg(m.body, m.arg_count)},')
-
-    lines.append("};")
-    lines.append("")
-    return "\n".join(lines)
+    return "\n".join(["export const macros = {", *map(_js_entry, macros), "};", ""])
 
 
 def generate_ts(macros: list[MacroDef]) -> str:
     """Generate TypeScript module content."""
-    lines: list[str] = [TS_PRELUDE]
-
-    for m in macros:
-        if m.arg_count == 0:
-            lines.append(f'  "{m.name}": {_format_0arg(m.body)},')
-        else:
-            lines.append(f'  "{m.name}": {_format_narg(m.body, m.arg_count)},')
-
-    lines.append("};\n")
-    return "\n".join(lines)
+    return "\n".join([TS_PRELUDE, *map(_js_entry, macros), "};\n"])
 
 
 def generate_json(macros: list[MacroDef]) -> str:
@@ -270,12 +357,26 @@ def generate_json(macros: list[MacroDef]) -> str:
     return json.dumps(_macro_object(macros), indent=2)
 
 
-def _macro_object(macros: list[MacroDef]) -> dict[str, str | list]:
+MathJaxValue = str | list[str | int]
+
+
+def _mathjax_value(macro: MacroDef) -> MathJaxValue:
+    if macro.default is not None:
+        return [macro.body, macro.arg_count, macro.default]
+    if macro.arg_count:
+        return [macro.body, macro.arg_count]
+    return macro.body
+
+
+def _macro_object(macros: list[MacroDef]) -> dict[str, MathJaxValue]:
     """Return the canonical MathJax ``tex.macros`` object."""
-    obj: dict[str, str | list] = {}
-    for m in macros:
-        obj[m.name] = m.body if m.arg_count == 0 else [m.body, m.arg_count]
-    return obj
+    return {macro.name: _mathjax_value(macro) for macro in macros}
+
+
+def _newcommand(macro: MacroDef) -> str:
+    count = f"[{macro.arg_count}]" if macro.arg_count else ""
+    default = "" if macro.default is None else f"[{macro.default}]"
+    return f"\\newcommand{{\\{macro.name}}}{count}{default}{{{macro.body}}}"
 
 
 GENERATED_TEMPLATES = (MATHJAX_CONFIG_PARTIAL, REVEALJS_TEMPLATE)
@@ -310,8 +411,7 @@ def generate_legacy_html(macros: list[MacroDef]) -> str:
     """
     lines: list[str] = []
     for m in macros:
-        args = "" if m.arg_count == 0 else f"[{m.arg_count}]"
-        lines.append(f"\\newcommand{{\\{m.name}}}{args}{{{m.body}}}")
+        lines.append(_newcommand(m))
     lines.append("")
     return "\n".join(lines)
 
@@ -333,8 +433,7 @@ def generate_reader_input(macros: list[MacroDef]) -> str:
         f"::: {{.{READER_INPUT_CLASS}}}",
     ]
     for m in macros:
-        args = "" if m.arg_count == 0 else f"[{m.arg_count}]"
-        lines.append(f"\\newcommand{{\\{m.name}}}{args}{{{m.body}}}")
+        lines.append(_newcommand(m))
     lines.append(":::")
     lines.append("")
     return "\n".join(lines)
@@ -354,8 +453,7 @@ def generate_html(macros: list[MacroDef]) -> str:
     ]
 
     for m in macros:
-        args = "" if m.arg_count == 0 else f"[{m.arg_count}]"
-        lines.append(f"\\newcommand{{\\{m.name}}}{args}{{{m.body}}}")
+        lines.append(_newcommand(m))
 
     lines.append("\\)")
     lines.append("</div>")
@@ -427,7 +525,11 @@ def main() -> None:
     args = parser.parse_args()
 
     source_files = _read_manifest(MACRO_MANIFEST)
-    all_macros = _read_macros(source_files)
+    try:
+        all_macros = _read_macros(source_files)
+    except ProjectionError as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        sys.exit(1)
 
     if args.count:
         zero = sum(1 for m in all_macros if m.arg_count == 0)

@@ -821,7 +821,7 @@ def test_parameterised_definitions_reach_the_projection() -> None:
         macros,
         "multichoose",
         [
-            "{\\left(\\kern-.3em\\left(\\genfrac{}{0pt}{}{#1}{#2}\\right)\\kern-.3em\\right)}",
+            "{\\left(\\kern-.3em\\left(\\genfrac{}{}{0pt}{}{#1}{#2}\\right)\\kern-.3em\\right)}",
             2,
         ],
     )
@@ -879,13 +879,27 @@ def test_a_definition_without_a_projection_stops_the_generator() -> None:
         fail("\\let to \\relax before a definition defines nothing", repr(undefined))
 
 
-def page_image(document: str, tmp_dir: Path) -> bytes:
-    (tmp_dir / "page.tex").write_text(document)
+PROJECTED_LATEX_CASES = {
+    "ceil": ["x+1"],
+    "rising": ["x", "n"],
+    "falling": ["x", "n"],
+    "multichoose": ["n", "k"],
+}
+
+
+def page_image(formula: str, tmp_dir: Path) -> bytes:
+    (tmp_dir / "page.tex").write_text(
+        "\\documentclass{article}\\usepackage{dzg-unified}\\pagestyle{empty}\n"
+        f"\\begin{{document}}${formula}$\\end{{document}}\n"
+    )
+    env = os.environ.copy()
+    env["TEXINPUTS"] = TEXINPUTS
     subprocess.run(
         ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "page.tex"],
         capture_output=True,
         text=True,
         cwd=tmp_dir,
+        env=env,
         check=True,
     )
     subprocess.run(
@@ -896,25 +910,23 @@ def page_image(document: str, tmp_dir: Path) -> bytes:
     return (tmp_dir / "page.png").read_bytes()
 
 
-def test_paired_delimiter_projection_typesets_as_mathtools() -> None:
-    body, count = generated_macros()["ceil"]
-    projected = body.replace("#1", "x+1")
-    preamble = "\\documentclass{article}\\usepackage{mathtools}\\pagestyle{empty}\n"
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp_dir = Path(tmp)
-        declared = page_image(
-            preamble + "\\DeclarePairedDelimiter{\\ceil}{\\lceil}{\\rceil}\n"
-            "\\begin{document}$a\\ceil{x+1}b$\\end{document}\n",
-            tmp_dir,
-        )
-        expanded = page_image(
-            preamble + f"\\begin{{document}}$a{projected}b$\\end{{document}}\n", tmp_dir
-        )
-    if count == 1 and declared == expanded:
-        check("\\ceil{x+1} and its projection give the same pdflatex page")
-    else:
-        fail("\\ceil{x+1} and its projection give the same pdflatex page", projected)
-
+def test_projection_typesets_as_the_latex_definition() -> None:
+    """pdflatex gives the same page for a macro of dzg-unified and for its projected expansion."""
+    macros = generated_macros()
+    for name, arguments in PROJECTED_LATEX_CASES.items():
+        body, count = macros[name]
+        expanded = body
+        for number, argument in enumerate(arguments, start=1):
+            expanded = expanded.replace(f"#{number}", argument)
+        call = "\\" + name + "".join(f"{{{argument}}}" for argument in arguments)
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_dir = Path(tmp)
+            defined = page_image(f"a{call}b", tmp_dir)
+            projected = page_image(f"a{expanded}b", tmp_dir)
+        if count == len(arguments) and defined == projected:
+            check(f"{call} and its projection give the same pdflatex page")
+        else:
+            fail(f"{call} and its projection give the same pdflatex page", expanded)
 
 def main() -> None:
     test_domain_aux_files_are_generated()
@@ -937,7 +949,7 @@ def main() -> None:
     test_parameterised_definitions_reach_the_projection()
     test_optional_default_reaches_each_projection()
     test_a_definition_without_a_projection_stops_the_generator()
-    test_paired_delimiter_projection_typesets_as_mathtools()
+    test_projection_typesets_as_the_latex_definition()
     total = passed + failed
     print(f"\n{'=' * 50}")
     print(f"  {passed}/{total} passed, {failed} failed")

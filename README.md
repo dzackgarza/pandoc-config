@@ -1582,6 +1582,7 @@ Regenerate with `just readme-reference`.
 | `\ubb` | 0 | `^{\rm BB}` |
 | `\dto` | 0 | `\Rightarrow` |
 | `\fign` | 0 | `Fig.~\ref{fig:discforms}` |
+| `\ditto` | 0 | `` |
 | `\hoV` | 0 | `\widehat{\overline V}` |
 | `\hoD` | 0 | `\widehat{\overline D}` |
 | `\ooT` | 0 | `\overline{\overline T}` |
@@ -1836,6 +1837,8 @@ Regenerate with `just readme-reference`.
 | `\places` | 1 | `\mathrm{Pl}\qty{#1}` |
 | `\ZZlocal` | 1 | `{ \ZZ_{\widehat{#1}} }` |
 | `\rad` | 1 | `\sqrt{#1}` |
+| `\rising` | 2 | `\qty{#1}^{ (#2) }` |
+| `\falling` | 2 | `\qty{#1}_{ (#2) }` |
 | `\elts` | 2 | `{ {#1}_1, {#1}_2, \cdots, {#1}_{#2}}` |
 | `\tselts` | 2 | `{ \theset{ {#1}_1, {#1}_2, \cdots, {#1}_{#2} } }` |
 | `\mix` | 1 | `\overset{\scriptscriptstyle {#1} }{\times}` |
@@ -1895,6 +1898,8 @@ Regenerate with `just readme-reference`.
 | `\rrrarrows` | 0 | `\mathrel{\substack{\textstyle\rightarrow\\[-0.6ex] \textstyle\rightarrow \\[-0.6ex] \textstyle\rightarrow}}` |
 | `\righttriplearrows` | 0 | `\mathrel{\substack{\rightarrow\\[-1ex]\rightarrow\\[-1ex]\rightarrow}}` |
 | `\contradiction` | 0 | `\mathord{\lightning}` |
+| `\multichoose` | 2 | `{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}` |
+| `\ceil` | 1 | `\mathopen{\lceil}#1\mathclose{\rceil}` |
 | `\bdlattice` | 2 | `\overline{#1}_{ #2 }` |
 | `\perpin` | 2 | `#2^{\perp_{#1}}` |
 | `\signature` | 1 | `\operatorname{sign}\qty{#1}` |
@@ -1923,7 +1928,9 @@ Regenerate with `just readme-reference`.
 | `\RM` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}` |
 | `\RN` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}` |
 | `\righttriplearrows` | 0 | `\operatorname{{\; \tikz{ \foreach \y in {0, 0.1, 0.2} { \draw [-stealth] (0, \y) -- +(0.5, 0);}} \; }}` |
+| `\qty` | 1 | `\mathopen{(}#1\mathclose{)}` |
 | `\dqty` | 1 | `\left( \left( {#1} \right) \right)` |
+| `\intvl` | 1 | `\mathopen{[}#1\mathclose{]}` |
 | `\fourcase` | 4 | `\begin{cases}{#1} & {#2} \\ {#3} & {#4}\end{cases}` |
 | `\cvec` | 2 | `{ \begin{bmatrix} {#1} \\ {#2} \end{bmatrix} }` |
 | `\mattt` | 9 | `{ \begin{bmatrix} {#1} & {#2} & {#3} \\ {#4} & {#5} & {#6} \\ {#7} & {#8} & {#9} \end{bmatrix} }` |
@@ -1946,6 +1953,7 @@ Regenerate with `just readme-reference`.
 | `\dcosetl` | 2 | `\scriptscriptstyle {\textstyle #1} \mkern-4mu\scalebox{1.5}{$\diagdown$}\mkern-5mu^{\textstyle #2}` |
 | `\dcosetr` | 2 | `\scriptscriptstyle {\textstyle #1} \mkern-4mu\scalebox{1.5}{$\diagup$}\mkern-5mu{\textstyle #2}` |
 | `\leftquotient` | 2 | `{\textstyle #1} \mkern-4mu\scalebox{1.5}{$\diagdown$}\mkern-5mu^{\textstyle #2}` |
+| `\multichoose` | 2 | `{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}` |
 | `\aug` | 0 | `\fboxsep=-\fboxrule\!\!\!\fbox{\strut}\!\!\!` |
 | `\bigast` | 0 | `{\mathop{\text{\Large $\ast$}}}` |
 | `\connectsum` | 0 | `\mathop{ \Large\mypound }` |
@@ -2003,6 +2011,7 @@ Regenerate with `just readme-reference`.
 | --- | --- | --- |
 | `\thesubsection` | 0 | `\thesection.\arabic{subsection}` |
 | `\thesubsection` | 0 | `\thesection\Alph{subsection}` |
+| `\@tocline` | 7 | `\relax \ifnum #1>\c@tocdepth \else \par \addpenalty\@secpenalty\addvspace{#2}\begingroup \hyphenpenalty\@M \@ifempty{#4}{\@tempdima\csname r@tocindent\number#1\endcsname\relax }{\@tempdima#4\relax }\parindent\z@ \leftskip#3\relax \advance\leftskip\@tempdima\relax \rightskip\@pnumwidth plus4em \parfillskip-\@pnumwidth #5\leavevmode\hskip-\@tempdima \ifcase #1 \or\or \hskip 2em \or \hskip 3em \else \hskip 4em \fi#6\nobreak\relax \hfill\hbox to\@pnumwidth{\@tocpagenum{#7}}\par\nobreak \endgroup \fi` |
 
 ### `styles/macros/categories.tex`
 
@@ -2280,6 +2289,7 @@ Regenerate with `just readme-reference`.
 | `\quote` | 0 | `\myblock` |
 | `\endquote` | 0 | `\endmyblock` |
 | `\danger` | 1 | `\renewcommand\stacktype{L}\scaleto{\stackon[1.0pt]{\color{Maroon}$\triangle$}{\tiny\bfseries !}}{#1}` |
+| `\@endtheorem` | 0 | `\vspace{-1.5em} \rmargnote{\pgfornament[width=1.5em, color=Maroon]{94}} \endtrivlist\@endpefalse` |
 
 | Environment | Heading or definition |
 | --- | --- |
