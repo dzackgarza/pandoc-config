@@ -188,6 +188,33 @@ carry the changes over. A template that includes the partial must stay in
 `tests/test-mathjax-generator.py` checks each template of the table: the
 macro map of each HTML page and pdflatex on each TeX writer.
 
+## Releases and downstream sites
+
+Downstream sites (pandoc-ssg sites) float on the current `main` of this
+repository. Nothing pins them. Each site commits `pandoc-config.known-good`
+at its root: the `git describe --tags` name of the pandoc-config commit
+that it was last verified against (`pandoc-config bump` in pandoc-ssg writes
+it). A release gives those names a version.
+
+- **Release.** `just release` cuts the next release of `main`. git-cliff
+  (`cliff.toml`) computes the version from the conventional commits since
+  the last tag: a `!` or `BREAKING CHANGE` bumps the major version, a
+  `feat` the minor version, and each other type the patch version. The
+  recipe writes `CHANGELOG.md`, commits it, pushes `main`, then pushes an
+  annotated tag and makes the GitHub release with the notes of the
+  version. Write commit subjects as conventional commits, so that the
+  version and the changelog are right. Tags are history: never move or
+  delete one.
+- **Staleness report.** `just staleness-report [site...]` reads the marker
+  of each site and compares its commit with `HEAD` by Git ancestry. With no
+  arguments it reads `downstream-sites.txt`; add a new site there. A tag
+  only labels a commit, so a marker behind `HEAD` is stale also when no
+  release is between them. The statuses are `stale` (with the releases
+  and every commit since the marker), `current`, `ahead`, `diverged`,
+  `no marker` and `unresolvable`. The report reads the local checkout of
+  each site, so fetch the site first. `tests/test-staleness-report.py`
+  proves it.
+
 ## Authoring Style
 
 `AUTHORING_STYLE.md` holds the markdown conventions for prose compiled through

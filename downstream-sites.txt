@@ -1,0 +1,4 @@
+# Downstream sites that float on this pandoc-config: one local site checkout
+# per line, the directory that holds its committed pandoc-config.known-good
+# marker. `just staleness-report` reads this list when it gets no sites.
+~/gitclones/dzackgarza-site-v2026
