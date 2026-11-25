@@ -112,7 +112,7 @@ def assert_macro(macros: dict, name: str, expected) -> None:
 def test_domain_aux_files_are_generated() -> None:
     macros = generated_macros()
     assert_macro(macros, "coloneqq", "\\vcentcolon\\mathrel{\\mkern-1.2mu}=")
-    assert_macro(macros, "qty", ["\\mathopen{(}#1\\mathclose{)}", 1])
+    assert_macro(macros, "qty", ["\\left( #1 \\right)", 1])
     assert_macro(macros, "cardinality", ["{\\left\\lvert {#1} \\right\\rvert}", 1])
     assert_macro(macros, "disc", ["{\\operatorname{disc}\\left( {#1} \\right)}", 1])
     assert_macro(macros, "discrete", "{\\mathrm{disc}}")
@@ -929,11 +929,15 @@ def test_projection_typesets_as_the_latex_definition() -> None:
             fail(f"{call} and its projection give the same pdflatex page", expanded)
 
 
+QTY_CASES = {
+    "\\qty{\\frac ab}": "\\left(\\frac ab\\right)",
+    "\\qty{x}": "\\left(x\\right)",
+}
+
 PAIRED_DELIMITER_CASES = {
-    "\\qty{\\frac ab}": "\\mathopen{(}\\frac ab\\mathclose{)}",
-    "\\qty*{\\frac ab}": "\\mathopen{}\\mathclose{\\left(\\frac ab\\right)}",
-    "\\qty[\\big]{\\frac ab}": "\\mathopen{\\bigl(}\\frac ab\\mathclose{\\bigr)}",
-    "\\qty[\\Bigg]{\\frac ab}": "\\mathopen{\\Biggl(}\\frac ab\\mathclose{\\Biggr)}",
+    "\\ceil{\\frac ab}": "\\mathopen{\\lceil}\\frac ab\\mathclose{\\rceil}",
+    "\\ceil*{\\frac ab}": "\\mathopen{}\\mathclose{\\left\\lceil\\frac ab\\right\\rceil}",
+    "\\ceil[\\big]{\\frac ab}": "\\mathopen{\\bigl\\lceil}\\frac ab\\mathclose{\\bigr\\rceil}",
 }
 
 SHIM_CASES = {
@@ -945,14 +949,14 @@ QTY_CALL_RE = re.compile(r"\\qty(?![A-Za-z])\s*\{")
 
 
 def without_qty(text: str) -> str:
-    """Replace each \\qty{X} by the unstarred mathtools meaning of the pair."""
+    """Replace each \\qty{X} by \\left(X\\right), the parentheses that grow with X."""
     while (match := QTY_CALL_RE.search(text)) is not None:
         depth, end = 1, match.end()
         while depth:
             depth += {"{": 1, "}": -1}.get(text[end], 0)
             end += 1
         inner = text[match.end() : end - 1]
-        text = f"{text[: match.start()]}\\mathopen{{(}}{inner}\\mathclose{{)}}{text[end:]}"
+        text = f"{text[: match.start()]}\\left({inner}\\right){text[end:]}"
     return text
 
 
@@ -1015,11 +1019,11 @@ def mathjax_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
 
 
 def test_mathjax_typesets_each_paired_delimiter_and_shim_as_pdflatex() -> None:
-    """For \\qty in each form, each macro that uses it and each shim of the
+    """For \\qty, each form of \\ceil, each macro that uses \\qty and each shim of the
     generator, the call and its LaTeX meaning give the same pdflatex page, and
     the call with the macros of the preview template gives the same MathJax
     page as that meaning."""
-    cases = {**PAIRED_DELIMITER_CASES, **SHIM_CASES, **qty_macro_cases(generated_macros())}
+    cases = {**QTY_CASES, **PAIRED_DELIMITER_CASES, **SHIM_CASES, **qty_macro_cases(generated_macros())}
     calls, meanings = list(cases), list(cases.values())
     with tempfile.TemporaryDirectory() as tmp:
         tmp_dir = Path(tmp)
