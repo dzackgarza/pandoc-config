@@ -170,8 +170,18 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "divisibility", "\\operatorname{div}")
     assert_macro(macros, "semistable", "{\\mathrm{ss}}")
     for retired in (
-        "sign", "coeq", "cocoeq", "OStab", "OrthObs", "wref",
-        "otherbar", "Diagonal", "bar", "hat", "div", "ss",
+        "sign",
+        "coeq",
+        "cocoeq",
+        "OStab",
+        "OrthObs",
+        "wref",
+        "otherbar",
+        "Diagonal",
+        "bar",
+        "hat",
+        "div",
+        "ss",
     ):
         if retired in macros:
             fail(f"{retired} retired", repr(macros[retired]))
@@ -197,9 +207,7 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "orthogonalreflectiongroup", ["W\\qty{#1}", 1])
     assert_macro(macros, "monodromygroup", ["\\operatorname{Mon}\\qty{#1}", 1])
     assert_macro(macros, "eichlergroup", ["E\\qty{#1}", 1])
-    assert_macro(
-        macros, "mirandamorrisongroup", ["\\operatorname{MM}\\qty{#1}", 1]
-    )
+    assert_macro(macros, "mirandamorrisongroup", ["\\operatorname{MM}\\qty{#1}", 1])
     assert_macro(macros, "nikulinobstructiongroup", ["I\\qty{#1}", 1])
     assert_macro(macros, "genusgroup", ["g\\qty{#1}", 1])
     if "OStab" in macros:
@@ -237,10 +245,14 @@ def declared_native_overrides() -> dict[str, set[str]]:
     if section is None:
         raise RuntimeError(f"{MACROS_README} has no section '## Overrides'")
     declared: dict[str, set[str]] = {renderer: set() for renderer in RENDERERS}
-    for name, cell in re.findall(r"(?m)^\| `\\([A-Za-z@]+)` \| ([^|]*) \|", section.group(1)):
+    for name, cell in re.findall(
+        r"(?m)^\| `\\([A-Za-z@]+)` \| ([^|]*) \|", section.group(1)
+    ):
         renderers = {part.strip() for part in cell.split(",")}
         if not renderers or not renderers <= set(RENDERERS):
-            raise RuntimeError(f"the row of \\{name} names no renderer of {RENDERERS}: {cell!r}")
+            raise RuntimeError(
+                f"the row of \\{name} names no renderer of {RENDERERS}: {cell!r}"
+            )
         for renderer in renderers:
             declared[renderer].add(name)
     return declared
@@ -315,7 +327,9 @@ def test_tree_overrides_only_the_declared_native_commands() -> None:
     if cp.returncode != 0 or "DZG-OVERRIDES-CHECKED" not in log:
         fail("overrides of native commands", cp.stdout[-2000:])
         return
-    compare_overrides("LaTeX", set(re.findall(r"DZG-OVERRIDE:([A-Za-z@]+)", log)), declared["LaTeX"])
+    compare_overrides(
+        "LaTeX", set(re.findall(r"DZG-OVERRIDE:([A-Za-z@]+)", log)), declared["LaTeX"]
+    )
 
 
 def compare_overrides(renderer: str, overrides: set[str], declared: set[str]) -> None:
@@ -325,14 +339,18 @@ def compare_overrides(renderer: str, overrides: set[str], declared: set[str]) ->
             "undeclared: " + ", ".join(sorted(overrides - declared)),
         )
     else:
-        check(f"the tree overrides only the native commands of {renderer} of the README table")
+        check(
+            f"the tree overrides only the native commands of {renderer} of the README table"
+        )
     if declared - overrides:
         fail(
             f"each declared override of {renderer} overrides a native command",
             "no override: " + ", ".join(sorted(declared - overrides)),
         )
     else:
-        check(f"each {renderer} row of the README table is a native command that the tree overrides")
+        check(
+            f"each {renderer} row of the README table is a native command that the tree overrides"
+        )
 
 
 def template_matches_generated_projection(name: str, template_path: Path) -> None:
@@ -340,7 +358,10 @@ def template_matches_generated_projection(name: str, template_path: Path) -> Non
     template = template_path.read_text()
     matches = re.findall(r"(?m)^\s*macros:\s*(\{.*\}),\s*$", template)
     if len(matches) != 1:
-        fail(f"{name} macro projection", f"{len(matches)} generated macros lines, expected 1")
+        fail(
+            f"{name} macro projection",
+            f"{len(matches)} generated macros lines, expected 1",
+        )
         return
     actual = json.loads(matches[0])
     if actual == expected:
@@ -350,7 +371,9 @@ def template_matches_generated_projection(name: str, template_path: Path) -> Non
 
 
 def test_mathjax_config_matches_generated_projection() -> None:
-    template_matches_generated_projection("MathJax configuration", MATHJAX_CONFIG_PARTIAL)
+    template_matches_generated_projection(
+        "MathJax configuration", MATHJAX_CONFIG_PARTIAL
+    )
 
 
 def test_html_templates_hold_no_macro_map_of_their_own() -> None:
@@ -405,8 +428,14 @@ def test_html_templates_configure_mathjax_before_it_loads() -> None:
         if 0 <= config < script and '"ZZ":' in page[config:script]:
             check(f"{writer} page defines the macros before it loads MathJax")
         else:
-            fail(f"{writer} page MathJax order", f"config at {config}, script at {script}")
-        if "mathjax:" not in page[config:script] and "fonts:" not in page[config:script]:
+            fail(
+                f"{writer} page MathJax order",
+                f"config at {config}, script at {script}",
+            )
+        if (
+            "mathjax:" not in page[config:script]
+            and "fonts:" not in page[config:script]
+        ):
             check(f"{writer} page names no place of a local MathJax when none is given")
         else:
             fail(f"{writer} page MathJax places", "a loader path without its variable")
@@ -433,7 +462,10 @@ def tex_program(name: str) -> Path:
     gives the folder of the distribution (SELFAUTOLOC).
     """
     found = subprocess.run(
-        ["kpsewhich", "-var-value=SELFAUTOLOC"], capture_output=True, text=True, check=True
+        ["kpsewhich", "-var-value=SELFAUTOLOC"],
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return Path(found.stdout.strip()) / name
 
@@ -512,12 +544,16 @@ def test_converting_writers_get_the_expansion_of_each_macro() -> None:
     for writer, (member, patterns) in expected.items():
         with tempfile.TemporaryDirectory() as tmp:
             output = converted(writer, [MACROS_FILTER], Path(tmp))
-            text = zip_text(output, member) if member is not None else output.read_text()
+            text = (
+                zip_text(output, member) if member is not None else output.read_text()
+            )
             if writer in ("docx", "pptx"):
                 text = "".join(re.findall(r"<m:t>([^<]*)</m:t>", text))
         missing = [p for p in patterns if re.search(p, text) is None]
         if missing:
-            fail(f"{writer} gets the expansion of the macros", f"no match for {missing}")
+            fail(
+                f"{writer} gets the expansion of the macros", f"no match for {missing}"
+            )
         else:
             check(f"{writer} gets the expansion of \\Hom(\\ZZ, \\QQ) and \\fiberprod")
 
@@ -543,7 +579,9 @@ def test_no_writer_gets_a_raw_macro_or_a_definition() -> None:
             if zipfile.is_zipfile(output):
                 with zipfile.ZipFile(output) as archive:
                     data = b"".join(archive.read(name) for name in archive.namelist())
-        leaks = [token for token in (b"\\ZZ", b"newcommand", b"math-macros") if token in data]
+        leaks = [
+            token for token in (b"\\ZZ", b"newcommand", b"math-macros") if token in data
+        ]
         if leaks:
             fail(f"{writer} output", f"holds {leaks}")
         else:
@@ -554,7 +592,10 @@ def test_context_template_typesets_the_macros() -> None:
     """ConTeXt typesets the expansion of the macros as the MathML of texmath."""
     with tempfile.TemporaryDirectory() as tmp:
         tex = converted(
-            "context", [MACROS_FILTER, CONTEXT_MATHML_FILTER], Path(tmp), CONTEXT_TEMPLATE
+            "context",
+            [MACROS_FILTER, CONTEXT_MATHML_FILTER],
+            Path(tmp),
+            CONTEXT_TEMPLATE,
         )
         context_typesets(tex)
 
@@ -582,7 +623,9 @@ def context_typesets(tex: Path) -> None:
 
 def test_context_template_defines_each_function_of_the_mathml_module() -> None:
     """Each command that x-mathml writes for an <mi> is defined with the template."""
-    found = subprocess.run(["kpsewhich", "x-mathml.lmt"], capture_output=True, text=True)
+    found = subprocess.run(
+        ["kpsewhich", "x-mathml.lmt"], capture_output=True, text=True
+    )
     module = Path(found.stdout.strip())
     if found.returncode != 0 or not module.is_file():
         fail("x-mathml.lmt", "kpsewhich does not find the mathml module of ConTeXt")
@@ -633,7 +676,9 @@ def test_context_template_defines_each_function_of_the_mathml_module() -> None:
     if missing:
         fail("context template functions", f"x-mathml writes undefined {missing}")
     else:
-        check(f"context template defines each of the {len(commands)} functions of x-mathml")
+        check(
+            f"context template defines each of the {len(commands)} functions of x-mathml"
+        )
 
 
 def test_context_mathml_filter_refuses_a_formula_that_texmath_cannot_convert() -> None:
@@ -682,14 +727,22 @@ def test_tex_templates_compile_macros_with_pdflatex() -> None:
             )
             if cp.returncode == 0 and writer != "pdf":
                 cp = subprocess.run(
-                    ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", tex.name],
+                    [
+                        "pdflatex",
+                        "-interaction=nonstopmode",
+                        "-halt-on-error",
+                        tex.name,
+                    ],
                     capture_output=True,
                     text=True,
                     cwd=tmp_dir,
                     env=env,
                 )
             if cp.returncode != 0 or not pdf.exists():
-                fail(f"{writer} template compiles the macros", (cp.stdout + cp.stderr)[-1500:])
+                fail(
+                    f"{writer} template compiles the macros",
+                    (cp.stdout + cp.stderr)[-1500:],
+                )
                 continue
             text = subprocess.run(
                 ["pdftotext", str(pdf), "-"], capture_output=True, text=True, check=True
@@ -716,7 +769,11 @@ def test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin() -> None:
             check(name)
         else:
             fail(name, f"{text!r} is not in the deck")
-    if "$" in re.sub(r"(?s)macros: \{.*?\},\n", "", page.split("mathjax3: {")[1].split("},\n        },")[0]):
+    if "$" in re.sub(
+        r"(?s)macros: \{.*?\},\n",
+        "",
+        page.split("mathjax3: {")[1].split("},\n        },")[0],
+    ):
         fail("reveal.js MathJax block", "an unfilled template variable")
     else:
         check("the MathJax block of the deck has no unfilled template variable")
@@ -815,8 +872,8 @@ def test_readme_reference_lists_each_definition_of_the_macro_files() -> None:
 
 def test_parameterised_definitions_reach_the_projection() -> None:
     macros = generated_macros()
-    assert_macro(macros, "rising", ["\\qty{#1}^{ (#2) }", 2])
-    assert_macro(macros, "falling", ["\\qty{#1}_{ (#2) }", 2])
+    assert_macro(macros, "rising", ["\\qty{#1}^{ \\qty{#2} }", 2])
+    assert_macro(macros, "falling", ["\\qty{#1}_{ \\qty{#2} }", 2])
     assert_macro(
         macros,
         "multichoose",
@@ -825,7 +882,6 @@ def test_parameterised_definitions_reach_the_projection() -> None:
             2,
         ],
     )
-    assert_macro(macros, "ceil", ["\\mathopen{\\lceil}#1\\mathclose{\\rceil}", 1])
 
 
 def test_optional_default_reaches_each_projection() -> None:
@@ -835,7 +891,10 @@ def test_optional_default_reaches_each_projection() -> None:
     if projected == {"pair": ["(#1, #2)", 2, "d"]}:
         check("an optional default is the third member of the MathJax entry")
     else:
-        fail("an optional default is the third member of the MathJax entry", repr(projected))
+        fail(
+            "an optional default is the third member of the MathJax entry",
+            repr(projected),
+        )
     definition = "\\newcommand{\\pair}[2][d]{(#1, #2)}"
     for name, text in (
         ("reader input", module.generate_reader_input(macros)),
@@ -849,7 +908,10 @@ def test_optional_default_reaches_each_projection() -> None:
     if '"pair": ["(#1, #2)", 2, "d"]' in module.generate_js(macros):
         check("the JavaScript module keeps the optional default")
     else:
-        fail("the JavaScript module keeps the optional default", module.generate_js(macros))
+        fail(
+            "the JavaScript module keeps the optional default",
+            module.generate_js(macros),
+        )
 
 
 def test_a_definition_without_a_projection_stops_the_generator() -> None:
@@ -870,10 +932,15 @@ def test_a_definition_without_a_projection_stops_the_generator() -> None:
             if "cases.tex:3" in message and name in message:
                 check(f"{source} stops the generator with its file, line and name")
             else:
-                fail(f"{source} stops the generator with its file, line and name", message)
+                fail(
+                    f"{source} stops the generator with its file, line and name",
+                    message,
+                )
             continue
         fail(f"{source} stops the generator", "parse_macros returned")
-    undefined = module.parse_macros("\\let\\hyp\\relax\n\\newcommand{\\hyp}{h}\n", "relax.tex")
+    undefined = module.parse_macros(
+        "\\let\\hyp\\relax\n\\newcommand{\\hyp}{h}\n", "relax.tex"
+    )
     if [(m.name, m.body) for m in undefined] == [("hyp", "h")]:
         check("\\let to \\relax before a definition defines nothing")
     else:
@@ -936,7 +1003,7 @@ QTY_CASES = {
 }
 
 DELIMITER_CASES = {
-    "\\ceiling{\\frac ab}": "\\left\\lceil\\frac ab\\right\\rceil",
+    "\\ceiling{\\frac ab}": "{\\left\\lceil\\frac ab\\right\\rceil}",
     "\\intvl{\\frac ab}": "\\left[\\frac ab\\right]",
     "\\rising{x}{\\frac ab}": "\\left(x\\right)^{\\left(\\frac ab\\right)}",
     "\\falling{x}{\\frac ab}": "\\left(x\\right)_{\\left(\\frac ab\\right)}",
@@ -996,7 +1063,9 @@ def pdflatex_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
     )
     if cp.returncode != 0:
         return cp.stdout
-    subprocess.run(["pdftoppm", "-png", "-r", "300", "pages.pdf", "page"], cwd=tmp_dir, check=True)
+    subprocess.run(
+        ["pdftoppm", "-png", "-r", "300", "pages.pdf", "page"], cwd=tmp_dir, check=True
+    )
     return [path.read_bytes() for path in sorted(tmp_dir.glob("page-*.png"))]
 
 
@@ -1014,7 +1083,8 @@ def mathjax_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
     for index in range(len(formulas)):
         svg, png = tmp_dir / f"{index}.svg", tmp_dir / f"{index}.png"
         subprocess.run(
-            ["rsvg-convert", "-z", "8", "-b", "white", str(svg), "-o", str(png)], check=True
+            ["rsvg-convert", "-z", "8", "-b", "white", str(svg), "-o", str(png)],
+            check=True,
         )
         images.append(png.read_bytes())
     return images
@@ -1025,7 +1095,12 @@ def test_mathjax_typesets_each_delimiter_and_shim_as_pdflatex() -> None:
     generator, the call and its LaTeX meaning give the same pdflatex page, and
     the call with the macros of the preview template gives the same MathJax
     page as that meaning."""
-    cases = {**QTY_CASES, **DELIMITER_CASES, **SHIM_CASES, **qty_macro_cases(generated_macros())}
+    cases = {
+        **QTY_CASES,
+        **DELIMITER_CASES,
+        **SHIM_CASES,
+        **qty_macro_cases(generated_macros()),
+    }
     calls, meanings = list(cases), list(cases.values())
     with tempfile.TemporaryDirectory() as tmp:
         tmp_dir = Path(tmp)
@@ -1041,17 +1116,23 @@ def test_mathjax_typesets_each_delimiter_and_shim_as_pdflatex() -> None:
         return
     count = len(calls)
     if len(latex) != 2 * count:
-        fail("pdflatex pages of the delimiters and shims", f"{len(latex)} pages for {2 * count} formulas")
+        fail(
+            "pdflatex pages of the delimiters and shims",
+            f"{len(latex)} pages for {2 * count} formulas",
+        )
         return
     for index, (call, meaning) in enumerate(cases.items()):
         if latex[index] == latex[count + index]:
             check(f"{call} and {meaning} give the same pdflatex page")
         else:
-            fail(f"{call} and {meaning} give the same pdflatex page", "the pages differ")
+            fail(
+                f"{call} and {meaning} give the same pdflatex page", "the pages differ"
+            )
         if mathjax[index] == mathjax[count + index]:
             check(f"{call} and {meaning} give the same MathJax page")
         else:
             fail(f"{call} and {meaning} give the same MathJax page", "the pages differ")
+
 
 def main() -> None:
     test_domain_aux_files_are_generated()

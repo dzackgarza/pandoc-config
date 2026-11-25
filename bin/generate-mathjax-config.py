@@ -10,7 +10,6 @@ outputs:
   - A JavaScript ESM module exporting a { macros } object
   - A TypeScript module exporting the same with type annotations
   - A JSON file for direct embedding in HTML
-  - The mathtools pairedDelimiters JSON of each \\DeclarePairedDelimiter
   - The \\newcommand lines as the first input of a Pandoc Markdown reader
     (math-macros.md), for each writer without a template that loads them
 
@@ -53,7 +52,6 @@ class MacroDef(NamedTuple):
     arg_count: int
     body: str
     default: str | None = None
-    delimiters: tuple[str, str] | None = None
 
 
 class ProjectionError(Exception):
@@ -114,7 +112,9 @@ _LATEX_CONTEXT = _latex_context()
 
 def _without_comments(nodes: list[LatexNode]) -> str:
     return "".join(
-        node.latex_verbatim() for node in nodes if not isinstance(node, LatexCommentNode)
+        node.latex_verbatim()
+        for node in nodes
+        if not isinstance(node, LatexCommentNode)
     )
 
 
@@ -122,7 +122,9 @@ def _defined_name(argument: LatexNode | None) -> str:
     if isinstance(argument, LatexMacroNode):
         return argument.macroname
     if isinstance(argument, LatexGroupNode):
-        inner = [node for node in argument.nodelist if not isinstance(node, LatexCommentNode)]
+        inner = [
+            node for node in argument.nodelist if not isinstance(node, LatexCommentNode)
+        ]
         if inner and isinstance(inner[0], LatexMacroNode):
             return inner[0].macroname
     return ""
@@ -184,7 +186,9 @@ def _def_definition(
     arg_count = _parameter_count(parameter_text.strip())
     if index == len(siblings) or arg_count is None:
         raise source.refuse(
-            node, name, f"a delimited parameter text {parameter_text.strip()!r} has no MathJax form"
+            node,
+            name,
+            f"a delimited parameter text {parameter_text.strip()!r} has no MathJax form",
         )
     body = _group_text(siblings[index])
     if body is None:
@@ -196,25 +200,26 @@ def _definition(source: _Source, node: LatexMacroNode) -> MacroDef | None:
     arguments = node.nodeargd.argnlist
     if node.macroname in _UNPROJECTED_DEFINITIONS:
         raise source.refuse(
-            node, _defined_name(arguments[0]), f"\\{node.macroname} has no MathJax projection"
+            node,
+            _defined_name(arguments[0]),
+            f"\\{node.macroname} has no MathJax projection",
         )
     if node.macroname == "let":
         name_arg, target_arg = arguments
         name = _defined_name(name_arg)
         if isinstance(target_arg, LatexMacroNode) and target_arg.macroname == "relax":
             return None
-        raise source.refuse(node, name, "a \\let copy of another macro has no MathJax projection")
-    if node.macroname == "DeclarePairedDelimiter":
-        name_arg, left_arg, right_arg = arguments
-        name, left, right = _defined_name(name_arg), _group_text(left_arg), _group_text(right_arg)
-        if left is None or right is None:
-            raise source.refuse(node, name, "a delimiter of the pair is not a group")
-        opening = "" if left == "." else f"\\mathopen{{{left}}}"
-        closing = "" if right == "." else f"\\mathclose{{{right}}}"
-        definition = MacroDef(
-            name=name, arg_count=1, body=f"{opening}#1{closing}", delimiters=(left, right)
+        raise source.refuse(
+            node, name, "a \\let copy of another macro has no MathJax projection"
         )
-    elif node.macroname in _NEWCOMMANDS:
+    if node.macroname == "DeclarePairedDelimiter":
+        raise source.refuse(
+            node,
+            _defined_name(arguments[0]),
+            "a paired delimiter has fixed size without a star, and each delimiter "
+            "grows with its content: define it with \\left and \\right",
+        )
+    if node.macroname in _NEWCOMMANDS:
         _star, name_arg, count_arg, default_arg, body_arg = arguments
         definition = MacroDef(
             name=_defined_name(name_arg),
@@ -232,7 +237,11 @@ def _definition(source: _Source, node: LatexMacroNode) -> MacroDef | None:
             body=None if body is None else f"\\{operator}{{{body}}}",
         )
     if not definition.name or definition.body is None:
-        raise source.refuse(node, definition.name or node.macroname, "the definition has no name or no body")
+        raise source.refuse(
+            node,
+            definition.name or node.macroname,
+            "the definition has no name or no body",
+        )
     return definition
 
 
@@ -246,7 +255,8 @@ def _definitions_in(source: _Source, nodes: list[LatexNode | None]) -> list[Macr
             definition, index = _def_definition(source, node, nodes, index)
             macros.append(definition)
         elif isinstance(node, LatexMacroNode) and (
-            node.macroname in _DEFINITION_MACROS or node.macroname in _UNPROJECTED_DEFINITIONS
+            node.macroname in _DEFINITION_MACROS
+            or node.macroname in _UNPROJECTED_DEFINITIONS
         ):
             definition = _definition(source, node)
             if definition is not None:
@@ -264,14 +274,23 @@ def parse_macros(content: str, source_name: str) -> list[MacroDef]:
     A definition that has no MathJax form raises ProjectionError with the
     source name, the line and the defined name."""
     if _AT_LETTER in content:
-        raise ProjectionError(f"{source_name}: the source holds {_AT_LETTER!r}, which the parser uses for @")
+        raise ProjectionError(
+            f"{source_name}: the source holds {_AT_LETTER!r}, which the parser uses for @"
+        )
     with_at_letters = _AT_LETTER_REGION_RE.sub(
         lambda region: region.group(0).replace("@", _AT_LETTER), content
     )
-    walker = LatexWalker(with_at_letters, latex_context=_LATEX_CONTEXT, tolerant_parsing=False)
+    walker = LatexWalker(
+        with_at_letters, latex_context=_LATEX_CONTEXT, tolerant_parsing=False
+    )
     nodes, _pos, _len = walker.get_latex_nodes()
     return [
-        MacroDef(*(field.replace(_AT_LETTER, "@") if isinstance(field, str) else field for field in macro))
+        MacroDef(
+            *(
+                field.replace(_AT_LETTER, "@") if isinstance(field, str) else field
+                for field in macro
+            )
+        )
         for macro in _definitions_in(_Source(source_name, walker), nodes)
     ]
 
@@ -340,7 +359,9 @@ def _read_file(path: Path) -> str:
 
 
 def _js_entry(macro: MacroDef) -> str:
-    value = json.dumps(_mathjax_value(macro), ensure_ascii=False, separators=(", ", ": "))
+    value = json.dumps(
+        _mathjax_value(macro), ensure_ascii=False, separators=(", ", ": ")
+    )
     return f'  "{macro.name}": {value},'
 
 
@@ -383,20 +404,6 @@ def _newcommand(macro: MacroDef) -> str:
     return f"\\newcommand{{\\{macro.name}}}{count}{default}{{{macro.body}}}"
 
 
-def _paired_delimiter_object(macros: list[MacroDef]) -> dict[str, list[str]]:
-    """Return the mathtools ``pairedDelimiters`` object of MathJax.
-
-    With it MathJax mathtools gives each pair its three forms: without a star
-    (no scaling), with a star (``\\left`` and ``\\right``) and with a size
-    (``\\bigl`` and ``\\bigr``), as ``\\DeclarePairedDelimiter`` does in LaTeX.
-    """
-    return {macro.name: list(macro.delimiters) for macro in macros if macro.delimiters is not None}
-
-
-def generate_paired_delimiters_json(macros: list[MacroDef]) -> str:
-    return json.dumps(_paired_delimiter_object(macros), indent=2)
-
-
 GENERATED_TEMPLATES = (MATHJAX_CONFIG_PARTIAL, REVEALJS_TEMPLATE)
 
 
@@ -405,27 +412,21 @@ def _generated_line_re(key: str) -> re.Pattern[str]:
 
 
 def update_template_macros(template_path: Path, macros: list[MacroDef]) -> None:
-    """Replace the one ``macros: {...},`` line and the one
-    ``pairedDelimiters: {...},`` line of a template.
+    """Replace the one ``macros: {...},`` line of a template.
 
     The rest of the MathJax configuration belongs to the template. The
-    generated lines are a projection of ``styles/macros``, so a template is
+    generated line is a projection of ``styles/macros``, so a template is
     never a second macro authority. A template with no such line or with more
     than one fails.
     """
     text = template_path.read_text()
-    projections = {
-        "macros": _macro_object(macros),
-        "pairedDelimiters": _paired_delimiter_object(macros),
-    }
-    for key, value in projections.items():
-        line_re = _generated_line_re(key)
-        if len(line_re.findall(text)) != 1:
-            raise RuntimeError(
-                f"Template {template_path} must contain exactly one generated {key} line"
-            )
-        replacement = json.dumps(value, separators=(",", ":"))
-        text = line_re.sub(lambda match: f"{match.group(1)}{replacement},", text)
+    line_re = _generated_line_re("macros")
+    if len(line_re.findall(text)) != 1:
+        raise RuntimeError(
+            f"Template {template_path} must contain exactly one generated macros line"
+        )
+    replacement = json.dumps(_macro_object(macros), separators=(",", ":"))
+    text = line_re.sub(lambda match: f"{match.group(1)}{replacement},", text)
     template_path.write_text(text)
 
 
@@ -517,15 +518,6 @@ def main() -> None:
         help="Output path for .json file (default: --out-dir/mathjax-macros.json)",
     )
     parser.add_argument(
-        "--paired-delimiters",
-        type=Path,
-        default=None,
-        help=(
-            "Output path for the mathtools pairedDelimiters JSON "
-            "(default: --out-dir/mathjax-paired-delimiters.json)"
-        ),
-    )
-    parser.add_argument(
         "--html",
         type=Path,
         default=None,
@@ -581,7 +573,6 @@ def main() -> None:
     js_path = args.js or (out_dir / "mathjax-macros.mjs")
     ts_path = args.ts or (out_dir / "mathjax-macros.ts")
     json_path = args.json or (out_dir / "mathjax-macros.json")
-    paired_delimiters_path = args.paired_delimiters or (out_dir / "mathjax-paired-delimiters.json")
     html_path = args.html or (out_dir / "mathjax-macros.html")
     legacy_html_path = args.legacy_html or (out_dir / "math-macros.html")
     reader_input_path = args.reader_input or (out_dir / "math-macros.md")
@@ -596,7 +587,6 @@ def main() -> None:
     js_path.write_text(js_content)
     ts_path.write_text(ts_content)
     json_path.write_text(json_content)
-    paired_delimiters_path.write_text(generate_paired_delimiters_json(all_macros))
     html_path.write_text(html_content)
     legacy_html_path.write_text(legacy_html_content)
     reader_input_path.write_text(reader_input_content)
@@ -616,7 +606,6 @@ def main() -> None:
     )
     print(f"Generated: {ts_path}")
     print(f"Generated: {json_path}")
-    print(f"Generated: {paired_delimiters_path}")
     print(f"Generated: {html_path}")
     print(f"Generated: {legacy_html_path}")
     print(f"Generated: {reader_input_path}")

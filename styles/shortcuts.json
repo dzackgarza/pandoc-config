@@ -163,5 +163,6 @@
   "unitsof": "units",
   "cocomplex": "chaincomplex",
   "incfiltration": "ascendingfiltration",
-  "decfiltration": "descendingfiltration"
+  "decfiltration": "descendingfiltration",
+  "ceil": "ceiling"
 }

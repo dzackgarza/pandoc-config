@@ -1837,8 +1837,8 @@ Regenerate with `just readme-reference`.
 | `\places` | 1 | `\mathrm{Pl}\qty{#1}` |
 | `\ZZlocal` | 1 | `{ \ZZ_{\widehat{#1}} }` |
 | `\rad` | 1 | `\sqrt{#1}` |
-| `\rising` | 2 | `\qty{#1}^{ (#2) }` |
-| `\falling` | 2 | `\qty{#1}_{ (#2) }` |
+| `\rising` | 2 | `\qty{#1}^{ \qty{#2} }` |
+| `\falling` | 2 | `\qty{#1}_{ \qty{#2} }` |
 | `\elts` | 2 | `{ {#1}_1, {#1}_2, \cdots, {#1}_{#2}}` |
 | `\tselts` | 2 | `{ \theset{ {#1}_1, {#1}_2, \cdots, {#1}_{#2} } }` |
 | `\mix` | 1 | `\overset{\scriptscriptstyle {#1} }{\times}` |
@@ -1899,8 +1899,8 @@ Regenerate with `just readme-reference`.
 | `\righttriplearrows` | 0 | `\mathrel{\substack{\rightarrow\\[-1ex]\rightarrow\\[-1ex]\rightarrow}}` |
 | `\contradiction` | 0 | `\mathord{\lightning}` |
 | `\multichoose` | 2 | `{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}` |
-| `\ceil` | 1 | `\mathopen{\lceil}#1\mathclose{\rceil}` |
 | `\qty` | 1 | `\left( #1 \right)` |
+| `\intvl` | 1 | `\left[ #1 \right]` |
 | `\bdlattice` | 2 | `\overline{#1}_{ #2 }` |
 | `\perpin` | 2 | `#2^{\perp_{#1}}` |
 | `\signature` | 1 | `\operatorname{sign}\qty{#1}` |
@@ -1930,7 +1930,6 @@ Regenerate with `just readme-reference`.
 | `\RN` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}` |
 | `\righttriplearrows` | 0 | `\operatorname{{\; \tikz{ \foreach \y in {0, 0.1, 0.2} { \draw [-stealth] (0, \y) -- +(0.5, 0);}} \; }}` |
 | `\dqty` | 1 | `\left( \left( {#1} \right) \right)` |
-| `\intvl` | 1 | `\mathopen{[}#1\mathclose{]}` |
 | `\fourcase` | 4 | `\begin{cases}{#1} & {#2} \\ {#3} & {#4}\end{cases}` |
 | `\cvec` | 2 | `{ \begin{bmatrix} {#1} \\ {#2} \end{bmatrix} }` |
 | `\mattt` | 9 | `{ \begin{bmatrix} {#1} & {#2} & {#3} \\ {#4} & {#5} & {#6} \\ {#7} & {#8} & {#9} \end{bmatrix} }` |

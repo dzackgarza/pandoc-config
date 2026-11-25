@@ -7,7 +7,6 @@ type PreviewConfig = {
   loader: { load?: string[] };
   tex: {
     macros: Record<string, Macro>;
-    mathtools: { pairedDelimiters: Record<string, string[]> };
   };
   startup?: { ready(): void };
 };
@@ -49,10 +48,6 @@ export async function previewMathJax(withMacros: boolean, output: string[] = [])
     tex: {
       ...tex,
       macros: withMacros ? tex.macros : {},
-      mathtools: {
-        ...tex.mathtools,
-        pairedDelimiters: withMacros ? tex.mathtools.pairedDelimiters : {},
-      },
       formatError: (_jax: TexInputJax, error: Error) => {
         throw error;
       },

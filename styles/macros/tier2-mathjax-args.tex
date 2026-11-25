@@ -227,8 +227,8 @@
 
 \newcommand{\rad}[1]{\sqrt{#1}}
 
-\def\rising#1#2{ \qty{#1}^{ (#2) }}
-\def\falling#1#2{ \qty{#1}_{ (#2) }}
+\def\rising#1#2{ \qty{#1}^{ \qty{#2} }}
+\def\falling#1#2{ \qty{#1}_{ \qty{#2} }}
 
 \newcommand\elts[2]{{ {#1}_1, {#1}_2, \cdots, {#1}_{#2}}}
 \newcommand\tselts[2]{{ \theset{ {#1}_1, {#1}_2, \cdots, {#1}_{#2} } }}
@@ -322,8 +322,8 @@
 
 \def\multichoose#1#2{{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}}
 
-\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \newcommand{\qty}[1]{\left( #1 \right)}
+\newcommand{\intvl}[1]{\left[ #1 \right]}
 
 \newcommand{\bdlattice}[2]{ \overline{#1}_{ #2  } }
 \newcommand{\perpin}[2]{#2^{\perp_{#1}}}

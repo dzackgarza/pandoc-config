@@ -1708,11 +1708,11 @@
     1
   ],
   "rising": [
-    "\\qty{#1}^{ (#2) }",
+    "\\qty{#1}^{ \\qty{#2} }",
     2
   ],
   "falling": [
-    "\\qty{#1}_{ (#2) }",
+    "\\qty{#1}_{ \\qty{#2} }",
     2
   ],
   "elts": [
@@ -1898,12 +1898,12 @@
     "{\\left(\\kern-.3em\\left(\\genfrac{}{}{0pt}{}{#1}{#2}\\right)\\kern-.3em\\right)}",
     2
   ],
-  "ceil": [
-    "\\mathopen{\\lceil}#1\\mathclose{\\rceil}",
-    1
-  ],
   "qty": [
     "\\left( #1 \\right)",
+    1
+  ],
+  "intvl": [
+    "\\left[ #1 \\right]",
     1
   ],
   "bdlattice": [

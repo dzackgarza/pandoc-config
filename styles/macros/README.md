@@ -159,24 +159,11 @@ or independently override their macro semantics.
   - `\def` with the parameter text `#1#2...#n` and nothing else;
   - `\DeclareMathOperator` (`\operatorname`) and its star form
     (`\operatorname*`);
-  - `\DeclarePairedDelimiter{\x}{L}{R}`, as `\mathopen{L}#1\mathclose{R}`
-    in the macro map: the form of mathtools without a star and without a
-    size. The generator also writes the pair `["L", "R"]` into
-    `templates/css/mathjax-paired-delimiters.json` and into the generated
-    `pairedDelimiters` line of `templates/mathjax-config.html` and
-    `templates/pandoc_revealjs_template.html`. That is the option
-    `tex.mathtools.pairedDelimiters` of MathJax mathtools, which takes
-    precedence over the macro map and gives the three forms of LaTeX: `\x`
-    without scaling, `\x*` with `\left` and `\right`, and `\x[\big]`
-    with `\bigl` and `\bigr`. A consumer of the macro map without that
-    option (a `\newcommand` include, the texmath reader of `math-macros.md`)
-    has only the form without a star; `\x*` and `\x[\big]` are then
-    errors;
   - `\let\x\relax`, which defines nothing.
 
   Each other definition (`\gdef`, `\edef`, `\xdef`, another `\let`, a `\def`
   with a delimited parameter text, `\DeclareRobustCommand`, the xparse
-  commands, `\DeclarePairedDelimiterX`, `\DeclareMathSymbol`,
+  commands, `\DeclarePairedDelimiter`, `\DeclarePairedDelimiterX`, `\DeclareMathSymbol`,
   `\mathchardef`, `\chardef`) stops the generator with its file, its line
   and its name. A definition between `\makeatletter` and `\makeatother`
   can have `@` in its name.
@@ -216,13 +203,16 @@ or independently override their macro semantics.
   mathtools and `\vcentcolon` the colon of MathJax mathtools that is
   centred on the math axis (`\vcentercolon`). A `\mathop` round a colon,
   as mathtools centres it in TeX, does not centre it in MathJax.
-- **`\qty{X}` is `\left( X \right)`**: parentheses that always grow with
-  `X`. It is a `\newcommand`, not a `\DeclarePairedDelimiter`: a paired
-  delimiter of mathtools without a star never grows.
+- **Each delimiter grows with its content.** A macro that puts delimiters
+  round an argument uses `\left` and `\right`: `\qty{X}` is
+  `\left( X \right)`, `\ceiling{X}` is `\left\lceil X \right\rceil`, and the
+  index of `\rising` and `\falling` is a `\qty`. A
+  `\DeclarePairedDelimiter` of mathtools has fixed size without a star, so
+  the generator refuses it.
 - **The shims are tested against the PDF.**
-  `tests/test-mathjax-generator.py` gives each shim, `\qty`, each macro
-  that uses `\qty` and each form of `\ceil` with its LaTeX meaning to
-  pdflatex and to MathJax, and requires the same page in each engine.
+  `tests/test-mathjax-generator.py` gives each shim, each delimiter macro and
+  each macro that uses `\qty` with its LaTeX meaning to pdflatex and to
+  MathJax, and requires the same page in each engine.
 - **`\fls`** builds the Laurent series delimiter: no font has a stretchy double
   parenthesis, so each outer parenthesis is a `\left` delimiter sized to a
   `\vphantom` of the argument, and a 5mu kern overlaps the pair.

@@ -476,6 +476,15 @@ both render Δ: the macro records which object the author means. Semantic names
 also stay separate from typographic ones (`\lieg` versus `\mfg`, `\OO` versus
 `\mco`).
 
+## Delimiters grow with their content
+
+By default each delimiter grows to the size of its content. A macro that puts
+parentheses, brackets, bars, braces, angles, floors or ceilings round an
+argument writes `\left` and `\right`: `\newcommand{\qty}[1]{\left( #1 \right)}`,
+not `\DeclarePairedDelimiter{\qty}{(}{)}`. The form of a mathtools paired
+delimiter without a star has fixed size, so the MathJax generator refuses
+`\DeclarePairedDelimiter`.
+
 ## Macro Tier System
 
 Macros in `styles/macros/` organized by MathJax compatibility:
