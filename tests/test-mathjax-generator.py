@@ -111,8 +111,8 @@ def assert_macro(macros: dict, name: str, expected) -> None:
 
 def test_domain_aux_files_are_generated() -> None:
     macros = generated_macros()
-    assert_macro(macros, "coloneqq", "\\mathrel{\\vcenter{:}}=")
-    assert_macro(macros, "qty", ["\\left( {#1} \\right)", 1])
+    assert_macro(macros, "coloneqq", "\\vcentcolon\\mathrel{\\mkern-1.2mu}=")
+    assert_macro(macros, "qty", ["\\mathopen{(}#1\\mathclose{)}", 1])
     assert_macro(macros, "cardinality", ["{\\left\\lvert {#1} \\right\\rvert}", 1])
     assert_macro(macros, "disc", ["{\\operatorname{disc}\\left( {#1} \\right)}", 1])
     assert_macro(macros, "discrete", "{\\mathrm{disc}}")
@@ -777,9 +777,9 @@ def test_legacy_mathjax_injection_defines_required_shims() -> None:
     else:
         fail("legacy coloneqq shim generated", "missing \\newcommand{\\coloneqq}")
     if r"\newcommand{\qty}[1]" in content:
-        check("legacy qty shim generated")
+        check("legacy qty projection generated")
     else:
-        fail("legacy qty shim generated", "missing \\newcommand{\\qty}[1]")
+        fail("legacy qty projection generated", "missing \\newcommand{\\qty}[1]")
     expected_fiberprod = r"\newcommand{\fiberprod}[3]{{#1} \fiberproduct{#2} {#3}}"
     if expected_fiberprod in content:
         check("legacy fiberprod semantic signature generated")
@@ -974,7 +974,7 @@ def qty_macro_cases(macros: dict) -> dict[str, str]:
 
 
 def pdflatex_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
-    pages = "\\newpage\n".join(f"$a{formula}b$\n" for formula in formulas)
+    pages = "\\newpage\n".join(f"$a {formula} b$\n" for formula in formulas)
     (tmp_dir / "pages.tex").write_text(
         "\\documentclass{article}\\usepackage{dzg-unified}\\pagestyle{empty}\n"
         f"\\begin{{document}}\n{pages}\\end{{document}}\n"
@@ -997,7 +997,7 @@ def pdflatex_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
 def mathjax_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
     cp = subprocess.run(
         ["bun", str(HERE / "mathjax-pages.ts"), str(tmp_dir)],
-        input=json.dumps([f"a{formula}b" for formula in formulas]),
+        input=json.dumps([f"a {formula} b" for formula in formulas]),
         capture_output=True,
         text=True,
         cwd=ROOT,

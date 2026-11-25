@@ -1,10 +1,7 @@
 {
-  "coloneqq": "\\mathrel{\\vcenter{:}}=",
-  "qty": [
-    "\\left( {#1} \\right)",
-    1
-  ],
-  "qed": "\\blacksquare",
+  "vcentcolon": "\\centercolon",
+  "coloneqq": "\\vcentcolon\\mathrel{\\mkern-1.2mu}=",
+  "qed": "\\quad\\blacksquare",
   "AA": "{\\mathbf{A}}",
   "CC": "{\\mathbf{C}}",
   "DD": "\\mathbb{D}",
@@ -1903,6 +1900,10 @@
   ],
   "ceil": [
     "\\mathopen{\\lceil}#1\\mathclose{\\rceil}",
+    1
+  ],
+  "qty": [
+    "\\mathopen{(}#1\\mathclose{)}",
     1
   ],
   "bdlattice": [

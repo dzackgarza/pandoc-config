@@ -10,6 +10,7 @@ outputs:
   - A JavaScript ESM module exporting a { macros } object
   - A TypeScript module exporting the same with type annotations
   - A JSON file for direct embedding in HTML
+  - The mathtools pairedDelimiters JSON of each \\DeclarePairedDelimiter
   - The \\newcommand lines as the first input of a Pandoc Markdown reader
     (math-macros.md), for each writer without a template that loads them
 
@@ -52,6 +53,7 @@ class MacroDef(NamedTuple):
     arg_count: int
     body: str
     default: str | None = None
+    delimiters: tuple[str, str] | None = None
 
 
 class ProjectionError(Exception):
@@ -59,9 +61,9 @@ class ProjectionError(Exception):
 
 
 MATHJAX_SHIMS = (
-    MacroDef("coloneqq", 0, r"\mathrel{\vcenter{:}}="),
-    MacroDef("qty", 1, r"\left( {#1} \right)"),
-    MacroDef("qed", 0, r"\blacksquare"),
+    MacroDef("vcentcolon", 0, r"\centercolon"),
+    MacroDef("coloneqq", 0, r"\vcentcolon\mathrel{\mkern-1.2mu}="),
+    MacroDef("qed", 0, r"\quad\blacksquare"),
 )
 
 _NEWCOMMANDS = ("newcommand", "renewcommand", "providecommand")
@@ -209,7 +211,9 @@ def _definition(source: _Source, node: LatexMacroNode) -> MacroDef | None:
             raise source.refuse(node, name, "a delimiter of the pair is not a group")
         opening = "" if left == "." else f"\\mathopen{{{left}}}"
         closing = "" if right == "." else f"\\mathclose{{{right}}}"
-        definition = MacroDef(name=name, arg_count=1, body=f"{opening}#1{closing}")
+        definition = MacroDef(
+            name=name, arg_count=1, body=f"{opening}#1{closing}", delimiters=(left, right)
+        )
     elif node.macroname in _NEWCOMMANDS:
         _star, name_arg, count_arg, default_arg, body_arg = arguments
         definition = MacroDef(
@@ -379,27 +383,50 @@ def _newcommand(macro: MacroDef) -> str:
     return f"\\newcommand{{\\{macro.name}}}{count}{default}{{{macro.body}}}"
 
 
+def _paired_delimiter_object(macros: list[MacroDef]) -> dict[str, list[str]]:
+    """Return the mathtools ``pairedDelimiters`` object of MathJax.
+
+    With it MathJax mathtools gives each pair its three forms: without a star
+    (no scaling), with a star (``\\left`` and ``\\right``) and with a size
+    (``\\bigl`` and ``\\bigr``), as ``\\DeclarePairedDelimiter`` does in LaTeX.
+    """
+    return {macro.name: list(macro.delimiters) for macro in macros if macro.delimiters is not None}
+
+
+def generate_paired_delimiters_json(macros: list[MacroDef]) -> str:
+    return json.dumps(_paired_delimiter_object(macros), indent=2)
+
+
 GENERATED_TEMPLATES = (MATHJAX_CONFIG_PARTIAL, REVEALJS_TEMPLATE)
 
-MACROS_LINE_RE = re.compile(r"(?m)^(\s*macros:\s*)\{.*\},[^\S\n]*$")
+
+def _generated_line_re(key: str) -> re.Pattern[str]:
+    return re.compile(rf"(?m)^(\s*{key}:\s*)\{{.*\}},[^\S\n]*$")
 
 
 def update_template_macros(template_path: Path, macros: list[MacroDef]) -> None:
-    """Replace the one ``macros: {...},`` line of a template.
+    """Replace the one ``macros: {...},`` line and the one
+    ``pairedDelimiters: {...},`` line of a template.
 
-    The rest of the MathJax configuration belongs to the template. The macro
-    line is a projection of ``styles/macros``, so a template is never a second
-    macro authority. A template with no such line or with more than one fails.
+    The rest of the MathJax configuration belongs to the template. The
+    generated lines are a projection of ``styles/macros``, so a template is
+    never a second macro authority. A template with no such line or with more
+    than one fails.
     """
     text = template_path.read_text()
-    if len(MACROS_LINE_RE.findall(text)) != 1:
-        raise RuntimeError(
-            f"Template {template_path} must contain exactly one generated macros line"
-        )
-    replacement = json.dumps(_macro_object(macros), separators=(",", ":"))
-    template_path.write_text(
-        MACROS_LINE_RE.sub(lambda match: f"{match.group(1)}{replacement},", text)
-    )
+    projections = {
+        "macros": _macro_object(macros),
+        "pairedDelimiters": _paired_delimiter_object(macros),
+    }
+    for key, value in projections.items():
+        line_re = _generated_line_re(key)
+        if len(line_re.findall(text)) != 1:
+            raise RuntimeError(
+                f"Template {template_path} must contain exactly one generated {key} line"
+            )
+        replacement = json.dumps(value, separators=(",", ":"))
+        text = line_re.sub(lambda match: f"{match.group(1)}{replacement},", text)
+    template_path.write_text(text)
 
 
 def generate_legacy_html(macros: list[MacroDef]) -> str:
@@ -490,6 +517,15 @@ def main() -> None:
         help="Output path for .json file (default: --out-dir/mathjax-macros.json)",
     )
     parser.add_argument(
+        "--paired-delimiters",
+        type=Path,
+        default=None,
+        help=(
+            "Output path for the mathtools pairedDelimiters JSON "
+            "(default: --out-dir/mathjax-paired-delimiters.json)"
+        ),
+    )
+    parser.add_argument(
         "--html",
         type=Path,
         default=None,
@@ -545,6 +581,7 @@ def main() -> None:
     js_path = args.js or (out_dir / "mathjax-macros.mjs")
     ts_path = args.ts or (out_dir / "mathjax-macros.ts")
     json_path = args.json or (out_dir / "mathjax-macros.json")
+    paired_delimiters_path = args.paired_delimiters or (out_dir / "mathjax-paired-delimiters.json")
     html_path = args.html or (out_dir / "mathjax-macros.html")
     legacy_html_path = args.legacy_html or (out_dir / "math-macros.html")
     reader_input_path = args.reader_input or (out_dir / "math-macros.md")
@@ -559,6 +596,7 @@ def main() -> None:
     js_path.write_text(js_content)
     ts_path.write_text(ts_content)
     json_path.write_text(json_content)
+    paired_delimiters_path.write_text(generate_paired_delimiters_json(all_macros))
     html_path.write_text(html_content)
     legacy_html_path.write_text(legacy_html_content)
     reader_input_path.write_text(reader_input_content)
@@ -578,6 +616,7 @@ def main() -> None:
     )
     print(f"Generated: {ts_path}")
     print(f"Generated: {json_path}")
+    print(f"Generated: {paired_delimiters_path}")
     print(f"Generated: {html_path}")
     print(f"Generated: {legacy_html_path}")
     print(f"Generated: {reader_input_path}")

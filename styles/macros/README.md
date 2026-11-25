@@ -159,9 +159,19 @@ or independently override their macro semantics.
   - `\def` with the parameter text `#1#2...#n` and nothing else;
   - `\DeclareMathOperator` (`\operatorname`) and its star form
     (`\operatorname*`);
-  - `\DeclarePairedDelimiter{\x}{L}{R}`, as `\mathopen{L}#1\mathclose{R}`:
-    the form of mathtools without a star and without a size. MathJax has
-    no form for `\x*` and `\x[\big]`;
+  - `\DeclarePairedDelimiter{\x}{L}{R}`, as `\mathopen{L}#1\mathclose{R}`
+    in the macro map: the form of mathtools without a star and without a
+    size. The generator also writes the pair `["L", "R"]` into
+    `templates/css/mathjax-paired-delimiters.json` and into the generated
+    `pairedDelimiters` line of `templates/mathjax-config.html` and
+    `templates/pandoc_revealjs_template.html`. That is the option
+    `tex.mathtools.pairedDelimiters` of MathJax mathtools, which takes
+    precedence over the macro map and gives the three forms of LaTeX: `\x`
+    without scaling, `\x*` with `\left` and `\right`, and `\x[\big]`
+    with `\bigl` and `\bigr`. A consumer of the macro map without that
+    option (a `\newcommand` include, the texmath reader of `math-macros.md`)
+    has only the form without a star; `\x*` and `\x[\big]` are then
+    errors;
   - `\let\x\relax`, which defines nothing.
 
   Each other definition (`\gdef`, `\edef`, `\xdef`, another `\let`, a `\def`
@@ -197,8 +207,19 @@ or independently override their macro semantics.
   the projection has none.
 - **`\qed`** is the command of amsthm. Tier 3 sets its symbol,
   `\qedsymbol`, to `\blacksquare` in `\ensuremath`, as amsthm sets the
-  symbol in text mode. MathJax has no `\qed`; the generator's shim gives
-  `\blacksquare`.
+  symbol in text mode. In math mode amsthm gives `\quad\qedsymbol`
+  (`\mathqed`). MathJax has no `\qed`; the generator's shim gives
+  `\quad\blacksquare`.
+- **`\coloneqq`** is `\vcentcolon\mathrel{\mkern-1.2mu}=` in mathtools.
+  MathJax mathtools has a `\coloneqq` of its own (one `:=` relation), and no
+  `\vcentcolon`. The generator's shims give `\coloneqq` the definition of
+  mathtools and `\vcentcolon` the colon of MathJax mathtools that is
+  centred on the math axis (`\centercolon`). A `\mathop` round a colon,
+  as mathtools centres it in TeX, does not centre it in MathJax.
+- **The shims are tested against the PDF.**
+  `tests/test-mathjax-generator.py` gives each shim and each form of `\qty`
+  (and each macro that uses `\qty`) with its LaTeX meaning to pdflatex and
+  to MathJax, and requires the same page in each engine.
 - **`\fls`** builds the Laurent series delimiter: no font has a stretchy double
   parenthesis, so each outer parenthesis is a `\left` delimiter sized to a
   `\vphantom` of the argument, and a 5mu kern overlaps the pair.

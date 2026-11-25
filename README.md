@@ -1900,6 +1900,7 @@ Regenerate with `just readme-reference`.
 | `\contradiction` | 0 | `\mathord{\lightning}` |
 | `\multichoose` | 2 | `{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}` |
 | `\ceil` | 1 | `\mathopen{\lceil}#1\mathclose{\rceil}` |
+| `\qty` | 1 | `\mathopen{(}#1\mathclose{)}` |
 | `\bdlattice` | 2 | `\overline{#1}_{ #2 }` |
 | `\perpin` | 2 | `#2^{\perp_{#1}}` |
 | `\signature` | 1 | `\operatorname{sign}\qty{#1}` |
@@ -1928,7 +1929,6 @@ Regenerate with `just readme-reference`.
 | `\RM` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}` |
 | `\RN` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}` |
 | `\righttriplearrows` | 0 | `\operatorname{{\; \tikz{ \foreach \y in {0, 0.1, 0.2} { \draw [-stealth] (0, \y) -- +(0.5, 0);}} \; }}` |
-| `\qty` | 1 | `\mathopen{(}#1\mathclose{)}` |
 | `\dqty` | 1 | `\left( \left( {#1} \right) \right)` |
 | `\intvl` | 1 | `\mathopen{[}#1\mathclose{]}` |
 | `\fourcase` | 4 | `\begin{cases}{#1} & {#2} \\ {#3} & {#4}\end{cases}` |

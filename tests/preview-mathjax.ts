@@ -5,7 +5,10 @@ type TexInputJax = object;
 export type Macro = string | [string, number] | [string, number, string];
 type PreviewConfig = {
   loader: { load?: string[] };
-  tex: { macros: Record<string, Macro> };
+  tex: {
+    macros: Record<string, Macro>;
+    mathtools: { pairedDelimiters: Record<string, string[]> };
+  };
   startup?: { ready(): void };
 };
 
@@ -36,6 +39,7 @@ function previewConfig(): PreviewConfig {
 
 export async function previewMathJax(withMacros: boolean, output: string[] = []) {
   const preview = previewConfig();
+  const tex: PreviewConfig["tex"] = JSON.parse(JSON.stringify(preview.tex));
   return MathJaxNode.init({
     ...preview,
     loader: {
@@ -43,8 +47,12 @@ export async function previewMathJax(withMacros: boolean, output: string[] = [])
       load: ["input/tex", ...output, ...(preview.loader.load ?? [])],
     },
     tex: {
-      ...preview.tex,
-      macros: withMacros ? preview.tex.macros : {},
+      ...tex,
+      macros: withMacros ? tex.macros : {},
+      mathtools: {
+        ...tex.mathtools,
+        pairedDelimiters: withMacros ? tex.mathtools.pairedDelimiters : {},
+      },
       formatError: (_jax: TexInputJax, error: Error) => {
         throw error;
       },
