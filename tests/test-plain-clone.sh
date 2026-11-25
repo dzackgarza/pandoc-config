@@ -11,7 +11,7 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRATCH="$(mktemp -d -t pandoc-plain-clone-XXXXXXXX)"
-trap 'rm -rf "$SCRATCH"' EXIT
+trap 'trash "$SCRATCH"' EXIT
 
 # A clone as a host without git-lfs makes it: no global or system
 # configuration, so no lfs filter driver.
