@@ -168,13 +168,8 @@ or independently override their macro semantics.
 - **One macro per meaning.** Letters with several meanings get one macro for
   each meaning, so each meaning keeps one display choice. The same holds for
   the macros that display as a pair of bars.
-- **Overrides.** Tier 3 loads after tier 2 and redefines some tier 2 macros
-  with a LaTeX-only form: the double cosets (`\dcoset`, `\dcosetl`,
-  `\dcosetr`, `\leftquotient`: `\scalebox` in LaTeX, natural-size
-  `\diagdown`/`\diagup` in MathJax), `\gitquot` (`\mkern` in LaTeX) and
-  `\righttriplearrows` (a TikZ drawing in LaTeX, a `\substack` of three arrows
-  in MathJax). `\ae` replaces the æ ligature with "a.e.".
-- **A native command keeps its definition.** The tree does not redefine
+- **A native command keeps its definition**, except for the overrides of
+  the section "Overrides". The tree does not redefine
   `\boldsymbol` (bm.sty makes it `\bm` in LaTeX; MathJax renders its own),
   `\det`, `\mod` (amsmath and MathJax: `\mod{m}`, one argument) or `\mid`
   (`\st` is the big-bar "such that"). A `tex.macros` entry for such a
@@ -193,6 +188,14 @@ or independently override their macro semantics.
   the opposite and unary operations take the object that they act on.
 - `\RN` and `\RM` use the TeX primitive `\romannumeral`, so they are tier 3.
   `\envlist` pulls a list up to the line of the environment heading before it.
+
+## Overrides
+
+Tier 3 loads after tier 2 and redefines some tier 2 macros with a
+LaTeX-only form: the double cosets (`\dcoset`, `\dcosetl`, `\dcosetr`,
+`\leftquotient`: `\scalebox` in LaTeX, natural-size `\diagdown`/`\diagup` in
+MathJax), `\gitquot` (`\mkern` in LaTeX) and `\righttriplearrows` (a TikZ
+drawing in LaTeX, a `\substack` of three arrows in MathJax).
 
 ## Adding New Macros
 

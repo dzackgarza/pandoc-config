@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Contract tests for generated MathJax macro configuration."""
 
+import importlib.util
 import json
 import os
 import re
@@ -14,6 +15,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 GENERATOR = ROOT / "bin" / "generate-mathjax-config.py"
+MACROS_README = ROOT / "styles" / "macros" / "README.md"
 LEGACY_MACROS = ROOT / "templates" / "css" / "math-macros.html"
 GENERATED_JSON = ROOT / "templates" / "css" / "mathjax-macros.json"
 TEMPLATES = ROOT / "templates"
@@ -91,6 +93,13 @@ def generated_macros() -> dict:
         if cp.returncode != 0:
             raise RuntimeError(cp.stderr.strip())
         return json.loads((out_dir / "mathjax-macros.json").read_text())
+
+
+def generator_module():
+    spec = importlib.util.spec_from_file_location("generate_mathjax_config", GENERATOR)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def assert_macro(macros: dict, name: str, expected) -> None:
@@ -233,6 +242,79 @@ def test_native_mathjax_macros_are_not_shadowed() -> None:
             )
         else:
             check(f"{native} left to native MathJax rendering")
+
+
+def declared_native_overrides() -> set[str]:
+    """The first column of the table of the section "Overrides" of MACROS_README."""
+    text = MACROS_README.read_text()
+    section = re.search(r"(?ms)^## Overrides\n(.*?)(?=^## |\Z)", text)
+    if section is None:
+        raise RuntimeError(f"{MACROS_README} has no section '## Overrides'")
+    return set(re.findall(r"(?m)^\| `\\([A-Za-z@]+)` \|", section.group(1)))
+
+
+def test_tree_overrides_only_the_declared_native_commands() -> None:
+    """A macro of the projection that changes the meaning of a command that
+    the document already has, at the load of dzg-macros under dzg-unified
+    and amsart, is an override. The set of overrides equals the table of
+    styles/macros/README.md. The shims of the generator are MathJax entries
+    and no macro of the tree."""
+    shims = {shim.name for shim in generator_module().MATHJAX_SHIMS}
+    names = sorted(set(generated_macros()) - shims)
+    saves = "\n".join(
+        f"\\ifcsname {n}\\endcsname\\expandafter\\let\\csname dzgnative@{n}\\expandafter\\endcsname\\csname {n}\\endcsname\\fi"
+        for n in names
+    )
+    compares = "\n".join(
+        f"\\ifcsname dzgnative@{n}\\endcsname"
+        f"\\expandafter\\let\\expandafter\\dzg@native\\csname dzgnative@{n}\\endcsname"
+        f"\\expandafter\\let\\expandafter\\dzg@tree\\csname {n}\\endcsname"
+        f"\\ifx\\dzg@native\\dzg@tree\\else\\typeout{{DZG-OVERRIDE:{n}}}\\fi\\fi"
+        for n in names
+    )
+    document = "\n".join(
+        [
+            r"\documentclass{amsart}",
+            r"\makeatletter",
+            f"\\def\\dzg@savenative{{{saves}}}",
+            f"\\def\\dzg@comparenative{{{compares}\\typeout{{DZG-OVERRIDES-CHECKED}}}}",
+            r"\AddToHook{package/dzg-macros/before}{\dzg@savenative}",
+            r"\AddToHook{package/dzg-macros/after}{\dzg@comparenative}",
+            r"\makeatother",
+            r"\usepackage{dzg-unified}",
+            r"\begin{document}x\end{document}",
+        ]
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_dir = Path(tmp)
+        (tmp_dir / "overrides.tex").write_text(document)
+        cp = subprocess.run(
+            ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "overrides.tex"],
+            capture_output=True,
+            text=True,
+            cwd=tmp_dir,
+            env={**os.environ, "TEXINPUTS": TEXINPUTS},
+        )
+        log = (tmp_dir / "overrides.log").read_text(errors="replace")
+    if cp.returncode != 0 or "DZG-OVERRIDES-CHECKED" not in log:
+        fail("overrides of native commands", cp.stdout[-2000:])
+        return
+    overrides = set(re.findall(r"DZG-OVERRIDE:([A-Za-z@]+)", log))
+    declared = declared_native_overrides()
+    if overrides - declared:
+        fail(
+            "the tree overrides only the declared native commands",
+            "undeclared: " + ", ".join(sorted(overrides - declared)),
+        )
+    else:
+        check("the tree overrides only the native commands of the README table")
+    if declared - overrides:
+        fail(
+            "each declared override overrides a native command",
+            "no override: " + ", ".join(sorted(declared - overrides)),
+        )
+    else:
+        check("each command of the README table is a native command that the tree overrides")
 
 
 def template_matches_generated_projection(name: str, template_path: Path) -> None:
@@ -690,6 +772,7 @@ def test_legacy_mathjax_injection_defines_required_shims() -> None:
 def main() -> None:
     test_domain_aux_files_are_generated()
     test_native_mathjax_macros_are_not_shadowed()
+    test_tree_overrides_only_the_declared_native_commands()
     test_mathjax_config_matches_generated_projection()
     test_html_templates_hold_no_macro_map_of_their_own()
     test_revealjs_template_matches_generated_projection()
