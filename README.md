@@ -188,6 +188,35 @@ delimiters. A consumer runs the file, calls `registerStmaryrd(MathJax)` in
 `startup.ready` before `MathJax.startup.defaultReady()`, and adds `stmaryrd`
 to `tex.packages`. `just _test-mathjax-macros` typesets every macro this way.
 
+### Support for `\fps` in HTML consumers
+
+- **Pandoc preview:** `templates/pandoc_preview_template.html` registers the
+  package automatically with MathJax 4. To select that engine regardless of
+  the installed Pandoc version, use:
+
+  ```sh
+  pandoc input.md --standalone --to=html5 \
+    --template=templates/pandoc_preview_template.html \
+    --mathjax=https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js -o preview.html
+  ```
+
+  The extension is a template partial, so it is included in the output even
+  when the editor embeds a local MathJax component. A preview using MathJax 3
+  does not support `\fps`; the default MathJax URL depends on the Pandoc version.
+- **Quarto and other HTML includes:** `templates/css/mathjax-macros.html`
+  defines macros, but does not select the engine or register TeX packages.
+  Including it alone does not support `\fps`. For support, the host must load
+  MathJax 4, run `templates/js/mathjax-stmaryrd.js` before engine startup, call
+  `registerStmaryrd(MathJax)` in `startup.ready` before `defaultReady()`, and
+  add `stmaryrd` to `tex.packages`, as described above.
+- **Obsidian:** the MathJax 3 engine does not support `\fps`. See
+  [Obsidian macro setup](styles/obsidian/README.md#what-wont-work-in-obsidian).
+- **reveal.js:** the current template does not register `stmaryrd`; it does not
+  support `\fps`.
+
+The macro has the same meaning in every generated definition; a consumer that
+lacks the required delimiters must not substitute single brackets.
+
 ## Figures
 
 ### The dzg TikZ library

@@ -17,6 +17,10 @@ This directory contains test documents that exercise the unified LaTeX macro sys
 
 ### MathJax Test
 
+- **test-mathjax-generator.py** - Checks canonical macro expansions, generated
+  template projections, rendered Pandoc preview/reveal.js configuration, legacy
+  shims, and LaTeX compilation of the MathJax subset
+  (`just _test-mathjax-generator`).
 - **test-mathjax-macros.ts** - Typesets every macro of
   `templates/css/mathjax-macros.json` in MathJax 4 with the ams, mathtools and
   stmaryrd packages and fails on a TeX error (`just _test-mathjax-macros`)

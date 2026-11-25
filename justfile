@@ -503,7 +503,7 @@ _test-theorem-tables:
   bash "{{source_directory()}}/tests/test-theorem-tables.sh"
 
 # Regenerate the README reference, then run all tests (macros, templates, tikz compilation, filter, poset layout)
-test: readme-reference _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-compile-pandoc _test-theorem-tables
+test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-compile-pandoc _test-theorem-tables
 
 # Run the fast commit check; the commit hook runs this
 test-commit:
@@ -524,6 +524,10 @@ test-push:
 # dir.
 test-references:
   bash "{{source_directory()}}/tests/test-project-references.sh"
+
+# Check generator semantics, embedded template projections and LaTeX compatibility
+_test-mathjax-generator:
+  uv run "{{source_directory()}}/tests/test-mathjax-generator.py"
 
 # Typeset every generated macro in MathJax 4 with ams, mathtools and stmaryrd
 _test-mathjax-macros:
