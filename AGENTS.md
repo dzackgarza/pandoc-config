@@ -100,6 +100,94 @@ export BIBINPUTS=".:$HOME/.pandoc/bib//:${BIBINPUTS:-}"
 export PATH="$HOME/.pandoc/bin:$PATH"
 ```
 
+## The justfile
+
+A project imports the justfile as a module (`mod pandoc '~/.pandoc/justfile'`)
+and calls `just pandoc::<recipe>`. The `[doc]` attribute of a recipe is its
+line in `just --list`. A recipe with a body in bash has the attribute
+`[script("bash")]`, not a shebang line. The justfile holds no comments; a
+reason for a recipe goes in this section.
+
+- **Environment variables are read when just parses the file.**
+  `ZOTERO_GLOBAL_BIB` (default `~/zotero_global.bib`), `FIGURES_DIR`,
+  `PANDOC_BIB_SOURCE`, `PANDOC_BUILD_DIR`, `PANDOC_CROSSREF` and
+  `PANDOC_TOP_LEVEL_DIVISION` must be in the environment of the `just`
+  process. An `export FOO := ...` at the top level of an importing justfile
+  sets only the environment of its recipes, which is too late, and the
+  default is then used without an error. Give them to a nested `just`:
+
+  ```just
+  [script("bash")]
+  compile:
+    PANDOC_BIB_SOURCE=refs.bib PANDOC_CROSSREF=no-crossref \
+      just pandoc::compile-pandoc-project out template.tex main.md
+  ```
+
+  When a setting seems to have no effect, read the `\addbibresource` lines
+  of the generated `output.tex`.
+- **Bibliographies.** `PANDOC_BIB_SOURCE` is a list of files separated by
+  `:`; an empty value is a document without a bibliography; without the
+  variable the bibliography is `ZOTERO_GLOBAL_BIB`. `compile-pandoc`,
+  `compile-pandoc-project` and `compile-html` read it. A relative file is
+  relative to the invocation directory. A file that does not exist stops
+  the build: biber would read it as an unknown resource, and each citation
+  of it would be undefined.
+- **`PANDOC_CROSSREF`** is `crossref` (default) or `no-crossref`. With
+  crossref, `@fig:`/`@tbl:`/`@eq:`/`@sec:`/`@lst:` resolve to numbered
+  references; without it they reach biblatex as unknown citation keys.
+  Crossref adds a preamble block that declares a `codelisting` float and
+  redefines `\footnote` in subfigures; a document that writes its own
+  `\label`/`\Cref` and has no crossref references does not need it, and the
+  block clashes with the caption and sidenotes packages.
+- **`PANDOC_TOP_LEVEL_DIVISION`** is the `--top-level-division` of the
+  compile-pandoc family: `default` (Pandoc chooses from the document class),
+  `section`, `chapter` or `part`. A book whose `#` headings are parts sets
+  `part`.
+- **`DEFAULT_TEMPLATE`** is the one name of the default LaTeX template:
+  `compile-pandoc` has it as its default, and `compile-pandoc-project` uses
+  it for a template argument of `''` or `-` (its template argument is
+  before the list of inputs, so it cannot be left out).
+- **`compile-pandoc-project`** gives its inputs to Pandoc in the given
+  order, and pandoc-crossref resolves the targets across the files. The list
+  of inputs is the last parameter, so the bibliography and the build folder
+  come from `PANDOC_BIB_SOURCE` and `PANDOC_BUILD_DIR`. just joins a
+  variadic argument of a dependency into one string, which splits a file
+  name with spaces; `[positional-arguments]` and `"${@:3}"` give each input
+  to the nested `just` as one argument.
+- **The Pandoc stage (`_compile-pandoc-tex`)** uses the filters of the
+  checkout of the justfile, not of `~/.pandoc`, so `--justfile <checkout>`
+  tests that checkout. It runs Pandoc in the invocation directory, so the
+  relative paths of `include.lua` resolve. The reader has
+  `tex_math_single_backslash`: `\(...\)` and `\[...\]` are math in these
+  documents (the Zettlr editor and the Flowmark lint read them so).
+  `wikilinks.lua` runs before `include.lua` adds the headings of included
+  files, and applies the resolutions that `PANDOC_WIKILINKS` names.
+  pandoc-crossref runs after `include.lua`, so it sees the whole document,
+  and before `convert_amsthm_envs.lua`: it passes theorem divs and `@thm:`
+  citations through unchanged.
+- **The latexmk stage (`_compile-pandoc-latexmk`)** adds the invocation
+  directory to `BIBINPUTS`, so a relative bibliography is found. It reads
+  the undefined citations and references from the log of the last LaTeX
+  pass and fails on each, with the PDF left in the build folder.
+- **`compile-html`** writes a staged file beside its target and renames it
+  only after a build without error (see "Note HTML is `compile-html`"
+  above). `--citeproc` is after the filters, so pandoc-crossref takes its
+  references first. `HTML_MATHJAX_URL` pins one release of the MathJax major
+  version that `templates/pandoc_preview_template.html` configures.
+- **`preview`** builds in a temporary folder. `compile-pandoc` copies the
+  dated PDF to the invocation directory; `preview` moves it to that folder
+  and shows it in zathura.
+- **`format-md`** formats only files below its targets and follows no
+  symbolic link out of them, so it does not format Zotero storage. It uses
+  the `.prettierrc` of the invocation directory, else
+  `~/.pandoc/.prettierrc`.
+- **`render-figures`** reads `TEXINPUTS` from the environment of the shell.
+- **`generate-math-macros`** is the one path that writes the MathJax
+  projections; `generate-math-macros-legacy` is an alias of it.
+- **`_test-templates`** compiles only the standalone LaTeX templates; a
+  Pandoc template (`research_draft.tex`, `pandoc_problem_template.tex`)
+  needs Pandoc.
+
 ## Templates that zettlr-pandoc exports with
 
 zettlr-pandoc (the editor) assembles no math for an export. The template of an
@@ -189,9 +277,13 @@ carry the changes over. A template that includes the partial must stay in
   variable than those of the justfile (`PANDOC_BIB_SOURCE`,
   `PANDOC_CROSSREF`) and of `tikzcd.lua`. It writes a staged file beside the
   target and renames it only after a build without a Pandoc error, a TikZ
-  marker (`[tikzcd-figure-error]`, `[tikzcd] lualatex failed`, `[tikzcd]
-  pdf2svg failed`) or an unknown citation in its log: in HTML `tikzcd.lua`
-  drops a failed figure and Pandoc exits 0. A caller gives the path; a shell
+  failure (`[tikzcd-latex-log-begin]`, `[tikzcd] lualatex failed`,
+  `[tikzcd] pdf2svg failed`) or an unknown citation in its log: in HTML
+  `tikzcd.lua` drops a failed figure and Pandoc exits 0. `tikzcd.lua` writes
+  the `[tikzcd-latex-log-begin]` block for each figure whose lualatex run
+  fails; its `[tikzcd-figure-error]` marker is only for an error on a line
+  of the figure body, so an error in an imported file (an Inkscape
+  `.pdf_tex`) has no such marker. A caller gives the path; a shell
   redirection (`> note.html`) empties the file before the build starts.
   `bin/pandoc_stripmacros.sh` expands the macros through
   `templates/css/math-macros.html`, found from its own location.
