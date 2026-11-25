@@ -1,75 +1,25 @@
-# Global Pandoc & LaTeX Build System
-# Include this as a module in your project justfile:
-# mod pandoc '~/.pandoc/justfile'
-
-# --- Variables ---
-
-# Default bibliography source
 GLOBAL_BIB_SOURCE := env_var_or_default("ZOTERO_GLOBAL_BIB", home_dir() / "zotero_global.bib")
 
-# Default figures directory
 GLOBAL_FIGURES_DIR := env_var_or_default("FIGURES_DIR", home_dir() / "figures")
 
-# Build directories
 BUILD_DIR_PANDOC := ".build_pandoc"
 BUILD_DIR_TEX := ".build_tex"
 
-# Default LaTeX template for the compile-pandoc family. Single source:
-# compile-pandoc's parameter default and compile-pandoc-project's
-# sentinel ('' or '-') both resolve here, so callers never have to
-# duplicate the template name.
 DEFAULT_TEMPLATE := "research_draft.tex"
 
-# compile-pandoc-project defaults: its variadic input list must be the
-# last parameter, so bib_source/build_dir are env-var overridable here
-# rather than positional. Defaults match compile-pandoc exactly.
-#
-# These env vars are read while this file is PARSED. A project that imports
-# this justfile as a module therefore cannot set them with `export FOO := ...`
-# at its own top level: that only populates the environment of its recipes,
-# which is too late. Put them in the environment of a nested just instead:
-#
-#   compile:
-#     #!/usr/bin/env bash
-#     PANDOC_BIB_SOURCE=... PANDOC_CROSSREF=no-crossref \
-#       just pandoc::compile-pandoc-project out template.tex main.md
-#
-# The failure is silent -- the default is used and the build still succeeds --
-# so check the \addbibresource lines of the generated output.tex if a setting
-# seems ignored.
-#
-# PANDOC_BIB_SOURCE is a list of bibliography files separated by ':'; an empty
-# value is a document without a bibliography. compile-pandoc and
-# compile-pandoc-project both read it; without it, the bibliography is
-# ZOTERO_GLOBAL_BIB.
 PROJECT_BIB_SOURCE := env_var_or_default("PANDOC_BIB_SOURCE", GLOBAL_BIB_SOURCE)
 PROJECT_BUILD_DIR := env_var_or_default("PANDOC_BUILD_DIR", BUILD_DIR_PANDOC)
 
-# pandoc-crossref for compile-pandoc and compile-pandoc-project: "crossref"
-# (default) or "no-crossref". With crossref, @fig:/@tbl:/@eq:/@sec:/@lst:
-# resolve to numbered references; without it they reach biblatex as unknown
-# citation keys. Crossref injects a preamble block that declares a
-# codelisting float and redefines \footnote inside subfigures; in a document
-# that authors its own \label/\Cref and uses no @fig:/@tbl:/@eq: references,
-# that block is dead weight and clashes with the caption/sidenotes stack.
 CROSSREF_MODE := env_var_or_default("PANDOC_CROSSREF", "crossref")
 
-# pandoc --top-level-division for the compile-pandoc family: "default"
-# (pandoc infers section/chapter from the document class), "section",
-# "chapter", or "part". Book-length projects whose "#" headings are parts
-# set PANDOC_TOP_LEVEL_DIVISION=part in their own justfile.
 TOP_LEVEL_DIVISION := env_var_or_default("PANDOC_TOP_LEVEL_DIVISION", "default")
 
-# --- Environment ---
 export PANDOC_DIR := home_dir() / ".pandoc"
 export TEXINPUTS := ".:" + home_dir() + "/.pandoc/styles//:" + home_dir() + "/.pandoc/macros//:" + home_dir() + "/.pandoc/config//:" + home_dir() + "/.pandoc:" + home_dir() + "/.pandoc/figures:" + env_var_or_default("TEXINPUTS", "")
 
-# --- Recipes ---
-
-# Preview a markdown file with live-reload
-# Usage: just pandoc::preview <file> [format=pdf] [template=research_draft.tex]
+[doc("Compile a Markdown file to a PDF in a sandbox, show it in zathura and compile it again at each change")]
+[script("bash")]
 preview file format="pdf" template="research_draft.tex":
-  #!/usr/bin/env bash
   set -euo pipefail
   cd "{{invocation_directory()}}"
   
@@ -78,14 +28,12 @@ preview file format="pdf" template="research_draft.tex":
   NAME=$(basename "$FILE" .md)
   ROOT="{{invocation_directory()}}"
   
-  # 1. Setup Sandbox
   export TMP_DIR=$(mktemp -d -t preview-XXXXXXXXXX)
   echo "Preview sandbox created at: $TMP_DIR"
   [ -d "$DIR/figures" ] && ln -sf "$DIR/figures" "$TMP_DIR/figures"
   
   export VIEWER_PID_FILE="$TMP_DIR/viewer.pid"
   
-  # 2. Viewer Lifecycle & Cleanup
   cleanup() {
       echo -e "\nCleaning up preview environment..."
       if [ -f "$VIEWER_PID_FILE" ]; then
@@ -96,7 +44,6 @@ preview file format="pdf" template="research_draft.tex":
   }
   trap cleanup SIGINT SIGTERM EXIT
 
-  # 3. Compilation & Watching Loop
   export FORMAT="{{format}}"
   export TEMPLATE="{{template}}"
   export NAME
@@ -106,12 +53,10 @@ preview file format="pdf" template="research_draft.tex":
 
   compile_and_view() {
       echo "[preview] Compiling $FILE..."
-      # Use the global compilation recipe
       just pandoc::compile-pandoc "$FILE" "$NAME" "$TEMPLATE" "$BIB_SOURCE" "$TMP_DIR"
       
       if [ "$FORMAT" = "pdf" ]; then
           OUTFILE="$TMP_DIR/$NAME-$(date +%d-%m-%y).pdf"
-          # The compile-pandoc recipe copies the PDF to ROOT, we move it to TMP_DIR for viewing
           LITTERED_PDF="$ROOT/$NAME-$(date +%d-%m-%y).pdf"
           if [ -f "$LITTERED_PDF" ]; then
               mv "$LITTERED_PDF" "$OUTFILE"
@@ -125,17 +70,14 @@ preview file format="pdf" template="research_draft.tex":
   }
   export -f compile_and_view
   
-  # Initial compile
   compile_and_view
   
-  # 4. Watcher
   echo "[preview] Watching for changes via entr..."
   find "$DIR" -maxdepth 1 -name "*.md" | entr -n -p bash -c 'compile_and_view'
 
-# Format markdown files to enforce one sentence per line
-# Usage: just pandoc::format-md [globs/dirs...]
+[doc("Format Markdown files with one sentence per line (prettier)")]
+[script("bash")]
 format-md *targets:
-  #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
   
@@ -145,10 +87,8 @@ format-md *targets:
   fi
   npm install --no-save prettier prettier-plugin-sentences-per-line
   
-  # Determine targets
   FINAL_TARGETS=()
   for t in {{targets}}; do
-    # Support both relative paths and direct globs
     if [[ "$t" == /* ]]; then
       FINAL_TARGETS+=("$t")
     else
@@ -161,7 +101,6 @@ format-md *targets:
     exit 1
   fi
 
-  # Resolve all targets to real files. DO NOT follow symlinks outside the project root to avoid formatting Zotero storage.
   REAL_FILES=()
   while IFS=  read -r -d $'\0'; do
       REAL_FILES+=("$REPLY")
@@ -172,7 +111,6 @@ format-md *targets:
     exit 0
   fi
 
-  # Use repo-local config if it exists, otherwise fall back to global ~/.pandoc/.prettierrc
   CONFIG_ARGS=()
   if [ -f "$ROOT/.prettierrc" ]; then
     CONFIG_ARGS+=(--config "$ROOT/.prettierrc")
@@ -182,70 +120,47 @@ format-md *targets:
 
   npx prettier "${CONFIG_ARGS[@]}" --ignore-path=/dev/null --write "${REAL_FILES[@]}"
 
-# Format markdown with flowmark (semantic line breaks, pandoc-structural awareness)
-# Usage: just pandoc::format-markdown <file> [file2 ...]
+[doc("Format Markdown files with flowmark (semantic line breaks, Pandoc structure)")]
+[script("bash")]
 format-markdown *files:
-  #!/usr/bin/env bash
   set -euo pipefail
   for f in {{files}}; do
     uvx --from 'git+https://github.com/dzackgarza/flowmark.git' flowmark --semantic "$f" > "$f.tmp" && mv "$f.tmp" "$f"
   done
 
-# Render TikZ figures to SVG+PDF via templates/standalone-tikz.tex; no argument renders all, a path or figure name renders one (add --force to skip the cache)
+[doc("Render TikZ figures to SVG+PDF via templates/standalone-tikz.tex; no argument renders all, a path or figure name renders one (add --force to skip the cache)")]
+[script("bash")]
 render-figures *args:
-  #!/usr/bin/env bash
   set -euo pipefail
-  # TEXINPUTS inherited from shell env (~/.zshrc)
   uv run "$HOME/.pandoc/bin/render_figures.py" {{args}}
 
-# Compile LaTeX source
+[doc("Compile a LaTeX file to a PDF with latexmk and the global bibliography")]
+[script("bash")]
 compile-tex main_file="main.tex" output_name="paper" bib_source=GLOBAL_BIB_SOURCE build_dir=BUILD_DIR_TEX:
-  #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
   
-  # Extract dir and file names
   DIR=$(dirname "{{main_file}}")
   FILE=$(basename "{{main_file}}")
   
   mkdir -p "$ROOT/{{build_dir}}"
   
-  # Symlink global bib for easy resolution
   ln -sf "{{bib_source}}" "$ROOT/global.bib"
   
-  # BIBINPUTS setup (Augment environment with project root)
   export BIBINPUTS=".:$ROOT:${BIBINPUTS:-}"
   
-  # Change to the source directory and run latexmk
   cd "$ROOT/$DIR"
   latexmk -gg -pdf -outdir="$ROOT/{{build_dir}}" "$FILE" -use-make
   
-  # Copy result back to project root
   cp "$ROOT/{{build_dir}}/${FILE%.tex}.pdf" "$ROOT/{{output_name}}-$(date +%d-%m-%y).pdf"
 
-# Compile Pandoc source to PDF via LaTeX
+[doc("Compile a Pandoc Markdown file to a PDF through a LaTeX template and latexmk")]
 compile-pandoc input_file="main.md" output_name="output" template=DEFAULT_TEMPLATE bib_source=PROJECT_BIB_SOURCE build_dir=BUILD_DIR_PANDOC: (_compile-pandoc-tex CROSSREF_MODE template bib_source build_dir input_file) (_compile-pandoc-latexmk output_name build_dir)
 
-# Compile multiple ordered Pandoc sources into one project PDF.
-# Inputs are passed to pandoc verbatim, in the given order, and
-# pandoc-crossref resolves {#fig:}/{#tbl:}/{#eq:}/{#sec:}/{#lst:}
-# targets across file boundaries. Since the variadic input list must be
-# the last parameter, bib_source/build_dir are overridden via the
-# PANDOC_BIB_SOURCE / PANDOC_BUILD_DIR environment variables instead of
-# positionally (defaults identical to compile-pandoc).
-# Usage: just pandoc::compile-pandoc-project <output_name> <template> <file1.md> [file2.md ...]
-# The template slot sits before the variadic, so it cannot be omitted
-# positionally; pass '' or '-' as a sentinel to use the recipe's own
-# default (DEFAULT_TEMPLATE, shared with compile-pandoc) without naming
-# it. Real template names keep working unchanged.
-# The variadic cannot be forwarded as a just dependency argument: just
-# joins it into a single string, which would word-split filenames
-# containing spaces. [positional-arguments] passes each recipe argument
-# through as a real shell positional, so "${@:3}" preserves per-file
-# quoting into the nested just invocation.
 [positional-arguments]
+[doc("Compile ordered Pandoc Markdown files to one PDF; a template of '' or '-' is the default template")]
+[script("bash")]
 compile-pandoc-project output_name template +input_files:
-  #!/usr/bin/env bash
   set -euo pipefail
   cd "{{invocation_directory()}}"
   TEMPLATE="{{template}}"
@@ -255,23 +170,12 @@ compile-pandoc-project output_name template +input_files:
   just --justfile "{{source_file()}}" _compile-pandoc-tex "{{CROSSREF_MODE}}" "$TEMPLATE" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
   just --justfile "{{source_file()}}" _compile-pandoc-latexmk "{{output_name}}" "{{PROJECT_BUILD_DIR}}"
 
-# The MathJax component of compile-html: the major version that
-# templates/pandoc_preview_template.html configures, pinned to one release.
 HTML_MATHJAX_URL := "https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-chtml.js"
 
-# Compile a Pandoc note to standalone HTML with MathJax and inline TikZ SVG; a failed build keeps the previous output_file
-# The input carries its own metadata (YAML front matter). bib_source is
-# the ':'-separated bibliography list of compile-pandoc; '' is a note
-# without a bibliography. The build writes a staged file beside
-# output_file and renames it over output_file only when pandoc succeeded,
-# each TikZ figure compiled and each citation resolved; otherwise it
-# exits nonzero and output_file stays as it was. tikzcd.lua drops a figure
-# that does not compile from HTML (the live preview shows the rest of the
-# document), so this recipe reads the figure errors from its log.
-# Usage: just pandoc::compile-html <note.md> <note.html> [bib_source]
 [positional-arguments]
+[doc("Compile a Pandoc note to standalone HTML with MathJax and inline TikZ SVG; a failed build keeps the previous output_file")]
+[script("bash")]
 compile-html input_file output_file bib_source=PROJECT_BIB_SOURCE:
-  #!/usr/bin/env bash
   set -euo pipefail
   cd "{{invocation_directory()}}"
   INPUT="$1"
@@ -322,8 +226,6 @@ compile-html input_file output_file bib_source=PROJECT_BIB_SOURCE:
   LOG="$(mktemp -t compile-html-log-XXXXXX)"
   trap 'rm -f "$STAGED" "$LOG"' EXIT
 
-  # --citeproc runs after the filters, in command-line order, so that
-  # pandoc-crossref has taken its @fig:/@eq:/@sec: references first.
   STATUS=0
   pandoc "$INPUT" \
       --from=markdown+tex_math_single_backslash+wikilinks_title_after_pipe \
@@ -348,7 +250,7 @@ compile-html input_file output_file bib_source=PROJECT_BIB_SOURCE:
     echo "❌ compile-html: pandoc exited $STATUS; $OUTPUT is not changed." >&2
     exit 1
   fi
-  if grep -qE '^\[tikzcd-figure-error\]|^\[tikzcd\] (lualatex|pdf2svg) failed' "$LOG"; then
+  if grep -qE '^\[tikzcd-latex-log-begin\]|^\[tikzcd\] (lualatex|pdf2svg) failed' "$LOG"; then
     echo "❌ compile-html: a TikZ figure did not compile (see the log above); $OUTPUT is not changed." >&2
     exit 1
   fi
@@ -360,22 +262,11 @@ compile-html input_file output_file bib_source=PROJECT_BIB_SOURCE:
   mv "$STAGED" "$OUTPUT"
   echo "✅ $OUTPUT"
 
-# Shared pandoc stage: markdown -> build_dir/output.tex.
-# Filters resolve from this justfile's checkout (not $HOME/.pandoc), so
-# an explicit --justfile invocation runs THIS checkout's filters.
-# pandoc-crossref (crossref mode, used by compile-pandoc-project) must
-# run after include.lua so it sees the fully transcluded document, and
-# before convert_amsthm_envs.lua: crossref rewrites the
-# @fig:/@tbl:/@eq:/@sec:/@lst: families and passes theorem divs and
-# @thm:-family citations through untouched, so the theorem filter still
-# receives its divs intact.
-# [positional-arguments] exposes the arguments as "$1".."$N" so the
-# variadic input list can be consumed as "${@:5}" with per-file quoting
-# (filenames with spaces stay single arguments).
 [private]
 [positional-arguments]
+[doc("The Pandoc stage of compile-pandoc: Markdown to build_dir/output.tex")]
+[script("bash")]
 _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
-  #!/usr/bin/env bash
   set -euo pipefail
   CROSSREF_ARGS=()
   case "{{crossref_mode}}" in
@@ -390,11 +281,6 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
   ROOT="{{invocation_directory()}}"
   mkdir -p "$ROOT/{{build_dir}}"
 
-  # bib_source is a list of bibliography files separated by ':'; each one is
-  # a bibliography of the document, and an empty list is a document without
-  # one. A relative file is relative to the invocation directory. A missing
-  # file would reach biber as an unknown resource, and every citation of it
-  # would come out undefined.
   cd "$ROOT"
   BIB_FILES=()
   IFS=':' read -r -a BIB_FILES <<< "{{bib_source}}"
@@ -407,13 +293,6 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
     BIB_ARGS+=(--bibliography="$bib")
   done
 
-  # Run pandoc from ROOT to ensure relative include.lua paths work correctly.
-  # \(...\) and \[...\] are math in these documents (the Zettlr editor and
-  # Flowmark's lint dialect read them so); plain `markdown` reads them as
-  # escaped brackets, hence +tex_math_single_backslash.
-  # [[target|label]] wikilinks are Links for wikilinks.lua, which applies
-  # the resolutions the editor names in PANDOC_WIKILINKS; it runs before
-  # include.lua adds the headings of transcluded files.
   pandoc "${@:5}" \
       --from=markdown+tex_math_single_backslash+wikilinks_title_after_pipe \
       --lua-filter="{{source_directory()}}/filters/wikilinks.lua" \
@@ -430,16 +309,14 @@ _compile-pandoc-tex crossref_mode template bib_source build_dir +input_files:
       --toc --toc-depth=2 \
       -s -o "{{build_dir}}/output.tex"
 
-# Shared latexmk stage: build_dir/output.tex -> PDF copied to ROOT.
 [private]
+[doc("The latexmk stage of compile-pandoc: build_dir/output.tex to a dated PDF in the invocation directory")]
+[script("bash")]
 _compile-pandoc-latexmk output_name build_dir:
-  #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
   cd "$ROOT"
   cd "{{build_dir}}"
-  # BIBINPUTS setup (Augment environment with project root so a relative
-  # bibliography is found)
   export BIBINPUTS=".:$ROOT:${BIBINPUTS:-}"
   LATEXMK_RC=0
   latexmk -pdf -interaction=nonstopmode -f -gg output.tex || LATEXMK_RC=$?
@@ -450,7 +327,6 @@ _compile-pandoc-latexmk output_name build_dir:
   if [ $LATEXMK_RC -ne 0 ]; then
     echo "⚠️  latexmk exited $LATEXMK_RC but PDF was produced — check warnings above"
   fi
-  # The log of the final LaTeX pass lists what is still unresolved.
   UNDEFINED=$(grep -oE "(Citation|Reference) [\`'][^']+' on page [0-9]+ undefined" output.log \
     | sed -E "s/ on page [0-9]+ undefined//" | sort -u || true)
   if [ -n "$UNDEFINED" ]; then
@@ -460,17 +336,17 @@ _compile-pandoc-latexmk output_name build_dir:
   fi
   cp output.pdf "$ROOT/{{output_name}}-$(date +%d-%m-%y).pdf"
 
-# Download and extract an arXiv tarball
+[doc("Download and extract an arXiv tarball")]
+[script("bash")]
 download-arxiv arxiv_id dir:
-  #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
   mkdir -p "$ROOT/knowledge/papers/{{dir}}"
   wget -qO - "https://arxiv.org/e-print/{{arxiv_id}}" | tar -xz -C "$ROOT/knowledge/papers/{{dir}}"
 
-# Compile a reference LaTeX file to Markdown (Modern extraction pipeline)
+[doc("Compile a reference LaTeX file to Markdown (Modern extraction pipeline)")]
+[script("bash")]
 extract-ref dir file="main":
-  #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
   mkdir -p "$ROOT/knowledge/papers"
@@ -478,21 +354,17 @@ extract-ref dir file="main":
   cd "$ROOT/{{dir}}"
   rm -f {{file}}.aux
 
-  # Expand macros
   xpandlatex -x on -m on -I on $(ls *.sty 2>/dev/null | sed 's/^/-f /' | xargs) {{file}}.tex > {{file}}_expanded.tex
 
-  # Preprocess: Wrap tikzcd in displaymath
   pandoc {{file}}_expanded.tex -s -f latex+raw_tex -t latex --lua-filter="$HOME/.pandoc/filters/wrap_tikzcd_semantic.lua" -o {{file}}_wrapped.tex
 
-  # Semantically preprocess the TeX
   make4ht -c "$HOME/.pandoc/config/tex4ht.cfg" -u -f html5 {{file}}_wrapped.tex "mathjax,section+" || true
 
-  # Convert to Markdown
   pandoc {{file}}_wrapped.html --lua-filter="$HOME/.pandoc/filters/semanticlean.lua" -f html -t gfm-tex_math_gfm+tex_math_dollars -o "$ROOT/knowledge/papers/$(basename {{dir}}).md"
 
-# Clean build artifacts
+[doc("Clean build artifacts")]
+[script("bash")]
 clean build_dir_pandoc=BUILD_DIR_PANDOC build_dir_tex=BUILD_DIR_TEX:
-  #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
   command -v trash >/dev/null 2>&1 || { echo "clean requires the trash command" >&2; exit 1; }
@@ -533,9 +405,9 @@ clean build_dir_pandoc=BUILD_DIR_PANDOC build_dir_tex=BUILD_DIR_TEX:
     fi
   done
 
-# Clean all build artifacts from reference directories
+[doc("Clean all build artifacts from reference directories")]
+[script("bash")]
 clean-refs:
-  #!/usr/bin/env bash
   set -euo pipefail
   ROOT="{{invocation_directory()}}"
   command -v trash >/dev/null 2>&1 || { echo "clean-refs requires the trash command" >&2; exit 1; }
@@ -548,9 +420,9 @@ clean-refs:
       -o -name "tex4ht.cfg" \) -print0)
   fi
 
-# Test macro compilation
+[doc("Test macro compilation")]
+[script("bash")]
 _test-macros:
-  #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
   export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:"
@@ -563,9 +435,9 @@ _test-macros:
     exit 1
   fi
 
-# Test TikZ macros (nodes, edges, diagrams, utilities)
+[doc("Test TikZ macros (nodes, edges, diagrams, utilities)")]
+[script("bash")]
 _test-tikz:
-  #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
   export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:$PANDOC_DIR/figures//:"
@@ -585,9 +457,9 @@ _test-tikz:
     exit 1
   fi
 
-# Test the poset layout: draw the fixtures of tests/fixtures/posets with every grading
+[doc("Test the poset layout: draw the fixtures of tests/fixtures/posets with every grading")]
+[script("bash")]
 _test-posets:
-  #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
   export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/figures//:"
@@ -596,9 +468,9 @@ _test-posets:
     || { grep -A4 '^!\|dzg-poset.lua:[0-9]*:' test-posets.log; exit 1; }
   echo "✅ Poset test compiled: test-posets.pdf"
 
-# Cut the next semantic release of main: version from the conventional commits (git-cliff), CHANGELOG.md, an annotated tag, a GitHub release
+[doc("Cut the next semantic release of main: version from the conventional commits (git-cliff), CHANGELOG.md, an annotated tag, a GitHub release")]
+[script("bash")]
 release:
-  #!/usr/bin/env bash
   set -euo pipefail
   cd "{{source_directory()}}"
   cliff=(uvx git-cliff@2.14.2 --config cliff.toml)
@@ -624,122 +496,109 @@ release:
   gh release create "$version" --verify-tag --title "$version" --notes "$notes"
   echo "released $version: $(git describe --tags)"
 
-# List the downstream sites whose known-good marker lags this checkout, with the changes since each marker (default: the sites of downstream-sites.txt)
 [positional-arguments]
+[doc("List the downstream sites whose known-good marker lags this checkout, with the changes since each marker (default: the sites of downstream-sites.txt)")]
 staleness-report *sites:
   @uv run --quiet "{{source_directory()}}/bin/staleness-report.py" --repository "{{source_directory()}}" --registry "{{source_directory()}}/downstream-sites.txt" "$@"
 
-# Regenerate the reference section of README.md (every macro, environment and figure object)
+[doc("Regenerate the reference section of README.md (every macro, environment and figure object)")]
 readme-reference:
   uv run "{{source_directory()}}/bin/generate-readme-reference.py"
 
+[doc("Test the compile-pandoc recipe end to end")]
 _test-compile-pandoc:
   bash "{{source_directory()}}/tests/test-compile-pandoc.sh"
 
-# Compile captionless tables inside theorem-family divs.
+[doc("Compile captionless tables inside theorem-family divs")]
 _test-theorem-tables:
   bash "{{source_directory()}}/tests/test-theorem-tables.sh"
 
-# Build a note to standalone HTML; a build that cannot finish keeps the previous HTML.
+[doc("Build a note to standalone HTML; a build that cannot finish keeps the previous HTML")]
 _test-compile-html:
   bash "{{source_directory()}}/tests/test-compile-html.sh"
 
-# Expand the central macros of a Markdown file without environment variables.
+[doc("Expand the central macros of a Markdown file without environment variables")]
 _test-stripmacros:
   bash "{{source_directory()}}/tests/test-stripmacros.sh"
 
-# A plain git clone (no git-lfs) gives each figure as a real file.
+[doc("A plain git clone (no git-lfs) gives each figure as a real file")]
 _test-plain-clone:
   bash "{{source_directory()}}/tests/test-plain-clone.sh"
 
-# Regenerate the README reference, then run all tests (macros, templates, tikz compilation, filter, poset layout)
+[doc("Regenerate the README reference, then run all tests (macros, templates, tikz compilation, filter, poset layout)")]
 test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-math-delimiters _test-posets _test-compile-pandoc _test-compile-html _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
 
-# Run the fast commit check; the commit hook runs this
+[doc("Run the fast commit check; the commit hook runs this")]
 test-commit:
     @just -f ~/ai-review-ci/justfiles/python.just -d . test-commit
 
-# CI gate: the full suite, same as `test`.
+[doc("CI gate: the full suite, same as test")]
 test-ci: test
 
-# Run the fast push check; the push hook runs this
+[doc("Run the fast push check; the push hook runs this")]
 test-push:
     @just -f ~/ai-review-ci/justfiles/python.just -d . test-push
 
-# Test workspace-resolved theorem references (compile-pandoc-project
-# tex stage on ordered inputs), byte-stability of the compile-pandoc
-# attribute-style theorem path, and a plain-branch latexmk gate proving
-# every filter-emitted theorem environment is defined in this
-# checkout's environments.tex (issue #6). Runs in a throwaway scratch
-# dir.
+[doc("Test theorem references across ordered inputs, the byte stability of the attribute theorem path, and that each emitted theorem environment is defined")]
 test-references:
   bash "{{source_directory()}}/tests/test-project-references.sh"
 
-# Check generator semantics, embedded template projections and LaTeX compatibility
+[doc("Check generator semantics, embedded template projections and LaTeX compatibility")]
 _test-mathjax-generator:
   uv run "{{source_directory()}}/tests/test-mathjax-generator.py"
 
-# Typeset every generated macro in MathJax 4 with ams, mathtools and stmaryrd
+[doc("Typeset every generated macro in MathJax 4 with ams, mathtools, centernot and stmaryrd")]
 _test-mathjax-macros:
   cd "{{source_directory()}}" && bun update && bun tests/test-mathjax-macros.ts
 
-# Test tikzcd filter on multiple scenarios
-# Uses pandoc JSON AST (semantic) + BeautifulSoup DOM assertions.
+[doc("Test the tikzcd filter through the Pandoc JSON AST and the DOM of the HTML")]
 _test-tikz-filter:
   uv run "{{source_directory()}}/tests/test-tikz-filter.py"
 
-# Test Lamport-style proof parsing, numbering, references, and LaTeX output
+[doc("Test Lamport-style proof parsing, numbering, references, and LaTeX output")]
 _test-lamport-proof:
   uv run "{{source_directory()}}/tests/test-lamport-proof.py"
 
-# Test that wikilinks become links to the headings the editor resolved
+[doc("Test that wikilinks become links to the headings the editor resolved")]
 _test-wikilinks:
   uv run "{{source_directory()}}/tests/test-wikilinks.py"
 
+[doc("Test the conversion of the math delimiters of the notes")]
 _test-math-delimiters:
   uv run "{{source_directory()}}/tests/test-math-delimiters.py"
 
-# Test the staleness report on built histories and the marker of a real site
+[doc("Test the staleness report on built histories and the marker of a real site")]
 _test-staleness-report:
   uv run "{{source_directory()}}/tests/test-staleness-report.py"
 
-
-# Generate every MathJax projection from the canonical macro manifest.
-# This is the only regeneration path: JSON/JS/TS, both HTML consumers, and the
-# macro maps of templates/mathjax-config.html and the reveal.js template all
-# derive from the same parsed semantic macro API.
+[doc("Generate every MathJax projection from the canonical macro manifest")]
 generate-math-macros:
   uv run "{{source_directory()}}/bin/generate-mathjax-config.py"
 
-# Compatibility alias. There is deliberately no separate legacy generator.
+[doc("Alias of generate-math-macros")]
 generate-math-macros-legacy: generate-math-macros
 
-# Test standalone templates compile (not Pandoc templates - those need Pandoc processing)
+[doc("Test that the standalone LaTeX templates compile")]
+[script("bash")]
 _test-templates clean="true":
-  #!/usr/bin/env bash
   set -euo pipefail
   PANDOC_DIR="{{source_directory()}}"
   BUILD_DIR="$PANDOC_DIR/.build_test_templates"
   export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$HOME/.pandoc/config//:"
 
-  # Clean and create build directory
   rm -rf "$BUILD_DIR"
   mkdir -p "$BUILD_DIR"
 
-  # Only test standalone LaTeX templates (not Pandoc templates with $variables$)
   for template in homework_template.tex MakeMeAQual_template.tex; do
     echo "Testing $template..."
 
-    # Create hidden temp directory for this template
     TEMP_DIR="$BUILD_DIR/.tmp_${template%.tex}"
     mkdir -p "$TEMP_DIR"
 
-    # Copy template and compile in temp directory
     cp "$PANDOC_DIR/templates/$template" "$TEMP_DIR/"
     cd "$TEMP_DIR"
     latexmk -pdf -interaction=nonstopmode -gg "$template" >/dev/null 2>&1 || true
 
-    # Copy only the PDF to main build directory
     if [ -f "${template%.tex}.pdf" ]; then
       cp "${template%.tex}.pdf" "$BUILD_DIR/"
       echo "  ✅ $template"
