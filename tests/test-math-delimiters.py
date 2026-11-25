@@ -75,7 +75,7 @@ def test_latex_output_aligns_sample() -> None:
         "latex sample uses align*",
         cp,
         lambda out: "\\begin{align*}" in out
-        and "\\Set &\\mapstofrom{}{} \\mathrm{CAlg}_k" in out
+        and "\\Sets &\\mapstofrom{}{} \\mathrm{CAlg}_k" in out
         and has_no_display_delimiter_lines(out),
     )
 
@@ -86,7 +86,7 @@ def test_markdown_output_aligns_sample() -> None:
         "markdown sample uses align*",
         cp,
         lambda out: "\\begin{align*}" in out
-        and "\\Set &\\mapstofrom{}{} \\mathrm{CAlg}_k" in out
+        and "\\Sets &\\mapstofrom{}{} \\mathrm{CAlg}_k" in out
         and has_no_display_delimiter_lines(out),
     )
 
@@ -98,8 +98,19 @@ def test_html_output_aligns_sample() -> None:
         cp,
         lambda out: '<span class="math display">' in out
         and "\\begin{align*}" in out
-        and "\\Set &\\mapstofrom{}{} \\mathrm{CAlg}_k" in out
+        and "\\Sets &\\mapstofrom{}{} \\mathrm{CAlg}_k" in out
         and has_no_display_delimiter_lines(out),
+    )
+
+
+def test_html_display_escapes_markup_characters() -> None:
+    # The HTML branch writes raw HTML: an unescaped "<b" in a display
+    # would be read as a <b> tag, and the browser would drop the math.
+    cp = run_pandoc(FIXTURES / "less-than.md", "html", "--mathjax")
+    assert_output(
+        "html display escapes <, > and &",
+        cp,
+        lambda out: "a&lt;b &amp;\\iff b&gt;a" in out and "<b" not in out,
     )
 
 
@@ -193,6 +204,7 @@ def main() -> None:
         test_latex_output_aligns_sample,
         test_markdown_output_aligns_sample,
         test_html_output_aligns_sample,
+        test_html_display_escapes_markup_characters,
         test_labeled_display_uses_numbered_align,
         test_prewrapped_align_is_not_double_wrapped,
         test_pdf_compiles_sample,
