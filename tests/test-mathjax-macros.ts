@@ -1,49 +1,9 @@
-import { runInNewContext } from "node:vm";
-import MathJaxNode from "mathjax";
+import { type Macro, previewMathJax, undefinedCommands } from "./preview-mathjax.ts";
 
-type TexInputJax = object;
-type Macro = string | [string, number] | [string, number, string];
 const macros: Record<string, Macro> = await Bun.file(
   `${import.meta.dir}/../templates/css/mathjax-macros.json`,
 ).json();
-const rendered = Bun.spawnSync({
-  cmd: [
-    "pandoc", "-f", "markdown", "-t", "html5", "--standalone",
-    `--template=${import.meta.dir}/../templates/pandoc_preview_template.html`,
-    "--mathjax=https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js",
-  ],
-  stdin: Buffer.from(String.raw`$\fps{\frac{a}{b}}$`),
-});
-if (rendered.exitCode !== 0) throw new Error(rendered.stderr.toString());
-const script = [
-  ...rendered.stdout.toString().matchAll(/<script>([\s\S]*?)<\/script>/g),
-]
-  .map((match) => match[1])
-  .find((body) => body.includes("window.MathJax ="));
-if (script === undefined)
-  throw new Error("Missing preview MathJax configuration");
-type PreviewConfig = {
-  loader: { load?: string[] };
-  tex: { macros: Record<string, Macro> };
-  startup?: { ready(): void };
-};
-const window: { MathJax?: PreviewConfig } = {};
-runInNewContext(script, { window, globalThis });
-const preview = window.MathJax;
-if (preview === undefined) throw new Error("Missing preview MathJax config");
-const mathjax = await MathJaxNode.init({
-  ...preview,
-  loader: {
-    ...preview.loader,
-    load: ["input/tex", ...(preview.loader.load ?? [])],
-  },
-  tex: {
-    ...preview.tex,
-    formatError: (_jax: TexInputJax, error: Error) => {
-      throw error;
-    },
-  },
-});
+const mathjax = await previewMathJax(true);
 const failures: string[] = [];
 for (const [name, macro] of Object.entries(macros)) {
   const arity = typeof macro === "string" ? 0 : macro[1];
@@ -52,13 +12,9 @@ for (const [name, macro] of Object.entries(macros)) {
     const mml = await mathjax.tex2mmlPromise(`\\left. ${call}{x} \\right.`, {
       display: true,
     });
-    const undefinedCommands = [
-      ...mml.matchAll(/<mtext mathcolor="red"[^>]*>(\\[A-Za-z]+)<\/mtext>/g),
-    ].map((match) => match[1]);
-    if (undefinedCommands.length)
-      failures.push(
-        `${call}: MathJax does not define ${undefinedCommands.join(", ")}`,
-      );
+    const unknown = undefinedCommands(mml);
+    if (unknown.length)
+      failures.push(`${call}: MathJax does not define ${unknown.join(", ")}`);
   } catch (error) {
     failures.push(`${call}: ${(error as Error).message}`);
   }

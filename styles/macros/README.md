@@ -201,13 +201,13 @@ The tree also overrides five native commands of LaTeX and its packages. Each
 name is one of the most-used names of the authoring language, so the tree
 keeps it (#26).
 
-| Command | Native meaning | Macro meaning | Expansion |
-| --- | --- | --- | --- |
-| `\AA` | Å, a text command of LaTeX; MathJax gives Å (U+212B) in math | affine space | `{\mathbf{A}}` |
-| `\SS` | "SS", the capital of ß, a text command of LaTeX | sphere, as `\sphere` | `{\mathbb{S}}` |
-| `\ae` | the æ ligature, a text command of LaTeX | "almost everywhere" | `{ \text{a.e.} }` |
-| `\vector` | `\vector(x,y){l}`, the arrow of the `picture` environment of LaTeX | a vector | `\vector{v}` gives `\mathbf{v}` |
-| `\hyp` | the breakable hyphen of hyphenat, which dzg-unified loads | the operator "hyp" | `{\operatorname{hyp}}` |
+| Command | Overrides in | Native meaning | Macro meaning | Expansion |
+| --- | --- | --- | --- | --- |
+| `\AA` | LaTeX, MathJax | Å, a text command of LaTeX; MathJax gives Å (U+212B) in math | affine space | `{\mathbf{A}}` |
+| `\SS` | LaTeX | "SS", the capital of ß, a text command of LaTeX | sphere, as `\sphere` | `{\mathbb{S}}` |
+| `\ae` | LaTeX | the æ ligature, a text command of LaTeX | "almost everywhere" | `{ \text{a.e.} }` |
+| `\vector` | LaTeX | `\vector(x,y){l}`, the arrow of the `picture` environment of LaTeX | a vector | `\vector{v}` gives `\mathbf{v}` |
+| `\hyp` | LaTeX | the breakable hyphen of hyphenat, which dzg-unified loads | the operator "hyp" | `{\operatorname{hyp}}` |
 
 - A document that loads the tree does not have the native command: no Å
   or æ from `\AA` or `\ae`, no "SS" from `\SS`, no `picture` arrow, no

@@ -545,7 +545,7 @@ test-references:
 
 [doc("Check generator semantics, embedded template projections and LaTeX compatibility")]
 _test-mathjax-generator:
-  uv run "{{source_directory()}}/tests/test-mathjax-generator.py"
+  cd "{{source_directory()}}" && bun install && uv run tests/test-mathjax-generator.py
 
 [doc("Typeset every generated macro in MathJax 4 with ams, mathtools, centernot and stmaryrd")]
 _test-mathjax-macros:
