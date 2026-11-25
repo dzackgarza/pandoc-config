@@ -181,6 +181,19 @@ carry the changes over. A template that includes the partial must stay in
   written by `bin/generate-mathjax-config.py` (`GENERATED_TEMPLATES`). Never
   edit it by hand. A new HTML template includes the partial; a template with a
   macro map of its own goes into that list.
+- **Note HTML is `compile-html`.** A class note (the Makefiles of
+  `~/notes`) and `bin/vimpreview.sh` build HTML through
+  `just compile-html <note.md> <note.html> [bib_source]`. The note carries
+  its metadata in its front matter; the recipe reads no other environment
+  variable than those of the justfile (`PANDOC_BIB_SOURCE`,
+  `PANDOC_CROSSREF`) and of `tikzcd.lua`. It writes a staged file beside the
+  target and renames it only after a build without a Pandoc error, a TikZ
+  marker (`[tikzcd-figure-error]`, `[tikzcd] lualatex failed`, `[tikzcd]
+  pdf2svg failed`) or an unknown citation in its log: in HTML `tikzcd.lua`
+  drops a failed figure and Pandoc exits 0. A caller gives the path; a shell
+  redirection (`> note.html`) empties the file before the build starts.
+  `bin/pandoc_stripmacros.sh` expands the macros through
+  `templates/css/math-macros.html`, found from its own location.
 - `mathjax-root` and `mathjax-fonts` are Pandoc variables for a MathJax that is
   not loaded from its CDN: the folder of the MathJax component and the folder
   of its font packages. The editor sets both to its own copy of MathJax 4. A

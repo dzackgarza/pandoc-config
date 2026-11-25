@@ -255,6 +255,110 @@ compile-pandoc-project output_name template +input_files:
   just --justfile "{{source_file()}}" _compile-pandoc-tex "{{CROSSREF_MODE}}" "$TEMPLATE" "{{PROJECT_BIB_SOURCE}}" "{{PROJECT_BUILD_DIR}}" "${@:3}"
   just --justfile "{{source_file()}}" _compile-pandoc-latexmk "{{output_name}}" "{{PROJECT_BUILD_DIR}}"
 
+# The MathJax component of compile-html: the major version that
+# templates/pandoc_preview_template.html configures, pinned to one release.
+HTML_MATHJAX_URL := "https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-chtml.js"
+
+# Compile a Pandoc note to standalone HTML with MathJax and inline TikZ SVG; a failed build keeps the previous output_file
+# The input carries its own metadata (YAML front matter). bib_source is
+# the ':'-separated bibliography list of compile-pandoc; '' is a note
+# without a bibliography. The build writes a staged file beside
+# output_file and renames it over output_file only when pandoc succeeded,
+# each TikZ figure compiled and each citation resolved; otherwise it
+# exits nonzero and output_file stays as it was. tikzcd.lua drops a figure
+# that does not compile from HTML (the live preview shows the rest of the
+# document), so this recipe reads the figure errors from its log.
+# Usage: just pandoc::compile-html <note.md> <note.html> [bib_source]
+[positional-arguments]
+compile-html input_file output_file bib_source=PROJECT_BIB_SOURCE:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  cd "{{invocation_directory()}}"
+  INPUT="$1"
+  OUTPUT="$2"
+  BIB_SOURCE="$3"
+
+  CROSSREF_ARGS=()
+  TOOLS=(pandoc lualatex pdf2svg)
+  case "{{CROSSREF_MODE}}" in
+    crossref)
+      CROSSREF_ARGS=(-F pandoc-crossref -M cref=true)
+      TOOLS+=(pandoc-crossref)
+      ;;
+    no-crossref) ;;
+    *)
+      echo "❌ compile-html: unknown PANDOC_CROSSREF '{{CROSSREF_MODE}}' (expected 'crossref' or 'no-crossref')" >&2
+      exit 1
+      ;;
+  esac
+  for tool in "${TOOLS[@]}"; do
+    if ! command -v "$tool" >/dev/null; then
+      echo "❌ compile-html: $tool is not on PATH; $OUTPUT is not changed." >&2
+      exit 1
+    fi
+  done
+  if [ ! -f "$INPUT" ]; then
+    echo "❌ compile-html: input $INPUT does not exist." >&2
+    exit 1
+  fi
+  OUTPUT_DIR="$(dirname "$OUTPUT")"
+  if [ ! -d "$OUTPUT_DIR" ]; then
+    echo "❌ compile-html: the directory $OUTPUT_DIR of $OUTPUT does not exist." >&2
+    exit 1
+  fi
+
+  BIB_FILES=()
+  IFS=':' read -r -a BIB_FILES <<< "$BIB_SOURCE"
+  BIB_ARGS=()
+  for bib in "${BIB_FILES[@]}"; do
+    if [ ! -f "$bib" ]; then
+      echo "❌ Bibliography $bib does not exist (set ZOTERO_GLOBAL_BIB or PANDOC_BIB_SOURCE)." >&2
+      exit 1
+    fi
+    BIB_ARGS+=(--bibliography="$bib")
+  done
+
+  STAGED="$(mktemp -p "$OUTPUT_DIR" ".$(basename "$OUTPUT").XXXXXX")"
+  LOG="$(mktemp -t compile-html-log-XXXXXX)"
+  trap 'rm -f "$STAGED" "$LOG"' EXIT
+
+  # --citeproc runs after the filters, in command-line order, so that
+  # pandoc-crossref has taken its @fig:/@eq:/@sec: references first.
+  STATUS=0
+  pandoc "$INPUT" \
+      --from=markdown+tex_math_single_backslash+wikilinks_title_after_pipe \
+      --lua-filter="{{source_directory()}}/filters/wikilinks.lua" \
+      --lua-filter="{{source_directory()}}/filters/include.lua" \
+      "${CROSSREF_ARGS[@]}" \
+      --lua-filter="{{source_directory()}}/filters/convert_amsthm_envs.lua" \
+      --lua-filter="{{source_directory()}}/filters/tikzcd.lua" \
+      --lua-filter="{{source_directory()}}/filters/replace_symbols_html.lua" \
+      --citeproc \
+      --csl="{{source_directory()}}/csl/alpha-preview.csl" \
+      "${BIB_ARGS[@]}" \
+      --to=html5 --standalone \
+      --template="{{source_directory()}}/templates/pandoc_preview_template.html" \
+      --math-method=mathjax:"{{HTML_MATHJAX_URL}}" \
+      --number-sections \
+      --toc --toc-depth=2 \
+      -o "$STAGED" 2> "$LOG" || STATUS=$?
+  cat "$LOG" >&2
+  if [ "$STATUS" -ne 0 ]; then
+    echo "❌ compile-html: pandoc exited $STATUS; $OUTPUT is not changed." >&2
+    exit 1
+  fi
+  if grep -qE '^\[tikzcd-figure-error\]|^\[tikzcd\] (lualatex|pdf2svg) failed' "$LOG"; then
+    echo "❌ compile-html: a TikZ figure did not compile (see the log above); $OUTPUT is not changed." >&2
+    exit 1
+  fi
+  if grep -qE 'Citeproc: citation .* not found' "$LOG"; then
+    echo "❌ compile-html: a citation is not in the bibliography (see the log above); $OUTPUT is not changed." >&2
+    exit 1
+  fi
+  chmod "$(printf '%o' $(( 0666 & ~0$(umask) )))" "$STAGED"
+  mv "$STAGED" "$OUTPUT"
+  echo "✅ $OUTPUT"
+
 # Shared pandoc stage: markdown -> build_dir/output.tex.
 # Filters resolve from this justfile's checkout (not $HOME/.pandoc), so
 # an explicit --justfile invocation runs THIS checkout's filters.
@@ -535,12 +639,20 @@ _test-compile-pandoc:
 _test-theorem-tables:
   bash "{{source_directory()}}/tests/test-theorem-tables.sh"
 
+# Build a note to standalone HTML; a build that cannot finish keeps the previous HTML.
+_test-compile-html:
+  bash "{{source_directory()}}/tests/test-compile-html.sh"
+
+# Expand the central macros of a Markdown file without environment variables.
+_test-stripmacros:
+  bash "{{source_directory()}}/tests/test-stripmacros.sh"
+
 # A plain git clone (no git-lfs) gives each figure as a real file.
 _test-plain-clone:
   bash "{{source_directory()}}/tests/test-plain-clone.sh"
 
 # Regenerate the README reference, then run all tests (macros, templates, tikz compilation, filter, poset layout)
-test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-compile-pandoc _test-theorem-tables _test-plain-clone _test-staleness-report
+test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-compile-pandoc _test-compile-html _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
 
 # Run the fast commit check; the commit hook runs this
 test-commit:
