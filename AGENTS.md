@@ -286,7 +286,9 @@ are `\mc<letter>` and fraktur letters are `\mf<Letter>`.
 
 Short spellings belong to the editor, not to the macro set.
 `styles/shortcuts.json` maps each retired alias to its canonical name, for
-quicktex-style expansion and autocomplete. A new short form goes there, never
+quicktex-style expansion and autocomplete. An alias whose old macro had
+more than one meaning maps to the list of canonical names, one per meaning
+(`"di": ["divisorof", "divisibility"]`); the author chooses. A new short form goes there, never
 into `styles/macros/`.
 
 Different meanings that share notation are intended. `\closure` and

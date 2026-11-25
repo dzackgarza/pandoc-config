@@ -68,7 +68,10 @@
   "Convv": "Conv",
   "da": "definedas",
   "diff": "Diff",
-  "di": "div",
+  "di": [
+    "divisorof",
+    "divisibility"
+  ],
   "End": "Endo",
   "ext": "Ext",
   "gen": "genus",

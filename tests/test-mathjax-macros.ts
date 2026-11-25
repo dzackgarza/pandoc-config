@@ -87,6 +87,11 @@ if (delimiters !== sequence)
   failures.push(
     `\\fls{\\frac{a}{b}} sets ${delimiters}, not ${sequence}:\n${laurent}`,
   );
+// \diagonal names the diagonal, an object, so it takes no argument: the
+// symbol that follows it stays in the formula (\diagonal X, \diagonal^c).
+const diagonal = await mathjax.tex2mmlPromise(String.raw`\diagonal X`);
+if (!/<mi[^>]*>X<\/mi>/.test(diagonal))
+  failures.push(`\\diagonal X drops the X:\n${diagonal}`);
 for (const failure of failures) console.log(failure);
 const count = Object.keys(macros).length;
 console.log(`${count - failures.length}/${count} macros typeset in MathJax.`);

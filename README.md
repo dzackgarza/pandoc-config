@@ -560,9 +560,9 @@ Regenerate with `just readme-reference`.
 | `\FFbar` | 0 | `{\bar\FF}` |
 | `\FFp` | 0 | `{\FF_p}` |
 | `\FFpn` | 0 | `{\FF_{p^n}}` |
-| `\Fpbar` | 0 | `\bar{\FF_p}` |
+| `\Fpbar` | 0 | `\overline{\FF_p}` |
 | `\fq` | 0 | `{\FF_{q}}` |
-| `\fqbar` | 0 | `\bar{\FF_{q}}` |
+| `\fqbar` | 0 | `\overline{\FF_{q}}` |
 | `\fqr` | 0 | `{\FF_{q^r}}` |
 | `\kG` | 0 | `{kG}` |
 | `\kk` | 0 | `{\mathbf{k}}` |
@@ -739,10 +739,10 @@ Regenerate with `just readme-reference`.
 | `\semi` | 0 | `{\mathrm{semi}}` |
 | `\semisimple` | 0 | `{\mathrm{ss}}` |
 | `\semisimplification` | 0 | `{\mathrm{ss}}` |
+| `\semistable` | 0 | `{\mathrm{ss}}` |
 | `\sing` | 0 | `{\mathrm{sing}}` |
 | `\smol` | 0 | `{\mathrm{small}}` |
 | `\snc` | 0 | `{\mathrm{snc}}` |
-| `\ss` | 0 | `{\mathrm{ss}}` |
 | `\stable` | 0 | `\mathrm{st}` |
 | `\std` | 0 | `\text{std}` |
 | `\trop` | 0 | `\mathrm{trop}` |
@@ -836,6 +836,8 @@ Regenerate with `just readme-reference`.
 | `\Der` | 0 | `{ \operatorname{Der} }` |
 | `\det` | 0 | `\operatorname{det}` |
 | `\diag` | 0 | `\operatorname{diag}` |
+| `\diagonal` | 0 | `\Delta` |
+| `\diagonalfunctor` | 0 | `\Delta` |
 | `\diam` | 0 | `{\operatorname{diam}}` |
 | `\Diff` | 0 | `\operatorname{Diff}` |
 | `\Diffeo` | 0 | `{\operatorname{Diffeo}}` |
@@ -845,7 +847,8 @@ Regenerate with `just readme-reference`.
 | `\Disk` | 0 | `{\operatorname{Disk}}` |
 | `\Dist` | 0 | `\operatorname{Dist}` |
 | `\dist` | 0 | `\operatorname{dist}` |
-| `\div` | 0 | `\operatorname{div}` |
+| `\divisibility` | 0 | `\operatorname{div}` |
+| `\divisorof` | 0 | `\operatorname{div}` |
 | `\Div` | 0 | `\operatorname{Div}` |
 | `\dlog` | 0 | `\operatorname{dLog}` |
 | `\dom` | 0 | `\operatorname{dom}` |
@@ -1043,6 +1046,7 @@ Regenerate with `just readme-reference`.
 | `\SO` | 0 | `{\operatorname{SO}}` |
 | `\soc` | 0 | `\operatorname{Soc}` |
 | `\spanof` | 0 | `\operatorname{span}` |
+| `\Sp` | 0 | `{\operatorname{Sp}}` |
 | `\Spc` | 0 | `\operatorname{Spc}` |
 | `\Spec` | 0 | `\operatorname{Spec}` |
 | `\Spf` | 0 | `\operatorname{Spf}` |
@@ -1066,7 +1070,7 @@ Regenerate with `just readme-reference`.
 | `\Symalg` | 0 | `\sym` |
 | `\Symb` | 0 | `\operatorname{Symb}` |
 | `\Symbil` | 0 | `\operatorname{SymBil}` |
-| `\Symp` | 0 | `{\operatorname{Sp}}` |
+| `\Symp` | 0 | `{\operatorname{Symp}}` |
 | `\Tatesymbol` | 0 | `\operatorname{TateSymb}` |
 | `\Taut` | 0 | `\operatorname{Taut}` |
 | `\TC` | 0 | `{\operatorname{TC}}` |
@@ -1111,7 +1115,7 @@ Regenerate with `just readme-reference`.
 | `\zbar` | 0 | `\bar{z}` |
 | `\ZHB` | 0 | `\operatorname{ZHB}` |
 | `\Ag` | 0 | `{\mathcal{A}_g}` |
-| `\agbar` | 0 | `\bar{\Ag}` |
+| `\agbar` | 0 | `\overline{\Ag}` |
 | `\Ahat` | 0 | `\hat{ \operatorname{A}}_g` |
 | `\B` | 0 | `{\mathbf{B}}` |
 | `\bmgn` | 0 | `{ \bar{\mathcal{M}}_{g, n} }` |
@@ -1152,7 +1156,7 @@ Regenerate with `just readme-reference`.
 | `\mbar` | 0 | `\bar{\mathcal{M}}` |
 | `\Mg` | 0 | `{\mathcal{M}_g}` |
 | `\mg` | 0 | `{ \mathcal{M}_{g} }` |
-| `\Mgbar` | 0 | `\bar{\Mg}` |
+| `\Mgbar` | 0 | `\overline{\Mg}` |
 | `\Mgn` | 0 | `{ \mathcal{M}_{g, n} }` |
 | `\Mell` | 0 | `{ \mathcal{M}_{\mathrm{ell}} }` |
 | `\mH` | 0 | `{ \mathsf{H} }` |
@@ -1653,7 +1657,7 @@ Regenerate with `just readme-reference`.
 | `\coInduction` | 2 | `\mathrm{coInd}^{#1}_{#2}` |
 | `\sheafify` | 1 | `\left( #1 \right)^{\scriptscriptstyle \mathrm{sh}}` |
 | `\padiccompletion` | 2 | `{ {#1}_{\widehat{#2}} }` |
-| `\complete` | 1 | `{ {}_{ \hat{#1} } }` |
+| `\complete` | 1 | `{ {}_{ \widehat{#1} } }` |
 | `\takecompletion` | 1 | `{ \overbrace{#1}^{\widehat{\hspace{4em}}} }` |
 | `\kv` | 0 | `{ k_{\hat{v}} }` |
 | `\Lv` | 0 | `{ L_{\hat{v}} }` |
@@ -1728,13 +1732,9 @@ Regenerate with `just readme-reference`.
 | `\conjugate` | 1 | `{\overline{{#1}}}` |
 | `\closure` | 1 | `\overline{#1}` |
 | `\univcover` | 1 | `\overline{#1}` |
-| `\bar` | 1 | `\overline{#1}` |
-| `\hat` | 1 | `\widehat{#1}` |
 | `\bundle` | 1 | `\mathcal{#1}` |
 | `\vector` | 1 | `\mathbf{#1}` |
 | `\vhat` | 1 | `\widehat{ \vector{#1} }` |
-| `\diagonal` | 1 | `\Delta` |
-| `\Diagonal` | 1 | `\Delta` |
 | `\correspond` | 1 | `\theset{\substack{#1}}` |
 | `\converges` | 1 | `\overset{#1}` |
 | `\convergesto` | 1 | `\overset{#1}\too` |
@@ -1762,7 +1762,7 @@ Regenerate with `just readme-reference`.
 | `\constantsheaf` | 1 | `\underline{#1}` |
 | `\vecc` | 2 | `\textcolor{#1}{\textbf{#2}}` |
 | `\places` | 1 | `\mathrm{Pl}\qty{#1}` |
-| `\ZZlocal` | 1 | `{ \ZZ_{\hat{#1}} }` |
+| `\ZZlocal` | 1 | `{ \ZZ_{\widehat{#1}} }` |
 | `\rad` | 1 | `\sqrt{#1}` |
 | `\elts` | 2 | `{ {#1}_1, {#1}_2, \cdots, {#1}_{#2}}` |
 | `\tselts` | 2 | `{ \theset{ {#1}_1, {#1}_2, \cdots, {#1}_{#2} } }` |
@@ -1888,7 +1888,6 @@ Regenerate with `just readme-reference`.
 | `\myraise` | 0 | `\raise.65pt` |
 | `\phmi` | 0 | `\myraise\hbox{$\ph^-$}\protect\kern -2pt` |
 | `\phpl` | 0 | `\myraise\hbox{$\ph^+$}\protect\kern -2pt` |
-| `\otherbar` | 0 | `\prime` |
 | `\exo` | 0 | `*` |
 | `\mA` | 0 | `\myraise\hbox{$\ph^-$}\protect\kern -4pt A` |
 | `\mD` | 0 | `\myraise\hbox{$\ph^-$}\protect\kern -2pt D` |
@@ -2086,7 +2085,6 @@ Regenerate with `just readme-reference`.
 | `\SH` | 0 | `{\mathsf{SH}}` |
 | `\Spaces` | 0 | `{\mathsf{Spaces}}` |
 | `\Spectra` | 0 | `{\mathsf{Sp}}` |
-| `\Sp` | 0 | `{\mathsf{Sp}}` |
 | `\Top` | 0 | `{\mathsf{Top}}` |
 | `\Bord` | 0 | `{\mathsf{Bord}}` |
 | `\TQFT` | 0 | `{\mathsf{TQFT}}` |
@@ -2288,7 +2286,6 @@ No macro or environment definitions.
 | `\DD` | 0 | `\mathbf{D}` |
 | `\Sch` | 0 | `\operatorname{Sch}` |
 | `\Sets` | 0 | `\operatorname{\mathsf{Sets}}` |
-| `\Sp` | 0 | `\operatorname{Sp}` |
 | `\bbcpt` | 1 | `\cpt{#1}^{ \BB }` |
 | `\bd` | 0 | `\partial` |
 | `\coxfan` | 0 | `\torfan^{\cox}` |

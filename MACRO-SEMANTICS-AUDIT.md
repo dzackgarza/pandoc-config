@@ -33,8 +33,7 @@ in `styles/macros/`.
 - `\mix` and `\fiberproduct`: low-level decorated multiplication glyphs. Older/imported
   source still uses `\fiberproduct{S}` infix, so migration must be explicit rather than
   silently changing its arity.
-- Ignored-argument definitions `\addbase[1]`, `\diagonal[1]`, and `\Diagonal[1]`
-  still require individual semantic recovery.
+- The ignored-argument definition `\addbase[1]` still requires semantic recovery.
 - Slice/coslice suffix fragments (`\slice`, `\coslice`, `\liesover`)
   should be checked against authored usage to determine whether they are intended
   typography helpers or collapsed object/category constructors.
@@ -67,11 +66,17 @@ legacy glyph primitive while old infix call sites are migrated. Public content s
 
 ## Ignored-argument defects
 
-A mechanical audit of the generated API finds three unresolved declarations still discard a declared argument: `\addbase[1]`,
-`\diagonal[1]`, and `\Diagonal[1]`. None currently has a live authored call site in
-the active corpus search. Historical sources do not establish a unique intended semantic
-signature (`\diagonal` appears historically in both zero- and one-argument forms), so
-these remain quarantined audit items rather than receiving invented semantics.
+A mechanical audit of the generated API finds one unresolved declaration that
+discards a declared argument: `\addbase[1]`. It has no live authored call site in
+the active corpus search, and no source establishes its intended signature, so it
+stays a quarantined audit item rather than receiving invented semantics.
+
+`\diagonal` is recovered from its call sites: the notes write
+`\diagonal: X\to X^{\times 2}`, `\diagonal^c` and `\tilde\diagonal`, so it names
+the diagonal, an object, and takes no argument. The call sites that write
+`\adjunction{\colim}{\diagonal}` and `\diagonal X` (the constant diagram at $X$) mean
+the diagonal functor and use `\diagonalfunctor`. `\Diagonal` had no call site and
+is deleted.
 `\lktt` and `\GSpaces` were separately recoverable from neighboring definitions and
 are repaired above.
 

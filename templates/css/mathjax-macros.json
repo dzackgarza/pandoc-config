@@ -53,9 +53,9 @@
   "FFbar": "{\\bar\\FF}",
   "FFp": "{\\FF_p}",
   "FFpn": "{\\FF_{p^n}}",
-  "Fpbar": "\\bar{\\FF_p}",
+  "Fpbar": "\\overline{\\FF_p}",
   "fq": "{\\FF_{q}}",
-  "fqbar": "\\bar{\\FF_{q}}",
+  "fqbar": "\\overline{\\FF_{q}}",
   "fqr": "{\\FF_{q^r}}",
   "kG": "{kG}",
   "kk": "{\\mathbf{k}}",
@@ -232,10 +232,10 @@
   "semi": "{\\mathrm{semi}}",
   "semisimple": "{\\mathrm{ss}}",
   "semisimplification": "{\\mathrm{ss}}",
+  "semistable": "{\\mathrm{ss}}",
   "sing": "{\\mathrm{sing}}",
   "smol": "{\\mathrm{small}}",
   "snc": "{\\mathrm{snc}}",
-  "ss": "{\\mathrm{ss}}",
   "stable": "\\mathrm{st}",
   "std": "\\text{std}",
   "trop": "\\mathrm{trop}",
@@ -329,6 +329,8 @@
   "Der": "{ \\operatorname{Der} }",
   "det": "\\operatorname{det}",
   "diag": "\\operatorname{diag}",
+  "diagonal": "\\Delta",
+  "diagonalfunctor": "\\Delta",
   "diam": "{\\operatorname{diam}}",
   "Diff": "\\operatorname{Diff}",
   "Diffeo": "{\\operatorname{Diffeo}}",
@@ -338,7 +340,8 @@
   "Disk": "{\\operatorname{Disk}}",
   "Dist": "\\operatorname{Dist}",
   "dist": "\\operatorname{dist}",
-  "div": "\\operatorname{div}",
+  "divisibility": "\\operatorname{div}",
+  "divisorof": "\\operatorname{div}",
   "Div": "\\operatorname{Div}",
   "dlog": "\\operatorname{dLog}",
   "dom": "\\operatorname{dom}",
@@ -536,6 +539,7 @@
   "SO": "{\\operatorname{SO}}",
   "soc": "\\operatorname{Soc}",
   "spanof": "\\operatorname{span}",
+  "Sp": "{\\operatorname{Sp}}",
   "Spc": "\\operatorname{Spc}",
   "Spec": "\\operatorname{Spec}",
   "Spf": "\\operatorname{Spf}",
@@ -559,7 +563,7 @@
   "Symalg": "\\sym",
   "Symb": "\\operatorname{Symb}",
   "Symbil": "\\operatorname{SymBil}",
-  "Symp": "{\\operatorname{Sp}}",
+  "Symp": "{\\operatorname{Symp}}",
   "Tatesymbol": "\\operatorname{TateSymb}",
   "Taut": "\\operatorname{Taut}",
   "TC": "{\\operatorname{TC}}",
@@ -604,7 +608,7 @@
   "zbar": "\\bar{z}",
   "ZHB": "\\operatorname{ZHB}",
   "Ag": "{\\mathcal{A}_g}",
-  "agbar": "\\bar{\\Ag}",
+  "agbar": "\\overline{\\Ag}",
   "Ahat": "\\hat{ \\operatorname{A}}_g",
   "B": "{\\mathbf{B}}",
   "bmgn": "{ \\bar{\\mathcal{M}}_{g, n} }",
@@ -645,7 +649,7 @@
   "mbar": "\\bar{\\mathcal{M}}",
   "Mg": "{\\mathcal{M}_g}",
   "mg": "{ \\mathcal{M}_{g} }",
-  "Mgbar": "\\bar{\\Mg}",
+  "Mgbar": "\\overline{\\Mg}",
   "Mgn": "{ \\mathcal{M}_{g, n} }",
   "Mell": "{ \\mathcal{M}_{\\mathrm{ell}} }",
   "mH": "{ \\mathsf{H} }",
@@ -1346,7 +1350,7 @@
     2
   ],
   "complete": [
-    "{ {}_{ \\hat{#1} } }",
+    "{ {}_{ \\widehat{#1} } }",
     1
   ],
   "takecompletion": [
@@ -1594,14 +1598,6 @@
     "\\overline{#1}",
     1
   ],
-  "bar": [
-    "\\overline{#1}",
-    1
-  ],
-  "hat": [
-    "\\widehat{#1}",
-    1
-  ],
   "bundle": [
     "\\mathcal{#1}",
     1
@@ -1612,14 +1608,6 @@
   ],
   "vhat": [
     "\\widehat{ \\vector{#1} }",
-    1
-  ],
-  "diagonal": [
-    "\\Delta",
-    1
-  ],
-  "Diagonal": [
-    "\\Delta",
     1
   ],
   "correspond": [
@@ -1716,7 +1704,7 @@
     1
   ],
   "ZZlocal": [
-    "{ \\ZZ_{\\hat{#1}} }",
+    "{ \\ZZ_{\\widehat{#1}} }",
     1
   ],
   "rad": [
@@ -2131,7 +2119,6 @@
   "SH": "{\\mathsf{SH}}",
   "Spaces": "{\\mathsf{Spaces}}",
   "Spectra": "{\\mathsf{Sp}}",
-  "Sp": "{\\mathsf{Sp}}",
   "Top": "{\\mathsf{Top}}",
   "Bord": "{\\mathsf{Bord}}",
   "TQFT": "{\\mathsf{TQFT}}",

@@ -55,9 +55,9 @@
 \newcommand{\FFbar}{{\bar\FF}}
 \newcommand{\FFp}{{\FF_p}}
 \newcommand{\FFpn}{{\FF_{p^n}}}
-\newcommand{\Fpbar}{\bar{\FF_p}}
+\newcommand{\Fpbar}{\overline{\FF_p}}
 \newcommand{\fq}{{\FF_{q}}}
-\newcommand{\fqbar}{\bar{\FF_{q}}}
+\newcommand{\fqbar}{\overline{\FF_{q}}}
 \newcommand{\fqr}{{\FF_{q^r}}}
 \newcommand{\kG}{{kG}}
 \newcommand{\kk}{{\mathbf{k}}}
@@ -234,10 +234,10 @@
 \newcommand{\semi}{{\mathrm{semi}}}
 \newcommand{\semisimple}{{\mathrm{ss}}}
 \newcommand{\semisimplification}{{\mathrm{ss}}}
+\newcommand{\semistable}{{\mathrm{ss}}}
 \newcommand{\sing}{{\mathrm{sing}}}
 \newcommand{\smol}{{\mathrm{small}}}
 \newcommand{\snc}{{\mathrm{snc}}}
-\newcommand{\ss}{{\mathrm{ss}}}
 \newcommand{\stable}{\mathrm{st}}
 \newcommand{\std}{\text{std}}
 \newcommand{\trop}{\mathrm{trop}}
@@ -331,6 +331,8 @@
 \newcommand{\Der}{{ \operatorname{Der} }}
 \newcommand{\det}{\operatorname{det}}
 \newcommand{\diag}{\operatorname{diag}}
+\newcommand{\diagonal}{\Delta}
+\newcommand{\diagonalfunctor}{\Delta}
 \newcommand{\diam}{{\operatorname{diam}}}
 \newcommand{\Diff}{\operatorname{Diff}}
 \newcommand{\Diffeo}{{\operatorname{Diffeo}}}
@@ -340,7 +342,8 @@
 \newcommand{\Disk}{{\operatorname{Disk}}}
 \newcommand{\Dist}{\operatorname{Dist}}
 \newcommand{\dist}{\operatorname{dist}}
-\newcommand{\div}{\operatorname{div}}
+\newcommand{\divisibility}{\operatorname{div}}
+\newcommand{\divisorof}{\operatorname{div}}
 \newcommand{\Div}{\operatorname{Div}}
 \newcommand{\dlog}{\operatorname{dLog}}
 \newcommand{\dom}{\operatorname{dom}}
@@ -538,6 +541,7 @@
 \newcommand{\SO}{{\operatorname{SO}}}
 \newcommand{\soc}{\operatorname{Soc}}
 \newcommand{\spanof}{\operatorname{span}}
+\newcommand{\Sp}{{\operatorname{Sp}}}
 \newcommand{\Spc}{\operatorname{Spc}}
 \newcommand{\Spec}{\operatorname{Spec}}
 \newcommand{\Spf}{\operatorname{Spf}}
@@ -561,7 +565,7 @@
 \newcommand{\Symalg}{\sym}
 \newcommand{\Symb}{\operatorname{Symb}}
 \newcommand{\Symbil}{\operatorname{SymBil}}
-\newcommand{\Symp}{{\operatorname{Sp}}}
+\newcommand{\Symp}{{\operatorname{Symp}}}
 \newcommand{\Tatesymbol}{\operatorname{TateSymb}}
 \newcommand{\Taut}{\operatorname{Taut}}
 \newcommand{\TC}{{\operatorname{TC}}}
@@ -606,7 +610,7 @@
 \newcommand{\zbar}{\bar{z}}
 \newcommand{\ZHB}{\operatorname{ZHB}}
 \newcommand{\Ag}{{\mathcal{A}_g}}
-\newcommand{\agbar}{\bar{\Ag}}
+\newcommand{\agbar}{\overline{\Ag}}
 \newcommand{\Ahat}{\hat{ \operatorname{A}}_g}
 \newcommand{\B}{{\mathbf{B}}}
 \newcommand{\bmgn}{{ \bar{\mathcal{M}}_{g, n} }}
@@ -647,7 +651,7 @@
 \newcommand{\mbar}{\bar{\mathcal{M}}}
 \newcommand{\Mg}{{\mathcal{M}_g}}
 \newcommand{\mg}{{ \mathcal{M}_{g} }}
-\newcommand{\Mgbar}{\bar{\Mg}}
+\newcommand{\Mgbar}{\overline{\Mg}}
 \newcommand{\Mgn}{{ \mathcal{M}_{g, n} }}
 \newcommand{\Mell}{{ \mathcal{M}_{\mathrm{ell}} }}
 \newcommand{\mH}{{ \mathsf{H} }}
@@ -1143,7 +1147,7 @@
 \newcommand{\coInduction}[2]{\mathrm{coInd}^{#1}_{#2}}
 \newcommand{\sheafify}[1]{\left( #1 \right)^{\scriptscriptstyle \mathrm{sh}}}
 \newcommand{\padiccompletion}[2]{{ {#1}_{\widehat{#2}} }}
-\newcommand{\complete}[1]{{ {}_{ \hat{#1} } }}
+\newcommand{\complete}[1]{{ {}_{ \widehat{#1} } }}
 \newcommand{\takecompletion}[1]{{ \overbrace{#1}^{\widehat{\hspace{4em}}}  }}
 \newcommand{\kv}{{ k_{\hat{v}} }}
 \newcommand{\Lv}{{ L_{\hat{v}} }}
@@ -1218,13 +1222,9 @@
 \newcommand{\conjugate}[1]{{\overline{{#1}}}}
 \newcommand{\closure}[1]{\overline{#1}}
 \newcommand{\univcover}[1]{\overline{#1}}
-\newcommand{\bar}[1]{\overline{#1}}
-\newcommand{\hat}[1]{\widehat{#1}}
 \newcommand{\bundle}[1]{\mathcal{#1}}
 \newcommand{\vector}[1]{\mathbf{#1}}
 \newcommand{\vhat}[1]{\widehat{ \vector{#1} }}
-\newcommand{\diagonal}[1]{\Delta}
-\newcommand{\Diagonal}[1]{\Delta}
 \newcommand{\correspond}[1]{\theset{\substack{#1}}}
 \newcommand{\converges}[1]{\overset{#1}}
 \newcommand{\convergesto}[1]{\overset{#1}\too}
@@ -1252,7 +1252,7 @@
 \newcommand{\constantsheaf}[1]{\underline{#1}}
 \newcommand{\vecc}[2]{\textcolor{#1}{\textbf{#2}}}
 \newcommand{\places}[1]{\mathrm{Pl}\qty{#1}}
-\newcommand{\ZZlocal}[1]{{ \ZZ_{\hat{#1}} }}
+\newcommand{\ZZlocal}[1]{{ \ZZ_{\widehat{#1}} }}
 \newcommand{\rad}[1]{\sqrt{#1}}
 \newcommand{\elts}[2]{{ {#1}_1, {#1}_2, \cdots, {#1}_{#2}}}
 \newcommand{\tselts}[2]{{ \theset{ {#1}_1, {#1}_2, \cdots, {#1}_{#2} } }}
@@ -1484,7 +1484,6 @@
 \newcommand{\SH}{{\mathsf{SH}}}
 \newcommand{\Spaces}{{\mathsf{Spaces}}}
 \newcommand{\Spectra}{{\mathsf{Sp}}}
-\newcommand{\Sp}{{\mathsf{Sp}}}
 \newcommand{\Top}{{\mathsf{Top}}}
 \newcommand{\Bord}{{\mathsf{Bord}}}
 \newcommand{\TQFT}{{\mathsf{TQFT}}}

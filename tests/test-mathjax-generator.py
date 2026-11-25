@@ -152,7 +152,22 @@ def test_domain_aux_files_are_generated() -> None:
         fail("orthogonal-complement fragment removed", repr(macros["orthcomp"]))
     else:
         check("orthogonal-complement fragment removed")
-    for retired in ("sign", "coeq", "cocoeq", "OStab", "OrthObs", "wref"):
+    # One name per meaning (#10): \Sp is the symplectic group and \Spectra the
+    # category of spectra; \diagonal is an object and takes no argument.
+    assert_macro(macros, "Sp", "{\\operatorname{Sp}}")
+    assert_macro(macros, "Spectra", "{\\mathsf{Sp}}")
+    assert_macro(macros, "Symp", "{\\operatorname{Symp}}")
+    assert_macro(macros, "diagonal", "\\Delta")
+    assert_macro(macros, "diagonalfunctor", "\\Delta")
+    assert_macro(macros, "divisorof", "\\operatorname{div}")
+    assert_macro(macros, "divisibility", "\\operatorname{div}")
+    assert_macro(macros, "semistable", "{\\mathrm{ss}}")
+    # A LaTeX primitive keeps its own meaning: the projection defines no
+    # \bar, \hat, \div or \ss.
+    for retired in (
+        "sign", "coeq", "cocoeq", "OStab", "OrthObs", "wref",
+        "otherbar", "Diagonal", "bar", "hat", "div", "ss",
+    ):
         if retired in macros:
             fail(f"{retired} retired", repr(macros[retired]))
         else:

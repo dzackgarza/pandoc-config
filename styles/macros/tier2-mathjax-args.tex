@@ -147,7 +147,7 @@
 % Sheafification and completion
 \newcommand{\sheafify}[1]{ \left( #1 \right)^{\scriptscriptstyle \mathrm{sh}} }
 \newcommand{\padiccompletion}[2]{{ {#1}_{\widehat{#2}} }}
-\newcommand{\complete}[1]{{ {}_{ \hat{#1} } }}
+\newcommand{\complete}[1]{{ {}_{ \widehat{#1} } }}
 \newcommand{\takecompletion}[1]{{ \overbrace{#1}^{\widehat{\hspace{4em}}}  }}
 \newcommand{\kv}{{ k_{\hat{v}} }}
 \newcommand{\Lv}{{ L_{\hat{v}} }}
@@ -253,17 +253,13 @@
 \newcommand{\conjugate}[1]{{\overline{{#1}}}}
 \newcommand{\closure}[1]{\overline{#1}}
 \newcommand{\univcover}[1]{\overline{#1}}
-\renewcommand{\bar}[1]{\overline{#1}}
-\renewcommand{\hat}[1]{\widehat{#1}}
 
 % Vector and bundle notations
 \newcommand{\bundle}[1]{\mathcal{#1}}
 \renewcommand{\vector}[1]{\mathbf{#1}}
 \newcommand{\vhat}[1]{\widehat{ \vector{#1} }}
 
-% Diagonal and correspondence
-\newcommand{\diagonal}[1]{\Delta}
-\newcommand{\Diagonal}[1]{\Delta}
+% Correspondence
 \newcommand{\correspond}[1]{\theset{\substack{#1}}}
 
 % Arrow notations (must come before usage)
@@ -327,7 +323,7 @@
 
 % Additional field extensions
 \newcommand{\places}[1]{ \mathrm{Pl}\qty{#1}}
-\newcommand{\ZZlocal}[1]{{ \ZZ_{\hat{#1}} }}
+\newcommand{\ZZlocal}[1]{{ \ZZ_{\widehat{#1}} }}
 
 % Radical and square root
 \newcommand{\rad}[1]{\sqrt{#1}}
