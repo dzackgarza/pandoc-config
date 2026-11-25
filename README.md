@@ -201,6 +201,9 @@ to `tex.packages`. `just _test-mathjax-macros` typesets every macro this way.
     --mathjax=https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js -o preview.html
   ```
 
+  `just pandoc::compile-html` runs this template with the filters of a note
+  build (crossref, theorem environments, TikZ, citeproc).
+
   The extension is a template partial, so it is included in the output even
   when the editor embeds a local MathJax component. A preview using MathJax 3
   does not support `\fps`; the default MathJax URL depends on the Pandoc version.
@@ -437,6 +440,7 @@ calls `just pandoc::<recipe>` (`just --list` in this repository shows all):
 ```bash
 just pandoc::compile-pandoc input_file=main.md output_name=paper template=research_draft.tex
 just pandoc::compile-tex main_file=main.tex output_name=paper
+just pandoc::compile-html notes.md notes.html refs.bib
 just pandoc::preview notes.md pdf research_draft.tex
 ```
 
@@ -444,6 +448,7 @@ just pandoc::preview notes.md pdf research_draft.tex
 | --- | --- |
 | `compile-pandoc`, `compile-pandoc-project` | markdown to PDF through a LaTeX template and latexmk; the bibliographies are the files of `PANDOC_BIB_SOURCE` (separated by `:`, empty for none), else `ZOTERO_GLOBAL_BIB` |
 | `compile-tex` | a LaTeX project with latexmk and the global bibliography |
+| `compile-html` | a Pandoc note to standalone HTML: the preview template, MathJax 4 with the central macros, TikZ figures as inline SVG, citeproc with the bibliographies of `bib_source` (as for `compile-pandoc`). The output appears only after a build without error: a missing tool, a figure that does not compile and an unknown citation stop the build, and the previous file stays |
 | `preview` | compile a markdown file and recompile on every change (entr), viewing the PDF in zathura |
 | `format-md`, `format-markdown` | one sentence per line (prettier), or semantic line breaks (flowmark) |
 | `render-figures` | see [Rendering figures](#rendering-figures) |
@@ -488,7 +493,9 @@ bibliography.
 template, the TikZ vocabulary and every figure object (`tests/test-tikz-macros.tex`,
 pdflatex), the tikzcd filter, the Lamport-proof filter, the poset layout
 (`tests/test-posets.tex`, lualatex), the `compile-pandoc` recipe
-(`tests/test-compile-pandoc.sh`) and a captionless table inside a theorem
+(`tests/test-compile-pandoc.sh`), the `compile-html` recipe
+(`tests/test-compile-html.sh`), `bin/pandoc_stripmacros.sh`
+(`tests/test-stripmacros.sh`) and a captionless table inside a theorem
 environment through that recipe (`tests/test-theorem-tables.sh`, which fails
 on each TeX error in the log, as latexmk runs in force mode), and checks that
 the generated reference below is current. The commit hook runs it.

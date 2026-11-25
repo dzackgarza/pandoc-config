@@ -79,7 +79,9 @@ check "build succeeds" bash -c "compile_html note.md note.html refs.bib > build.
 check "the output is an HTML document" bash -c "head -c 200 note.html | grep -qi '<!DOCTYPE html>'"
 check "the output holds the text of the note" grep -q 'is finite' note.html
 check "the title is the title of the note" grep -q '<h1 class="title">A Note On Points</h1>' note.html
-check "the math is MathJax math" grep -qF '\(\theset{x \in X \st x^2 = 1}\)' note.html
+# Pandoc wraps the HTML at spaces, so a formula can span two lines.
+check "the math is MathJax math" \
+  bash -c "command tr '\n' ' ' < note.html | grep -qF 'class=\"math inline\">\(\theset{x \in X \st x^2 = 1}\)'"
 check "MathJax gets the central macros" grep -qE '"?theset"?:' note.html
 check "the figure is an inline SVG" bash -c "grep -A2 'class=\"tikzcd' note.html | grep -q '<svg'"
 check "the citation is resolved" grep -q 'Friedman' note.html

@@ -12,12 +12,9 @@ print_usage() {
   printf "-f somefile.md"
 }
 
-vimpreview="false"
-
-while getopts 'f:v' flag; do
+while getopts 'f:' flag; do
   case "${flag}" in
     f) files="${OPTARG}" ;;
-    v) vimpreview="true";;
     *) print_usage
        exit 1 ;;
   esac
@@ -58,12 +55,9 @@ fi
 ln -s "$(realpath ./figures)" $TMP_DIR/figures
 
 while true; do
-  if [[ $vimpreview == true ]]; then  
-    outfile=$(pandoc_tohtml.sh -f "$filepath" -p -t "$TMP_DIR" -v);
-  else
-    outfile=$(pandoc_tohtml.sh -f "$filepath" -p -t "$TMP_DIR");
-  fi
-  echo "(VP) HTML converted at: $outfile";
+  outfile="$TMP_DIR/$filename.html"
+  just --justfile "$(dirname "$(realpath "$0")")/../justfile" compile-html "$filepath" "$outfile" '' \
+    && echo "(VP) HTML converted at: $outfile";
   if [ "$first_run" = true ]; then
     echo "(VP) First run"
     $PREVIEW_BROWSER "$outfile" > /dev/null 2>&1 &
