@@ -118,6 +118,7 @@ template of this repository, by name:
 | `revealjs` | `templates/pandoc_revealjs_template.html` |
 | `latex`, `pdf` | `templates/research_draft.tex` |
 | `beamer` | `templates/research_beamer.tex` |
+| `context` | `templates/pandoc_context_template.tex` |
 
 So a change of one of these files changes each such export of the editor, and
 a rename or a removal stops those exports (the editor names the missing file).
@@ -126,33 +127,47 @@ The list is `PANDOC_DIRECTORY_TEMPLATES` in zettlr-pandoc
 clones `main` of this repository, so a change here that the editor needs lands
 here first.
 
-A writer that is not in the table gets no macro from a template, for one of
-these reasons:
+Each other writer gets the macros from the Markdown reader, not from a
+template:
 
-- Pandoc converts the TeX of each formula to the math of the format (MathML,
-  OMML, eqn, Typst, Unicode text) in the writer, before the template: `docx`,
-  `pptx`, `odt`, `opendocument`, `epub`, `epub2`, `epub3`, `docbook*`,
-  `jats*`, `typst`, `ms`, `man`, `rtf`, `icml`, `plain`, `ansi`, `jira`,
-  `muse`, `commonmark`, `markdown_strict`, `markdown_phpextra`,
-  `markdown_github`. A formula
-  with a macro of this repository stays raw TeX. Only a definition that the
-  reader sees (`latex_macros`: `\newcommand` lines in an input, such as
-  `templates/css/math-macros.html`) gives such a writer the macros. The
-  `epub` templates also have no `$math$`, and Pandoc does not put a script
-  that a template names into the container.
-- The writer keeps the TeX of each formula, and the program that reads the
-  output renders it: `markdown`, `markdown_mmd`, `commonmark_x`, `gfm`,
-  `rst`, `asciidoc*`, `org`, `mediawiki`, `textile`, `tei`, `texinfo`,
-  `xwiki`, `zimwiki`, `dokuwiki`, `djot`, `ipynb`, `haddock`, `bbcode*`,
-  `t2t`, `vimdoc`, `markua`, `fb2`, `xml`.
-- The output has no body text: `biblatex`, `bibtex`, `csljson`, `json`,
-  `native`, `opml`.
-- `context`: the bodies of the macros are LaTeX. ConTeXt does not define
-  commands that they use (`\operatorname`, `\mathsf`, `\genfrac`,
-  `\substack`, `\textrm`, `\textbf`, ...), and about 75 macro names (`\det`,
-  `\hat`, `\bar`, `\mod`, `\type`, `\from`, `\tr`, ...) are commands of
-  ConTeXt itself. ConTeXt gets the macros only through a translation of the
-  macro tree, which does not exist.
+- `templates/css/math-macros.md` holds the `\newcommand` line of each macro
+  of `styles/macros/mathjax-sources.txt` in a fenced div of the class
+  `math-macros`. `bin/generate-mathjax-config.py` writes it; never edit it by
+  hand.
+- The editor gives that file as the first input of the export. The
+  `latex_macros` extension of the Markdown reader (on by default) applies
+  each definition to the TeX math of the inputs after it, so the writer gets
+  the expansion: the OMML of `docx` and `pptx`, the MathML of `odt`, `epub*`,
+  `jats*` and `docbook*`, the math of `typst` and `ms`, and the TeX of the
+  expansion for each writer that keeps TeX (`markdown`, `rst`, `org`, ...).
+  A definition after its use expands nothing, so the file must be first.
+- `filters/math-macros.lua` removes the div. A writer that keeps raw TeX
+  would otherwise write the definitions into its output.
+- A first input of its own changes one thing for the document: a `% title`
+  block of Pandoc holds only in the first input. A title in YAML front matter
+  holds.
+- The TeX writers do not get the file: their templates load the macro style.
+- texmath converts the expansion of 1503 of the 1580 macros. For the other
+  77 (`\rm`, `\hbox`, `\mkern`, `\vcenter`, `\xhookrightarrow`, ... in the
+  body) Pandoc warns "Could not convert TeX math" and keeps the TeX of the
+  expansion.
+
+`context` gets the reader input and its template
+(`pandoc -D context` with the block before `$for(header-includes)$`), and
+the filter `filters/context-mathml.lua`:
+
+- The ConTeXt writer keeps the TeX of each formula, and ConTeXt is no LaTeX:
+  it does not define `\operatorname`, `\mathsf`, `\genfrac`, `\textrm` and
+  other commands of the expansions. The filter gives each formula as the
+  MathML of texmath in `\startmml ... \stopmml`, and the template loads the
+  `mathml` module of ConTeXt (`x-mathml`), which typesets it.
+- A formula that texmath cannot convert stops the export with the formula.
+- The module writes an `<mi>` of some names as the command of the same name
+  (`i_replacements` in `x-mathml.lmt`), and ConTeXt defines 17 of them in no
+  file (`\arccot`, `\sech`, `\lcm`, `\id`, ...). The template defines each one
+  with `\definemathfunction`, as `math-def.mkxl` defines `\arcsin`. After a
+  ConTeXt update, the test names each new command that the module writes and
+  that is not defined.
 
 The HTML templates other than reveal.js include one MathJax configuration, the
 Pandoc partial `templates/mathjax-config.html` (`$mathjax-config.html()$` in
@@ -186,7 +201,10 @@ carry the changes over. A template that includes the partial must stay in
   environments that the macro tree defines too.
 
 `tests/test-mathjax-generator.py` checks each template of the table: the
-macro map of each HTML page and pdflatex on each TeX writer.
+macro map of each HTML page, pdflatex on each TeX writer and `context` on the
+ConTeXt template. It also runs each other writer of `pandoc --list-output-formats`
+with the reader input: no output holds a raw macro or a definition, and the
+math of the converting writers holds the expansion.
 
 ## Releases and downstream sites
 

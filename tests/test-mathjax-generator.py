@@ -7,6 +7,8 @@ import re
 import subprocess
 import sys
 import tempfile
+import unicodedata
+import zipfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -53,6 +55,19 @@ MATHJAX_URL = "file:///opt/mathjax/tex-chtml.js"
 ROOT_URL = "file:///opt/mathjax"
 FONTS_URL = "file:///opt/mathjax/fonts"
 LOCAL_MATHJAX = [f"mathjax-root={ROOT_URL}", f"mathjax-fonts={FONTS_URL}"]
+# The macro definitions as the first input of a Markdown reader, for each
+# writer without a template of this repository that loads the macros.
+READER_INPUT = TEMPLATES / "css" / "math-macros.md"
+MACROS_FILTER = ROOT / "filters" / "math-macros.lua"
+CONTEXT_MATHML_FILTER = ROOT / "filters" / "context-mathml.lua"
+CONTEXT_TEMPLATE = TEMPLATES / "pandoc_context_template.tex"
+# A title in YAML: a % title block holds only in the first input, and the
+# macro input is first.
+READER_DOCUMENT = (
+    "---\ntitle: Macros\n---\n\n"
+    "A formula $\\Hom(\\ZZ, \\QQ)$ and $\\fiberprod{X}{S}{Y}$.\n\n"
+    "$$\\Hom(\\ZZ, \\QQ) = \\frac{a}{b}$$\n"
+)
 
 passed = 0
 failed = 0
@@ -329,6 +344,244 @@ def test_html_templates_configure_mathjax_before_it_loads() -> None:
                 fail(f"{writer} page {name}", f"{text!r} is not in the page")
 
 
+def tex_program(name: str) -> Path:
+    """The program in the bin folder of the TeX distribution of kpsewhich.
+
+    mtxrun and context find the tree of their distribution from the path by
+    which they run (SELFAUTODIR). Through a link in /usr/bin they find no
+    texmfcnf.lua and stop with "unknown script 'mtx-context.lua'"; kpsewhich
+    gives the folder of the distribution (SELFAUTOLOC).
+    """
+    found = subprocess.run(
+        ["kpsewhich", "-var-value=SELFAUTOLOC"], capture_output=True, text=True, check=True
+    )
+    return Path(found.stdout.strip()) / name
+
+
+def test_reader_input_matches_generated_projection() -> None:
+    """templates/css/math-macros.md is the output of the generator for the macro sources."""
+    with tempfile.TemporaryDirectory() as tmp:
+        cp = subprocess.run(
+            [sys.executable, str(GENERATOR), "--out-dir", tmp],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        if cp.returncode != 0:
+            fail("reader input generated", cp.stderr.strip())
+            return
+        expected = (Path(tmp) / "math-macros.md").read_text()
+    if READER_INPUT.read_text() == expected:
+        check("math-macros.md matches the generated projection")
+    else:
+        fail("math-macros.md", "stale; run just generate-math-macros")
+
+
+def converted(
+    writer: str, filters: list[Path], tmp_dir: Path, template: Path | None = None
+) -> Path:
+    """The file in tmp_dir that Pandoc writes from the reader input and READER_DOCUMENT."""
+    document = tmp_dir / "document.md"
+    document.write_text(READER_DOCUMENT)
+    output = tmp_dir / f"out.{writer}"
+    cp = subprocess.run(
+        [
+            "pandoc",
+            "--from=markdown",
+            f"--to={writer}",
+            "--standalone",
+            *([f"--template={template}"] if template is not None else []),
+            *[f"--lua-filter={f}" for f in filters],
+            f"--output={output}",
+            str(READER_INPUT),
+            str(document),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if cp.returncode != 0:
+        raise RuntimeError(f"pandoc -t {writer}: {cp.stderr.strip()}")
+    return output
+
+
+def zip_text(path: Path, member: str) -> str:
+    with zipfile.ZipFile(path) as archive:
+        return "".join(
+            archive.read(name).decode()
+            for name in archive.namelist()
+            if re.fullmatch(member, name)
+        )
+
+
+def test_converting_writers_get_the_expansion_of_each_macro() -> None:
+    """A writer that converts TeX math gets the expansion of \\Hom(\\ZZ, \\QQ) and \\fiberprod."""
+    mathml_hom = r'<(mml:)?mi (mml:)?mathvariant="normal">Hom</(mml:)?mi>'
+    mathml_z = r'<(mml:)?mi (mml:)?mathvariant="bold-italic">\U0001d481</(mml:)?mi>'
+    mathml_fiber = r"<(mml:)?munder><(mml:)?mo>×</(mml:)?mo><(mml:)?mi>S</(mml:)?mi>"
+    # The text runs of the OMML of Word and PowerPoint, one after the other.
+    omml = [r"Hom\(Z,Q\)", r"X×SY"]
+    expected = {
+        "docx": (r"word/document\.xml", omml),
+        "pptx": (r"ppt/slides/slide\d+\.xml", omml),
+        "odt": (r"Formula-\d+/content\.xml", [mathml_hom, mathml_z, mathml_fiber]),
+        "epub3": (r"EPUB/text/ch\d+\.xhtml", [mathml_hom, mathml_z, mathml_fiber]),
+        "jats": (None, [mathml_hom, mathml_z, mathml_fiber]),
+        "docbook5": (None, [mathml_hom, mathml_z, mathml_fiber]),
+        "typst": (None, [r'"Hom"\\\(upright\(bold\(Z\)\)', r"X times_S Y"]),
+        "ms": (None, [r'"Hom" \( roman \{bold \{Z\}\}', r"X times from S Y"]),
+    }
+    for writer, (member, patterns) in expected.items():
+        with tempfile.TemporaryDirectory() as tmp:
+            output = converted(writer, [MACROS_FILTER], Path(tmp))
+            text = zip_text(output, member) if member is not None else output.read_text()
+            if writer in ("docx", "pptx"):
+                text = "".join(re.findall(r"<m:t>([^<]*)</m:t>", text))
+        missing = [p for p in patterns if re.search(p, text) is None]
+        if missing:
+            fail(f"{writer} gets the expansion of the macros", f"no match for {missing}")
+        else:
+            check(f"{writer} gets the expansion of \\Hom(\\ZZ, \\QQ) and \\fiberprod")
+
+
+def test_no_writer_gets_a_raw_macro_or_a_definition() -> None:
+    """For each writer of Pandoc the output holds no \\ZZ and no \\newcommand of the reader input."""
+    skipped = {
+        # No document: the output is the bibliography of the document.
+        "biblatex",
+        "bibtex",
+        "csljson",
+        # A folder of pages; chunkedhtml has a template of this repository.
+        "chunkedhtml",
+        # A TeX writer gets the macros from the style that its template loads
+        # (test_tex_templates_compile_macros_with_pdflatex), not from the
+        # reader input, and it keeps raw TeX.
+        *TEX_WRITER_TEMPLATES,
+    }
+    writers = subprocess.run(
+        ["pandoc", "--list-output-formats"], capture_output=True, text=True, check=True
+    ).stdout.split()
+    for writer in writers:
+        if writer in skipped:
+            continue
+        with tempfile.TemporaryDirectory() as tmp:
+            output = converted(writer, [MACROS_FILTER], Path(tmp))
+            data = output.read_bytes()
+            if zipfile.is_zipfile(output):
+                with zipfile.ZipFile(output) as archive:
+                    data = b"".join(archive.read(name) for name in archive.namelist())
+        leaks = [token for token in (b"\\ZZ", b"newcommand", b"math-macros") if token in data]
+        if leaks:
+            fail(f"{writer} output", f"holds {leaks}")
+        else:
+            check(f"{writer} output holds no raw macro and no definition")
+
+
+def test_context_template_typesets_the_macros() -> None:
+    """ConTeXt typesets the expansion of the macros as the MathML of texmath."""
+    with tempfile.TemporaryDirectory() as tmp:
+        tex = converted(
+            "context", [MACROS_FILTER, CONTEXT_MATHML_FILTER], Path(tmp), CONTEXT_TEMPLATE
+        )
+        context_typesets(tex)
+
+
+def context_typesets(tex: Path) -> None:
+    cp = subprocess.run(
+        [str(tex_program("context")), "--batchmode", "--nonstopmode", tex.name],
+        capture_output=True,
+        text=True,
+        cwd=tex.parent,
+    )
+    pdf = tex.with_suffix(".pdf")
+    if cp.returncode != 0 or not pdf.exists():
+        fail("context compiles the macros", (cp.stdout + cp.stderr)[-1500:])
+        return
+    text = subprocess.run(
+        ["pdftotext", str(pdf), "-"], capture_output=True, text=True, check=True
+    ).stdout
+    # ConTeXt sets the bold Z and Q of tier1 as the mathematical bold letters
+    # of Unicode; NFKC gives them as Z and Q.
+    plain = unicodedata.normalize("NFKC", text)
+    if "Hom(Z, Q)" in plain and "×" in plain:
+        check("context template typesets \\Hom(\\ZZ, \\QQ) and \\fiberprod")
+    else:
+        fail("context template typesets the macros", plain[:300])
+
+
+def test_context_template_defines_each_function_of_the_mathml_module() -> None:
+    """Each command that x-mathml writes for an <mi> is defined with the template."""
+    found = subprocess.run(["kpsewhich", "x-mathml.lmt"], capture_output=True, text=True)
+    module = Path(found.stdout.strip())
+    if found.returncode != 0 or not module.is_file():
+        fail("x-mathml.lmt", "kpsewhich does not find the mathml module of ConTeXt")
+        return
+    source = module.read_text()
+    table = re.search(r"local i_replacements = \{(.*?)\n\}", source, re.S)
+    if table is None:
+        fail("x-mathml.lmt", "no i_replacements table")
+        return
+    commands = sorted(set(re.findall(r'= "\\\\([A-Za-z]+)"', table.group(1))))
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_dir = Path(tmp)
+        document = tmp_dir / "document.md"
+        document.write_text(
+            "".join(
+                f"\\ifdefined\\{c}\\else MISSING-{c}\\par\\fi\n\n" for c in commands
+            )
+        )
+        tex = tmp_dir / "functions.tex"
+        subprocess.run(
+            [
+                "pandoc",
+                "--from=markdown",
+                "--to=context",
+                "--standalone",
+                f"--template={CONTEXT_TEMPLATE}",
+                f"--output={tex}",
+                str(document),
+            ],
+            check=True,
+        )
+        cp = subprocess.run(
+            [str(tex_program("context")), "--batchmode", "--nonstopmode", tex.name],
+            capture_output=True,
+            text=True,
+            cwd=tmp_dir,
+        )
+        if cp.returncode != 0:
+            fail("context function check", (cp.stdout + cp.stderr)[-1500:])
+            return
+        text = subprocess.run(
+            ["pdftotext", str(tex.with_suffix(".pdf")), "-"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+    missing = re.findall(r"MISSING-(\w+)", text)
+    if missing:
+        fail("context template functions", f"x-mathml writes undefined {missing}")
+    else:
+        check(f"context template defines each of the {len(commands)} functions of x-mathml")
+
+
+def test_context_mathml_filter_refuses_a_formula_that_texmath_cannot_convert() -> None:
+    cp = subprocess.run(
+        [
+            "pandoc",
+            "--from=markdown",
+            "--to=context",
+            f"--lua-filter={CONTEXT_MATHML_FILTER}",
+        ],
+        input="A $\\vcenter{x}$.\n",
+        capture_output=True,
+        text=True,
+    )
+    if cp.returncode != 0 and "cannot convert the formula \\vcenter{x}" in cp.stderr:
+        check("context-mathml.lua stops at a formula that texmath cannot convert")
+    else:
+        fail("context-mathml.lua refusal", f"exit {cp.returncode}: {cp.stderr[-300:]}")
+
+
 def test_tex_templates_compile_macros_with_pdflatex() -> None:
     """Each TeX writer typesets the macros of styles/macros through its template."""
     env = os.environ.copy()
@@ -472,6 +725,12 @@ def main() -> None:
     test_html_templates_hold_no_macro_map_of_their_own()
     test_revealjs_template_matches_generated_projection()
     test_html_templates_configure_mathjax_before_it_loads()
+    test_reader_input_matches_generated_projection()
+    test_converting_writers_get_the_expansion_of_each_macro()
+    test_no_writer_gets_a_raw_macro_or_a_definition()
+    test_context_template_typesets_the_macros()
+    test_context_template_defines_each_function_of_the_mathml_module()
+    test_context_mathml_filter_refuses_a_formula_that_texmath_cannot_convert()
     test_tex_templates_compile_macros_with_pdflatex()
     test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin()
     test_dzg_mathjax_style_compiles_domain_macros()
