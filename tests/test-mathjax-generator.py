@@ -20,8 +20,6 @@ TEMPLATES = ROOT / "templates"
 MATHJAX_CONFIG_PARTIAL = TEMPLATES / "mathjax-config.html"
 PREVIEW_TEMPLATE = TEMPLATES / "pandoc_preview_template.html"
 REVEALJS_TEMPLATE = TEMPLATES / "pandoc_revealjs_template.html"
-# Each HTML writer whose template includes the MathJax configuration partial.
-# zettlr-pandoc exports with these templates (PANDOC_DIRECTORY_TEMPLATES).
 HTML_WRITER_TEMPLATES = {
     "html": PREVIEW_TEMPLATE,
     "html5": PREVIEW_TEMPLATE,
@@ -32,7 +30,6 @@ HTML_WRITER_TEMPLATES = {
     "dzslides": TEMPLATES / "pandoc_dzslides_template.html",
     "chunkedhtml": TEMPLATES / "pandoc_chunkedhtml_template.html",
 }
-# Each TeX writer and the template that loads the macro style for it.
 TEX_WRITER_TEMPLATES = {
     "latex": TEMPLATES / "research_draft.tex",
     "pdf": TEMPLATES / "research_draft.tex",
@@ -42,27 +39,19 @@ TEXINPUTS = (
     f".:{ROOT / 'styles'}//:{ROOT / 'styles' / 'macros'}//:"
     f"{ROOT / 'styles' / 'preambles'}//:{ROOT / 'config'}//:"
 )
-# A slide document whose formulas use macros of styles/macros: a TeX writer
-# that does not define one stops with "Undefined control sequence".
 TEX_DOCUMENT = (
     "---\ntitle: Macros\n---\n\n# A slide\n\n"
     "A formula $\\Hom(\\ZZ, \\QQ)$ and $\\fiberprod{X}{S}{Y}$.\n"
 )
-# A document with a formula: Pandoc sets the math variables of a template
-# only for a document that has math.
 MATH_DOCUMENT = "---\ntitle: Macros\n---\n\nA formula $\\ZZ$.\n"
 MATHJAX_URL = "file:///opt/mathjax/tex-chtml.js"
 ROOT_URL = "file:///opt/mathjax"
 FONTS_URL = "file:///opt/mathjax/fonts"
 LOCAL_MATHJAX = [f"mathjax-root={ROOT_URL}", f"mathjax-fonts={FONTS_URL}"]
-# The macro definitions as the first input of a Markdown reader, for each
-# writer without a template of this repository that loads the macros.
 READER_INPUT = TEMPLATES / "css" / "math-macros.md"
 MACROS_FILTER = ROOT / "filters" / "math-macros.lua"
 CONTEXT_MATHML_FILTER = ROOT / "filters" / "context-mathml.lua"
 CONTEXT_TEMPLATE = TEMPLATES / "pandoc_context_template.tex"
-# A title in YAML: a % title block holds only in the first input, and the
-# macro input is first.
 READER_DOCUMENT = (
     "---\ntitle: Macros\n---\n\n"
     "A formula $\\Hom(\\ZZ, \\QQ)$ and $\\fiberprod{X}{S}{Y}$.\n\n"
@@ -120,14 +109,11 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "discrete", "{\\mathrm{disc}}")
     assert_macro(macros, "discriminantmap", "{\\operatorname{disc}}")
     assert_macro(macros, "padiccompletion", ["{ {#1}_{\\widehat{#2}} }", 2])
-    # One name per meaning (d823b92): \Set is \Sets and \cC is \mcc.
     assert_macro(macros, "Sets", "{\\mathsf{Set}}")
     assert_macro(macros, "mcc", "{\\mathcal{C}}")
     assert_macro(macros, "modsleft", ["{}_{#1}\\Mod", 1])
     assert_macro(macros, "tmf", "\\mathrm{tmf}")
     assert_macro(macros, "Suspendpinf", "\\operatorname{{\\Sigma_+^\\infty}}")
-    # Semantic macro contract: the fibre product is one atomic object-valued
-    # construction, not a one-argument alias for the decorated multiplication glyph.
     assert_macro(macros, "fiberprod", ["{#1} \\fiberproduct{#2} {#3}", 3])
     assert_macro(macros, "fprod", ["\\fiberprod{#1}{#2}{#3}", 3])
     assert_macro(macros, "lktt", ["{L_{\\mathrm{K3}, #1}}", 1])
@@ -151,7 +137,6 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "chaincomplex", ["{ {#1}^{\\bullet} }", 1])
     assert_macro(macros, "ascendingfiltration", ["{ {#1}^{\\bullet} }", 1])
     assert_macro(macros, "descendingfiltration", ["{ {#1}_{\\bullet} }", 1])
-    # Unary operations take the object they act on as their argument.
     assert_macro(macros, "opcat", ["{ {#1}^{\\operatorname{op}} }", 1])
     assert_macro(macros, "oppositeof", ["{ {#1}^{\\mathrm{op}} }", 1])
     assert_macro(macros, "dualof", ["{ {#1}^{\\vee} }", 1])
@@ -167,8 +152,6 @@ def test_domain_aux_files_are_generated() -> None:
         fail("orthogonal-complement fragment removed", repr(macros["orthcomp"]))
     else:
         check("orthogonal-complement fragment removed")
-    # One name per meaning (#10): \Sp is the symplectic group and \Spectra the
-    # category of spectra; \diagonal is an object and takes no argument.
     assert_macro(macros, "Sp", "{\\operatorname{Sp}}")
     assert_macro(macros, "Spectra", "{\\mathsf{Sp}}")
     assert_macro(macros, "Symp", "{\\operatorname{Symp}}")
@@ -177,8 +160,6 @@ def test_domain_aux_files_are_generated() -> None:
     assert_macro(macros, "divisorof", "\\operatorname{div}")
     assert_macro(macros, "divisibility", "\\operatorname{div}")
     assert_macro(macros, "semistable", "{\\mathrm{ss}}")
-    # A LaTeX primitive keeps its own meaning: the projection defines no
-    # \bar, \hat, \div or \ss.
     for retired in (
         "sign", "coeq", "cocoeq", "OStab", "OrthObs", "wref",
         "otherbar", "Diagonal", "bar", "hat", "div", "ss",
@@ -239,13 +220,12 @@ def test_domain_aux_files_are_generated() -> None:
 def test_native_mathjax_macros_are_not_shadowed() -> None:
     """Differential-definition contract: macros MathJax renders natively
     must never appear in tex.macros — a generated entry would shadow the
-    native implementation (worse output for the same source). The LaTeX
-    upgrade of such a macro lives in tier3-tex-complex.tex, which never
-    feeds MathJax; tier2 documents the deliberate absence."""
+    native implementation. \\boldsymbol is the native command of MathJax's
+    boldsymbol extension (bm.sty makes it \\bm in LaTeX); \\det and \\mod are
+    the native operators of TeX and MathJax, and \\mod takes its modulus as
+    its argument."""
     macros = generated_macros()
-    # \boldsymbol: native via MathJax's autoloaded boldsymbol extension;
-    # upgraded to bm.sty's \bm in LaTeX by tier3-tex-complex.tex.
-    for native in ("boldsymbol",):
+    for native in ("boldsymbol", "det", "mod"):
         if native in macros:
             fail(
                 f"{native} shadowed",
@@ -418,7 +398,6 @@ def test_converting_writers_get_the_expansion_of_each_macro() -> None:
     mathml_hom = r'<(mml:)?mi (mml:)?mathvariant="normal">Hom</(mml:)?mi>'
     mathml_z = r'<(mml:)?mi (mml:)?mathvariant="bold-italic">\U0001d481</(mml:)?mi>'
     mathml_fiber = r"<(mml:)?munder><(mml:)?mo>×</(mml:)?mo><(mml:)?mi>S</(mml:)?mi>"
-    # The text runs of the OMML of Word and PowerPoint, one after the other.
     omml = [r"Hom\(Z,Q\)", r"X×SY"]
     expected = {
         "docx": (r"word/document\.xml", omml),
@@ -446,15 +425,10 @@ def test_converting_writers_get_the_expansion_of_each_macro() -> None:
 def test_no_writer_gets_a_raw_macro_or_a_definition() -> None:
     """For each writer of Pandoc the output holds no \\ZZ and no \\newcommand of the reader input."""
     skipped = {
-        # No document: the output is the bibliography of the document.
         "biblatex",
         "bibtex",
         "csljson",
-        # A folder of pages; chunkedhtml has a template of this repository.
         "chunkedhtml",
-        # A TeX writer gets the macros from the style that its template loads
-        # (test_tex_templates_compile_macros_with_pdflatex), not from the
-        # reader input, and it keeps raw TeX.
         *TEX_WRITER_TEMPLATES,
     }
     writers = subprocess.run(
@@ -499,8 +473,6 @@ def context_typesets(tex: Path) -> None:
     text = subprocess.run(
         ["pdftotext", str(pdf), "-"], capture_output=True, text=True, check=True
     ).stdout
-    # ConTeXt sets the bold Z and Q of tier1 as the mathematical bold letters
-    # of Unicode; NFKC gives them as Z and Q.
     plain = unicodedata.normalize("NFKC", text)
     if "Hom(Z, Q)" in plain and "×" in plain:
         check("context template typesets \\Hom(\\ZZ, \\QQ) and \\fiberprod")
@@ -591,8 +563,6 @@ def test_tex_templates_compile_macros_with_pdflatex() -> None:
             tmp_dir = Path(tmp)
             tex = tmp_dir / "slides.tex"
             pdf = tmp_dir / "slides.pdf"
-            # pandoc -t pdf runs pdflatex itself; -t latex and -t beamer give the
-            # TeX file, which pdflatex then compiles.
             target = pdf if writer == "pdf" else tex
             cp = subprocess.run(
                 [
@@ -624,7 +594,6 @@ def test_tex_templates_compile_macros_with_pdflatex() -> None:
             text = subprocess.run(
                 ["pdftotext", str(pdf), "-"], capture_output=True, text=True, check=True
             ).stdout
-            # \Hom(\ZZ, \QQ) is Hom(Z, Q), the bold Z and Q of tier1.
             if "Hom(Z, Q)" in text:
                 check(f"{writer} template typesets \\Hom(\\ZZ, \\QQ) with pdflatex")
             else:
