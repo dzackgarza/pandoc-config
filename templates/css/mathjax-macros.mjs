@@ -1,5 +1,5 @@
 export const macros = {
-  "vcentcolon": "\\centercolon",
+  "vcentcolon": "\\vcentercolon",
   "coloneqq": "\\vcentcolon\\mathrel{\\mkern-1.2mu}=",
   "qed": "\\quad\\blacksquare",
   "AA": "{\\mathbf{A}}",

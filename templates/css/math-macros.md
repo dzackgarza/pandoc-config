@@ -1,5 +1,5 @@
 ::: {.math-macros}
-\newcommand{\vcentcolon}{\centercolon}
+\newcommand{\vcentcolon}{\vcentercolon}
 \newcommand{\coloneqq}{\vcentcolon\mathrel{\mkern-1.2mu}=}
 \newcommand{\qed}{\quad\blacksquare}
 \newcommand{\AA}{{\mathbf{A}}}

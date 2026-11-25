@@ -61,7 +61,7 @@ class ProjectionError(Exception):
 
 
 MATHJAX_SHIMS = (
-    MacroDef("vcentcolon", 0, r"\centercolon"),
+    MacroDef("vcentcolon", 0, r"\vcentercolon"),
     MacroDef("coloneqq", 0, r"\vcentcolon\mathrel{\mkern-1.2mu}="),
     MacroDef("qed", 0, r"\quad\blacksquare"),
 )

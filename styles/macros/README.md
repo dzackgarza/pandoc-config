@@ -214,7 +214,7 @@ or independently override their macro semantics.
   MathJax mathtools has a `\coloneqq` of its own (one `:=` relation), and no
   `\vcentcolon`. The generator's shims give `\coloneqq` the definition of
   mathtools and `\vcentcolon` the colon of MathJax mathtools that is
-  centred on the math axis (`\centercolon`). A `\mathop` round a colon,
+  centred on the math axis (`\vcentercolon`). A `\mathop` round a colon,
   as mathtools centres it in TeX, does not centre it in MathJax.
 - **The shims are tested against the PDF.**
   `tests/test-mathjax-generator.py` gives each shim and each form of `\qty`

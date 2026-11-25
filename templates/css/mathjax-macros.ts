@@ -3,7 +3,7 @@ type NArgMacro = [replacement: string, argCount: number];
 type DefaultArgMacro = [replacement: string, argCount: number, defaultArgument: string];
 
 export const macros: Record<string, ZeroArgMacro | NArgMacro | DefaultArgMacro> = {
-  "vcentcolon": "\\centercolon",
+  "vcentcolon": "\\vcentercolon",
   "coloneqq": "\\vcentcolon\\mathrel{\\mkern-1.2mu}=",
   "qed": "\\quad\\blacksquare",
   "AA": "{\\mathbf{A}}",
