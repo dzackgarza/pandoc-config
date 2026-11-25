@@ -1,14 +1,8 @@
 $passoptions.latex()$
 \documentclass{amsart}
-% dzg-unified owns cleveref, biblatex (backend=biber, style=alphabetic),
-% and \pandocbounded; template-specific options must be passed BEFORE it
-% loads those packages — re-loading them here is an option clash.
 \PassOptionsToPackage{nameinlink}{cleveref}
 \PassOptionsToPackage{sorting=ynt}{biblatex}
 \usepackage[arxiv]{dzg-unified}
-% dzg-unified provides: amsmath, amsthm, amssymb, amsfonts, mathtools,
-% mathrsfs, stmaryrd, bm, esint, upgreek, graphicx, xcolor[dvipsnames],
-% tikz, tikz-cd, etoolbox, xparse, pgfornament, marginnote
 
 \newif\ifshort
 \shortfalse
@@ -56,23 +50,14 @@ $for(bibliography)$
 \addbibresource{$bibliography$}
 $endfor$
 
-\renewcommand{\tilde}{\widetilde}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
-% Pandoc compatibility macros
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-% Standard Pandoc macros for figures
 $if(graphics)$
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\textwidth\textwidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
 \makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to H or value from metadata
 \makeatletter
 \def\fps@figure{$if(fig-pos)$$fig-pos$$else$H$endif$}
 \makeatother

@@ -2,7 +2,6 @@ type ZeroArgMacro = string;
 type NArgMacro = [replacement: string, argCount: number];
 
 export const macros: Record<string, ZeroArgMacro | NArgMacro> = {
-
   "coloneqq": "\\mathrel{\\vcenter{:}}=",
   "qty": ["\\left( {#1} \\right)", 1],
   "qed": "\\blacksquare",

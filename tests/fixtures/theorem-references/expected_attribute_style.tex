@@ -1,11 +1,7 @@
-% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \documentclass{amsart}
 \usepackage{dzg-unified}
-% dzg-unified provides: amsmath, amsthm, amssymb, amsfonts, mathtools,
-% mathrsfs, stmaryrd, bm, esint, upgreek, graphicx, xcolor[dvipsnames],
-% tikz, tikz-cd, etoolbox, xparse, pgfornament, marginnote
 
 \newif\ifshort
 \shortfalse
@@ -36,16 +32,10 @@
 \usetikzlibrary{arrows.meta, cd, fadings, patterns, calc, matrix, positioning, decorations, decorations.pathreplacing, decorations.markings, shapes, backgrounds, fit, shapes.geometric, intersections, hobby, matrix,arrows,decorations.pathmorphing}
 \tikzfading[name=fade out, inner color=transparent!0, outer color=transparent!100]
 
-% biblatex is provided by dzg-unified
 \addbibresource{refs.bib}
 
-\renewcommand{\tilde}{\widetilde}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
-% Pandoc compatibility macros
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-% Standard Pandoc macros for figures
 
 \makeatletter
 \providecommand{\pandocbounded}[1]{#1}

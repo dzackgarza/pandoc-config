@@ -76,22 +76,22 @@ macros** from categories.tex work ✅ **Spectral sequence macros** from spectral
 
 ## Production Usage
 
-In real documents, use:
+In real documents, `\usepackage{dzg-unified}` loads each tier:
 
 ```latex
 \documentclass{scrartcl}
-\usepackage{dzg-unified}  % Loads all tiers
+\usepackage{dzg-unified}
 \begin{document}
-% All macros available
+$\ZZ, \QQ, \RR$
 \end{document}
 ```
 
-Or use a modern preamble:
+`\input{koma-article}` loads dzg-unified too:
 
 ```latex
-\input{koma-article}  % Includes dzg-unified automatically
+\input{koma-article}
 \begin{document}
-% All macros available
+$\ZZ, \QQ, \RR$
 \end{document}
 ```
 
@@ -113,3 +113,30 @@ The test documents include examples of:
 - Differential geometry (tangent bundles, exterior algebra)
 
 All macros successfully tested in the LaTeX compilation.
+
+## Theorem references (`just test-references`)
+
+`tests/test-project-references.sh` runs the Pandoc stage of the recipes
+(`_compile-pandoc-tex`) in a scratch directory and checks the `.tex` that it
+writes. The stage is the first dependency of `compile-pandoc-project` (mode
+`crossref`) and of `compile-pandoc` (mode `no-crossref`). Each step names the template of this checkout by its absolute
+path, so Pandoc does not read it from `~/.pandoc`, which can be another
+checkout.
+
+| Step | What it proves |
+| --- | --- |
+| 1 | The `ref_prefixes` table of `filters/convert_amsthm_envs.lua` has the keys of `THEOREM_DIV_PREFIXES` in zettlr-pandoc (`source/common/util/pandoc-quick-reference.ts`). The test holds the one copy of that list in this repository, so a prefix that one repository adds, removes or renames fails it. `not` is a Lua keyword, so the table writes it as `["not"]=true`. |
+| 2 | Two ordered inputs: the content of the first file comes before the content of the second; a theorem div with an id has its `\label`; `@thm:` citations become `\cref`, with the prefix, the suffix, the suppressed form (`\ref`) and the clusters of the authored text; a bibliography citation stays `\autocite`. The LaTeX writer wraps lines, so a match of more than one word runs on a copy with the whitespace collapsed. |
+| 3 | A file name with a space stays one argument, and its content goes in its place in the order. |
+| 4 | A proof div has no number and no label; an empty key gives no `\label{thm:}`. |
+| 5 | The attribute-style sample (`title=`/`ref=` attributes, no theorem citations) gives the `.tex` of `fixtures/theorem-references/expected_attribute_style.tex` through `research_draft.tex`. Lines that start with `%` are not compared: they are TeX comments, and the comment check of the commit hook refuses them in the fixture. Pandoc writes one, from its partial `passoptions.latex`. |
+| 6 | On the single-file path, `@thm:` citations become `\cref` too. |
+| 7 | The `.tex` of step 2 compiles with latexmk under the plain style branch of this checkout (`TEXINPUTS` names this checkout, not `~/.pandoc`), so each environment that the filter writes is defined (#6). latexmk runs without `-f`, so an undefined environment fails the exit code. |
+| 8 | `_compile-pandoc-tex` refuses a mode other than `crossref` and `no-crossref` before it makes a directory (zettlr-pandoc#5, item B19). |
+| 9 | The same fixture compiles under the arxiv branch (`research_paper.tex`, by absolute path): no undefined environment (#7) and no LaTeX error. |
+
+The workspace fixtures are copies of
+`zettlr-pandoc/test/fixtures/reference-workspace/ProjectA/`. `Theorems.md` is
+a verbatim copy. `Halphen_Surfaces.md` has its cross-file lemma key changed to
+`lem:kodaira:embedding`, a bare `@thm:torelli`, and citations with a prefix, a
+suffix, the suppressed form and a mixed cluster.
