@@ -489,6 +489,62 @@ stylesheets and the generated MathJax macros.
 | `context-mathml.lua` | gives ConTeXt each formula as MathML, for its `mathml` module |
 | `components.lua`, `post-navigation.lua`, `youtube.lua`, `select_images.lua`, `semanticlean.lua` | blog components, navigation, embeds, image selection, make4ht HTML cleanup |
 
+### `convert_amsthm_envs.lua`
+
+For LaTeX, PDF and Beamer output, a theorem div becomes its environment:
+
+| Markdown | LaTeX |
+| --- | --- |
+| `::: {.theorem title="abcde" ref="thm:123"}` | `\begin{theorem}[abcde]\label{thm:123}` |
+| `::: {.theorem #thm:key title="abcde"}` | `\begin{theorem}[abcde]\label{thm:key}` |
+
+The title can hold math. The environments are `theorem`, `lemma`,
+`proposition`, `corollary`, `proof`, `remark`, `definition`, `example`,
+`conjecture`, `claim`, `observation`, `question`, `problem`, `assumption`,
+`warning`, `exercise`, `construction`, `notation` and `convention`. A proof
+div gets no label, also with an id. An id that ends in `:` (`#thm:`) gets
+no label. Markdown output keeps the div; other output adds the class
+`proofenv` for CSS.
+
+A label is wider than a reference. Each id that is not empty and does not
+end in `:` becomes a `\label` (`::: {.theorem #torelli}` gives
+`\label{torelli}`), but only a key of a theorem family becomes `\cref` from
+an `@` citation. zettlr-pandoc indexes only keys of a theorem family
+(`extract-references`), so a bare id is a LaTeX target that the editor does
+not see: no navigation, completion or rename. A bare id is kept for old
+documents (zettlr-pandoc#5, item B22).
+
+A citation of a theorem-family key becomes a cleveref reference before the
+natbib or biblatex writer makes it `\autocite`. The families are `thm`,
+`lem`, `prop`, `cor`, `def`, `rmk`, `ex`, `conj`, `clm`, `obs`, `qst`,
+`prob`, `ass`, `warn`, `exr`, `cons`, `not` and `conv`; a key is
+`<family>:<text>`, with text that is not empty. This list is the same as
+`THEOREM_FAMILY_METADATA` of zettlr-pandoc
+(`source/common/util/pandoc-quick-reference.ts`) and the table of the
+Quarto book filter `~/research/writing/.book/_extensions/local/amsthm-refs`,
+which resolves the same citations in HTML. A change goes into all three.
+
+| Markdown | LaTeX |
+| --- | --- |
+| `@thm:key` | `\cref{thm:key}` |
+| `[@thm:a; @lem:b]` | `\cref{thm:a,lem:b}` |
+| `[see @thm:key]` | `see \cref{thm:key}` |
+| `[@thm:key, part (ii)]` | `\cref{thm:key}, part (ii)` |
+| `[-@thm:key]` | `\ref{thm:key}` |
+| `@def:key [@MH73, I §3.1]` | `\cref{def:key} \autocite[I §3.1]{MH73}` |
+
+The prefix comes before the reference and the suffix after it (a Pandoc
+suffix has its own leading comma). A cleveref reference has no author, so
+`-@` drops the type name and gives the number with its link, as in
+"Torelli's theorem [-@thm:torelli]". In a cluster, each run of items
+without a prefix, a suffix or `-` is one `\cref{a,b}`, so cleveref writes
+its own conjunction; each other item is a reference of its own, and two
+theorem parts are set apart by `; `. A run of bibliography items stays one
+citation, set apart by a space. A cluster without a theorem-family key
+(`[@Ols04, Lem. 7.1]`) does not change. `\cref` needs cleveref, which
+`dzg-unified.sty` (the `research_draft`, `koma-article` and `ams-article`
+templates) and `research_paper.tex` load.
+
 `defaults/`, `csl/` and `bib/` hold pandoc defaults, citation styles and the
 bibliography.
 
