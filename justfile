@@ -545,7 +545,7 @@ _check-figure-preambles:
 
 [doc("Fail when a generated macro file differs from the generator output (a hand edit)")]
 _check-generated-macros:
-  uv run "{{source_directory()}}/bin/generate-mathjax-config.py" >/dev/null
+  uv run --project "{{source_directory()}}" "{{source_directory()}}/bin/generate-mathjax-config.py" >/dev/null
   git -C "{{source_directory()}}" diff --exit-code -- templates/css templates/mathjax-config.html templates/pandoc_revealjs_template.html
 
 [doc("CI gate: the full suite, same as test")]
@@ -593,7 +593,7 @@ _test-staleness-report:
 
 [doc("Generate every MathJax projection from the canonical macro manifest")]
 generate-math-macros:
-  uv run "{{source_directory()}}/bin/generate-mathjax-config.py"
+  uv run --project "{{source_directory()}}" "{{source_directory()}}/bin/generate-mathjax-config.py"
 
 [doc("Alias of generate-math-macros")]
 generate-math-macros-legacy: generate-math-macros
