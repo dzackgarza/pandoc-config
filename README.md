@@ -136,7 +136,7 @@ standalone and included (see [Rendering figures](#rendering-figures)).
 | `dzg-tikz` | the shared preamble and the macros, without document-level packages | standalone figures (the renderers use it) |
 | `dzg-mathjax` | tiers 1-2, `categories`, `spectral` | the MathJax-safe subset (Obsidian, blog) |
 | `dzg-dissertation` | the shared preamble, the tiers, then `dissertation-overrides.tex` | the dissertation |
-| `dzg-beamer` | `dzg-macros`, clearing Beamer's theorem names first | slides |
+| `dzg-beamer` | `preambles/dzg-math-preamble.tex`, `dzg-macros`, the arXiv theorem environments; needs the class option `notheorems` | slides (`templates/research_beamer.tex`) |
 
 ```latex
 \documentclass{amsart}
@@ -177,8 +177,9 @@ and `MACRO-SEMANTICS-AUDIT.md` hold the rule and the migration ledger.
 
 MathJax targets read a generated copy: `just generate-math-macros` parses the
 files in `styles/macros/mathjax-sources.txt` and writes
-`templates/css/mathjax-macros.{mjs,ts,json,html}` and the macro map of
-`templates/pandoc_preview_template.html`. `styles/obsidian/` holds the Obsidian
+`templates/css/mathjax-macros.{mjs,ts,json,html}` and the macro maps of
+`templates/mathjax-config.html` (the MathJax configuration that each HTML
+template except reveal.js includes) and `templates/pandoc_revealjs_template.html`. `styles/obsidian/` holds the Obsidian
 setup.
 
 The macros need MathJax 4 with the `ams`, `mathtools` and `stmaryrd` TeX

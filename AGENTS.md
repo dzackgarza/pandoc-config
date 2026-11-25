@@ -110,29 +110,69 @@ template of this repository, by name:
 | Writer | Template |
 | --- | --- |
 | `html`, `html5`, `html4` | `templates/pandoc_preview_template.html` |
+| `s5` | `templates/pandoc_s5_template.html` |
+| `slidy` | `templates/pandoc_slidy_template.html` |
+| `slideous` | `templates/pandoc_slideous_template.html` |
+| `dzslides` | `templates/pandoc_dzslides_template.html` |
+| `chunkedhtml` | `templates/pandoc_chunkedhtml_template.html` |
 | `revealjs` | `templates/pandoc_revealjs_template.html` |
-| `latex` | `templates/research_draft.tex` |
+| `latex`, `pdf` | `templates/research_draft.tex` |
+| `beamer` | `templates/research_beamer.tex` |
 
-So a change of one of these three files changes each such export of the
-editor, and a rename or a removal stops those exports (the editor names the
-missing file). The list is `PANDOC_DIRECTORY_TEMPLATES` in zettlr-pandoc
+So a change of one of these files changes each such export of the editor, and
+a rename or a removal stops those exports (the editor names the missing file).
+The list is `PANDOC_DIRECTORY_TEMPLATES` in zettlr-pandoc
 (`source/app/service-providers/commands/exporter/resolve-export.ts`); its CI
 clones `main` of this repository, so a change here that the editor needs lands
 here first.
 
-The two HTML templates hold a MathJax configuration:
+A writer that is not in the table gets no macro from a template, for one of
+these reasons:
+
+- Pandoc converts the TeX of each formula to the math of the format (MathML,
+  OMML, eqn, Typst, Unicode text) in the writer, before the template: `docx`,
+  `pptx`, `odt`, `opendocument`, `epub`, `epub2`, `epub3`, `docbook*`,
+  `jats*`, `typst`, `ms`, `man`, `rtf`, `icml`, `plain`, `ansi`, `jira`,
+  `muse`, `commonmark`, `markdown_strict`, `markdown_phpextra`,
+  `markdown_github`. A formula
+  with a macro of this repository stays raw TeX. Only a definition that the
+  reader sees (`latex_macros`: `\newcommand` lines in an input, such as
+  `templates/css/math-macros.html`) gives such a writer the macros. The
+  `epub` templates also have no `$math$`, and Pandoc does not put a script
+  that a template names into the container.
+- The writer keeps the TeX of each formula, and the program that reads the
+  output renders it: `markdown`, `markdown_mmd`, `commonmark_x`, `gfm`,
+  `rst`, `asciidoc*`, `org`, `mediawiki`, `textile`, `tei`, `texinfo`,
+  `xwiki`, `zimwiki`, `dokuwiki`, `djot`, `ipynb`, `haddock`, `bbcode*`,
+  `t2t`, `vimdoc`, `markua`, `fb2`, `xml`.
+- The output has no body text: `biblatex`, `bibtex`, `csljson`, `json`,
+  `native`, `opml`.
+- `context`: the bodies of the macros are LaTeX. ConTeXt does not define
+  commands that they use (`\operatorname`, `\mathsf`, `\genfrac`,
+  `\substack`, `\textrm`, `\textbf`, ...), and about 75 macro names (`\det`,
+  `\hat`, `\bar`, `\mod`, `\type`, `\from`, `\tr`, ...) are commands of
+  ConTeXt itself. ConTeXt gets the macros only through a translation of the
+  macro tree, which does not exist.
+
+The HTML templates other than reveal.js include one MathJax configuration, the
+Pandoc partial `templates/mathjax-config.html` (`$mathjax-config.html()$` in
+the place of `$math$`). Each such template is `pandoc -D <writer>` with that
+line; after a Pandoc release, compare it with the new `pandoc -D <writer>` and
+carry the changes over. A template that includes the partial must stay in
+`templates/`, as Pandoc finds a partial in the folder of its template.
 
 - The `macros: {...},` line between the `MATHJAX_MACROS_START` and
-  `MATHJAX_MACROS_END` markers is written by `bin/generate-mathjax-config.py`
-  (`GENERATED_TEMPLATES`). Never edit it by hand. A new template with macros
-  goes into that list.
+  `MATHJAX_MACROS_END` markers of the partial and of the reveal.js template is
+  written by `bin/generate-mathjax-config.py` (`GENERATED_TEMPLATES`). Never
+  edit it by hand. A new HTML template includes the partial; a template with a
+  macro map of its own goes into that list.
 - `mathjax-root` and `mathjax-fonts` are Pandoc variables for a MathJax that is
   not loaded from its CDN: the folder of the MathJax component and the folder
   of its font packages. The editor sets both to its own copy of MathJax 4. A
   page that embeds the component (`--embed-resources`) cannot find its TeX
   extensions without `mathjax-root`. Without the variables a page loads
   MathJax as Pandoc names it (the default URL depends on the Pandoc version),
-  so the configuration must stay valid for MathJax 3 and 4. The preview uses
+  so the configuration must stay valid for MathJax 3 and 4. The partial uses
   `js/mathjax-stmaryrd.js` as a Pandoc template partial and registers it at
   startup only for MathJax 4, before `defaultReady()`. MathJax 3 cannot render
   `\fps`. Do not copy the extension's implementation into the template.
@@ -140,8 +180,13 @@ The two HTML templates hold a MathJax configuration:
   the MathJax 3 plugin of reveal.js (`RevealMath.MathJax3`) in the place of
   the MathJax 2 plugin. After a Pandoc release, compare it with the new
   `pandoc -D revealjs` and carry the changes over.
+- `research_beamer.tex` is `pandoc -D beamer` with the class option
+  `notheorems` and `\usepackage{dzg-beamer}` after `$common.latex()$`.
+  `dzg-beamer` stops without `notheorems`: beamer otherwise defines theorem
+  environments that the macro tree defines too.
 
-`tests/test-mathjax-generator.py` checks both templates.
+`tests/test-mathjax-generator.py` checks each template of the table: the
+macro map of each HTML page and pdflatex on each TeX writer.
 
 ## Releases and downstream sites
 

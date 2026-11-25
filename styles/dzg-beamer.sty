@@ -1,41 +1,28 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{dzg-beamer}[2026/06/17 DZG Beamer Style Package]
+\ProvidesPackage{dzg-beamer}[2026/11/25 DZG Beamer Style Package]
 
-% Load general macros package
+% The theorem environments of the macro tree replace those of beamer. Beamer
+% defines its own (theorem, corollary, lemma, ... with their counters) unless
+% the class has the option notheorems (beameruserguide, section 12.4), and a
+% package cannot undo that definition completely. The class option is
+% therefore required.
+\@ifclasswith{beamer}{notheorems}{}{%
+  \PackageError{dzg-beamer}{Beamer was loaded without the class option notheorems}{%
+    Use \string\documentclass[notheorems]{beamer}; templates/research_beamer.tex does.}}
+
+% Beamer sets up sans-serif math alphabets of its own, and with them the math
+% packages pass the limit of 16 math alphabets ("Too many math alphabets used
+% in version normal"). bm then gets no alphabet of its own for bold and heavy
+% math: \bmmax and \hmmax are the number that it allocates, and \bm then
+% reaches the bold fonts through \boldmath (bm.pdf, section 2 "Font allocation").
+\newcommand{\bmmax}{0}
+\newcommand{\hmmax}{0}
+
+% The packages that the macros need, then the macros
+\input{preambles/dzg-math-preamble}
 \RequirePackage{dzg-macros}
 
-% Undefine Beamer defaults to prevent collision with environments-arxiv
-\makeatletter
-\let\c@theorem\relax
-\let\thetheorem\relax
-\let\cl@theorem\relax
-\let\p@theorem\relax
-
-\let\theorem\relax
-\let\endtheorem\relax
-\let\lemma\relax
-\let\endlemma\relax
-\let\corollary\relax
-\let\endcorollary\relax
-\let\definition\relax
-\let\enddefinition\relax
-\let\example\relax
-\let\endexample\relax
-\let\examples\relax
-\let\endexamples\relax
-\let\fact\relax
-\let\endfact\relax
-\let\remark\relax
-\let\endremark\relax
-\let\problem\relax
-\let\endproblem\relax
-\let\conjecture\relax
-\let\endconjecture\relax
-\let\proposition\relax
-\let\endproposition\relax
-\makeatother
-
-% Load simple, non-tcolorbox theorem environments
+% Simple, non-tcolorbox theorem environments
 \input{environments-arxiv}
 
 \endinput

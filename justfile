@@ -590,7 +590,8 @@ _test-staleness-report:
 
 # Generate every MathJax projection from the canonical macro manifest.
 # This is the only regeneration path: JSON/JS/TS, both HTML consumers, and the
-# preview template all derive from the same parsed semantic macro API.
+# macro maps of templates/mathjax-config.html and the reveal.js template all
+# derive from the same parsed semantic macro API.
 generate-math-macros:
   uv run "{{source_directory()}}/bin/generate-mathjax-config.py"
 
