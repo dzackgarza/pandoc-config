@@ -521,7 +521,8 @@ Every figure draws with the style vocabulary in
    use `curve component`, `curve node`, `dual vertex`, `genus`.
 2. **Figures define no styles.** No `\tikzset`, `\tikzstyle`, `\colorlet`,
    `\pgfsetlayers`, `\usetikzlibrary`, or drawing macros in a figure file, and
-   no raw colours or line widths. A missing element is added to the library,
+   no raw colours or line widths. `just test-commit` fails when a figure file
+   contains `\usetikzlibrary` or loads a package other than `dzg-tikz`. A missing element is added to the library,
    in its family section, with its meaning in a comment.
 3. **Conventions.** Degeneration arrows and poset cover edges point from the
    generic stratum to the more degenerate one. A 0-cusp is a rounded box and a

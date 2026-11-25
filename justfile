@@ -533,8 +533,15 @@ _test-plain-clone:
 test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-tikz-paths _test-lamport-proof _test-wikilinks _test-math-delimiters _test-posets _test-compile-pandoc _test-compile-html _test-hide-solutions _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
 
 [doc("Run the fast commit check; the commit hook runs this")]
-test-commit: _check-generated-macros
+test-commit: _check-generated-macros _check-figure-preambles
     @just -f ~/ai-review-ci/justfiles/python.just -d . test-commit
+
+[doc("Fail when a figure file loads a TikZ library or a package other than dzg-tikz")]
+[script("bash")]
+_check-figure-preambles:
+  cd "{{source_directory()}}"
+  hits=$(git ls-files -z 'figures/*.tex' 'figures/*.tikz' ':!:figures/tikz/visualizations' | xargs -0 grep -anE '\\usetikzlibrary|\\usepackage(\[[^]]*\])?\{' | grep -vE '\\usepackage\{dzg-tikz\}' || true)
+  test -z "$hits" || { printf 'Figure files load libraries; only dzg-tikz may be loaded:\n%s\n' "$hits"; exit 1; }
 
 [doc("Fail when a generated macro file differs from the generator output (a hand edit)")]
 _check-generated-macros:
