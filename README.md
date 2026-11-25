@@ -500,7 +500,8 @@ template, the TikZ vocabulary and every figure object (`tests/test-tikz-macros.t
 pdflatex), the tikzcd filter, the Lamport-proof filter, the poset layout
 (`tests/test-posets.tex`, lualatex), the `compile-pandoc` recipe
 (`tests/test-compile-pandoc.sh`), the `compile-html` recipe
-(`tests/test-compile-html.sh`), `bin/pandoc_stripmacros.sh`
+(`tests/test-compile-html.sh`), the `hide_solutions` filters
+(`tests/test-hide-solutions.sh`), `bin/pandoc_stripmacros.sh`
 (`tests/test-stripmacros.sh`) and a captionless table inside a theorem
 environment through that recipe (`tests/test-theorem-tables.sh`, which fails
 on each TeX error in the log, as latexmk runs in force mode), and checks that
