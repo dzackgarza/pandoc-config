@@ -545,6 +545,17 @@ citation, set apart by a space. A cluster without a theorem-family key
 `dzg-unified.sty` (the `research_draft`, `koma-article` and `ams-article`
 templates) and `research_paper.tex` load.
 
+### Copied code
+
+Three files are copies of a project of another author. A change of one of
+them starts from its source.
+
+| File | Source | Delta from the source |
+| --- | --- | --- |
+| `filters/include.lua` | `include-files.lua` of [pandoc-ext/include-files](https://github.com/pandoc-ext/include-files) (MIT) | An image path of an included file that starts with `resources/`, `rendered/`, `figures/` or `..` is not made relative to the folder of that file: these paths start at the root of the project (`figures/` is often a link to `~/.pandoc/figures`). Upstream has no option for this, so the copy stays. |
+| `bin/xpandlatex` | `xpandlatex` of [xpandlatex/xpandlatex](https://github.com/xpandlatex/xpandlatex), commit `6261f3c` | A command name can hold `@`; `\providecommand` defines a macro as `\newcommand` does; a `\newlabel` of the `.aux` file can have more than two groups (hyperref writes five); the option `-L`/`--annotate-labels` puts the number of each `\label` from the `.aux` file after it as a TeX comment. The `extract-ref` recipe runs it. |
+| `bin/ankdown.py` | `ankdown/ankdown.py` of [benwr/ankdown](https://github.com/benwr/ankdown) (MIT) | Each field goes through `bin/pandoc_stripmacros.sh` in place of the `$`-to-`\(` conversion of upstream; the card script configures MathJax 3 (upstream loads MathJax 2.7) with three macros of its own (`coloneqq`, `qty`, `divides`); the card model is `Custom Ankdown Model`, with text on the left at 18pt. |
+
 `defaults/`, `csl/` and `bib/` hold pandoc defaults, citation styles and the
 bibliography.
 
