@@ -484,7 +484,7 @@ stylesheets and the generated MathJax macros.
 | `normalize_fenced_divs.lua` | fenced-div layout |
 | `obsidian.lua`, `obsidian_callouts.lua` | strip Obsidian wikilinks, comments and tags; render callouts |
 | `hide_solutions_html.lua`, `hide_solutions_pdf.lua` | collapse or drop solution blocks |
-| `replace_symbols_html.lua` | MathJax replacements for symbols it lacks (`\coloneqq`) |
+| `strip_unanswered_questions_tag.lua` | removes the `#unanswered_questions` tag (and the parentheses around it) from the text |
 | `math-macros.lua` | removes the macro definitions of `templates/css/math-macros.md` from the document |
 | `context-mathml.lua` | gives ConTeXt each formula as MathML, for its `mathml` module |
 | `components.lua`, `post-navigation.lua`, `youtube.lua`, `select_images.lua`, `semanticlean.lua` | blog components, navigation, embeds, image selection, make4ht HTML cleanup |

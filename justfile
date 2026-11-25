@@ -234,7 +234,7 @@ compile-html input_file output_file bib_source=PROJECT_BIB_SOURCE:
       "${CROSSREF_ARGS[@]}" \
       --lua-filter="{{source_directory()}}/filters/convert_amsthm_envs.lua" \
       --lua-filter="{{source_directory()}}/filters/tikzcd.lua" \
-      --lua-filter="{{source_directory()}}/filters/replace_symbols_html.lua" \
+      --lua-filter="{{source_directory()}}/filters/strip_unanswered_questions_tag.lua" \
       --lua-filter="{{source_directory()}}/filters/convert_math_delimiters.lua" \
       --citeproc \
       --csl="{{source_directory()}}/csl/alpha-preview.csl" \
