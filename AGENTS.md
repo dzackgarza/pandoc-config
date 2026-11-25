@@ -131,8 +131,11 @@ The two HTML templates hold a MathJax configuration:
   of its font packages. The editor sets both to its own copy of MathJax 4. A
   page that embeds the component (`--embed-resources`) cannot find its TeX
   extensions without `mathjax-root`. Without the variables a page loads
-  MathJax as Pandoc names it (MathJax 3 by default), so the configuration must
-  stay valid for MathJax 3 and 4: no option that only one of them knows.
+  MathJax as Pandoc names it (the default URL depends on the Pandoc version),
+  so the configuration must stay valid for MathJax 3 and 4. The preview uses
+  `js/mathjax-stmaryrd.js` as a Pandoc template partial and registers it at
+  startup only for MathJax 4, before `defaultReady()`. MathJax 3 cannot render
+  `\fps`. Do not copy the extension's implementation into the template.
 - The reveal.js template is the template of Pandoc (`pandoc -D revealjs`) with
   the MathJax 3 plugin of reveal.js (`RevealMath.MathJax3`) in the place of
   the MathJax 2 plugin. After a Pandoc release, compare it with the new

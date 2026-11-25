@@ -26,6 +26,7 @@ $endif$
 $if(math)$
 <!--MATHJAX_MACROS_START-->
 <script>
+$js/mathjax-stmaryrd.js()$
 window.MathJax = {
 $-- The two places of a MathJax that is not loaded from its CDN (a local
 $-- copy). `mathjax-root` is the folder of the MathJax component: a page
@@ -40,6 +41,19 @@ $endif$
 $if(mathjax-fonts)$
       fonts: "$mathjax-fonts$",
 $endif$
+    }
+  },
+  startup: {
+    ready() {
+      // The preview can be given either MathJax 3 or 4. Only 4 has the
+      // New Computer Modern double-bracket glyphs needed by stmaryrd.
+      // https://docs.mathjax.org/en/latest/web/actions.html
+      const mathjax = globalThis.MathJax;
+      if (mathjax.version.startsWith("4.")) {
+        globalThis.registerStmaryrd(mathjax);
+        mathjax.config.tex.packages.push("stmaryrd");
+      }
+      mathjax.startup.defaultReady();
     }
   },
   tex: {

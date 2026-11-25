@@ -38,7 +38,7 @@ Create a test note with:
 - Spectra: $\tmf, \MO, \KU$
 ```
 
-All macros should render correctly.
+All macros in this test note should render correctly. See the restrictions below for other macros.
 
 ## What Macros Are Available?
 
@@ -54,7 +54,7 @@ See `styles/macros/tier1-mathjax-simple.tex` for full list.
 - Brackets: `\ceiling{x}`, `\floor{x}`
 - Inner products: `\inner{u}{v}`
 - Complexes: `\complex{C}`, `\cocomplex{C}`
-- Function fields: `\fps{x}`, `\functionfield{K}`
+- Function fields: `\functionfield{K}`
 
 See `styles/macros/tier2-mathjax-args.tex` for full list.
 
@@ -65,6 +65,13 @@ See `styles/macros/tier2-mathjax-args.tex` for full list.
 See `styles/macros/categories.tex` and `styles/macros/spectral.tex` for full lists.
 
 ## What Won't Work in Obsidian?
+
+**`\fps{...}` is not supported by Obsidian's MathJax 3 engine.** It uses
+`\llbracket` and `\rrbracket`, which require MathJax 4's New Computer Modern
+font and the `stmaryrd` extension in `templates/js/mathjax-stmaryrd.js`.
+Loading the TeX macro file through Better MathJax does not install either.
+The macro remains in the shared definitions for consumers that meet those
+requirements; it is not a supported Obsidian macro.
 
 **Tier 3 and 4 macros** (LaTeX-only):
 - Complex TeX primitives (`\mathpalette`, `\ooalign`, boxes)
