@@ -76,7 +76,7 @@ archive/                    # Archived legacy files
 
 ```latex
 \documentclass{article}
-\usepackage{dzg-unified}  % Loads all macros
+\usepackage{dzg-unified}
 \begin{document}
 $\ZZ, \QQ, \RR, \CC$
 \end{document}
@@ -92,10 +92,9 @@ pandoc input.md -o output.pdf \
 
 ### Environment Setup
 
-Required in `~/.zshrc`:
+Required in `~/.zshrc`; the canonical source is `~/.envrc`:
 
 ```bash
-# Canonical source: ~/.envrc
 export TEXINPUTS=".:$HOME/.pandoc/templates//:$HOME/.pandoc/styles//:$HOME/.pandoc/styles/macros//:${TEXINPUTS:-}:"
 export BIBINPUTS=".:$HOME/.pandoc/bib//:${BIBINPUTS:-}"
 export PATH="$HOME/.pandoc/bin:$PATH"
@@ -176,10 +175,12 @@ line; after a Pandoc release, compare it with the new `pandoc -D <writer>` and
 carry the changes over. A template that includes the partial must stay in
 `templates/`, as Pandoc finds a partial in the folder of its template.
 
-- The `macros: {...},` line between the `MATHJAX_MACROS_START` and
-  `MATHJAX_MACROS_END` markers of the partial and of the reveal.js template is
-  written by `bin/generate-mathjax-config.py` (`GENERATED_TEMPLATES`). Never
-  edit it by hand. A new HTML template includes the partial; a template with a
+- The one `macros: {...},` line of the partial and of the reveal.js template
+  is written by `bin/generate-mathjax-config.py` (`GENERATED_TEMPLATES`); a
+  template with no such line or with more than one stops the generator. Never
+  edit it by hand. The configuration loads the MathJax packages `mathtools`,
+  `centernot` and `stmaryrd`, which the macro expansions use
+  (`styles/macros/README.md`). A new HTML template includes the partial; a template with a
   macro map of its own goes into that list.
 - **Note HTML is `compile-html`.** A class note (the Makefiles of
   `~/notes`) and `bin/vimpreview.sh` build HTML through
@@ -458,20 +459,23 @@ this machine.
    single `\usetikzlibrary{...}` line and the `\RequirePackage` block that
    every document and every standalone figure inherits.
 3. **Check the local TeX Live for a candidate.** A TikZ library ships as
-   `tikzlibrary<name>.code.tex`; a package ships as `<name>.sty`.
+   `tikzlibrary<name>.code.tex`; a package ships as `<name>.sty`. The
+   first two commands find a TikZ library and a package; `texdoc` opens
+   the manual.
 
    ```bash
-   kpsewhich tikzlibraryhobby.code.tex     # TikZ library present?
-   kpsewhich dynkin-diagrams.sty           # package present?
-   texdoc hobby                            # open its manual
+   kpsewhich tikzlibraryhobby.code.tex
+   kpsewhich dynkin-diagrams.sty
+   texdoc hobby
    ```
 
 4. **Search TeX Live by description and by file name.** Search several
-   phrasings; package names rarely match the mathematical term.
+   phrasings; package names rarely match the mathematical term. The first
+   command matches descriptions, the second the names of shipped files.
 
    ```bash
-   tlmgr search --global 'hyperbolic'            # match descriptions
-   tlmgr search --global --all --file 'tikzlibrary.*knot'   # match shipped file names
+   tlmgr search --global 'hyperbolic'
+   tlmgr search --global --all --file 'tikzlibrary.*knot'
    ```
 
 5. **Search CTAN topics.** `https://ctan.org/topic/pgf-tikz` lists every

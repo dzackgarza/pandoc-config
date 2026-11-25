@@ -15,9 +15,11 @@ const rendered = Bun.spawnSync({
   stdin: Buffer.from(String.raw`$\fps{\frac{a}{b}}$`),
 });
 if (rendered.exitCode !== 0) throw new Error(rendered.stderr.toString());
-const script = rendered.stdout.toString().match(
-  /<!--MATHJAX_MACROS_START-->\s*<script>([\s\S]*?)<\/script>/,
-)?.[1];
+const script = [
+  ...rendered.stdout.toString().matchAll(/<script>([\s\S]*?)<\/script>/g),
+]
+  .map((match) => match[1])
+  .find((body) => body.includes("window.MathJax ="));
 if (script === undefined)
   throw new Error("Missing preview MathJax configuration");
 type PreviewConfig = {

@@ -1,8 +1,4 @@
 #!/usr/bin/env -S uv run --script
-# /// script
-# requires-python = ">=3.12"
-# dependencies = []
-# ///
 """
 Generate MathJax 3 macro configuration (JS/TS) from compatible LaTeX macro files.
 
@@ -30,14 +26,10 @@ from typing import NamedTuple
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MACRO_DIR = REPO_ROOT / "styles" / "macros"
-# Single source of truth for *which* macro files feed MathJax. Source filenames
-# are NOT hard-coded here — they are declared in the manifest, shared verbatim
-# with the SSG's bundled extractor so both consumers stay in lock-step.
+
 MACRO_MANIFEST = MACRO_DIR / "mathjax-sources.txt"
 OUT_DIR = REPO_ROOT / "templates" / "css"
-# The MathJax configuration of each HTML template except reveal.js: a Pandoc
-# partial that the template of each such writer includes, so the macro map
-# has one copy for all of them.
+
 MATHJAX_CONFIG_PARTIAL = REPO_ROOT / "templates" / "mathjax-config.html"
 REVEALJS_TEMPLATE = REPO_ROOT / "templates" / "pandoc_revealjs_template.html"
 
@@ -54,8 +46,6 @@ MATHJAX_SHIMS = (
     MacroDef("qed", 0, r"\blacksquare"),
 )
 
-
-# Pattern to locate the start of any macro definition command
 DEF_CMD_RE = re.compile(
     r"""
     \\
@@ -67,10 +57,8 @@ DEF_CMD_RE = re.compile(
     re.VERBOSE | re.DOTALL,
 )
 
-# Lines that are pure comments or empty
 _COMMENT_OR_EMPTY = re.compile(r"^\s*(%.*|\s*)$")
 
-# Lines to exclude entirely (preamble boilerplate)
 _EXCLUDE_STARTSWITH = (
     "\\NeedsTeXFormat",
     "\\ProvidesPackage",
@@ -80,7 +68,6 @@ _EXCLUDE_STARTSWITH = (
     "\\endinput",
 )
 
-# Lines to exclude entirely (not macros, or problematic for MathJax)
 EXCLUDE_LINES_STARTSWITH = (
     "\\NeedsTeXFormat",
     "\\ProvidesPackage",
@@ -91,11 +78,8 @@ EXCLUDE_LINES_STARTSWITH = (
     "\\input{",
 )
 
-# Lines that are pure comments or empty
 COMMENT_OR_EMPTY = re.compile(r"^\s*(%.*|\s*)$")
 
-# \DeclareMathOperator{{\mathbb{L} }} -> this produces an arg-count issue;
-# DeclareMathOperator always wraps in \operatorname{}
 DECLARE_MATH_OP_RE = re.compile(
     r"\\DeclareMathOperator\*?\s*\{\s*\\([a-zA-Z@]+)\s*\}\s*\{(.*)\}",
     re.DOTALL,
@@ -123,7 +107,7 @@ def _merge_continuations(raw: str) -> str:
     while i < len(lines):
         line = lines[i]
         if line.rstrip().endswith("%") and i + 1 < len(lines):
-            line = line.rstrip()[:-1]  # strip trailing %
+            line = line.rstrip()[:-1]
             i += 1
             line += " " + lines[i].lstrip()
         merged.append(line)
@@ -156,7 +140,7 @@ def _extract_balanced_group(raw: str, pos: int) -> tuple[str, int]:
             if depth == 0:
                 return raw[start + 1 : pos], pos + 1
         elif ch == "\\":
-            pos += 1  # skip next char (escaped brace)
+            pos += 1
         pos += 1
     return raw[start + 1 : pos], pos
 
@@ -167,12 +151,10 @@ def _extract_name(raw: str, pos: int) -> tuple[str, int]:
     if pos >= len(raw):
         return "", pos
     if raw[pos] == "{" and pos + 1 < len(raw) and raw[pos + 1] == "\\":
-        # {\name} form
         inner, after = _extract_balanced_group(raw, pos)
         assert inner.startswith("\\"), f"expected \\ name in braces, got {inner!r}"
         return inner[1:], after
     if raw[pos] == "\\":
-        # \name form
         end = pos + 1
         while end < len(raw) and raw[end].isalpha():
             end += 1
@@ -220,30 +202,24 @@ def parse_macros(content: str) -> list[MacroDef]:
         pos = m.end()
         pos = _skip_ws(text, pos)
 
-        # --- DeclarePairedDelimiter: skip it (not directly usable in MathJax) ---
         if "DeclarePairedDelimiter" in cmd:
-            # Consume name, left, right groups and skip
             name, pos = _extract_name(text, pos)
             _body, pos = _extract_body(text, pos)
             _body, pos = _extract_body(text, pos)
             continue
 
-        # --- Extract macro name ---
         name, pos = _extract_name(text, pos)
         if not name:
             continue
 
-        # --- Extract optional arg count ---
         arg_count, pos = _extract_opt_arg_count(text, pos)
 
-        # --- Extract body ---
         body, pos = _extract_body(text, pos)
         body = body.strip()
 
         if not body:
             continue
 
-        # --- Special handling ---
         if "DeclareMathOperator" in cmd:
             body = f"\\operatorname{{{body}}}"
             arg_count = 0
@@ -251,10 +227,6 @@ def parse_macros(content: str) -> list[MacroDef]:
         macros.append(MacroDef(name=name, arg_count=arg_count, body=body))
 
     return macros
-
-
-def _relative_source_lines(source_files: tuple[Path, ...]) -> str:
-    return "\n".join(f" *   {path.relative_to(REPO_ROOT)}" for path in source_files)
 
 
 def _unique_macros(macros: list[MacroDef]) -> list[MacroDef]:
@@ -291,7 +263,9 @@ def _read_manifest(manifest_path: Path) -> tuple[Path, ...]:
             sys.exit(1)
         files.append(resolved)
     if not files:
-        print(f"ERROR: manifest declares no macro files: {manifest_path}", file=sys.stderr)
+        print(
+            f"ERROR: manifest declares no macro files: {manifest_path}", file=sys.stderr
+        )
         sys.exit(1)
     return tuple(files)
 
@@ -303,51 +277,11 @@ def _read_macros(source_files: tuple[Path, ...]) -> list[MacroDef]:
     return _unique_macros(macros)
 
 
-def _esm_header(source_files: tuple[Path, ...]) -> str:
-    return """\
-/**
- * MathJax 3 macro configuration — generated by bin/generate-mathjax-config.py.
- *
- * DO NOT EDIT MANUALLY.  Source of truth:
-""" + _relative_source_lines(source_files) + "\n" + """\
- *
- * Usage (ESM):
- *   import { macros } from "./mathjax-macros.mjs";
- *   MathJax = { tex: { macros } };
- *
- * Usage (MathJax HTML config):
- *   <script>
- *     window.MathJax = {
- *       tex: { macros: { ... } }
- *     };
- *   </script>
- */
-
-"""
-
-
-def _ts_header(source_files: tuple[Path, ...]) -> str:
-    return """\
-/**
- * MathJax 3 macro configuration — generated by bin/generate-mathjax-config.py.
- *
- * DO NOT EDIT MANUALLY.  Source of truth:
-""" + _relative_source_lines(source_files) + "\n" + """\
- *
- * Usage:
- *   import { macros } from "./mathjax-macros";
- *   MathJax = { tex: { macros } };
- */
-
-/** A zero-argument macro replacement. */
+TS_PRELUDE = """\
 type ZeroArgMacro = string;
-
-/** A macro with N arguments. */
 type NArgMacro = [replacement: string, argCount: number];
 
-/** MathJax 3 tex.macros configuration. */
-export const macros: Record<string, ZeroArgMacro | NArgMacro> = {
-"""
+export const macros: Record<string, ZeroArgMacro | NArgMacro> = {"""
 
 
 def _read_file(path: Path) -> str:
@@ -365,7 +299,7 @@ def _escape_for_js(body: str) -> str:
     - Other chars that break JS string literals get \\uXXXX encoding
     """
     body = body.replace("\\", "\\\\")
-    # Escape literal newlines (from multiline \\def bodies)
+
     body = body.replace("\n", "\\n")
     body = body.replace("\r", "\\r")
     body = body.replace("\t", "\\t")
@@ -382,9 +316,9 @@ def _format_narg(body: str, n: int) -> str:
     return f'["{_escape_for_js(body)}", {n}]'
 
 
-def generate_js(macros: list[MacroDef], source_files: tuple[Path, ...]) -> str:
+def generate_js(macros: list[MacroDef]) -> str:
     """Generate JavaScript ESM module content."""
-    lines: list[str] = [_esm_header(source_files), "export const macros = {"]
+    lines: list[str] = ["export const macros = {"]
 
     for m in macros:
         if m.arg_count == 0:
@@ -393,13 +327,13 @@ def generate_js(macros: list[MacroDef], source_files: tuple[Path, ...]) -> str:
             lines.append(f'  "{m.name}": {_format_narg(m.body, m.arg_count)},')
 
     lines.append("};")
-    lines.append("")  # trailing newline
+    lines.append("")
     return "\n".join(lines)
 
 
-def generate_ts(macros: list[MacroDef], source_files: tuple[Path, ...]) -> str:
+def generate_ts(macros: list[MacroDef]) -> str:
     """Generate TypeScript module content."""
-    lines: list[str] = [_ts_header(source_files)]
+    lines: list[str] = [TS_PRELUDE]
 
     for m in macros:
         if m.arg_count == 0:
@@ -426,77 +360,37 @@ def _macro_object(macros: list[MacroDef]) -> dict[str, str | list]:
     return obj
 
 
-class GeneratedTemplate(NamedTuple):
-    """A Pandoc template that holds a generated ``macros: {...},`` line.
+GENERATED_TEMPLATES = (MATHJAX_CONFIG_PARTIAL, REVEALJS_TEMPLATE)
 
-    The markers are text of the language at their place in the template: an
-    HTML comment in the head of a page, a JavaScript comment inside a script.
+MACROS_LINE_RE = re.compile(r"(?m)^(\s*macros:\s*)\{.*\},[^\S\n]*$")
+
+
+def update_template_macros(template_path: Path, macros: list[MacroDef]) -> None:
+    """Replace the one ``macros: {...},`` line of a template.
+
+    The rest of the MathJax configuration belongs to the template. The macro
+    line is a projection of ``styles/macros``, so a template is never a second
+    macro authority. A template with no such line or with more than one fails.
     """
-
-    path: Path
-    start_marker: str
-    end_marker: str
-
-
-HTML_MARKERS = ("<!--MATHJAX_MACROS_START-->", "<!--MATHJAX_MACROS_END-->")
-SCRIPT_MARKERS = ("/* MATHJAX_MACROS_START */", "/* MATHJAX_MACROS_END */")
-
-# Each template whose MathJax configuration takes its macros from this
-# generator. A template that is not listed here must not hold a macro map.
-GENERATED_TEMPLATES = (
-    GeneratedTemplate(MATHJAX_CONFIG_PARTIAL, *HTML_MARKERS),
-    GeneratedTemplate(REVEALJS_TEMPLATE, *SCRIPT_MARKERS),
-)
-
-
-def update_template_macros(template: GeneratedTemplate, macros: list[MacroDef]) -> None:
-    """Replace the generated macro map inside a template.
-
-    The surrounding MathJax configuration is hand-owned by the template; only
-    the ``macros: {...},`` line between the explicit generation markers is a
-    derivative of ``styles/macros``. Keeping this in the same generator as the
-    JSON/JS outputs prevents a template from becoming a second macro authority.
-    """
-    template_path = template.path
-    start_marker = template.start_marker
-    end_marker = template.end_marker
     text = template_path.read_text()
-    start = text.find(start_marker)
-    end = text.find(end_marker, start + len(start_marker))
-    if start < 0 or end < 0:
-        raise RuntimeError(
-            f"Template {template_path} is missing the MathJax generation markers"
-        )
-
-    section = text[start:end]
-    replacement = json.dumps(_macro_object(macros), separators=(",", ":"))
-    section, count = re.subn(
-        # The space after the comma is of that line only: the line can be
-        # the last one before the end marker.
-        r"(?m)^(\s*macros:\s*)\{.*\},[^\S\n]*$",
-        lambda match: f"{match.group(1)}{replacement},",
-        section,
-        count=1,
-    )
-    if count != 1:
+    if len(MACROS_LINE_RE.findall(text)) != 1:
         raise RuntimeError(
             f"Template {template_path} must contain exactly one generated macros line"
         )
-    template_path.write_text(text[:start] + section + text[end:])
+    replacement = json.dumps(_macro_object(macros), separators=(",", ":"))
+    template_path.write_text(
+        MACROS_LINE_RE.sub(lambda match: f"{match.group(1)}{replacement},", text)
+    )
 
 
-def generate_legacy_html(macros: list[MacroDef], source_files: tuple[Path, ...]) -> str:
+def generate_legacy_html(macros: list[MacroDef]) -> str:
     """Generate raw MathJax TeX definitions for the legacy HTML template.
 
     ``research_draft.html`` wraps this file in a MathJax delimiter. It is a
     projection of the same parsed macro API as every other target; it must not
     be built by separately concatenating source files.
     """
-    lines: list[str] = [
-        "% Generated by bin/generate-mathjax-config.py; DO NOT EDIT.",
-        "% Source of truth:",
-        *[f"%   {line.removeprefix(' * ')}" for line in _relative_source_lines(source_files).splitlines()],
-    ]
+    lines: list[str] = []
     for m in macros:
         args = "" if m.arg_count == 0 else f"[{m.arg_count}]"
         lines.append(f"\\newcommand{{\\{m.name}}}{args}{{{m.body}}}")
@@ -504,12 +398,10 @@ def generate_legacy_html(macros: list[MacroDef], source_files: tuple[Path, ...])
     return "\n".join(lines)
 
 
-# The class of the fenced div that holds the definitions of the reader input.
-# filters/math-macros.lua removes the div with this class.
 READER_INPUT_CLASS = "math-macros"
 
 
-def generate_reader_input(macros: list[MacroDef], source_files: tuple[Path, ...]) -> str:
+def generate_reader_input(macros: list[MacroDef]) -> str:
     """Generate the macro definitions as a first input of a Pandoc Markdown reader.
 
     The ``latex_macros`` extension of the Markdown reader applies each
@@ -521,10 +413,6 @@ def generate_reader_input(macros: list[MacroDef], source_files: tuple[Path, ...]
     """
     lines: list[str] = [
         f"::: {{.{READER_INPUT_CLASS}}}",
-        "<!-- Generated by bin/generate-mathjax-config.py; DO NOT EDIT. Source of truth:",
-        _relative_source_lines(source_files).replace(" * ", "     "),
-        "-->",
-        "",
     ]
     for m in macros:
         args = "" if m.arg_count == 0 else f"[{m.arg_count}]"
@@ -534,7 +422,7 @@ def generate_reader_input(macros: list[MacroDef], source_files: tuple[Path, ...]
     return "\n".join(lines)
 
 
-def generate_html(macros: list[MacroDef], source_files: tuple[Path, ...]) -> str:
+def generate_html(macros: list[MacroDef]) -> str:
     """Generate a MathJax macro include for HTML documents.
 
     Quarto and other Pandoc HTML outputs register macros by rendering them:
@@ -543,12 +431,6 @@ def generate_html(macros: list[MacroDef], source_files: tuple[Path, ...]) -> str
     (Quarto: `include-before-body`) instead of defining macros of their own.
     """
     lines: list[str] = [
-        "<!-- MathJax macro include -- generated by bin/generate-mathjax-config.py.",
-        r"     This include alone does not support \fps; the host must load MathJax 4",
-        "     and register templates/js/mathjax-stmaryrd.js before typesetting.",
-        "     DO NOT EDIT MANUALLY.  Source of truth:",
-        _relative_source_lines(source_files).replace(" * ", "     "),
-        "-->",
         '<div style="display:none">',
         "\\(",
     ]
@@ -647,12 +529,12 @@ def main() -> None:
     legacy_html_path = args.legacy_html or (out_dir / "math-macros.html")
     reader_input_path = args.reader_input or (out_dir / "math-macros.md")
 
-    js_content = generate_js(all_macros, source_files)
-    ts_content = generate_ts(all_macros, source_files)
+    js_content = generate_js(all_macros)
+    ts_content = generate_ts(all_macros)
     json_content = generate_json(all_macros)
-    html_content = generate_html(all_macros, source_files)
-    legacy_html_content = generate_legacy_html(all_macros, source_files)
-    reader_input_content = generate_reader_input(all_macros, source_files)
+    html_content = generate_html(all_macros)
+    legacy_html_content = generate_legacy_html(all_macros)
+    reader_input_content = generate_reader_input(all_macros)
 
     js_path.write_text(js_content)
     ts_path.write_text(ts_content)
@@ -661,12 +543,9 @@ def main() -> None:
     legacy_html_path.write_text(legacy_html_content)
     reader_input_path.write_text(reader_input_content)
 
-    # A run into the canonical output directory refreshes each canonical
-    # template. A MathJax configuration that the caller names is the one
-    # template of the run.
-    templates: list[GeneratedTemplate] = []
+    templates: list[Path] = []
     if args.mathjax_config is not None:
-        templates = [GeneratedTemplate(args.mathjax_config, *HTML_MARKERS)]
+        templates = [args.mathjax_config]
     elif out_dir.resolve() == OUT_DIR.resolve():
         templates = list(GENERATED_TEMPLATES)
     for template in templates:
@@ -683,7 +562,7 @@ def main() -> None:
     print(f"Generated: {legacy_html_path}")
     print(f"Generated: {reader_input_path}")
     for template in templates:
-        print(f"Updated: {template.path}")
+        print(f"Updated: {template}")
 
 
 if __name__ == "__main__":

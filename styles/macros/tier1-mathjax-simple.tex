@@ -1,10 +1,3 @@
-% Tier 1: Simple MathJax-Compatible Shortcuts
-% No arguments, only \mathbb, \mathcal, \mathsf, \mathrm, \mathfrak
-% Works in: LaTeX, Pandoc, Obsidian MathJax
-%
-% Migrated from macros/latexmacs.tex on 2025-01-09
-
-% ===== Alphabetical Blackboard Bold =====
 \renewcommand{\AA}{{\mathbf{A}}}
 \newcommand{\CC}{{\mathbf{C}}}
 \newcommand{\DD}{\mathbb{D}}
@@ -24,8 +17,6 @@
 \newcommand{\VV}{{\mathbf{V}}}
 \newcommand{\ZZ}{{\mathbf{Z}}}
 
-% ===== Named Spaces and Sets =====
-% One macro per meaning, so letters shared by several meanings keep one display choice each.
 \newcommand{\irrationals}{{\mathbb{P}}}
 \newcommand{\Prob}{{\mathbb{P}}}
 \newcommand{\halfplane}{{\mathbb{H}}}
@@ -49,14 +40,10 @@
 \newcommand{\hypercohomology}{{\mathbb{H}}}
 \newcommand{\openball}{{\mathbb{B}}}
 
-% ===== Category Theory & Common Sets =====
-
-% ===== Blackboard Bold Variants =====
 \newcommand{\GGr}{ {\mathbb{Gr}}}
 \newcommand{\OP}{{\mathbb{OP}}}
 \newcommand{\SpSp}{{\mathbb{S}}}
 
-% ===== Specific Field Extensions =====
 \newcommand{\CCpadic}{{ \CC_p }}
 \newcommand{\CCstar}{\units{\CC}}
 \newcommand{\FFbar}{{\bar\FF}}
@@ -87,7 +74,6 @@
 \newcommand{\znz}{\ZZ/n\ZZ}
 \newcommand{\zpz}{\ZZ/p\ZZ}
 
-% ===== Calligraphic Letters =====
 \newcommand{\Banach}{\mathcal{B}}
 \newcommand{\Hsh}{{ \mathcal{H} }}
 \newcommand{\mca}{{\mathcal{A}}}
@@ -120,7 +106,6 @@
 \newcommand{\OO}{{\mathcal{O}}}
 \newcommand{\Path}{\mathcal{P}}
 
-% ===== Fraktur Letters =====
 \newcommand{\liea}{{\mathfrak{a}}}
 \newcommand{\lieb}{{\mathfrak{b}}}
 \newcommand{\lied}{{\mathfrak{d}}}
@@ -166,12 +151,10 @@
 \newcommand{\mfX}{{\mathfrak{X}}}
 \newcommand{\mm}{{\mathfrak{m}}}
 
-% ===== Math Sans-Serif =====
 \newcommand{\bigo}{{ \mathsf{O}}}
 \newcommand{\Gal}{{ \mathsf{Gal}}}
 \newcommand{\Herm}{{\mathsf{Herm}}}
 
-% ===== Math Roman Abbreviations =====
 \newcommand{\AMGM}{{\mathrm{AMGM}}}
 \newcommand{\CM}{{\mathrm{CM}}}
 \newcommand{\CR}{{\mathrm{CR}}}
@@ -216,7 +199,6 @@
 \newcommand{\WI}{\mathrm{WI}}
 \newcommand{\Zar}{{\mathrm{Zar}}}
 
-% ===== Math Roman Lowercase =====
 \newcommand{\alev}{{\,\mathrm{a.e.}}}
 \newcommand{\amp}{{\mathrm{amp}}}
 \newcommand{\an}{{\mathrm{an}}}
@@ -262,12 +244,11 @@
 \newcommand{\vamp}{{\mathrm{v.amp}}}
 \newcommand{\zar}{{\mathrm{zar}}}
 
-% ===== Operators without arguments =====
 \newcommand{\ab}{{\operatorname{ab}}}
 \newcommand{\ad}{ { \operatorname{ad}}}
 \newcommand{\Ad}{{ \operatorname{Ad} }}
 \newcommand{\adjoint}{\dagger}
-\renewcommand{\ae}{{ \text{a.e.} }}  % Override LaTeX built-in æ ligature
+\renewcommand{\ae}{{ \text{a.e.} }}
 \newcommand{\afp}{A_{/\FF_p}}
 \newcommand{\AG}{\operatorname{AG}}
 \newcommand{\AGL}{\operatorname{AGL}}
@@ -292,7 +273,6 @@
 \newcommand{\Bil}{\operatorname{Bil}}
 \newcommand{\Bl}{\operatorname{Bl}}
 \newcommand{\BM}{{\operatorname{BM}}}
-% \bP moved to blackboard bold family below; was \operatorname{bP} (surgery theory, unused)
 \newcommand{\Brauer}{\mathrm{Br}}
 \newcommand{\Bs}{\operatorname{Bs}}
 \newcommand{\by}{\times}
@@ -333,7 +313,6 @@
 \newcommand{\covol}{\operatorname{coVol}}
 \newcommand{\Cox}{{ \operatorname{Cox} }}
 \newcommand{\CP}{{\mathbf{CP}}}
-% \cpt: moved to tier2 as 1-arg compactification wrapper \overline{#1}
 \newcommand{\Crit}{\operatorname{Crit}}
 \newcommand{\crit}{\operatorname{crit}}
 \newcommand{\cross}{\times}
@@ -577,7 +556,7 @@
 \newcommand{\submfds}{\operatorname{SubMfds}}
 \newcommand{\SU}{{\operatorname{SU}}}
 \newcommand{\Sum}{ \sum }
-\newcommand{\orthogonalsum}{\mathop{\perp}\displaylimits}
+\newcommand{\orthogonalsum}{\mathop{\perp}}
 \newcommand{\supp}{\operatorname{supp}}
 \newcommand{\Supp}{{\operatorname{Supp}}}
 \newcommand{\Sw}{{\mathrm{Sw}}}
@@ -632,7 +611,6 @@
 \newcommand{\zbar}{\bar{z}}
 \newcommand{\ZHB}{\operatorname{ZHB}}
 
-% ===== Specific Complex Numbers and Symbols =====
 \newcommand{\Ag}{{\mathcal{A}_g}}
 \newcommand{\agbar}{\overline{\Ag}}
 \newcommand{\Ahat}{\hat{ \operatorname{A}}_g }
@@ -714,7 +692,6 @@
 \newcommand{\ZHS}{\ZZ\operatorname{HS}}
 \newcommand{\ZVHS}{{ \ZZ\mathrm{VHS} }}
 
-% ===== Symbols and Relations =====
 \newcommand{\abuts}{\Rightarrow}
 \newcommand{\actson}{\curvearrowright}
 \newcommand{\actsonl}{\curvearrowleft}
@@ -793,7 +770,7 @@
 \newcommand{\normalizer}{{ N }}
 \newcommand{\notimplies}{\centernot\implies}
 \newcommand{\ofrom}{\overset{\circ}{\leftarrow}}
-\newcommand{\onto}{\twoheadhthtarrow}
+\newcommand{\onto}{\twoheadrightarrow}
 \newcommand{\oto}{\overset{\circ}{\rightarrow}}
 \newcommand{\padic}{p\dash\text{adic}}
 \newcommand{\plocal}{{ \scriptsize {}_{ \localize{p}  } }}
@@ -816,10 +793,6 @@
 \newcommand{\wedgeprod}{\vee}
 \newcommand{\wreath}{\wr}
 
-% ===== Uppercase Shorthand Families (from AE_Style/Coble.sty) =====
-% These were dropped during the dzg-unified centralization refactor.
-
-% --- Blackboard bold \bX = \mathbb{X} (A-Z) ---
 \newcommand{\bA}{{\mathbb{A}}}
 \newcommand{\bB}{{\mathbb{B}}}
 \newcommand{\bC}{{\mathbb{C}}}
@@ -847,7 +820,6 @@
 \newcommand{\bY}{{\mathbb{Y}}}
 \newcommand{\bZ}{{\mathbb{Z}}}
 
-% --- Fraktur \mfX = \mathfrak{X} (A-Z) ---
 \newcommand{\mfA}{{\mathfrak{A}}}
 \newcommand{\mfB}{{\mathfrak{B}}}
 \newcommand{\mfD}{{\mathfrak{D}}}
@@ -871,7 +843,6 @@
 \newcommand{\mfY}{{\mathfrak{Y}}}
 \newcommand{\mfZ}{{\mathfrak{Z}}}
 
-% --- Widehat \hX = \widehat{X} (A-Z) ---
 \newcommand{\hA}{{\widehat{A}}}
 \newcommand{\hB}{{\widehat{B}}}
 \newcommand{\hC}{{\widehat{C}}}
@@ -899,7 +870,6 @@
 \newcommand{\hY}{{\widehat{Y}}}
 \newcommand{\hZ}{{\widehat{Z}}}
 
-% --- Widetilde \wA = \widetilde{X} (A-Z) ---
 \newcommand{\wA}{{\widetilde{A}}}
 \newcommand{\wB}{{\widetilde{B}}}
 \newcommand{\wC}{{\widetilde{C}}}
@@ -927,7 +897,6 @@
 \newcommand{\wY}{{\widetilde{Y}}}
 \newcommand{\wZ}{{\widetilde{Z}}}
 
-% --- Overline \oX = \overline{X} (A-Z) ---
 \newcommand{\oA}{{\overline{A}}}
 \newcommand{\oB}{{\overline{B}}}
 \newcommand{\oC}{{\overline{C}}}
@@ -955,7 +924,6 @@
 \newcommand{\oY}{{\overline{Y}}}
 \newcommand{\oZ}{{\overline{Z}}}
 
-% --- Underline \uX = \underline{X} (A-Z) ---
 \newcommand{\uA}{{\underline{A}}}
 \newcommand{\uB}{{\underline{B}}}
 \newcommand{\uC}{{\underline{C}}}
@@ -983,7 +951,6 @@
 \newcommand{\uY}{{\underline{Y}}}
 \newcommand{\uZ}{{\underline{Z}}}
 
-% --- Coble/Ga_Style project-specific abbreviations ---
 \newcommand{\Co}{{\mathrm{Co}}}
 \newcommand{\Nik}{{\mathrm{Nik}}}
 \newcommand{\Nod}{{\mathrm{Nod}}}
@@ -999,7 +966,6 @@
 \newcommand{\utor}{^{\mathrm{tor}}}
 \newcommand{\dnor}{_{\mathrm{nor}}}
 
-% --- Dissertation-specific moduli, lattice, and involution macros ---
 \newcommand{\fco}{F_{\Co}}
 \newcommand{\fell}{F_{ \mathrm{ell} } }
 \newcommand{\fen}{F_{\En}}
@@ -1031,12 +997,6 @@
 \newcommand{\ADEBC}{\mathrm{ADE}+\mathrm{BC}}
 \newcommand{\tADE}{\widetilde{ \ADE } }
 
-
-% ================================================================================
-% Migrated from legacy AE_Style.sty on 2026-06-16 (Approved Restoration)
-% ================================================================================
-
-% ----- Standard Math Operators -----
 \newcommand{\Bir}{\operatorname{Bir}}
 \newcommand{\Conv}{\operatorname{Conv}}
 \newcommand{\Exc}{\operatorname{Exc}}
@@ -1046,10 +1006,8 @@
 \newcommand{\Specm}{\operatorname{Specm}}
 \newcommand{\Ver}{\operatorname{Ver}}
 
-% ----- Arrows and Relations -----
 \newcommand{\isoto}{\xrightarrow{\sim}}
 
-% ----- Miscellaneous Math Symbols -----
 \newcommand{\wh}{\widehat}
 \newcommand{\la}{\langle}
 \newcommand{\ra}{\rangle}
@@ -1061,7 +1019,6 @@
 \newcommand{\ubb}{^{\rm BB}}
 \newcommand{\dto}{\Rightarrow}
 
-% ----- Project-Specific Abbreviations / Notations -----
 \newcommand{\fign}{Fig.~\ref{fig:discforms}}
 \newcommand{\ditto}{}
 \newcommand{\hoV}{\widehat{\overline V}}
@@ -1106,7 +1063,6 @@
 \newcommand{\evn}{\text{even }n}
 \newcommand{\odn}{\text{odd }n}
 
-% ===== Dissertation & Moduli Additions =====
 \DeclareMathOperator{\BB}{BB}
 \DeclareMathOperator{\ConvOp}{Conv}
 \DeclareMathOperator{\perfOp}{perf}

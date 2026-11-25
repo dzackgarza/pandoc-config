@@ -1,19 +1,5 @@
-% Tier 2: Commands with Arguments (MathJax-Compatible)
-% 1-9 arguments, only \left, \right, \frac, \text, basic math mode
-% Works in: LaTeX, Pandoc, Obsidian MathJax
-%
-% Migrated from macros/latexmacs.tex on 2025-01-09
-
-% Macros will be added here by macro-categorizer agent
-
-% ================================================================================
-% General utility macros from latexmacs_commands.tex
-% ================================================================================
-
-% Absolute value and norms
 \newcommand{\abs}[1]{{\left\lvert {#1} \right\rvert}}
 \newcommand{\cardinality}[1]{{\left\lvert {#1} \right\rvert}}
-% One macro per meaning of a pair of bars; each displays as bars.
 \newcommand{\determinant}[1]{{\left\lvert {#1} \right\rvert}}
 \newcommand{\elementorder}[1]{{\left\lvert {#1} \right\rvert}}
 \newcommand{\subgroupindex}[1]{{\left\lvert {#1} \right\rvert}}
@@ -34,14 +20,11 @@
 \newcommand{\normm}[1]{{\left\lVert \left\lVert {#1} \right\rVert\right\rVert}}
 \newcommand{\pnorm}[2]{{\left\lVert {#1} \right\rVert}_{#2}}
 
-% 2x2 matrices
 \newcommand{\matt}[4]{{ \begin{bmatrix} {#1} & {#2}  \\ {#3} & {#4} \end{bmatrix} }}
 
-% Adjoining and algebra constructions
 \newcommand{\adjoin}[1]{ { \left[ \scriptstyle {#1} \right] } }
 \newcommand{\polynomialring}[1]{ { \left[ {#1} \right] } }
 
-% Brackets and generators
 \newcommand{\bracket}[1]{ \left\langle #1 \right\rangle }
 \newcommand{\cyclicgroup}[1]{C_{#1}}
 \newcommand{\generators}[1]{\left\langle{#1}\right\rangle}
@@ -49,102 +32,61 @@
 \newcommand{\freeon}[1]{ \left[ {#1} \right]  }
 \newcommand{\dgens}[1]{\generators{\generators{ #1 }}}
 
-% Ceiling and floor
 \newcommand{\ceiling}[1]{{\left\lceil #1 \right\rceil}}
 \newcommand{\floor}[1]{{\left\lfloor #1 \right\rfloor}}
 
-% Complexes and bicomplexes
 \newcommand{\bicomplex}[1]{{ {#1}_{\scriptscriptstyle \bullet, \bullet}} }
 \newcommand{\cobicomplex}[1]{ { {#1}^{\scriptscriptstyle \bullet, \bullet}} }
 \newcommand{\chaincomplex}[1]{{ {#1}^{\bullet} }}
 \newcommand{\complex}[1]{{ {#1}_{\scriptscriptstyle \bullet}} }
 
-% Filtrations
 \newcommand{\descendingfiltration}[1]{{ {#1}_{\bullet} }}
 \newcommand{\ascendingfiltration}[1]{{ {#1}^{\bullet} }}
 
-% Conjugation
-
-% Convergence
 \newcommand{\ctz}[1]{\, {{\converges{{#1} \to\infty}\longrightarrow 0}} \, }
 
-% Function fields and formal series
 \newcommand{\fps}[1]{{\left\llbracket #1 \right\rrbracket}}
 \newcommand{\formalpowerseries}[1]{ \fps{#1} }
 \newcommand{\functionfield}[1]{ { \left( {#1} \right) } }
 \newcommand{\rff}[1]{ \functionfield{#1} }
 
-% Homotopy classes
 \newcommand{\htyclass}[1]{ { \left[ {#1} \right] } }
 
-% Mapping class groups: \mappingclassgroup{X} is the complete object MCG(X)
 \newcommand{\mappingclassgroup}[1]{{\MCG \left( {#1} \right)}}
 
-% Ideals
 \newcommand{\ideal}[1]{\mathcal{#1}}
 
-% Inner products
 \newcommand{\inner}[2]{{\left\langle {#1},~{#2} \right\rangle}}
 
-% Inversion and localization
 \newcommand{\invert}[1]{{ \left[ { \scriptstyle \frac{1}{#1} } \right] }}
 \newcommand{\localize}[1]{ \left[ { \scriptstyle \inverseof{#1} } \right] }
 \newcommand{\plocalize}[1]{\primelocalize{#1}}
 \newcommand{\primelocalize}[1]{ \left[ { \scriptstyle \inverseof{\left( {#1}^c \right)} } \right]}
 
-% Laurent series. No font has a stretchy double parenthesis, so \fls builds the
-% delimiter that stmaryrd's \DeclareMathDelimiter\llbracket gets from its font:
-% each outer parenthesis is a \left delimiter sized to a \vphantom of the
-% argument, the same height as the inner \left( #1 \right). The 5mu kern
-% removes the null delimiter space and overlaps the pair as (\!( does.
 \newcommand\fls[1]{{\mathopen{\left(\vphantom{#1}\right.}\mkern-5mu\left( #1 \right)\mkern-5mu\mathclose{\left.\vphantom{#1}\right)}}}
 \newcommand\laurentseries[1]{\fls{#1}}
 
-% Morphisms
 \newcommand{\embedsvia}[1]{\xhookrightarrow{#1}}
 
-% Open sets
 \newcommand{\open}[1]{\overset{\circ}{#1}}
 
-% Poisson brackets
 \newcommand{\poisbrack}[2]{{\left\{ {#1},~{#2} \right\} }}
 
-% Quotients and moduli
+\providecommand{\dcoset}[3]{{#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}\mkern-3mu\diagup\mkern-3mu{#3}}
+\providecommand{\dcosetl}[2]{{#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}}
+\providecommand{\dcosetr}[2]{{#1}\mkern-3mu\diagup\mkern-3mu{#2}}
+\providecommand{\leftquotient}[2]{{#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}}
 
-% Double coset notation (MathJax-safe — no \scalebox)
-% Uses natural-size \diagdown/\diagup (visually distinct from \setminus)
-% with superscript-raised middle term. Full-fidelity \scalebox{1.5}
-% version in tier3-tex-complex.tex overrides these in LaTeX.
-\providecommand{\dcoset}[3]{%
-  {#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}\mkern-3mu\diagup\mkern-3mu{#3}}
-\providecommand{\dcosetl}[2]{%
-  {#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}}
-\providecommand{\dcosetr}[2]{%
-  {#1}\mkern-3mu\diagup\mkern-3mu{#2}}
-\providecommand{\leftquotient}[2]{%
-  {#1}\mkern-3mu\diagdown\mkern-3mu{}^{#2}}
-
-% GIT quotient /\!/, MathJax-safe (no \mkern). Full-fidelity
-% \mkern-6mu version in tier3-tex-complex.tex overrides this in LaTeX.
 \providecommand{\gitquot}{\mathbin{/\!/}}
-
-% Bold vectors: \boldsymbol is deliberately NOT defined here. MathJax
-% renders \boldsymbol natively (autoloaded boldsymbol extension), and a
-% definition in this file would be parsed into tex.macros and shadow
-% that native rendering with a worse approximation. The full-fidelity
-% LaTeX upgrade \boldsymbol -> \bm lives in tier3-tex-complex.tex,
-% which never feeds MathJax.
 
 \newcommand{\jacobsonrad}[1]{{J \left( {#1} \right) }}
 \newcommand{\nilrad}[1]{{\sqrt{0_{#1}} }}
 
-% Restriction and induction
 \newcommand\Restriction[2]{\mathrm{Res}^{#1}_{#2}}
 \newcommand\coRestriction[2]{\mathrm{coRes}^{#1}_{#2}}
 \newcommand\Induction[2]{\mathrm{Ind}^{#1}_{#2}}
 \newcommand\coInduction[2]{\mathrm{coInd}^{#1}_{#2}}
 
-% Sheafification and completion
 \newcommand{\sheafify}[1]{ \left( #1 \right)^{\scriptscriptstyle \mathrm{sh}} }
 \newcommand{\padiccompletion}[2]{{ {#1}_{\widehat{#2}} }}
 \newcommand{\complete}[1]{{ {}_{ \widehat{#1} } }}
@@ -152,21 +94,17 @@
 \newcommand{\kv}{{ k_{\hat{v}} }}
 \newcommand{\Lv}{{ L_{\hat{v}} }}
 
-% Slices and fibers
 \newcommand{\coslice}[1]{_{{#1/}}}
 \newcommand{\liesover}[1]{{ {}_{/ {#1}} }}
 \newcommand{\slice}[1]{_{/ {#1}}}
 
-% Symbols
 \newcommand{\symb}[2]{{ \qty{ #1 \over #2 } }}
 
-% Tensor lists
 \newcommand\tl[2]{{ #1_1, \cdots, #1_{#2} }}
 \newcommand\tlset[2]{ \theset{ {#1}_{1}, \cdots, {#1}_{#2} } }
 \newcommand\tlz[2]{{ #1_0, \cdots, #1_{#2} }}
 \newcommand\tsl[3]{ \theset{ {#1}_{#2}, \cdots, {#1}_{#3} } }
 
-% Transforms and powers
 \newcommand{\fourier}[1]{\widehat{#1}}
 \newcommand\cartpower[1]{{ {}^{ \scriptscriptstyle\times^{#1} }  }}
 \newcommand\disjointpower[2]{{#1}^{\scriptscriptstyle\coprod^{#2}}}
@@ -182,19 +120,14 @@
 \newcommand\transp[1]{{ \, {}^{t}{ \left( #1 \right) } }}
 \newcommand\wedgepower[2]{{#1}^{\scriptscriptstyle\smashprod^{#2}}}
 
-% Twisting
 \newcommand{\twistleft}[2]{{ {}^{#1} #2 }}
 \newcommand{\twistright}[2]{{ #2 {}^{#1} }}
 
-% Section and global sections
 \newcommand{\globsec}[1]{{\Gamma\qty{#1} }}
 
-% Miscellaneous
 \newcommand{\addbase}[1]{{ {}_{pt} }}
 \newcommand{\catspan}[3]{\roof{#1}{#2}{#3}}
 \newcommand{\cptf}[1]{ \overline{ #1 } }
-%
-% ===== Compactification macros (restored from diss/DZG-Macros.sty) =====
 \newcommand{\cpt}[1]{\overline{#1}}
 \newcommand{\normalize}[1]{ {#1}^{\nu} }
 \newcommand{\ksbacpt}[1]{ \cpt{#1}^{\operatorname{KSBA}} }
@@ -216,8 +149,6 @@
 \newcommand{\halfpd}[1]{D_{#1}}
 \newcommand{\fullpd}[1]{\Omega_{#1}}
 \newcommand{\dmodgamma}[2]{ {#1}/{#2} }
-% ===== End compactification macros =====
-%
 \newcommand{\discgroup}[1]{A_{#1}}
 \newcommand{\diverges}{\mapstofrom}
 \newcommand{\langL}[1]{ {}^{L}{#1} }
@@ -229,167 +160,117 @@
 \newcommand{\squares}[1]{{ {#1}_{\scriptscriptstyle \square} }}
 \newcommand{\weakeq}{\underset{\scriptscriptstyle W}{\rightarrow}}
 
-% Equivalence markers
 \newcommand{\congas}[1]{\underset{#1}{\cong}}
 \newcommand{\congbecause}[1]{\overset{#1}{\cong}}
 \newcommand{\equalsbecause}[1]{\overset{#1}{=}}
 \newcommand{\pwiso}{\underset{\mathrm{pw}}{\cong}}
 
-% Prefixes and suffixes
 \newcommand\lshriek{{}_{!}}
 \newcommand\pushf{{}^{*}}
 
-% Terminal and initial objects
 \newcommand{\cofinal}{\mathsf{\emptyset} }
 \newcommand{\final}{\theset{\pt}}
 
-% Ring freezing
 \newcommand{\freezmod}[1]{\ZZ\left[ {#1} \right] }
-% ================================================================================
-% Additional macros with arguments from latexmacs.tex
-% ================================================================================
 
-% Conjugation and closures
 \newcommand{\conjugate}[1]{{\overline{{#1}}}}
 \newcommand{\closure}[1]{\overline{#1}}
 \newcommand{\univcover}[1]{\overline{#1}}
 
-% Vector and bundle notations
 \newcommand{\bundle}[1]{\mathcal{#1}}
 \renewcommand{\vector}[1]{\mathbf{#1}}
 \newcommand{\vhat}[1]{\widehat{ \vector{#1} }}
 
-% Correspondence
 \newcommand{\correspond}[1]{\theset{\substack{#1}}}
 
-% Arrow notations (must come before usage)
-
-% Convergence notations
 \newcommand{\converges}[1]{\overset{#1}}
 \newcommand{\convergesto}[1]{\overset{#1}\too}
 
-% Derivatives
 \newcommand{\ddd}[2]{{\frac{d #1}{d #2}\,}}
 \newcommand{\dd}[2]{{\frac{\partial #1}{\partial #2}\,}}
 
-% Evaluation and restriction
 \newcommand{\evalfrom}{\Big|}
 \newcommand{\evaluated}[1]{{\left. {#1} \right\rvert}}
 \newcommand{\restricted}[1]{{\left. {#1} \right\rvert}}
 \newcommand{\restrictionof}[2]{ {\left.{{#1}} \right|_{{#2}} }}
 
-% Inner products and brackets
-
-% Kernel symbols and spacing
 \newcommand{\ddt}{\tfrac{\dif}{\dif t}}
 \newcommand{\ddx}{\tfrac{\dif}{\dif x}}
 \newcommand{\logd}{{ \del^{\scriptsize \log} }}
 
-% Lists and tuples
 \newcommand{\theset}[1]{\left\{{#1}\right\}}
 \newcommand{\thevector}[1]{{\left[ {#1} \right]}}
 
-% Matrix and vector helpers
 \newcommand{\mltext}[1]{\left\{\begin{array}{c}#1\end{array}\right\}}
 
-% Modular arithmetic
 \newcommand{\Suchthat}{\middle\vert}
 
-% Multinomial coefficients  
 \newcommand{\multinomial}[1]{\left(\!\!{#1}\!\!\right)}
 
-% Pairing with overhead notation
 \newcommand{\realpart}[1]{{\mathcal{Re}\left( {#1} \right)}}
 
-% Sheaf notation
 \newcommand{\sheaf}[1]{\operatorname{\mathcal{#1}}}
 
-% Sets with specific elements
 \newcommand{\smpt}[1]{\setminus\theset{#1}}
 \newcommand{\smts}[1]{\setminus\theset{ #1 }}
 
-% Stirling numbers
 \newcommand{\stirlingfirst}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
 \newcommand{\stirling}[2]{\genfrac\{\}{0pt}{}{#1}{#2}}
 
-% Surjections with labels
-
-% Category theory notations
 \newcommand{\thecat}[1]{\mathbf{#1}}
 \newcommand{\constantsheaf}[1]{\underline{#1}}
 
-% Colored text for vectors
 \newcommand{\vecc}[2]{\textcolor{#1}{\textbf{#2}}}
 
-% Additional field extensions
 \newcommand{\places}[1]{ \mathrm{Pl}\qty{#1}}
 \newcommand{\ZZlocal}[1]{{ \ZZ_{\widehat{#1}} }}
 
-% Radical and square root
 \newcommand{\rad}[1]{\sqrt{#1}}
 
-% Rising and falling factorials
 \def\rising#1#2{ \qty{#1}^{ (#2) }}
 \def\falling#1#2{ \qty{#1}_{ (#2) }}
 
-% Lists with index ranges
 \newcommand\elts[2]{{ {#1}_1, {#1}_2, \cdots, {#1}_{#2}}}
 \newcommand\tselts[2]{{ \theset{ {#1}_1, {#1}_2, \cdots, {#1}_{#2} } }}
 
-% Fiber products and mixed products
-% \fiberprod is the semantic object constructor: \fiberprod{X}{S}{Y} = X \times_S Y.
-% \fiberproduct remains a legacy low-level glyph helper while older authored sources are migrated.
 \newcommand\mix[1]{\overset{\scriptscriptstyle {#1} }{\times}}
 \newcommand\fiberproduct[1]{\underset{\scriptscriptstyle {#1} }{\times}}
 \newcommand\fiberprod[3]{{#1} \fiberproduct{#2} {#3}}
 \newcommand\basechange[1]{{ \fiberproduct{k} {#1} }}
 \newcommand\fprod[3]{\fiberprod{#1}{#2}{#3}}
 
-% Complex-valued functions
 \newcommand{\qsymb}[2]{{ \left( {#1} \over {#2} \right)  }}
 
-% Polynomial rings
 \newcommand{\kx}[1]{k\left[ x_1, \cdots, x_{#1} \right]}
 
-% K-theory variants
 \newcommand{\lktt}[1]{ {L_{\mathrm{K3}, #1}} }
 
-% Fractional ideals and parts
 \newcommand{\fractionalpart}[1]{\theset{#1}}
 \newcommand{\integerpart}[1]{\left[ {#1}\right] }
 \newcommand{\zadjoin}[1]{\ZZ\left[ {#1} \right]}
 
-% Special map notations
 \newcommand{\mapscorrespond}[2]{\mathrel{\operatorname*{\rightleftharpoons}_{#2}^{#1}}}
 \newcommand{\mapsvia}[1]{\xrightarrow{#1}}
 \newcommand{\mapsfromvia}[1]{\xleftarrow{#1}}
 \newcommand{\mapstovia}[1]{\xmapsto{#1}}
 
-% Birational and stable birational
 \newcommand{\birationaliso}{\overset{\sim}{\rationalmap}}
 \newcommand{\sbirational}{\overset{\sim_{ \Stab} }{\rationalmap}}
 
-% Isomorphism with labels
 \newcommand{\isovia}[1]{\underset{#1}{\iso}}
 \newcommand{\isoin}[1]{\overset{#1}{\iso}}
 
-% Injections with labels
 \newcommand{\injectsvia}[1]{\xhookrightarrow{#1}}
 \newcommand{\injectsfromvia}[1]{\xhookleftarrow{#1}}
 
-% Relative spectrum
 \newcommand{\relspec}{\underline{ \operatorname{Spec}} }
 
-% Nerves and realizations
 \newcommand{\nerve}[1]{{ \mathcal{N}\left( {#1} \right) }}
 \newcommand{\realize}[1]{{ \abs{#1} }}
 
-% Category operations
 \newcommand{\opcat}[1]{{ {#1}^{\operatorname{op}} }}
-% The opposite of an object under the ambient involution (e.g. a polygon and its image).
 \newcommand{\oppositeof}[1]{{ {#1}^{\mathrm{op}} }}
 
-% Unary operations on an object: each macro takes the object it acts on.
 \newcommand{\dualof}[1]{{ {#1}^{\vee} }}
 \newcommand{\doubledualof}[1]{{ {#1}^{\vee\vee} }}
 \newcommand{\inverseof}[1]{{ {#1}^{-1} }}
@@ -403,71 +284,46 @@
 \newcommand{\procompletion}[1]{{ {#1}^{\wedge_{\scriptscriptstyle \pro}} }}
 \newcommand{\isoclasses}[1]{{ {#1}_{/\sim} }}
 
-% Gluing
 \newcommand{\glue}[1]{{ \Disjoint_{#1} }}
 
-% Norm of complexes
 \newcommand{\normcomplex}[1]{{\norm{\complex{#1}}}}
 
-% Extalgebra
 \newcommand{\Extalgebra}{\chaincomplex{\bigwedge}}
 \newcommand{\Extalg}{\Extalgebra}
 \newcommand{\Extcomplex}{\chaincomplex{ \Extalgebra}}
 
-% DR complexes and Hodge
 \newcommand{\drcomplex}{{\chaincomplex{\Omega}}}
 \newcommand{\cxH}{{\complex{H}}}
 \newcommand{\ccxH}{{\chaincomplex{H}}}
 
-% Sheaf homomorphisms
 \newcommand{\sheafhom}{\mathop{\mathcal{H}\! \mathit{om}}}
 
-% Multicase definitions
 \newcommand{\smallprod}{{ \scriptscriptstyle\prod }}
 
-% Equal because
 \newcommand{\eqLH}{{ \equalsbecause{\scriptscriptstyle\text{LH}} }}
 \newcommand{\eqae}{\underset{\ae}{=}}
 
-% Hodge structure variants
 \newcommand{\eq}{\operatorname*{=}}
 
-% Canonical isomorphism
 \newcommand\caniso{{ \underset{\can}{\iso} }}
 
-% Other notations
 \newcommand\dif{\mathop{}\!\operatorname{d}}
 
-% Rotate utility (MathJax may not support)
 \newcommand{\rotate}[2]{{\style{display: inline-block; transform: rotate(#1deg)}{#2}}}
 
-% Triple arrow decoration
 \newcommand\rrrarrows{
     \mathrel{\substack{\textstyle\rightarrow\\[-0.6ex]
         \textstyle\rightarrow \\[-0.6ex]
         \textstyle\rightarrow}}
 }
 
-% Right triple arrows operator
-\DeclareMathOperator{\righttriplearrows} {{\; \tikz{ \foreach \y in {0, 0.1, 0.2} { \draw [-stealth] (0, \y) -- +(0.5, 0);}} \; }}
+\newcommand{\righttriplearrows}{\mathrel{\substack{\rightarrow\\[-1ex]\rightarrow\\[-1ex]\rightarrow}}}
+\newcommand{\contradiction}{\mathord{\lightning}}
 
-% Normal subgroup not-equal
-
-% Big ast for smash products
-
-% Connect sum
-
-% Horizontal and vertical bars
-
-% Git quotient
-
-% Multi-choose
 \def\multichoose#1#2{{\left(\kern-.3em\left(\genfrac{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}}
 
-% Ceiling paired delimiter (from physics package usually)
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 
-% --- Dissertation-specific macros with arguments ---
 \newcommand{\bdlattice}[2]{ \overline{#1}_{ #2  } }
 \newcommand{\perpin}[2]{#2^{\perp_{#1}}}
 \newcommand{\signature}[1]{\operatorname{sign}\qty{#1}}
@@ -486,11 +342,5 @@
 \newcommand{\thecone}[1]{\mathfrak{#1}}
 \newcommand{\theposet}[1]{\mathcal{#1}}
 \newcommand{\modulistack}[1]{\mathcal{#1}}
-\AtBeginDocument{\providecommand{\RN}[1]{\textup{\uppercase\expandafter{\romannumeral#1}}}}
 \newcommand{\torcptf}[2]{\overline{#1}^{#2}}
 
-% ================================================================================
-% Migrated from legacy AE_Style.sty on 2026-06-16 (Approved Restoration)
-% ================================================================================
-
-% ----- Commands with Arguments -----

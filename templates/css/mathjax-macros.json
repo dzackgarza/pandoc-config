@@ -553,7 +553,7 @@
   "submfds": "\\operatorname{SubMfds}",
   "SU": "{\\operatorname{SU}}",
   "Sum": "\\sum",
-  "orthogonalsum": "\\mathop{\\perp}\\displaylimits",
+  "orthogonalsum": "\\mathop{\\perp}",
   "supp": "\\operatorname{supp}",
   "Supp": "{\\operatorname{Supp}}",
   "Sw": "{\\mathrm{Sw}}",
@@ -765,7 +765,7 @@
   "normalizer": "{ N }",
   "notimplies": "\\centernot\\implies",
   "ofrom": "\\overset{\\circ}{\\leftarrow}",
-  "onto": "\\twoheadhthtarrow",
+  "onto": "\\twoheadrightarrow",
   "oto": "\\overset{\\circ}{\\rightarrow}",
   "padic": "p\\dash\\text{adic}",
   "plocal": "{ \\scriptsize {}_{ \\localize{p}  } }",
@@ -1888,7 +1888,8 @@
     2
   ],
   "rrrarrows": "\\mathrel{\\substack{\\textstyle\\rightarrow\\\\[-0.6ex]\n        \\textstyle\\rightarrow \\\\[-0.6ex]\n        \\textstyle\\rightarrow}}",
-  "righttriplearrows": "\\operatorname{{\\; \\tikz{ \\foreach \\y in {0, 0.1, 0.2} { \\draw [-stealth] (0, \\y) -- +(0.5, 0);}} \\; }}",
+  "righttriplearrows": "\\mathrel{\\substack{\\rightarrow\\\\[-1ex]\\rightarrow\\\\[-1ex]\\rightarrow}}",
+  "contradiction": "\\mathord{\\lightning}",
   "bdlattice": [
     "\\overline{#1}_{ #2  }",
     2
@@ -1959,10 +1960,6 @@
   ],
   "modulistack": [
     "\\mathcal{#1}",
-    1
-  ],
-  "RN": [
-    "\\textup{\\uppercase\\expandafter{\\romannumeral#1}}",
     1
   ],
   "torcptf": [

@@ -74,9 +74,7 @@ glyphs. A suggestion requires the author to select the intended meaning.
 **Examples:**
 ```latex
 \makeatletter
-\newcommand{\superimpose}[2]{%
-  {\ooalign{$#1$\cr\hfil$#2$\hfil\cr}}%
-}
+\newcommand{\superimpose}[2]{{\ooalign{$#1$\cr\hfil$#2$\hfil\cr}}}
 \makeatother
 ```
 
@@ -129,10 +127,10 @@ Public construction macros are therefore atomic: they take all semantic operands
 arguments and render the whole object. They are not aliases for a single symbol which
 expects neighboring TeX to complete the expression.
 
-Canonical example:
+Canonical example, which renders $X \times_S Y$:
 
 ```latex
-\fiberprod{X}{S}{Y} % X \times_S Y
+\fiberprod{X}{S}{Y}
 ```
 
 A definition such as `\fiberprod{S} -> \times_S` is invalid even if it can be used
@@ -143,6 +141,53 @@ to be audited from authored call sites before their signatures are changed.
 
 Generated MathJax JSON/JS/HTML files are projections of this canonical API. Never edit
 or independently override their macro semantics.
+
+## The MathJax projection
+
+- `mathjax-sources.txt` names the files that feed MathJax. The generator
+  (`bin/generate-mathjax-config.py`) and the bundled extractor of the site read
+  the same manifest, so the two consumers agree.
+- The generator writes `templates/css/mathjax-macros.{json,mjs,ts,html}`,
+  `templates/css/math-macros.{html,md}` and the one `macros: {...},` line of
+  `templates/mathjax-config.html` and `templates/pandoc_revealjs_template.html`.
+  Do not edit these outputs; run `just generate-math-macros`. A template with no
+  such line or with more than one stops the generator.
+- A tier 1 or tier 2 expansion uses only commands that MathJax defines with
+  the packages that the configuration loads: the default set, `mathtools`,
+  `centernot` and `stmaryrd` (`templates/js/mathjax-stmaryrd.js`: `\llbracket`,
+  `\rrbracket`, `\mapsfrom`, `\lightning`). MathJax shows an unknown command in
+  red and raises no error, so `tests/test-mathjax-macros.ts` typesets each macro
+  and fails on each such command.
+- `templates/css/mathjax-macros.html` is the include for a host that loads
+  MathJax itself (Quarto). The host loads MathJax 4 and registers
+  `templates/js/mathjax-stmaryrd.js` before typesetting; without it `\fps`
+  does not render.
+
+## Rules of particular definitions
+
+- **One macro per meaning.** Letters with several meanings get one macro for
+  each meaning, so each meaning keeps one display choice. The same holds for
+  the macros that display as a pair of bars.
+- **Overrides.** Tier 3 loads after tier 2 and redefines some tier 2 macros
+  with a LaTeX-only form: the double cosets (`\dcoset`, `\dcosetl`,
+  `\dcosetr`, `\leftquotient`: `\scalebox` in LaTeX, natural-size
+  `\diagdown`/`\diagup` in MathJax), `\gitquot` (`\mkern` in LaTeX) and
+  `\righttriplearrows` (a TikZ drawing in LaTeX, a `\substack` of three arrows
+  in MathJax). `\ae` replaces the æ ligature with "a.e.".
+- **`\boldsymbol` has no tier 2 definition.** MathJax renders it natively; a
+  `tex.macros` entry would replace that with a worse approximation. Tier 3
+  upgrades it to `\bm` in LaTeX.
+- **`\qed`** uses `\hfill` in LaTeX and the generator's shim in MathJax. It is
+  wrapped in `\ensuremath`, as amsthm's `\popQED` emits `\qed` in text mode.
+- **`\fls`** builds the Laurent series delimiter: no font has a stretchy double
+  parenthesis, so each outer parenthesis is a `\left` delimiter sized to a
+  `\vphantom` of the argument, and a 5mu kern overlaps the pair.
+- **`\fiberprod{X}{S}{Y}`** is the semantic constructor of $X \times_S Y$.
+  `\fiberproduct` is the low-level glyph helper of older sources.
+- `\mappingclassgroup{X}` is the complete object $\operatorname{MCG}(X)$;
+  the opposite and unary operations take the object that they act on.
+- `\RN` and `\RM` use the TeX primitive `\romannumeral`, so they are tier 3.
+  `\envlist` pulls a list up to the line of the environment heading before it.
 
 ## Adding New Macros
 
@@ -164,9 +209,9 @@ Is it domain-specific? → categories.tex, spectral.tex, or tikz.tex
    - Category theory: `categories.tex`
    - Spectral sequences: `spectral.tex`
    - TikZ content: `tikz.tex`
-3. **Organize within file:**
-   - Alphabetical by command name, OR
-   - Grouped by topic with clear section comments
+3. **Organize within file:** group by topic, then sort by command name. The
+   macro files hold no TeX comments; a reason for a definition goes in
+   "Rules of particular definitions" below.
 4. **MathJax compatibility:**
    - If MathJax-safe, it auto-loads in Obsidian on reload
    - The generated MathJax config reads `tier1-mathjax-simple.tex`, `tier2-mathjax-args.tex`, `categories.tex`, and `spectral.tex`
