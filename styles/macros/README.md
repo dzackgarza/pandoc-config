@@ -197,9 +197,10 @@ LaTeX-only form: the double cosets (`\dcoset`, `\dcosetl`, `\dcosetr`,
 MathJax), `\gitquot` (`\mkern` in LaTeX) and `\righttriplearrows` (a TikZ
 drawing in LaTeX, a `\substack` of three arrows in MathJax).
 
-The tree also overrides five native commands of LaTeX and its packages. Each
-name is one of the most-used names of the authoring language, so the tree
-keeps it (#26).
+The tree also overrides native commands of LaTeX, its packages and
+MathJax 4. Each name is one of the most-used names of the authoring
+language, so the tree keeps it (#26, #27). The column "Overrides in" names
+each renderer whose native command the macro replaces.
 
 | Command | Overrides in | Native meaning | Macro meaning | Expansion |
 | --- | --- | --- | --- | --- |
@@ -208,20 +209,35 @@ keeps it (#26).
 | `\ae` | LaTeX | the æ ligature, a text command of LaTeX | "almost everywhere" | `{ \text{a.e.} }` |
 | `\vector` | LaTeX | `\vector(x,y){l}`, the arrow of the `picture` environment of LaTeX | a vector | `\vector{v}` gives `\mathbf{v}` |
 | `\hyp` | LaTeX | the breakable hyphen of hyphenat, which dzg-unified loads | the operator "hyp" | `{\operatorname{hyp}}` |
+| `\U` | MathJax | `\U{hex}`, the Unicode character of the code point `hex`; LaTeX has no `\U` | the operator "U" | `{\operatorname{U}}` |
+| `\Bbb` | MathJax | `\mathbb`; amsfonts gives the same `\Bbb` in LaTeX | `\mathbb` | `\mathbb` |
 
 - A document that loads the tree does not have the native command: no Å
   or æ from `\AA` or `\ae`, no "SS" from `\SS`, no `picture` arrow, no
   breakable hyphen from `\hyp`. Write the character itself (Å, æ), or use
   another command for the arrow or the hyphen.
-- In math, the PDF and MathJax agree on each of the five: the projection
-  has the expansion of the table, so MathJax uses it in place of its own
-  `\AA`, and LaTeX has no math meaning for the other four.
-- `tests/test-mathjax-generator.py` reads the first column of this table.
-  It finds each macro of the projection that changes the meaning of a
-  command that the document has where dzg-macros loads (amsart,
-  dzg-unified), and fails when that set and this table differ. A new
-  override of a native command therefore fails the test until a row of this
-  table declares it.
+- In math, the PDF and MathJax agree on each row: the projection has the
+  expansion of the table, so MathJax uses it in place of its own `\AA`,
+  `\U` and `\Bbb`, and LaTeX has no math meaning for `\SS`, `\ae`,
+  `\vector` and `\hyp`. Without its entry, `\U` in MathJax takes the next
+  group as a code point: `\U{0041}` gives "A" where the PDF gives the
+  operator U and the group 0041.
+- `\Bbb` changes no MathJax output: MathJax gives the same MathML for
+  `\Bbb{R}`, `\Bbb R`, `\Bbb{ZQ}` and `\Bbb{R}^n_{+}` with and without the
+  entry, and in LaTeX `\providecommand` keeps the `\Bbb` of amsfonts. The
+  macro stays because `templates/css/math-macros.md` is made from the same
+  tree: texmath, which converts the math of each other Pandoc writer, has
+  no `\Bbb`, and without the definition Pandoc keeps the TeX of `\Bbb{R}`
+  in place of the double-struck R.
+- `tests/test-mathjax-generator.py` reads the first two columns of this
+  table. It finds each macro of the projection that changes the meaning of
+  a command that the document has where dzg-macros loads (amsart,
+  dzg-unified), and each macro of the projection whose name MathJax 4 of
+  `node_modules` defines with the configuration of the preview template
+  (`tests/mathjax-native-commands.ts`). For each renderer it fails when
+  that set and the rows that name the renderer differ. A new override of a
+  native command therefore fails the test until a row of this table
+  declares it.
 
 ## Adding New Macros
 
