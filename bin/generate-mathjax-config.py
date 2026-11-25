@@ -33,7 +33,10 @@ MACRO_DIR = REPO_ROOT / "styles" / "macros"
 # with the SSG's bundled extractor so both consumers stay in lock-step.
 MACRO_MANIFEST = MACRO_DIR / "mathjax-sources.txt"
 OUT_DIR = REPO_ROOT / "templates" / "css"
-PREVIEW_TEMPLATE = REPO_ROOT / "templates" / "pandoc_preview_template.html"
+# The MathJax configuration of each HTML template except reveal.js: a Pandoc
+# partial that the template of each such writer includes, so the macro map
+# has one copy for all of them.
+MATHJAX_CONFIG_PARTIAL = REPO_ROOT / "templates" / "mathjax-config.html"
 REVEALJS_TEMPLATE = REPO_ROOT / "templates" / "pandoc_revealjs_template.html"
 
 
@@ -439,7 +442,7 @@ SCRIPT_MARKERS = ("/* MATHJAX_MACROS_START */", "/* MATHJAX_MACROS_END */")
 # Each template whose MathJax configuration takes its macros from this
 # generator. A template that is not listed here must not hold a macro map.
 GENERATED_TEMPLATES = (
-    GeneratedTemplate(PREVIEW_TEMPLATE, *HTML_MARKERS),
+    GeneratedTemplate(MATHJAX_CONFIG_PARTIAL, *HTML_MARKERS),
     GeneratedTemplate(REVEALJS_TEMPLATE, *SCRIPT_MARKERS),
 )
 
@@ -569,13 +572,13 @@ def main() -> None:
         help="Output path for the legacy raw-TeX HTML projection (default: --out-dir/math-macros.html)",
     )
     parser.add_argument(
-        "--preview-template",
+        "--mathjax-config",
         type=Path,
         default=None,
         help=(
-            "Pandoc preview template whose generated MathJax macro map should be refreshed. "
-            "The canonical templates (preview and reveal.js) are updated automatically for the "
-            "canonical output directory."
+            "A copy of templates/mathjax-config.html whose generated MathJax macro map should be "
+            "refreshed. The canonical MathJax configuration and the reveal.js template are "
+            "updated automatically for the canonical output directory."
         ),
     )
     parser.add_argument(
@@ -618,11 +621,11 @@ def main() -> None:
     legacy_html_path.write_text(legacy_html_content)
 
     # A run into the canonical output directory refreshes each canonical
-    # template. A preview template that the caller names is the one template
-    # of the run.
+    # template. A MathJax configuration that the caller names is the one
+    # template of the run.
     templates: list[GeneratedTemplate] = []
-    if args.preview_template is not None:
-        templates = [GeneratedTemplate(args.preview_template, *HTML_MARKERS)]
+    if args.mathjax_config is not None:
+        templates = [GeneratedTemplate(args.mathjax_config, *HTML_MARKERS)]
     elif out_dir.resolve() == OUT_DIR.resolve():
         templates = list(GENERATED_TEMPLATES)
     for template in templates:

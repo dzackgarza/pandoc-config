@@ -1,0 +1,72 @@
+% DZG math package loading
+% The packages that the macros of styles/macros and the figures need. Shared by
+% dzg-preamble.tex (article documents) and dzg-beamer.sty (slides): a beamer
+% document cannot load the document part of dzg-preamble.tex (hyperref with
+% options, enumitem), as beamer loads hyperref itself and owns its lists.
+
+% Core math packages (required for macros to work)
+\RequirePackage{amsmath,amsthm,amssymb,amsfonts}
+\RequirePackage{mathtools}    % DeclarePairedDelimiter, coloneqq
+\RequirePackage{mathrsfs}     % Script fonts
+\RequirePackage{bm}           % Bold math
+\RequirePackage{esint}        % Integral symbols
+\RequirePackage{stmaryrd}     % Special brackets
+\RequirePackage{bbm}          % Blackboard-bold digits
+\RequirePackage{upgreek}      % Upright Greek
+
+% Encoding (modern LaTeX defaults, explicit for older engines). inputenc is
+% pdfTeX-only; the UTF-8 engines read UTF-8 natively.
+\RequirePackage{iftex}
+\ifpdftex\RequirePackage[utf8]{inputenc}\fi
+\RequirePackage[T1]{fontenc}
+
+% Graphics
+\RequirePackage{graphicx}
+\RequirePackage{subcaption}
+%\usepackage{graphicx}
+%\setkeys{Gin}{width=\linewidth}
+\RequirePackage[dvipsnames]{xcolor}
+
+% Extra math and diagram packages
+\RequirePackage{amscd}
+\RequirePackage{centernot}
+\RequirePackage{slashed}
+
+% TikZ and diagrams
+\RequirePackage{tikz}
+\RequirePackage{tikz-cd}
+\RequirePackage{tikz-3dplot}   % 3D projections: tdplot_main_coords, \tdplotsetcoord
+\usetikzlibrary{arrows.meta, cd, fadings, patterns, calc, matrix, positioning, decorations, decorations.pathreplacing, decorations.markings, shapes, backgrounds, fit, shapes.geometric, intersections, hobby, matrix,arrows,decorations.pathmorphing, graphs}
+% Automatic graph layout computes in Lua, so it exists only under LuaTeX; the
+% figures that use it are rendered standalone with lualatex (AGENTS.md rule 7).
+% LuaTeX finds Lua modules on LUAINPUTS only, which does not include
+% TEXINPUTS; this searcher also finds <a/b/c>.lua for require("a.b.c") on
+% TEXINPUTS, where the repository's modules (styles/macros/tikz/lua/) live.
+\ifluatex
+  \directlua{table.insert(package.searchers, function(name)
+      local path = kpse.find_file((string.gsub(name, "[.]", "/")) .. ".lua", "tex")
+      if path then return loadfile(path), path end
+      return "no " .. name .. ".lua on TEXINPUTS"
+    end)}
+  \usetikzlibrary{graphdrawing}\usegdlibrary{layered}
+\fi
+\tikzfading[name=fade out, inner color=transparent!0, outer color=transparent!100]
+
+% Utilities
+\RequirePackage{etoolbox}
+\RequirePackage{xparse}
+
+% Diagrams and Plots
+\RequirePackage{dynkin-diagrams}
+\RequirePackage{quiver}
+\RequirePackage{pgfplots}
+% Figure vocabulary (styles/macros/tikz/tikzlibrarydzg.code.tex). Loaded after
+% dynkin-diagrams, whose layer list it extends.
+\usetikzlibrary{dzg}
+% xy [all] loads its xypdf driver, which needs the pdfTeX primitives; luatex85
+% provides them under LuaTeX (the standalone class loads it itself, article does not).
+\ifluatex\RequirePackage{luatex85}\fi
+% Hyperbolic plane and Poincare disk figures; the package computes in Lua, so
+% only LuaTeX figures can use it (AGENTS.md, Figures, rule 7).
+\ifluatex\RequirePackage{luahyperbolic}\fi
+\RequirePackage[all]{xy}

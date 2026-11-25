@@ -6,7 +6,15 @@ These are not full document templates (see `../templates/`).
 ### `dzg-preamble.tex`
 
 Shared `\RequirePackage` block loaded by both `dzg-unified.sty` and `dzg-tikz.sty`.
-Contains core math, TikZ, graphics, typography packages with personal defaults.
+It inputs `dzg-math-preamble.tex`, then loads the document packages: microtype,
+hyperref, bookmark and enumitem.
+
+### `dzg-math-preamble.tex`
+
+The packages that the macros and the figures need: the math packages, TikZ and
+its libraries, the diagram packages. `dzg-preamble.tex` and `dzg-beamer.sty`
+input it. Beamer loads hyperref itself and owns its lists, so a beamer document
+loads this part only.
 
 ## Document Templates
 

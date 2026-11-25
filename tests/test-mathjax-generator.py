@@ -14,8 +14,38 @@ ROOT = HERE.parent
 GENERATOR = ROOT / "bin" / "generate-mathjax-config.py"
 LEGACY_MACROS = ROOT / "templates" / "css" / "math-macros.html"
 GENERATED_JSON = ROOT / "templates" / "css" / "mathjax-macros.json"
-PREVIEW_TEMPLATE = ROOT / "templates" / "pandoc_preview_template.html"
-REVEALJS_TEMPLATE = ROOT / "templates" / "pandoc_revealjs_template.html"
+TEMPLATES = ROOT / "templates"
+MATHJAX_CONFIG_PARTIAL = TEMPLATES / "mathjax-config.html"
+PREVIEW_TEMPLATE = TEMPLATES / "pandoc_preview_template.html"
+REVEALJS_TEMPLATE = TEMPLATES / "pandoc_revealjs_template.html"
+# Each HTML writer whose template includes the MathJax configuration partial.
+# zettlr-pandoc exports with these templates (PANDOC_DIRECTORY_TEMPLATES).
+HTML_WRITER_TEMPLATES = {
+    "html": PREVIEW_TEMPLATE,
+    "html5": PREVIEW_TEMPLATE,
+    "html4": PREVIEW_TEMPLATE,
+    "s5": TEMPLATES / "pandoc_s5_template.html",
+    "slidy": TEMPLATES / "pandoc_slidy_template.html",
+    "slideous": TEMPLATES / "pandoc_slideous_template.html",
+    "dzslides": TEMPLATES / "pandoc_dzslides_template.html",
+    "chunkedhtml": TEMPLATES / "pandoc_chunkedhtml_template.html",
+}
+# Each TeX writer and the template that loads the macro style for it.
+TEX_WRITER_TEMPLATES = {
+    "latex": TEMPLATES / "research_draft.tex",
+    "pdf": TEMPLATES / "research_draft.tex",
+    "beamer": TEMPLATES / "research_beamer.tex",
+}
+TEXINPUTS = (
+    f".:{ROOT / 'styles'}//:{ROOT / 'styles' / 'macros'}//:"
+    f"{ROOT / 'styles' / 'preambles'}//:{ROOT / 'config'}//:"
+)
+# A slide document whose formulas use macros of styles/macros: a TeX writer
+# that does not define one stops with "Undefined control sequence".
+TEX_DOCUMENT = (
+    "---\ntitle: Macros\n---\n\n# A slide\n\n"
+    "A formula $\\Hom(\\ZZ, \\QQ)$ and $\\fiberprod{X}{S}{Y}$.\n"
+)
 # A document with a formula: Pandoc sets the math variables of a template
 # only for a document that has math.
 MATH_DOCUMENT = "---\ntitle: Macros\n---\n\nA formula $\\ZZ$.\n"
@@ -209,8 +239,18 @@ def template_matches_generated_projection(name: str, template_path: Path) -> Non
         fail(f"{name} macro projection", "embedded macro map is stale")
 
 
-def test_preview_template_matches_generated_projection() -> None:
-    template_matches_generated_projection("preview", PREVIEW_TEMPLATE)
+def test_mathjax_config_matches_generated_projection() -> None:
+    template_matches_generated_projection("MathJax configuration", MATHJAX_CONFIG_PARTIAL)
+
+
+def test_html_templates_hold_no_macro_map_of_their_own() -> None:
+    """The macro map of an HTML writer has one copy: the partial."""
+    for path in sorted(set(HTML_WRITER_TEMPLATES.values())):
+        text = path.read_text()
+        if "$mathjax-config.html()$" in text and "macros:" not in text:
+            check(f"{path.name} includes the MathJax configuration partial")
+        else:
+            fail(f"{path.name} MathJax configuration", "not the partial alone")
 
 
 def test_revealjs_template_matches_generated_projection() -> None:
@@ -218,50 +258,109 @@ def test_revealjs_template_matches_generated_projection() -> None:
 
 
 def rendered(writer: str, template_path: Path, variables: list[str]) -> str:
-    """The standalone page that Pandoc writes with a template of this repository."""
-    cp = subprocess.run(
-        [
-            "pandoc",
-            "--from=markdown",
-            f"--to={writer}",
-            "--standalone",
-            f"--template={template_path}",
-            f"--mathjax={MATHJAX_URL}",
-            *[f"--variable={variable}" for variable in variables],
-        ],
-        input=MATH_DOCUMENT,
-        capture_output=True,
-        text=True,
-    )
-    if cp.returncode != 0:
-        raise RuntimeError(cp.stderr.strip())
-    return cp.stdout
+    """The standalone page that Pandoc writes with a template of this repository.
+
+    For chunkedhtml, which writes a folder of pages, the page with the formula.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        output = Path(tmp) / "out"
+        cp = subprocess.run(
+            [
+                "pandoc",
+                "--from=markdown",
+                f"--to={writer}",
+                "--standalone",
+                f"--template={template_path}",
+                f"--math-method=mathjax:{MATHJAX_URL}",
+                *[f"--variable={variable}" for variable in variables],
+                f"--output={output}",
+            ],
+            input=MATH_DOCUMENT,
+            capture_output=True,
+            text=True,
+        )
+        if cp.returncode != 0:
+            raise RuntimeError(cp.stderr.strip())
+        if output.is_dir():
+            pages = [p.read_text() for p in sorted(output.glob("*.html"))]
+            return next(page for page in pages if "\\ZZ" in page)
+        return output.read_text()
 
 
-def test_preview_template_configures_mathjax_before_it_loads() -> None:
-    page = rendered("html5", PREVIEW_TEMPLATE, [])
-    config = page.find("window.MathJax = {")
-    script = page.find(MATHJAX_URL)
-    if 0 <= config < script and '"ZZ":' in page[config:script]:
-        check("preview page sets the macros before it loads MathJax")
-    else:
-        fail("preview page MathJax order", f"config at {config}, script at {script}")
-    if "mathjax:" not in page[config:script] and "fonts:" not in page[config:script]:
-        check("preview page names no place of a local MathJax when none is given")
-    else:
-        fail("preview page MathJax places", "a loader path without its variable")
-
-    local = rendered("html5", PREVIEW_TEMPLATE, LOCAL_MATHJAX)
-    for name, text in {
-        "preview page takes the folder of MathJax from the mathjax-root variable": (
-            f'mathjax: "{ROOT_URL}",'
-        ),
-        "preview page takes its fonts from the mathjax-fonts variable": f'fonts: "{FONTS_URL}",',
-    }.items():
-        if text in local:
-            check(name)
+def test_html_templates_configure_mathjax_before_it_loads() -> None:
+    for writer, template in HTML_WRITER_TEMPLATES.items():
+        page = rendered(writer, template, [])
+        config = page.find("window.MathJax = {")
+        script = page.find(MATHJAX_URL)
+        if 0 <= config < script and '"ZZ":' in page[config:script]:
+            check(f"{writer} page defines the macros before it loads MathJax")
         else:
-            fail(name, f"{text!r} is not in the page")
+            fail(f"{writer} page MathJax order", f"config at {config}, script at {script}")
+        if "mathjax:" not in page[config:script] and "fonts:" not in page[config:script]:
+            check(f"{writer} page names no place of a local MathJax when none is given")
+        else:
+            fail(f"{writer} page MathJax places", "a loader path without its variable")
+
+        local = rendered(writer, template, LOCAL_MATHJAX)
+        for name, text in {
+            "takes the folder of MathJax from the mathjax-root variable": (
+                f'mathjax: "{ROOT_URL}",'
+            ),
+            "takes its fonts from the mathjax-fonts variable": f'fonts: "{FONTS_URL}",',
+        }.items():
+            if text in local:
+                check(f"{writer} page {name}")
+            else:
+                fail(f"{writer} page {name}", f"{text!r} is not in the page")
+
+
+def test_tex_templates_compile_macros_with_pdflatex() -> None:
+    """Each TeX writer typesets the macros of styles/macros through its template."""
+    env = os.environ.copy()
+    env["TEXINPUTS"] = TEXINPUTS
+    for writer, template in TEX_WRITER_TEMPLATES.items():
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_dir = Path(tmp)
+            tex = tmp_dir / "slides.tex"
+            pdf = tmp_dir / "slides.pdf"
+            # pandoc -t pdf runs pdflatex itself; -t latex and -t beamer give the
+            # TeX file, which pdflatex then compiles.
+            target = pdf if writer == "pdf" else tex
+            cp = subprocess.run(
+                [
+                    "pandoc",
+                    "--from=markdown",
+                    f"--to={writer}",
+                    "--standalone",
+                    f"--template={template}",
+                    "--pdf-engine=pdflatex",
+                    f"--output={target}",
+                ],
+                input=TEX_DOCUMENT,
+                capture_output=True,
+                text=True,
+                cwd=tmp_dir,
+                env=env,
+            )
+            if cp.returncode == 0 and writer != "pdf":
+                cp = subprocess.run(
+                    ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", tex.name],
+                    capture_output=True,
+                    text=True,
+                    cwd=tmp_dir,
+                    env=env,
+                )
+            if cp.returncode != 0 or not pdf.exists():
+                fail(f"{writer} template compiles the macros", (cp.stdout + cp.stderr)[-1500:])
+                continue
+            text = subprocess.run(
+                ["pdftotext", str(pdf), "-"], capture_output=True, text=True, check=True
+            ).stdout
+            # \Hom(\ZZ, \QQ) is Hom(Z, Q), the bold Z and Q of tier1.
+            if "Hom(Z, Q)" in text:
+                check(f"{writer} template typesets \\Hom(\\ZZ, \\QQ) with pdflatex")
+            else:
+                fail(f"{writer} template typesets the macros", text[:300])
 
 
 def test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin() -> None:
@@ -354,9 +453,11 @@ def test_legacy_mathjax_injection_defines_required_shims() -> None:
 def main() -> None:
     test_domain_aux_files_are_generated()
     test_native_mathjax_macros_are_not_shadowed()
-    test_preview_template_matches_generated_projection()
+    test_mathjax_config_matches_generated_projection()
+    test_html_templates_hold_no_macro_map_of_their_own()
     test_revealjs_template_matches_generated_projection()
-    test_preview_template_configures_mathjax_before_it_loads()
+    test_html_templates_configure_mathjax_before_it_loads()
+    test_tex_templates_compile_macros_with_pdflatex()
     test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin()
     test_dzg_mathjax_style_compiles_domain_macros()
     test_legacy_mathjax_injection_defines_required_shims()
