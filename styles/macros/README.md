@@ -216,10 +216,13 @@ or independently override their macro semantics.
   mathtools and `\vcentcolon` the colon of MathJax mathtools that is
   centred on the math axis (`\vcentercolon`). A `\mathop` round a colon,
   as mathtools centres it in TeX, does not centre it in MathJax.
+- **`\qty{X}` is `\left( X \right)`**: parentheses that always grow with
+  `X`. It is a `\newcommand`, not a `\DeclarePairedDelimiter`: a paired
+  delimiter of mathtools without a star never grows.
 - **The shims are tested against the PDF.**
-  `tests/test-mathjax-generator.py` gives each shim and each form of `\qty`
-  (and each macro that uses `\qty`) with its LaTeX meaning to pdflatex and
-  to MathJax, and requires the same page in each engine.
+  `tests/test-mathjax-generator.py` gives each shim, `\qty`, each macro
+  that uses `\qty` and each form of `\ceil` with its LaTeX meaning to
+  pdflatex and to MathJax, and requires the same page in each engine.
 - **`\fls`** builds the Laurent series delimiter: no font has a stretchy double
   parenthesis, so each outer parenthesis is a `\left` delimiter sized to a
   `\vphantom` of the argument, and a 5mu kern overlaps the pair.

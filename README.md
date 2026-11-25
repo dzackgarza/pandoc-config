@@ -1900,7 +1900,7 @@ Regenerate with `just readme-reference`.
 | `\contradiction` | 0 | `\mathord{\lightning}` |
 | `\multichoose` | 2 | `{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}` |
 | `\ceil` | 1 | `\mathopen{\lceil}#1\mathclose{\rceil}` |
-| `\qty` | 1 | `\mathopen{(}#1\mathclose{)}` |
+| `\qty` | 1 | `\left( #1 \right)` |
 | `\bdlattice` | 2 | `\overline{#1}_{ #2 }` |
 | `\perpin` | 2 | `#2^{\perp_{#1}}` |
 | `\signature` | 1 | `\operatorname{sign}\qty{#1}` |

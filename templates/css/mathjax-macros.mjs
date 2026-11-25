@@ -1311,7 +1311,7 @@ export const macros = {
   "contradiction": "\\mathord{\\lightning}",
   "multichoose": ["{\\left(\\kern-.3em\\left(\\genfrac{}{}{0pt}{}{#1}{#2}\\right)\\kern-.3em\\right)}", 2],
   "ceil": ["\\mathopen{\\lceil}#1\\mathclose{\\rceil}", 1],
-  "qty": ["\\mathopen{(}#1\\mathclose{)}", 1],
+  "qty": ["\\left( #1 \\right)", 1],
   "bdlattice": ["\\overline{#1}_{ #2  }", 2],
   "perpin": ["#2^{\\perp_{#1}}", 2],
   "signature": ["\\operatorname{sign}\\qty{#1}", 1],

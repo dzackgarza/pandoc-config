@@ -1313,7 +1313,7 @@
 \newcommand{\contradiction}{\mathord{\lightning}}
 \newcommand{\multichoose}[2]{{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}}
 \newcommand{\ceil}[1]{\mathopen{\lceil}#1\mathclose{\rceil}}
-\newcommand{\qty}[1]{\mathopen{(}#1\mathclose{)}}
+\newcommand{\qty}[1]{\left( #1 \right)}
 \newcommand{\bdlattice}[2]{\overline{#1}_{ #2  }}
 \newcommand{\perpin}[2]{#2^{\perp_{#1}}}
 \newcommand{\signature}[1]{\operatorname{sign}\qty{#1}}

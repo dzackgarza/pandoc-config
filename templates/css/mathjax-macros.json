@@ -1903,7 +1903,7 @@
     1
   ],
   "qty": [
-    "\\mathopen{(}#1\\mathclose{)}",
+    "\\left( #1 \\right)",
     1
   ],
   "bdlattice": [

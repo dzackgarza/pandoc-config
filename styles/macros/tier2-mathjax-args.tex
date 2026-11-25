@@ -323,7 +323,7 @@
 \def\multichoose#1#2{{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}}
 
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
-\DeclarePairedDelimiter{\qty}{(}{)}
+\newcommand{\qty}[1]{\left( #1 \right)}
 
 \newcommand{\bdlattice}[2]{ \overline{#1}_{ #2  } }
 \newcommand{\perpin}[2]{#2^{\perp_{#1}}}
