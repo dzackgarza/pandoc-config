@@ -813,6 +813,109 @@ def test_readme_reference_lists_each_definition_of_the_macro_files() -> None:
         check("README reference leaves out a definition nested in a body")
 
 
+def test_parameterised_definitions_reach_the_projection() -> None:
+    macros = generated_macros()
+    assert_macro(macros, "rising", ["\\qty{#1}^{ (#2) }", 2])
+    assert_macro(macros, "falling", ["\\qty{#1}_{ (#2) }", 2])
+    assert_macro(
+        macros,
+        "multichoose",
+        [
+            "{\\left(\\kern-.3em\\left(\\genfrac{}{0pt}{}{#1}{#2}\\right)\\kern-.3em\\right)}",
+            2,
+        ],
+    )
+    assert_macro(macros, "ceil", ["\\mathopen{\\lceil}#1\\mathclose{\\rceil}", 1])
+
+
+def test_optional_default_reaches_each_projection() -> None:
+    module = generator_module()
+    macros = module.parse_macros("\\newcommand{\\pair}[2][d]{(#1, #2)}\n", "pair.tex")
+    projected = json.loads(module.generate_json(macros))
+    if projected == {"pair": ["(#1, #2)", 2, "d"]}:
+        check("an optional default is the third member of the MathJax entry")
+    else:
+        fail("an optional default is the third member of the MathJax entry", repr(projected))
+    definition = "\\newcommand{\\pair}[2][d]{(#1, #2)}"
+    for name, text in (
+        ("reader input", module.generate_reader_input(macros)),
+        ("HTML include", module.generate_html(macros)),
+        ("legacy HTML", module.generate_legacy_html(macros)),
+    ):
+        if definition in text:
+            check(f"the {name} keeps the optional default")
+        else:
+            fail(f"the {name} keeps the optional default", text)
+    if '"pair": ["(#1, #2)", 2, "d"]' in module.generate_js(macros):
+        check("the JavaScript module keeps the optional default")
+    else:
+        fail("the JavaScript module keeps the optional default", module.generate_js(macros))
+
+
+def test_a_definition_without_a_projection_stops_the_generator() -> None:
+    module = generator_module()
+    cases = {
+        "\\def\\dotted#1.{#1}": "\\dotted",
+        "\\gdef\\global{x}": "\\global",
+        "\\let\\copied\\alpha": "\\copied",
+        "\\DeclareRobustCommand{\\robust}{x}": "\\robust",
+    }
+    for source, name in cases.items():
+        text = f"\\newcommand{{\\fine}}{{y}}\n\n{source}\n"
+        try:
+            module.parse_macros(text, "cases.tex")
+        except module.ProjectionError as error:
+            message = str(error)
+            if "cases.tex:3" in message and name in message:
+                check(f"{source} stops the generator with its file, line and name")
+            else:
+                fail(f"{source} stops the generator with its file, line and name", message)
+            continue
+        fail(f"{source} stops the generator", "parse_macros returned")
+    undefined = module.parse_macros("\\let\\hyp\\relax\n\\newcommand{\\hyp}{h}\n", "relax.tex")
+    if [(m.name, m.body) for m in undefined] == [("hyp", "h")]:
+        check("\\let to \\relax before a definition defines nothing")
+    else:
+        fail("\\let to \\relax before a definition defines nothing", repr(undefined))
+
+
+def page_image(document: str, tmp_dir: Path) -> bytes:
+    (tmp_dir / "page.tex").write_text(document)
+    subprocess.run(
+        ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "page.tex"],
+        capture_output=True,
+        text=True,
+        cwd=tmp_dir,
+        check=True,
+    )
+    subprocess.run(
+        ["pdftoppm", "-png", "-r", "300", "-singlefile", "page.pdf", "page"],
+        cwd=tmp_dir,
+        check=True,
+    )
+    return (tmp_dir / "page.png").read_bytes()
+
+
+def test_paired_delimiter_projection_typesets_as_mathtools() -> None:
+    body, count = generated_macros()["ceil"]
+    projected = body.replace("#1", "x+1")
+    preamble = "\\documentclass{article}\\usepackage{mathtools}\\pagestyle{empty}\n"
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_dir = Path(tmp)
+        declared = page_image(
+            preamble + "\\DeclarePairedDelimiter{\\ceil}{\\lceil}{\\rceil}\n"
+            "\\begin{document}$a\\ceil{x+1}b$\\end{document}\n",
+            tmp_dir,
+        )
+        expanded = page_image(
+            preamble + f"\\begin{{document}}$a{projected}b$\\end{{document}}\n", tmp_dir
+        )
+    if count == 1 and declared == expanded:
+        check("\\ceil{x+1} and its projection give the same pdflatex page")
+    else:
+        fail("\\ceil{x+1} and its projection give the same pdflatex page", projected)
+
+
 def main() -> None:
     test_domain_aux_files_are_generated()
     test_tree_overrides_only_the_declared_native_commands()
@@ -831,6 +934,10 @@ def main() -> None:
     test_dzg_mathjax_style_compiles_domain_macros()
     test_legacy_mathjax_injection_defines_required_shims()
     test_readme_reference_lists_each_definition_of_the_macro_files()
+    test_parameterised_definitions_reach_the_projection()
+    test_optional_default_reaches_each_projection()
+    test_a_definition_without_a_projection_stops_the_generator()
+    test_paired_delimiter_projection_typesets_as_mathtools()
     total = passed + failed
     print(f"\n{'=' * 50}")
     print(f"  {passed}/{total} passed, {failed} failed")
