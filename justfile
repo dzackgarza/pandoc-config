@@ -533,8 +533,13 @@ _test-plain-clone:
 test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-tikz-paths _test-lamport-proof _test-wikilinks _test-math-delimiters _test-posets _test-compile-pandoc _test-compile-html _test-hide-solutions _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
 
 [doc("Run the fast commit check; the commit hook runs this")]
-test-commit:
+test-commit: _check-generated-macros
     @just -f ~/ai-review-ci/justfiles/python.just -d . test-commit
+
+[doc("Fail when a generated macro file differs from the generator output (a hand edit)")]
+_check-generated-macros:
+  uv run "{{source_directory()}}/bin/generate-mathjax-config.py" >/dev/null
+  git -C "{{source_directory()}}" diff --exit-code -- templates/css templates/mathjax-config.html templates/pandoc_revealjs_template.html
 
 [doc("CI gate: the full suite, same as test")]
 test-ci: test

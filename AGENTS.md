@@ -220,7 +220,8 @@ template:
 - `templates/css/math-macros.md` holds the `\newcommand` line of each macro
   of `styles/macros/mathjax-sources.txt` in a fenced div of the class
   `math-macros`. `bin/generate-mathjax-config.py` writes it; never edit it by
-  hand.
+  hand. `just test-commit` runs the generator and fails when it changes a
+  generated file.
 - The editor gives that file as the first input of the export. The
   `latex_macros` extension of the Markdown reader (on by default) applies
   each definition to the TeX math of the inputs after it, so the writer gets
@@ -266,7 +267,7 @@ carry the changes over. A template that includes the partial must stay in
 - The one `macros: {...},` line of the partial and of the reveal.js template
   is written by `bin/generate-mathjax-config.py` (`GENERATED_TEMPLATES`); a
   template with no such line or with more than one stops the generator. Never
-  edit it by hand. The configuration loads the MathJax packages `mathtools`,
+  edit it by hand; the same `just test-commit` check covers it. The configuration loads the MathJax packages `mathtools`,
   `centernot` and `stmaryrd`, which the macro expansions use
   (`styles/macros/README.md`). A new HTML template includes the partial; a template with a
   macro map of its own goes into that list.
