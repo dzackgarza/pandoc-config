@@ -91,7 +91,7 @@ check "the math is MathJax math" \
 check "MathJax gets the central macros" grep -qE '"?theset"?:' note.html
 # The notes write a display as the body of align* (convert_math_delimiters.lua).
 check "a display with & is an align* environment" \
-  bash -c "command tr '\n' ' ' < note.html | grep -qE 'class=\"math display\">[[:space:]]*\\\\begin\{align\*\}[[:space:]]*A &\\\\to B'"
+  bash -c "command tr '\n' ' ' < note.html | grep -qE 'class=\"math display\">[[:space:]]*\\\\begin\{align\*\}[[:space:]]*A &amp;\\\\to B'"
 check "the figure is an inline SVG" bash -c "grep -A2 'class=\"tikzcd' note.html | grep -q '<svg'"
 check "the citation is resolved" grep -q 'Friedman' note.html
 check "no temporary output is left beside the target" bash -c "! ls -A | grep -q '^\.note\.html\.'"

@@ -5,16 +5,21 @@ The filter owns normalization from raw display math delimiters to alignable
 equations. These tests exercise Pandoc's real markdown reader and writers.
 """
 
+import atexit
 from pathlib import Path
+import shutil
 import subprocess
 import sys
+import tempfile
 
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 FILTER = ROOT / "filters" / "convert_math_delimiters.lua"
 FIXTURES = HERE / "fixtures" / "math-delimiters"
-BUILD_DIR = ROOT / ".build_test_math_delimiters"
+# The PDFs go to a temporary directory that is removed at exit.
+BUILD_DIR = Path(tempfile.mkdtemp(prefix="test-math-delimiters-"))
+atexit.register(shutil.rmtree, BUILD_DIR, True)
 
 passed = 0
 failed = 0
@@ -98,7 +103,7 @@ def test_html_output_aligns_sample() -> None:
         cp,
         lambda out: '<span class="math display">' in out
         and "\\begin{align*}" in out
-        and "\\Sets &\\mapstofrom{}{} \\mathrm{CAlg}_k" in out
+        and "\\Sets &amp;\\mapstofrom{}{} \\mathrm{CAlg}_k" in out
         and has_no_display_delimiter_lines(out),
     )
 
@@ -138,7 +143,6 @@ def test_prewrapped_align_is_not_double_wrapped() -> None:
 
 
 def test_pdf_compiles_sample() -> None:
-    BUILD_DIR.mkdir(exist_ok=True)
     out_path = BUILD_DIR / "math-delimiters.pdf"
     cp = subprocess.run(
         [
@@ -169,7 +173,6 @@ def test_pdf_compiles_sample() -> None:
 
 
 def test_pdf_compiles_sample_with_unified_style() -> None:
-    BUILD_DIR.mkdir(exist_ok=True)
     out_path = BUILD_DIR / "math-delimiters-unified.pdf"
     cp = subprocess.run(
         [

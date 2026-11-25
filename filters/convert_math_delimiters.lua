@@ -50,7 +50,10 @@ function Math(m)
     if not is_display_math(m) then
       return m
     end
-    return pandoc.RawInline('html', '\n<span class="math display">\n' .. alignable_display(m.text) .. '\n</span>')
+    -- Raw HTML: the markup characters of the TeX are escaped, as Pandoc
+    -- escapes a Math element; the browser gives MathJax the TeX back.
+    local tex = alignable_display(m.text):gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;")
+    return pandoc.RawInline('html', '\n<span class="math display">\n' .. tex .. '\n</span>')
   end 
 
 end

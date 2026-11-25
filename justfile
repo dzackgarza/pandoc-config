@@ -333,6 +333,7 @@ compile-html input_file output_file bib_source=PROJECT_BIB_SOURCE:
       --lua-filter="{{source_directory()}}/filters/convert_amsthm_envs.lua" \
       --lua-filter="{{source_directory()}}/filters/tikzcd.lua" \
       --lua-filter="{{source_directory()}}/filters/replace_symbols_html.lua" \
+      --lua-filter="{{source_directory()}}/filters/convert_math_delimiters.lua" \
       --citeproc \
       --csl="{{source_directory()}}/csl/alpha-preview.csl" \
       "${BIB_ARGS[@]}" \
@@ -652,7 +653,7 @@ _test-plain-clone:
   bash "{{source_directory()}}/tests/test-plain-clone.sh"
 
 # Regenerate the README reference, then run all tests (macros, templates, tikz compilation, filter, poset layout)
-test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-posets _test-compile-pandoc _test-compile-html _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
+test: readme-reference _test-mathjax-generator _test-macros _test-mathjax-macros _test-templates _test-tikz _test-tikz-filter _test-lamport-proof _test-wikilinks _test-math-delimiters _test-posets _test-compile-pandoc _test-compile-html _test-stripmacros _test-theorem-tables _test-plain-clone _test-staleness-report
 
 # Run the fast commit check; the commit hook runs this
 test-commit:
@@ -694,6 +695,9 @@ _test-lamport-proof:
 # Test that wikilinks become links to the headings the editor resolved
 _test-wikilinks:
   uv run "{{source_directory()}}/tests/test-wikilinks.py"
+
+_test-math-delimiters:
+  uv run "{{source_directory()}}/tests/test-math-delimiters.py"
 
 # Test the staleness report on built histories and the marker of a real site
 _test-staleness-report:
