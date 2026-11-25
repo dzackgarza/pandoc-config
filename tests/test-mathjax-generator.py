@@ -928,6 +928,125 @@ def test_projection_typesets_as_the_latex_definition() -> None:
         else:
             fail(f"{call} and its projection give the same pdflatex page", expanded)
 
+
+PAIRED_DELIMITER_CASES = {
+    "\\qty{\\frac ab}": "\\mathopen{(}\\frac ab\\mathclose{)}",
+    "\\qty*{\\frac ab}": "\\mathopen{}\\mathclose{\\left(\\frac ab\\right)}",
+    "\\qty[\\big]{\\frac ab}": "\\mathopen{\\bigl(}\\frac ab\\mathclose{\\bigr)}",
+    "\\qty[\\Bigg]{\\frac ab}": "\\mathopen{\\Biggl(}\\frac ab\\mathclose{\\Biggr)}",
+}
+
+SHIM_CASES = {
+    "\\coloneqq": "\\vcentcolon\\mathrel{\\mkern-1.2mu}=",
+    "\\qed": "\\quad\\blacksquare",
+}
+
+QTY_CALL_RE = re.compile(r"\\qty(?![A-Za-z])\s*\{")
+
+
+def without_qty(text: str) -> str:
+    """Replace each \\qty{X} by the unstarred mathtools meaning of the pair."""
+    while (match := QTY_CALL_RE.search(text)) is not None:
+        depth, end = 1, match.end()
+        while depth:
+            depth += {"{": 1, "}": -1}.get(text[end], 0)
+            end += 1
+        inner = text[match.end() : end - 1]
+        text = f"{text[: match.start()]}\\mathopen{{(}}{inner}\\mathclose{{)}}{text[end:]}"
+    return text
+
+
+def qty_macro_cases(macros: dict) -> dict[str, str]:
+    cases: dict[str, str] = {}
+    for name, value in macros.items():
+        if name == "qty":
+            continue
+        body, count = (value, 0) if isinstance(value, str) else (value[0], value[1])
+        if not QTY_CALL_RE.search(body):
+            continue
+        arguments = ["x", "y", "z", "w", "v", "u", "t", "s", "r"][:count]
+        expanded = body
+        for number, argument in enumerate(arguments, start=1):
+            expanded = expanded.replace(f"#{number}", argument)
+        call = "\\" + name + "".join(f"{{{argument}}}" for argument in arguments)
+        cases[call] = without_qty(expanded)
+    return cases
+
+
+def pdflatex_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
+    pages = "\\newpage\n".join(f"$a{formula}b$\n" for formula in formulas)
+    (tmp_dir / "pages.tex").write_text(
+        "\\documentclass{article}\\usepackage{dzg-unified}\\pagestyle{empty}\n"
+        f"\\begin{{document}}\n{pages}\\end{{document}}\n"
+    )
+    env = os.environ.copy()
+    env["TEXINPUTS"] = TEXINPUTS
+    cp = subprocess.run(
+        ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "pages.tex"],
+        capture_output=True,
+        text=True,
+        cwd=tmp_dir,
+        env=env,
+    )
+    if cp.returncode != 0:
+        return cp.stdout
+    subprocess.run(["pdftoppm", "-png", "-r", "300", "pages.pdf", "page"], cwd=tmp_dir, check=True)
+    return [path.read_bytes() for path in sorted(tmp_dir.glob("page-*.png"))]
+
+
+def mathjax_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
+    cp = subprocess.run(
+        ["bun", str(HERE / "mathjax-pages.ts"), str(tmp_dir)],
+        input=json.dumps([f"a{formula}b" for formula in formulas]),
+        capture_output=True,
+        text=True,
+        cwd=ROOT,
+    )
+    if cp.returncode != 0:
+        return cp.stdout + cp.stderr
+    images: list[bytes] = []
+    for index in range(len(formulas)):
+        svg, png = tmp_dir / f"{index}.svg", tmp_dir / f"{index}.png"
+        subprocess.run(
+            ["rsvg-convert", "-z", "8", "-b", "white", str(svg), "-o", str(png)], check=True
+        )
+        images.append(png.read_bytes())
+    return images
+
+
+def test_mathjax_typesets_each_paired_delimiter_and_shim_as_pdflatex() -> None:
+    """For \\qty in each form, each macro that uses it and each shim of the
+    generator, the call and its LaTeX meaning give the same pdflatex page, and
+    the call with the macros of the preview template gives the same MathJax
+    page as that meaning."""
+    cases = {**PAIRED_DELIMITER_CASES, **SHIM_CASES, **qty_macro_cases(generated_macros())}
+    calls, meanings = list(cases), list(cases.values())
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_dir = Path(tmp)
+        (tmp_dir / "latex").mkdir()
+        (tmp_dir / "mathjax").mkdir()
+        latex = pdflatex_pages(calls + meanings, tmp_dir / "latex")
+        mathjax = mathjax_pages(calls + meanings, tmp_dir / "mathjax")
+    if isinstance(latex, str):
+        fail("pdflatex pages of the paired delimiters and shims", latex[-2000:])
+        return
+    if isinstance(mathjax, str):
+        fail("MathJax pages of the paired delimiters and shims", mathjax[-2000:])
+        return
+    count = len(calls)
+    if len(latex) != 2 * count:
+        fail("pdflatex pages of the paired delimiters and shims", f"{len(latex)} pages for {2 * count} formulas")
+        return
+    for index, (call, meaning) in enumerate(cases.items()):
+        if latex[index] == latex[count + index]:
+            check(f"{call} and {meaning} give the same pdflatex page")
+        else:
+            fail(f"{call} and {meaning} give the same pdflatex page", "the pages differ")
+        if mathjax[index] == mathjax[count + index]:
+            check(f"{call} and {meaning} give the same MathJax page")
+        else:
+            fail(f"{call} and {meaning} give the same MathJax page", "the pages differ")
+
 def main() -> None:
     test_domain_aux_files_are_generated()
     test_tree_overrides_only_the_declared_native_commands()
@@ -950,6 +1069,7 @@ def main() -> None:
     test_optional_default_reaches_each_projection()
     test_a_definition_without_a_projection_stops_the_generator()
     test_projection_typesets_as_the_latex_definition()
+    test_mathjax_typesets_each_paired_delimiter_and_shim_as_pdflatex()
     total = passed + failed
     print(f"\n{'=' * 50}")
     print(f"  {passed}/{total} passed, {failed} failed")
