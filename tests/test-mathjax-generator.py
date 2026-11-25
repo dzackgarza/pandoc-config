@@ -859,6 +859,7 @@ def test_a_definition_without_a_projection_stops_the_generator() -> None:
         "\\gdef\\global{x}": "\\global",
         "\\let\\copied\\alpha": "\\copied",
         "\\DeclareRobustCommand{\\robust}{x}": "\\robust",
+        "\\DeclarePairedDelimiter{\\pair}{(}{)}": "\\pair",
     }
     for source, name in cases.items():
         text = f"\\newcommand{{\\fine}}{{y}}\n\n{source}\n"
@@ -880,7 +881,7 @@ def test_a_definition_without_a_projection_stops_the_generator() -> None:
 
 
 PROJECTED_LATEX_CASES = {
-    "ceil": ["x+1"],
+    "ceiling": ["x+1"],
     "rising": ["x", "n"],
     "falling": ["x", "n"],
     "multichoose": ["n", "k"],
@@ -934,10 +935,11 @@ QTY_CASES = {
     "\\qty{x}": "\\left(x\\right)",
 }
 
-PAIRED_DELIMITER_CASES = {
-    "\\ceil{\\frac ab}": "\\mathopen{\\lceil}\\frac ab\\mathclose{\\rceil}",
-    "\\ceil*{\\frac ab}": "\\mathopen{}\\mathclose{\\left\\lceil\\frac ab\\right\\rceil}",
-    "\\ceil[\\big]{\\frac ab}": "\\mathopen{\\bigl\\lceil}\\frac ab\\mathclose{\\bigr\\rceil}",
+DELIMITER_CASES = {
+    "\\ceiling{\\frac ab}": "\\left\\lceil\\frac ab\\right\\rceil",
+    "\\intvl{\\frac ab}": "\\left[\\frac ab\\right]",
+    "\\rising{x}{\\frac ab}": "\\left(x\\right)^{\\left(\\frac ab\\right)}",
+    "\\falling{x}{\\frac ab}": "\\left(x\\right)_{\\left(\\frac ab\\right)}",
 }
 
 SHIM_CASES = {
@@ -1018,12 +1020,12 @@ def mathjax_pages(formulas: list[str], tmp_dir: Path) -> list[bytes] | str:
     return images
 
 
-def test_mathjax_typesets_each_paired_delimiter_and_shim_as_pdflatex() -> None:
-    """For \\qty, each form of \\ceil, each macro that uses \\qty and each shim of the
+def test_mathjax_typesets_each_delimiter_and_shim_as_pdflatex() -> None:
+    """For each delimiter macro, each macro that uses \\qty and each shim of the
     generator, the call and its LaTeX meaning give the same pdflatex page, and
     the call with the macros of the preview template gives the same MathJax
     page as that meaning."""
-    cases = {**QTY_CASES, **PAIRED_DELIMITER_CASES, **SHIM_CASES, **qty_macro_cases(generated_macros())}
+    cases = {**QTY_CASES, **DELIMITER_CASES, **SHIM_CASES, **qty_macro_cases(generated_macros())}
     calls, meanings = list(cases), list(cases.values())
     with tempfile.TemporaryDirectory() as tmp:
         tmp_dir = Path(tmp)
@@ -1031,15 +1033,15 @@ def test_mathjax_typesets_each_paired_delimiter_and_shim_as_pdflatex() -> None:
         (tmp_dir / "mathjax").mkdir()
         mathjax = mathjax_pages(calls + meanings, tmp_dir / "mathjax")
         if isinstance(mathjax, str):
-            fail("MathJax pages of the paired delimiters and shims", mathjax[-2000:])
+            fail("MathJax pages of the delimiters and shims", mathjax[-2000:])
             return
         latex = pdflatex_pages(calls + meanings, tmp_dir / "latex")
     if isinstance(latex, str):
-        fail("pdflatex pages of the paired delimiters and shims", latex[-2000:])
+        fail("pdflatex pages of the delimiters and shims", latex[-2000:])
         return
     count = len(calls)
     if len(latex) != 2 * count:
-        fail("pdflatex pages of the paired delimiters and shims", f"{len(latex)} pages for {2 * count} formulas")
+        fail("pdflatex pages of the delimiters and shims", f"{len(latex)} pages for {2 * count} formulas")
         return
     for index, (call, meaning) in enumerate(cases.items()):
         if latex[index] == latex[count + index]:
@@ -1073,7 +1075,7 @@ def main() -> None:
     test_optional_default_reaches_each_projection()
     test_a_definition_without_a_projection_stops_the_generator()
     test_projection_typesets_as_the_latex_definition()
-    test_mathjax_typesets_each_paired_delimiter_and_shim_as_pdflatex()
+    test_mathjax_typesets_each_delimiter_and_shim_as_pdflatex()
     total = passed + failed
     print(f"\n{'=' * 50}")
     print(f"  {passed}/{total} passed, {failed} failed")
