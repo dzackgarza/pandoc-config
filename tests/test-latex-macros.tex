@@ -1,5 +1,3 @@
-% Test document for unified LaTeX macro system
-% Tests macros from all tiers and domain files
 \documentclass[11pt]{scrartcl}
 \usepackage{test-macros}
 
@@ -63,8 +61,8 @@ Column vector: $\cvec{x}{y}$
 \subsection{Stacking}
 Stacked symbols: $\stack{a \\ b \\ c}$
 
-Bold vectors via the tier 3 \texttt{\string\boldsymbol} renewal to bm.sty
-(the pair's MathJax side is a deliberate absence, guarded in tier2):
+Bold vectors through the \texttt{\string\boldsymbol} of bm.sty, which is
+\texttt{\string\bm}; MathJax renders its own \texttt{\string\boldsymbol}:
 $\boldsymbol{\alpha} + \boldsymbol{x}$, and
 $\boldsymbol{\xi}^{\,2} \in \boldsymbol{H}^1(\boldsymbol{X})$.
 

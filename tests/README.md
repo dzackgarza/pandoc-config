@@ -47,7 +47,7 @@ This produces `test-latex-macros.pdf` which exercises:
 
 Some macros conflict with LaTeX defaults:
 - `\ae` (already defined by LaTeX)
-- `\mod`, `\qed`, `\too` (conflicts with standard commands)
+- `\too` (conflicts with a standard command)
 
 These are handled by the macro files but may generate warnings.
 

@@ -1,21 +1,19 @@
-% Test-specific macro package with absolute paths
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{test-macros}[2025/01/09 Test Macros]
 
-% Load required packages first
 \RequirePackage{amsmath,amsthm,amssymb}
 \RequirePackage{mathtools}
 \RequirePackage{bm}
 \RequirePackage{stmaryrd}
 \RequirePackage{tikz-cd}
 
-\input{/home/dzack/.pandoc/styles/macros/tier1-mathjax-simple}
-\input{/home/dzack/.pandoc/styles/macros/tier2-mathjax-args}
-\input{/home/dzack/.pandoc/styles/macros/tier3-tex-complex}
-\input{/home/dzack/.pandoc/styles/macros/tier4-preamble}
-\input{/home/dzack/.pandoc/styles/macros/categories}
-\input{/home/dzack/.pandoc/styles/macros/spectral}
+\input{tier1-mathjax-simple}
+\input{tier2-mathjax-args}
+\input{tier3-tex-complex}
+\input{tier4-preamble}
+\input{categories}
+\input{spectral}
 
-\input{/home/dzack/.pandoc/styles/macros/environments}
+\input{environments}
 
 \endinput

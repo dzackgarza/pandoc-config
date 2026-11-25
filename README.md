@@ -264,11 +264,12 @@ Each mathematical object (a Coxeter diagram, cusp diagram, lattice polygon,
 integral-affine sphere, lattice table, stratum, space, commutative diagram) is
 one file `figures/objects/<family>/<name>.tikz`: drawing commands without a
 `tikzpicture`, built from the constructors below, with its data source in its
-leading comment. A figure places it and draws on its named points:
+leading comment. A figure places it and draws on its named points; here the
+pic `Q` gives the points `Q-pstar`, `Q-1`, and so on:
 
 ```latex
 \begin{tikzpicture}
-  \pic (Q) {object=ade/minus-E8-minus};                          % points Q-pstar, Q-1, ...
+  \pic (Q) {object=ade/minus-E8-minus};
   \pic[scale=0.4, ias labels=multiplicities, ell={2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,4,6,4}]
     (S) at (8,0) {object=ias/symington-18-2-0};
   \draw[degeneration] (Q-pstar) -- (S-p16);
@@ -839,7 +840,6 @@ Regenerate with `just readme-reference`.
 | `\delbar` | 0 | `{ \bar{\del}}` |
 | `\depth` | 0 | `\operatorname{depth}` |
 | `\Der` | 0 | `{ \operatorname{Der} }` |
-| `\det` | 0 | `\operatorname{det}` |
 | `\diag` | 0 | `\operatorname{diag}` |
 | `\diagonal` | 0 | `\Delta` |
 | `\diagonalfunctor` | 0 | `\Delta` |
@@ -956,7 +956,6 @@ Regenerate with `just readme-reference`.
 | `\mHH` | 0 | `{\operatorname{HH}}` |
 | `\minor` | 0 | `{\operatorname{minor}}` |
 | `\minpoly` | 0 | `{\operatorname{minpoly}}` |
-| `\mod` | 0 | `\operatorname{mod}` |
 | `\Mor` | 0 | `\operatorname{Mor}` |
 | `\mproj` | 0 | `\operatorname{mProj}` |
 | `\mspec` | 0 | `\operatorname{mSpec}` |
@@ -1065,7 +1064,7 @@ Regenerate with `just readme-reference`.
 | `\submfds` | 0 | `\operatorname{SubMfds}` |
 | `\SU` | 0 | `{\operatorname{SU}}` |
 | `\Sum` | 0 | `\sum` |
-| `\orthogonalsum` | 0 | `\mathop{\perp}\displaylimits` |
+| `\orthogonalsum` | 0 | `\mathop{\perp}` |
 | `\supp` | 0 | `\operatorname{supp}` |
 | `\Supp` | 0 | `{\operatorname{Supp}}` |
 | `\Sw` | 0 | `{\mathrm{Sw}}` |
@@ -1277,7 +1276,7 @@ Regenerate with `just readme-reference`.
 | `\normalizer` | 0 | `{ N }` |
 | `\notimplies` | 0 | `\centernot\implies` |
 | `\ofrom` | 0 | `\overset{\circ}{\leftarrow}` |
-| `\onto` | 0 | `\twoheadhthtarrow` |
+| `\onto` | 0 | `\twoheadrightarrow` |
 | `\oto` | 0 | `\overset{\circ}{\rightarrow}` |
 | `\padic` | 0 | `p\dash\text{adic}` |
 | `\plocal` | 0 | `{ \scriptsize {}_{ \localize{p} } }` |
@@ -1826,7 +1825,8 @@ Regenerate with `just readme-reference`.
 | `\dif` | 0 | `\mathop{}\!\operatorname{d}` |
 | `\rotate` | 2 | `{\style{display: inline-block; transform: rotate(#1deg)}{#2}}` |
 | `\rrrarrows` | 0 | `\mathrel{\substack{\textstyle\rightarrow\\[-0.6ex] \textstyle\rightarrow \\[-0.6ex] \textstyle\rightarrow}}` |
-| `\righttriplearrows` | 0 | `\operatorname{{\; \tikz{ \foreach \y in {0, 0.1, 0.2} { \draw [-stealth] (0, \y) -- +(0.5, 0);}} \; }}` |
+| `\righttriplearrows` | 0 | `\mathrel{\substack{\rightarrow\\[-1ex]\rightarrow\\[-1ex]\rightarrow}}` |
+| `\contradiction` | 0 | `\mathord{\lightning}` |
 | `\bdlattice` | 2 | `\overline{#1}_{ #2 }` |
 | `\perpin` | 2 | `#2^{\perp_{#1}}` |
 | `\signature` | 1 | `\operatorname{sign}\qty{#1}` |
@@ -1845,15 +1845,16 @@ Regenerate with `just readme-reference`.
 | `\thecone` | 1 | `\mathfrak{#1}` |
 | `\theposet` | 1 | `\mathcal{#1}` |
 | `\modulistack` | 1 | `\mathcal{#1}` |
-| `\RN` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}` |
 | `\torcptf` | 2 | `\overline{#1}^{#2}` |
 
 ### `styles/macros/tier3-tex-complex.tex`
 
 | Macro | Args | Expansion |
 | --- | --- | --- |
-| `\qed` | 0 | `\hfill\ensuremath{\blacksquare}` |
-| `\RM` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}%` |
+| `\qedsymbol` | 0 | `\ensuremath{\blacksquare}` |
+| `\RM` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}` |
+| `\RN` | 1 | `\textup{\uppercase\expandafter{\romannumeral#1}}` |
+| `\righttriplearrows` | 0 | `\operatorname{{\; \tikz{ \foreach \y in {0, 0.1, 0.2} { \draw [-stealth] (0, \y) -- +(0.5, 0);}} \; }}` |
 | `\dqty` | 1 | `\left( \left( {#1} \right) \right)` |
 | `\fourcase` | 4 | `\begin{cases}{#1} & {#2} \\ {#3} & {#4}\end{cases}` |
 | `\cvec` | 2 | `{ \begin{bmatrix} {#1} \\ {#2} \end{bmatrix} }` |
@@ -1870,7 +1871,6 @@ Regenerate with `just readme-reference`.
 | `\QHS` | 0 | `\mathbf{Q}\kern-0.5pt\operatorname{HS}` |
 | `\BGL` | 0 | `\mathbf{B}\mkern-3mu \operatorname{GL}` |
 | `\gitquot` | 0 | `{ \mathbin{/\mkern-6mu/}}` |
-| `\boldsymbol` | 0 | `\bm` |
 | `\quotleft` | 2 | `{}_{#2}\mkern-.5mu\backslash\mkern-2mu^{#1}` |
 | `\quotright` | 2 | `{}^{#1}\mkern-2mu/\mkern-2mu_{#2}` |
 | `\dcoset` | 3 | `\,\scriptscriptstyle {\textstyle #1} \mkern-4mu\scalebox{1.5}{$\diagdown$}\mkern-5mu^{\textstyle #2} \mkern-4mu\scalebox{1.5}{$\diagup$}\mkern-5mu{\textstyle #3}` |
@@ -1924,7 +1924,6 @@ Regenerate with `just readme-reference`.
 | `\mapsfrom` | 0 | `\mathrel{\reflectbox{\ensuremath{\mapsto}}}` |
 | `\envlist` | 0 | `\leavevmode\vspace{-1.00\baselineskip}` |
 | `\one` | 0 | `\mathbbm{1}` |
-| `\contradiction` | 0 | `\mathord{\lightning}` |
 | `\dzg` | 1 | `\@ifundefined{todo}{#1}{\todo[color=blue!40]{#1}}` |
 | `\dzginline` | 1 | `\@ifundefined{todo}{#1}{\todo[inline,color=blue!40]{#1}}` |
 
@@ -1932,7 +1931,6 @@ Regenerate with `just readme-reference`.
 
 | Macro | Args | Expansion |
 | --- | --- | --- |
-| `\mid` | 0 | `\mathrel{\Big\|}` |
 | `\thesubsection` | 0 | `\thesection.\arabic{subsection}` |
 | `\thesubsection` | 0 | `\thesection\Alph{subsection}` |
 

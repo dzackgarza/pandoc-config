@@ -427,7 +427,7 @@ _test-macros:
   PANDOC_DIR="{{source_directory()}}"
   export TEXINPUTS=".:$PANDOC_DIR/styles//:$PANDOC_DIR/styles/macros//:$PANDOC_DIR/styles/preambles//:$PANDOC_DIR/config//:"
   cd "$PANDOC_DIR/tests"
-  pdflatex -interaction=nonstopmode test-latex-macros.tex || true
+  pdflatex -interaction=nonstopmode -halt-on-error test-latex-macros.tex
   if [ -f test-latex-macros.pdf ]; then
     echo "✅ LaTeX test compiled: test-latex-macros.pdf ($(du -h test-latex-macros.pdf | cut -f1))"
   else

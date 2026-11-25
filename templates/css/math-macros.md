@@ -324,7 +324,6 @@
 \newcommand{\delbar}{{ \bar{\del}}}
 \newcommand{\depth}{\operatorname{depth}}
 \newcommand{\Der}{{ \operatorname{Der} }}
-\newcommand{\det}{\operatorname{det}}
 \newcommand{\diag}{\operatorname{diag}}
 \newcommand{\diagonal}{\Delta}
 \newcommand{\diagonalfunctor}{\Delta}
@@ -441,7 +440,6 @@
 \newcommand{\mHH}{{\operatorname{HH}}}
 \newcommand{\minor}{{\operatorname{minor}}}
 \newcommand{\minpoly}{{\operatorname{minpoly}}}
-\newcommand{\mod}{\operatorname{mod}}
 \newcommand{\Mor}{\operatorname{Mor}}
 \newcommand{\mproj}{\operatorname{mProj}}
 \newcommand{\mspec}{\operatorname{mSpec}}

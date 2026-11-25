@@ -174,11 +174,16 @@ or independently override their macro semantics.
   `\diagdown`/`\diagup` in MathJax), `\gitquot` (`\mkern` in LaTeX) and
   `\righttriplearrows` (a TikZ drawing in LaTeX, a `\substack` of three arrows
   in MathJax). `\ae` replaces the æ ligature with "a.e.".
-- **`\boldsymbol` has no tier 2 definition.** MathJax renders it natively; a
-  `tex.macros` entry would replace that with a worse approximation. Tier 3
-  upgrades it to `\bm` in LaTeX.
-- **`\qed`** uses `\hfill` in LaTeX and the generator's shim in MathJax. It is
-  wrapped in `\ensuremath`, as amsthm's `\popQED` emits `\qed` in text mode.
+- **A native command keeps its definition.** The tree does not redefine
+  `\boldsymbol` (bm.sty makes it `\bm` in LaTeX; MathJax renders its own),
+  `\det`, `\mod` (amsmath and MathJax: `\mod{m}`, one argument) or `\mid`
+  (`\st` is the big-bar "such that"). A `tex.macros` entry for such a
+  command would replace the native one; the generator test asserts that
+  the projection has none.
+- **`\qed`** is the command of amsthm. Tier 3 sets its symbol,
+  `\qedsymbol`, to `\blacksquare` in `\ensuremath`, as amsthm sets the
+  symbol in text mode. MathJax has no `\qed`; the generator's shim gives
+  `\blacksquare`.
 - **`\fls`** builds the Laurent series delimiter: no font has a stretchy double
   parenthesis, so each outer parenthesis is a `\left` delimiter sized to a
   `\vphantom` of the argument, and a 5mu kern overlaps the pair.
