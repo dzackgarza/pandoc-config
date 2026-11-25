@@ -787,6 +787,32 @@ def test_legacy_mathjax_injection_defines_required_shims() -> None:
         fail("legacy fiberprod semantic signature", f"missing {expected_fiberprod}")
 
 
+def test_readme_reference_lists_each_definition_of_the_macro_files() -> None:
+    spec = importlib.util.spec_from_file_location(
+        "generate_readme_reference", ROOT / "bin" / "generate-readme-reference.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    reference = module.reference()
+    expected_rows = {
+        "\\danger with an optional argument": "| `\\danger` | 1 |",
+        "\\ratmap with an optional argument": "| `\\ratmap` | 1 |",
+        "\\surjectsvia with an optional argument": "| `\\surjectsvia` | 2 |",
+    }
+    for name, row in expected_rows.items():
+        if row in reference:
+            check(f"README reference lists {name}")
+        else:
+            fail(f"README reference lists {name}", f"no row {row!r}")
+    if "| `\\stacktype` |" in reference:
+        fail(
+            "README reference leaves out a definition nested in a body",
+            "\\stacktype of the body of \\danger is listed as a macro",
+        )
+    else:
+        check("README reference leaves out a definition nested in a body")
+
+
 def main() -> None:
     test_domain_aux_files_are_generated()
     test_tree_overrides_only_the_declared_native_commands()
@@ -804,6 +830,7 @@ def main() -> None:
     test_revealjs_template_loads_mathjax_through_the_mathjax3_plugin()
     test_dzg_mathjax_style_compiles_domain_macros()
     test_legacy_mathjax_injection_defines_required_shims()
+    test_readme_reference_lists_each_definition_of_the_macro_files()
     total = passed + failed
     print(f"\n{'=' * 50}")
     print(f"  {passed}/{total} passed, {failed} failed")
