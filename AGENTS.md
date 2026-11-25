@@ -312,6 +312,73 @@ ConTeXt template. It also runs each other writer of `pandoc --list-output-format
 with the reader input: no output holds a raw macro or a definition, and the
 math of the converting writers holds the expansion.
 
+## The `tikzcd.lua` filter contract
+
+`filters/tikzcd.lua` compiles each TikZ block of a document to a PDF and an
+SVG. zettlr-pandoc runs it for its live preview
+(`packages/tikz-render/src/tikz-render.ts`), so these rules are an interface.
+The first line of the filter is the code line
+`local ZETTLR_TIKZ_RENDER_PROTOCOL = <n>`. zettlr-pandoc reads the number
+from that line and refuses a filter without it. A change to one of the rules
+raises that number and the constant `TIKZ_RENDER_PROTOCOL` of zettlr-pandoc.
+The filter loads no other Lua file of this repository.
+
+- **Which blocks.** A raw TeX block that starts with `\begin{tikzcd}` or
+  `\begin{tikzpicture}`, a block that is `\input{file}` of a figure, a
+  `tikz` code block, and, in HTML, an inline `\dynkin` (the LaTeX preamble
+  loads `dynkin-diagrams`, so LaTeX output needs no handler). An `\input`
+  names a figure when its extension is `.tikz` or `.tikzcd`, or when the
+  body of the file, after its leading comment lines, opens a `tikzpicture`
+  or a `tikzcd`.
+- **Where an `\input` is found.** An absolute path; else the folder of the
+  document (`PANDOC_DOC_PATH`); else `FIGURES_SOURCE_DIR` (default
+  `figures/`), then its `tikz/` and `tikzcd/`; else one level of
+  subfolders of those three. A path without an extension also tries
+  `.tikz`, `.tikzcd` and `.tex`.
+- **The per-figure template.** `FIGURE_TEMPLATE_FILE` (default
+  `templates/standalone-tikz.tex`), read when the first figure compiles: a
+  load of the filter with empty input needs no render environment.
+  zettlr-pandoc gives the template of `~/.pandoc`, so no other filter data
+  tree owns a preamble. The figure body goes in at the `<>` marker (the QTikz
+  convention) after Pandoc applies the template, so a `$` in the figure
+  never reaches the template engine. The count of lines before the marker
+  maps a TeX `l.NN` line to the line of the figure body.
+- **The cache key.** The SHA-1 of the figure after `\input` resolution, the
+  template text, `TIKZ_RENDER_CONTEXT_HASH` and the folder of the document.
+  zettlr-pandoc gives a digest of the whole template, package and input
+  graph in `TIKZ_RENDER_CONTEXT_HASH`, because the template itself only
+  says `\usepackage{dzg-tikz}`. The folder is in the key because TeX loads
+  relative assets (`\includegraphics`) from it. A full-document `tikz` code
+  block has no template, so its key has no template text.
+- **The cache files.** `SVG_DIR/dzgtikz-<hash>.svg` and `.pdf` (default
+  `FIGURES_DIR/rendered`). A pair that exists is a hit unless
+  `TIKZ_FORCE_REBUILD=1`. With `TIKZ_CACHE_ONLY=1` a miss writes
+  `[tikzcd-cache-miss] <hash>` and stops the filter: a viewer that must not
+  wait leaves the compile to another job. The PDF is copied as soon as
+  lualatex succeeds, so LaTeX output has it when the SVG conversion fails.
+  pdf2svg writes into the scratch folder; the SVG is copied beside its
+  target and renamed over it, so a failed conversion or copy keeps the last
+  good SVG that the editor shows.
+- **The processes.** lualatex (`--shell-escape`, with `TEXINPUTS` the
+  folder of the document, `FIGURE_STYLES_DIR//` and `FIGURES_SOURCE_DIR//`)
+  and pdf2svg run through `pandoc.system.command`, with no shell, so a path
+  with a space is one argument (`tests/test-tikz-paths.sh`). Their output is
+  captured: stdout of the filter is its document, and a TeX log in it would
+  break a later `pandoc -f latex` of the output.
+- **The failure markers, on stderr.** For each `! message` of the TeX log
+  whose `l.NN` line is in the figure body:
+  `[tikzcd-figure-error] <body line>|<message>|<source line>`; the source is
+  last, so a reader splits on the first two `|`. Then the whole TeX log
+  between `[tikzcd-latex-log-begin]` and `[tikzcd-latex-log-end]`. Without a
+  TeX log: `[tikzcd] lualatex failed (exit N) without a TeX log:` and the
+  output. A failed conversion or copy of the SVG:
+  `[tikzcd] pdf2svg failed (exit N):` and the cause.
+- **A figure that fails.** LaTeX output stops the filter. HTML output keeps
+  the raw block, which the HTML writer drops, so the page renders without
+  that figure (a template that lacks a library shows as a missing figure).
+- **IDs in an SVG** get a prefix of the hash of the SVG, so two inline SVGs
+  in one page have no common `id`.
+
 ## Releases and downstream sites
 
 Downstream sites (pandoc-ssg sites) float on the current `main` of this

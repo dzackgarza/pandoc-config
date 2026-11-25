@@ -1,10 +1,8 @@
--- ZETTLR_TIKZ_RENDER_PROTOCOL=3
+local ZETTLR_TIKZ_RENDER_PROTOCOL = 3
 local system = require 'pandoc.system'
+local path = require 'pandoc.path'
 local home = os.getenv("HOME")
-package.path = package.path .. ';' .. home .. '/.pandoc/filters/?.lua;'
-require "utilities"
 
--- Logging helper: writes to stderr, no-op unless TIKZCD_DEBUG=1
 local debug_mode = os.getenv("TIKZCD_DEBUG") == "1"
 local function log(msg)
   if debug_mode then
@@ -12,59 +10,31 @@ local function log(msg)
   end
 end
 
--- Output directories
+local function starts_with(start, str)
+  return str:sub(1, #start) == start
+end
+
 local pandoc_dir = os.getenv("PANDOC_DIR") or (home .. "/.pandoc")
 local figures_dir = os.getenv("FIGURES_DIR") or (home .. "/.pandoc/figures")
 local svg_dir = os.getenv("SVG_DIR") or (figures_dir .. "/rendered")
 
--- Per-figure preamble template: the standalone LaTeX document each figure body is
--- wrapped in. It \usepackage's dzg-tikz, whose preamble loads the dzg TikZ library
--- (the single source of truth for tikz styles/defs — the same files the MathJax
--- path consumes), so the template carries the tikz macros directly; there is no
--- separate palette. Standalone filter use defaults
--- to the template under PANDOC_DIR (mirroring the PANDOC_DIR default above).
--- Zettlr supplies FIGURE_TEMPLATE_FILE explicitly from ~/.pandoc so a separately
--- selected filter data tree cannot become a second preamble owner. Read LAZILY
--- at compile time (not at filter load) so the
--- doctor's empty-stdin invocation probe, which loads the filter but compiles no
--- figure, needs no render-context env. Returns (compiled_template,
--- raw_template_string): the raw string is folded into the figure cache key so
--- swapping the template content changes the render.
 local function figure_template()
   local template_path = os.getenv("FIGURE_TEMPLATE_FILE")
   if not template_path or template_path == "" then
     template_path = pandoc_dir .. "/templates/standalone-tikz.tex"
   end
-  local template_file = io.open(template_path, "r")
-  if not template_file then
+  if not path.exists(template_path, "file") then
     error("tikzcd.lua: per-figure template not found at " .. template_path)
   end
-  local template_str = template_file:read("*a")
-  template_file:close()
+  local template_str = system.read_file(template_path)
   return pandoc.template.compile(template_str), template_str
 end
 
--- Surface a figure-compile FAILURE to the app (Phase D / D-6 / P95). On a
--- lualatex failure the standard LaTeX log carries a bang-error block: a `! …`
--- message line followed by an `l.NN  <source-prefix>` marker citing the line —
--- in the GENERATED `.tex` — that aborted the compile. This recovers that
--- diagnostic and writes ONE machine-parseable marker line per error to stderr so
--- it flows into the renderer subprocess stderr the app captures as
--- RenderResult.log (the figure-compile analog of the P11 pandoc log). The marker
--- carries the line WITHIN the figure body (the lualatex `.tex` line minus the
--- preamble lines the template prepended before the figure source) and the EXACT
--- verbatim figure-body source line at that position, so the app can map it back
--- to the editor buffer's tikz SOURCE line. `figure_body` is the figure source the
--- `<>` marker was replaced with; `preamble_lines` is the count of `.tex` lines
--- BEFORE that source began. The parse contract is LaTeX's own bang-error format,
--- not a bespoke shape — the same `! …` / `l.NN` block pplatex consumes.
 local function emit_figure_compile_error(log_path, figure_body, preamble_lines)
-  local lf = io.open(log_path, "r")
-  if not lf then
+  if not path.exists(log_path, "file") then
     return
   end
-  local log_text = lf:read("*a")
-  lf:close()
+  local log_text = system.read_file(log_path)
 
   local body_lines = {}
   for line in (figure_body .. "\n"):gmatch("(.-)\n") do
@@ -78,16 +48,12 @@ local function emit_figure_compile_error(log_path, figure_body, preamble_lines)
   for i = 1, #log_lines do
     local message = log_lines[i]:match("^!%s*(.+)$")
     if message then
-      -- The source line is cited later in the block by an `l.NN` marker.
       for j = i + 1, #log_lines do
         local tex_line = log_lines[j]:match("^l%.(%d+)")
         if tex_line then
           local body_line = tonumber(tex_line) - preamble_lines
           local src = body_lines[body_line]
           if src and src ~= "" then
-            -- ONE marker line, pipe-delimited, source last (it is the only field
-            -- that may contain a literal `|` in practice — tikz source rarely
-            -- does — so the app splits on the FIRST two pipes only).
             io.stderr:write("[tikzcd-figure-error] " .. body_line .. "|" .. message .. "|" .. src .. "\n")
           end
           break
@@ -96,12 +62,6 @@ local function emit_figure_compile_error(log_path, figure_body, preamble_lines)
     end
   end
 
-  -- The mapped marker above is a convenience for editor line highlighting, not
-  -- a substitute for the compiler's own diagnostics. Always forward the real
-  -- lualatex log on failure so callers can present the actual TeX error even
-  -- when the narrow `! ...` / `l.NN` mapper cannot associate it with a figure
-  -- body line. stderr is Pandoc's diagnostic channel; unlike stdout, writing
-  -- the log here cannot corrupt the filter's document output.
   io.stderr:write("[tikzcd-latex-log-begin]\n")
   io.stderr:write(log_text)
   if not log_text:match("\n$") then
@@ -111,168 +71,116 @@ local function emit_figure_compile_error(log_path, figure_body, preamble_lines)
   return true
 end
 
--- Shared compilation core: given full LaTeX source, compile to PDF then SVG.
--- `figure_body` + `preamble_lines` let a FAILURE be surfaced to the app as a
--- mapped figure-compile diagnostic (Phase D / D-6 / P95). Returns
--- (svg_path, pdf_path) or (nil, nil) on failure.
+local function tex_inputs(doc_dir)
+  local styles_dir = (os.getenv("FIGURE_STYLES_DIR") or (pandoc_dir .. "/styles")):gsub("/+$", "") .. "//"
+  local figures_inputs = (os.getenv("FIGURES_SOURCE_DIR") or (pandoc_dir .. "/figures")):gsub("/+$", "") .. "//"
+  if doc_dir and doc_dir ~= "" then
+    return doc_dir .. ":" .. styles_dir .. ":" .. figures_inputs .. "::"
+  end
+  return styles_dir .. ":" .. figures_inputs .. "::"
+end
+
+local function run(program, args, environment)
+  local function call()
+    return system.command(program, args, "")
+  end
+  local exit, stdout, stderr
+  if environment then
+    exit, stdout, stderr = system.with_environment(environment, call)
+  else
+    exit, stdout, stderr = call()
+  end
+  return exit, stdout .. stderr
+end
+
 local function run_latex_and_convert(tex_source, tmp_prefix, hash, doc_dir, figure_body, preamble_lines)
   local svg_path = svg_dir .. "/dzgtikz-" .. hash .. ".svg"
   local pdf_path = svg_dir .. "/dzgtikz-" .. hash .. ".pdf"
 
   local force_rebuild = os.getenv("TIKZ_FORCE_REBUILD") == "1"
-
-  local sf = io.open(svg_path, "r")
-  if sf then sf:close() end
-  local pf = io.open(pdf_path, "r")
-  if pf then pf:close() end
-  if sf and pf and not force_rebuild then
+  if path.exists(svg_path, "file") and path.exists(pdf_path, "file") and not force_rebuild then
     return svg_path, pdf_path
   end
 
-  -- A viewer that must never wait for a compile sets TIKZ_CACHE_ONLY=1 and
-  -- leaves compilation to a separate job; a miss names the missing figure.
   if os.getenv("TIKZ_CACHE_ONLY") == "1" then
     io.stderr:write("[tikzcd-cache-miss] " .. hash .. "\n")
     error("tikzcd.lua: figure not compiled yet: " .. hash)
   end
 
-  os.execute("mkdir -p " .. svg_dir)
-  -- A force refresh skips the cache hit but deliberately leaves the previous
-  -- SVG in place until the replacement SVG has been converted successfully.
-  -- In particular pdf2svg must never write directly over svg_path: a failed
-  -- conversion may truncate its destination, which would destroy the
-  -- lightbox/cache file for the last-good image the editor is still showing.
+  system.make_directory(svg_dir, true)
 
   return system.with_temporary_directory(tmp_prefix .. "-" .. hash, function(tmp)
-  local tex_path = tmp .. "/tikz.tex"
+    local tex_path = tmp .. "/tikz.tex"
+    system.write_file(tex_path, tex_source)
 
-  local f = io.open(tex_path, "w")
-  f:write(tex_source)
-  f:close()
-
-  local inputs_env = ""
-  local styles_dir = os.getenv("FIGURE_STYLES_DIR") or (pandoc_dir .. "/styles")
-  styles_dir = styles_dir:gsub("/+$", "") .. "//"
-  local figures_dir = os.getenv("FIGURES_SOURCE_DIR") or (pandoc_dir .. "/figures")
-  local figures_inputs = figures_dir:gsub("/+$", "") .. "//"
-  if doc_dir and doc_dir ~= "" then
-    inputs_env = 'TEXINPUTS="' .. doc_dir .. ':' .. styles_dir .. ':' .. figures_inputs .. '::" '
-  else
-    inputs_env = 'TEXINPUTS="' .. styles_dir .. ':' .. figures_inputs .. '::" '
-  end
-
-  -- Capture lualatex's stdout+stderr in the private scratch directory: a pandoc filter's stdout is its output
-  -- channel and must stay clean. The compile log would otherwise prepend to the
-  -- rendered document, breaking a downstream `pandoc -f latex` re-parse of the
-  -- output (the figure renders, but the log corrupts the stream). Diagnostics on
-  -- failure come from the .log file or this command transcript, never stdout.
-  local latex_command_log = tmp .. "/lualatex-command.log"
-  local cmd1 = inputs_env .. "lualatex --shell-escape -interaction=nonstopmode -output-directory=" .. tmp .. " " .. tex_path .. " >" .. latex_command_log .. " 2>&1"
-  local ok1, _, latex_exit = os.execute(cmd1)
-  if not ok1 then
-    -- Surface the figure-compile diagnostic (mapped to the figure source line)
-    -- before tearing down the tmp dir, so the failure reaches the app instead of
-    -- being dropped to a bare stderr note (Phase D / D-6 / P95).
-    if not emit_figure_compile_error(tmp .. "/tikz.log", figure_body, preamble_lines) then
-      local command_file = io.open(latex_command_log, "r")
-      local output = command_file and command_file:read("*a") or ""
-      if command_file then command_file:close() end
-      io.stderr:write("[tikzcd] lualatex failed (exit " .. tostring(latex_exit) .. ") without a TeX log:\n" .. output .. "\n")
+    local environment = system.environment()
+    environment.TEXINPUTS = tex_inputs(doc_dir)
+    local latex_exit, latex_output = run("lualatex", {
+      "--shell-escape", "-interaction=nonstopmode", "-output-directory=" .. tmp, tex_path,
+    }, environment)
+    if latex_exit then
+      if not emit_figure_compile_error(tmp .. "/tikz.log", figure_body, preamble_lines) then
+        io.stderr:write("[tikzcd] lualatex failed (exit " .. tostring(latex_exit) .. ") without a TeX log:\n" .. latex_output .. "\n")
+      end
+      return nil, nil
     end
-    return nil, nil
-  end
 
-  local tmp_pdf = tmp .. "/tikz.pdf"
-  local tmp_svg = tmp .. "/tikz.svg"
-  -- The PDF is already a successful lualatex product and remains useful to
-  -- LaTeX-output callers even when SVG conversion later fails.
-  os.execute("cp " .. tmp_pdf .. " " .. pdf_path)
-  local conversion_log = tmp .. "/pdf2svg.log"
-  local ok2, _, conversion_exit = os.execute("pdf2svg " .. tmp_pdf .. " " .. tmp_svg .. " >" .. conversion_log .. " 2>&1")
-  if ok2 then
-    -- Stage in the cache directory, then rename over the old SVG. `cp` may fail
-    -- part-way (disk full, permissions); that must leave the old svg_path
-    -- untouched. The final rename is within one directory/filesystem.
-    local staged_svg = svg_path .. "." .. tmp:match("[^/]+$") .. ".new"
-    local staged = os.execute("cp " .. tmp_svg .. " " .. staged_svg)
+    local tmp_pdf = tmp .. "/tikz.pdf"
+    local tmp_svg = tmp .. "/tikz.svg"
+    system.copy(tmp_pdf, pdf_path)
+    local conversion_exit, conversion_output = run("pdf2svg", { tmp_pdf, tmp_svg })
+    if conversion_exit then
+      io.stderr:write("[tikzcd] pdf2svg failed (exit " .. tostring(conversion_exit) .. "):\n" .. conversion_output .. "\n")
+      return nil, pdf_path
+    end
+
+    local staged_svg = svg_path .. "." .. path.filename(tmp) .. ".new"
+    local staged, staging_error = pcall(system.copy, tmp_svg, staged_svg)
+    local renamed, rename_error = false, staging_error
     if staged then
-      ok2 = os.rename(staged_svg, svg_path)
-    else
-      ok2 = false
+      renamed, rename_error = os.rename(staged_svg, svg_path)
     end
-    if not ok2 then
+    if not renamed then
       os.remove(staged_svg)
+      io.stderr:write("[tikzcd] pdf2svg failed (exit 0):\n" .. tostring(rename_error) .. "\n")
+      return nil, pdf_path
     end
-  end
-  if not ok2 then
-    local conversion_file = io.open(conversion_log, "r")
-    if conversion_file then
-      local conversion_text = conversion_file:read("*a")
-      conversion_file:close()
-      io.stderr:write("[tikzcd] pdf2svg failed (exit " .. tostring(conversion_exit) .. "):\n" .. conversion_text .. "\n")
-    end
-    return nil, pdf_path
-  end
 
-  return svg_path, pdf_path
+    return svg_path, pdf_path
   end)
 end
 
-local function try_open_file(candidate)
-  local f = io.open(candidate, "r")
-  if f then
-    f:close()
-    return candidate
-  end
-  return nil
-end
-
-local function check_path_and_extensions(base_path)
-  local p = try_open_file(base_path)
-  if p then return p end
-  if not base_path:match("%.%a+$") then
-    p = try_open_file(base_path .. ".tikz")
-    if p then return p end
-    p = try_open_file(base_path .. ".tikzcd")
-    if p then return p end
-    p = try_open_file(base_path .. ".tex")
-    if p then return p end
+local function existing_file(base_path)
+  if path.exists(base_path, "file") then return base_path end
+  if base_path:match("%.%a+$") then return nil end
+  for _, extension in ipairs({ ".tikz", ".tikzcd", ".tex" }) do
+    if path.exists(base_path .. extension, "file") then return base_path .. extension end
   end
   return nil
 end
 
 local function find_input_file(filename, base_dir, figures_dir)
-  -- 1. Absolute path
-  if filename:sub(1,1) == "/" or filename:match("^%a+:") then
-    return check_path_and_extensions(filename)
+  if path.is_absolute(filename) then
+    return existing_file(filename)
   end
 
-  -- 2. Document-relative
   if base_dir and base_dir ~= "" then
-    local p = check_path_and_extensions(base_dir .. "/" .. filename)
+    local p = existing_file(path.join({ base_dir, filename }))
     if p then return p end
   end
 
-  -- 3. Figures directory direct match
   if figures_dir and figures_dir ~= "" then
-    local p = check_path_and_extensions(figures_dir .. "/" .. filename)
-    if p then return p end
+    for _, sub in ipairs({ "", "tikz", "tikzcd" }) do
+      local p = existing_file(path.join({ figures_dir, sub, filename }))
+      if p then return p end
+    end
 
-    p = check_path_and_extensions(figures_dir .. "/tikz/" .. filename)
-    if p then return p end
-
-    p = check_path_and_extensions(figures_dir .. "/tikzcd/" .. filename)
-    if p then return p end
-
-    -- 4. Search subdirectories of figures_dir
     local sub_filename = filename:gsub("^tikz/", ""):gsub("^tikzcd/", "")
-    for _, parent_name in ipairs({"tikz", "tikzcd", ""}) do
-      local search_root = parent_name ~= "" and (figures_dir .. "/" .. parent_name) or figures_dir
-      local ok, entries = pcall(pandoc.system.list_directory, search_root)
-      if ok and entries then
-        for _, entry in ipairs(entries) do
-          local candidate = search_root .. "/" .. entry .. "/" .. sub_filename
-          p = check_path_and_extensions(candidate)
+    for _, parent_name in ipairs({ "tikz", "tikzcd", "" }) do
+      local search_root = path.join({ figures_dir, parent_name })
+      if path.exists(search_root, "directory") then
+        for _, entry in ipairs(system.list_directory(search_root)) do
+          local p = existing_file(path.join({ search_root, entry, sub_filename }))
           if p then return p end
         end
       end
@@ -281,7 +189,6 @@ local function find_input_file(filename, base_dir, figures_dir)
 
   return nil
 end
-
 local function resolve_inputs(text, base_dir, depth)
   if not depth then depth = 1 end
   if depth > 10 then
@@ -310,10 +217,6 @@ local function resolve_inputs(text, base_dir, depth)
   end)
 end
 
--- The kind of figure a block's \input{} names: "tikzcd" or "tikzpic", or nil when
--- it names no figure. A .tikz or .tikzcd file is a figure by its extension. Any
--- other file (fig_x.tex) is a figure when, after its leading comment lines, its
--- body opens a tikzpicture or tikzcd environment.
 local function figure_input(text)
   local filename = text:match("\\input%s-{%s*(.-)%s*}")
   if not filename then return nil end
@@ -335,9 +238,6 @@ local function figure_input(text)
   return nil
 end
 
--- Compile a tikz snippet (e.g. \begin{tikzcd}...) by wrapping it in the
--- config-declared per-figure template (Phase D / D-3 / P92) at its `<>` marker.
--- Returns (svg_path, pdf_path) or (nil, nil) on failure.
 local function compile_tikz(source)
   local doc_path = os.getenv("PANDOC_DOC_PATH")
   local doc_dir = "."
@@ -347,46 +247,18 @@ local function compile_tikz(source)
 
   local resolved_source = resolve_inputs(source, doc_dir)
 
-  -- The per-figure preamble template wraps this figure body; it \usepackage's
-  -- dzg-tikz, so the broken-out macro files (styles/defs) are already in scope —
-  -- no separate shared palette is wired in. Read lazily here.
   local tikz_doc_template, template_str = figure_template()
 
-  -- Zettlr fingerprints the complete local template/package/input graph on
-  -- every render request and supplies that digest here. Hashing template_str
-  -- alone is insufficient because the template normally only says
-  -- `\usepackage{dzg-tikz}`: changing a macro in dzg-tikz's transitive inputs
-  -- must make the same figure source a different cached render. Standalone
-  -- filter callers that do not supply this app-side context keep the historical
-  -- template-string cache semantics.
   local render_context_hash = os.getenv("TIKZ_RENDER_CONTEXT_HASH") or ""
 
-  -- The cache key (hash) folds in the TEMPLATE content as well as the figure body:
-  -- the same body compiled against a different per-figure template (its bytes carry
-  -- the dzg-tikz \usepackage / macro-file includes) is a different figure, so
-  -- hashing only the body would return a stale cached SVG when the template
-  -- changes.
-  -- doc_dir is part of the render input even after resolving \input: TeX can
-  -- still load relative assets directly (notably \includegraphics). Two
-  -- documents with byte-identical TikZ source but different local assets must
-  -- therefore never share a cache entry.
   local hash = pandoc.sha1(resolved_source .. "\0" .. template_str .. "\0" .. render_context_hash .. "\0" .. doc_dir)
 
-  -- Substitute the figure source at the QTikz `<>` marker. The `<>` is plain text
-  -- to pandoc's template engine (not a $...$ variable), so it survives the render
-  -- untouched; substituting it AFTER keeps the figure source (which may contain
-  -- `$` math) out of the pandoc-template pass entirely. A function replacement
-  -- avoids gsub treating `%`/`\` in the source as special.
   local ctx = {}
   local rendered = pandoc.layout.render(pandoc.template.apply(tikz_doc_template, ctx))
   local marker_at = rendered:find("<>", 1, true)
   if not marker_at then
     error("tikzcd.lua: per-figure template carries no `<>` source marker (QTikz convention)")
   end
-  -- The figure body begins on the SAME `.tex` line the `<>` marker sat on, so the
-  -- preamble line count (lines strictly BEFORE the body) is the number of
-  -- newlines in `rendered` before the marker (Phase D / D-6 / P95). A lualatex
-  -- `l.NN` cite minus this yields the 1-based line WITHIN the figure body.
   local preamble_lines = select(2, rendered:sub(1, marker_at - 1):gsub("\n", "\n"))
   local tex_source = rendered:gsub("<>", function() return resolved_source end)
 
@@ -398,8 +270,6 @@ local function compile_tikz(source)
   return run_latex_and_convert(tex_source, "tikzcd", hash, doc_dir, resolved_source, preamble_lines)
 end
 
--- Compile a full tikz document (from ```tikz code block) directly, no template.
--- Returns (svg_path, pdf_path) or (nil, nil) on failure.
 local function compile_tikz_document(source)
   local doc_path = os.getenv("PANDOC_DOC_PATH")
   local doc_dir = "."
@@ -408,14 +278,8 @@ local function compile_tikz_document(source)
   end
 
   local resolved_source = resolve_inputs(source, doc_dir)
-  -- A full document may still import the user's shared styles through the
-  -- TEXINPUTS supplied by Zettlr. Fold the same render-context fingerprint in
-  -- here as a conservative invalidation boundary; callers outside Zettlr leave
-  -- it empty and retain the standalone filter's previous behavior.
   local render_context_hash = os.getenv("TIKZ_RENDER_CONTEXT_HASH") or ""
   local hash = pandoc.sha1(resolved_source .. "\0" .. render_context_hash .. "\0" .. doc_dir)
-  -- A full-document tikz code block IS its own `.tex`: no template preamble is
-  -- prepended, so a lualatex `l.NN` cite is already the figure-body line.
   return run_latex_and_convert(resolved_source, "tikzfull", hash, doc_dir, resolved_source, 0)
 end
 
@@ -431,7 +295,6 @@ local function compile_tikz_code_block(source)
   return svg_path, pdf_path, source:match("\\begin%s*{tikzcd}") ~= nil
 end
 
--- Shared helpers for building output from a compiled SVG/PDF pair.
 local function make_latex_output(pdf_path, is_tikzcd)
   local base = pdf_path:gsub("%.pdf$", "")
   if is_tikzcd then
@@ -442,8 +305,6 @@ local function make_latex_output(pdf_path, is_tikzcd)
 end
 
 local function namespace_svg_ids(svg_tag, prefix)
-  -- Prefix all id="..." and xlink:href="#..." to prevent cross-SVG ID collisions
-  -- when multiple inline SVGs share one HTML document.
   local result = svg_tag:gsub('id="([^"]*)"', 'id="' .. prefix .. '-%1"')
   result = result:gsub('xlink:href="#([^"]*)"', 'xlink:href="#' .. prefix .. '-%1"')
   return result
@@ -460,7 +321,6 @@ local function svg_markup(svg_path)
     svg_tag = svg_content
   end
 
-  -- Namespace IDs using a short hash to prevent cross-SVG collisions
   local hash = pandoc.sha1(svg_tag):sub(1, 8)
   return namespace_svg_ids(svg_tag, hash)
 end
@@ -535,14 +395,6 @@ if FORMAT:match 'html' then
     log("RawBlock (html): processing tikz/pdftex block, length=" .. #el.text)
     local svg_path, _ = compile_tikz(el.text)
     if not svg_path then
-      -- A figure that does NOT compile under the active per-figure template
-      -- (Phase D / D-3 / P92: e.g. it requires a \usetikzlibrary the configured
-      -- template omits) is ABSENT from the preview — it produces no <svg> — while
-      -- the rest of the document still renders. The failure is loud in the filter
-      -- log (and the figure visibly does not appear); dropping the single block,
-      -- not aborting the whole render, is what makes a template swap observable in
-      -- the live preview. Return the raw latex block unchanged: pandoc's HTML
-      -- writer omits non-HTML raw blocks, so the failed figure leaves no element.
       return el
     end
     log("RawBlock (html): compiled to " .. svg_path)
@@ -573,9 +425,6 @@ if FORMAT:match 'html' then
     return el
   end
 
-  -- A Dynkin diagram written inline (\dynkin from the dynkin-diagrams package,
-  -- e.g. in a table cell) renders as an inline SVG. LaTeX output needs no
-  -- handler: the document preamble loads dynkin-diagrams.
   function RawInline(el)
     if not (el.format == 'tex' or el.format == 'latex') or not starts_with('\\dynkin', el.text) then
       return el
